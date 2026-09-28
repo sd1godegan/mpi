@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI · SD Negeri 1 Godegan</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+<style>
+/* ============ PALET ============ */
+:root{
+  --bg:#FAF8F5;
+  --surface:#FFFFFF;
+  --surface-2:#F5F2EC;
+  --border:#ECE7DE;
+  --text:#2E2E3F;
+  --text-soft:#5A5A70;
+  --muted:#8E8EA0;
+
+  --primary:#8899C4;
+  --primary-hover:#7386B5;
+  --primary-soft:#EDF0F8;
+  --primary-ring:#DDE4F2;
+
+  /* Pastel accents */
+  --peach:#F7DEC8;
+  --mint:#D4E8DC;
+  --lavender:#E0D7EE;
+  --sky:#DAE4F2;
+  --rose:#F5DCE2;
+  --butter:#F5EBC8;
+  --sage:#D8E6DC;
+
+  /* Mapel colors (pastel) */
+  --m-agama:#E8DCF0;      --m-agama-i:#7E6BA5;
+  --m-pancasila:#F5DFDC;  --m-pancasila-i:#B7726A;
+  --m-bindo:#DCE6F2;      --m-bindo-i:#6B87B5;
+  --m-bing:#D4E6E0;       --m-bing-i:#5E8F84;
+  --m-mtk:#F5E6D2;        --m-mtk-i:#B58B5A;
+  --m-seni:#F0DCE6;       --m-seni-i:#A5708B;
+  --m-pjok:#DCE8DA;       --m-pjok-i:#6B8F62;
+  --m-ipas:#DCE6DF;       --m-ipas-i:#5F8F79;
+  --m-tik:#E0E0F0;        --m-tik-i:#7474A8;
+  --m-jawa:#F0E8D4;       --m-jawa-i:#A89454;
+  --m-batik:#E8D8DE;      --m-batik-i:#A8707E;
+
+  --radius:14px;
+  --radius-sm:10px;
+  --shadow-sm:0 1px 2px rgba(46,46,63,.04);
+  --shadow:0 2px 10px rgba(46,46,63,.05);
+  --shadow-md:0 6px 20px rgba(46,46,63,.08);
+  --shadow-lg:0 12px 32px rgba(46,46,63,.10);
+
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+[data-theme="dark"]{
+  --bg:#1C1C28;
+  --surface:#24242F;
+  --surface-2:#2A2A38;
+  --border:#35353F;
+  --text:#ECEAF2;
+  --text-soft:#B8B6C8;
+  --muted:#8E8CA0;
+
+  --primary:#98A8D0;
+  --primary-hover:#A8B8DD;
+  --primary-soft:#2E3245;
+  --primary-ring:#3A4058;
+
+  --shadow-sm:0 1px 2px rgba(0,0,0,.2);
+  --shadow:0 2px 10px rgba(0,0,0,.25);
+  --shadow-md:0 6px 20px rgba(0,0,0,.3);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.55;
+  -webkit-font-smoothing:antialiased;min-height:100vh;
+  transition:background .3s,color .3s;
+}
+svg{display:block}
+.icon{width:20px;height:20px;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
+.icon-sm{width:16px;height:16px;stroke-width:2}
+.icon-lg{width:28px;height:28px;stroke-width:1.5}
+.icon-xl{width:36px;height:36px;stroke-width:1.25}
+
+/* ============ HEADER ============ */
+.topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:1.5rem 1rem;
+  position:relative;
+}
+.topbar-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:1rem;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:.9rem}
+.brand-mark{
+  width:48px;height:48px;border-radius:14px;
+  background:var(--primary-soft);color:var(--primary);
+  display:grid;place-items:center;flex-shrink:0;
+}
+.brand-mark .icon{width:24px;height:24px;stroke-width:1.6}
+.brand-text h1{
+  font-size:1.15rem;font-weight:700;letter-spacing:-.015em;
+  line-height:1.2;color:var(--text);
+}
+.brand-text p{
+  font-size:.82rem;color:var(--muted);margin-top:.1rem;
+}
+.top-actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+
+.btn-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:10px;
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--text-soft);cursor:pointer;
+  transition:all .2s var(--ease);font-family:inherit;
+}
+.btn-icon:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
+.btn-icon.active{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
+
+.btn-pill{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.55rem 1rem;border-radius:10px;
+  background:var(--primary-soft);border:1px solid var(--primary-ring);
+  color:var(--primary);font-size:.86rem;font-weight:600;
+  cursor:pointer;transition:all .2s var(--ease);
+  text-decoration:none;font-family:inherit;
+}
+.btn-pill:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-pill.solid{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-pill.solid:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+
+/* User menu */
+.user-menu{position:relative}
+.user-trigger{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.35rem .75rem .35rem .35rem;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;transition:all .2s;
+  font-family:inherit;font-size:.85rem;font-weight:600;
+}
+.user-trigger:hover{border-color:var(--primary-ring);background:var(--primary-soft)}
+.user-av{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--lavender);color:var(--m-agama-i);
+  display:grid;place-items:center;
+  font-size:.68rem;font-weight:800;letter-spacing:.02em;
+}
+.dropdown{
+  position:absolute;top:calc(100% + .5rem);right:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;box-shadow:var(--shadow-lg);
+  min-width:220px;padding:.35rem;z-index:100;
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:all .2s var(--ease);
+}
+.dropdown.show{opacity:1;visibility:visible;transform:translateY(0)}
+.dd-head{
+  padding:.7rem .85rem;border-bottom:1px solid var(--border);
+  margin-bottom:.3rem;
+}
+.dd-head strong{display:block;font-size:.9rem;color:var(--text)}
+.dd-head .role{
+  display:inline-block;margin-top:.25rem;
+  font-size:.66rem;text-transform:uppercase;letter-spacing:.6px;
+  background:var(--primary-soft);color:var(--primary);
+  padding:.15rem .5rem;border-radius:999px;font-weight:700;
+}
+.dd-item{
+  display:flex;align-items:center;gap:.6rem;
+  width:100%;text-align:left;padding:.55rem .85rem;
+  border-radius:8px;background:transparent;border:none;
+  cursor:pointer;font-size:.86rem;color:var(--text);
+  font-family:inherit;text-decoration:none;transition:background .15s;
+}
+.dd-item .icon{width:16px;height:16px;stroke-width:1.9}
+.dd-item:hover{background:var(--primary-soft);color:var(--primary)}
+.dd-item.danger{color:#C4707A}
+.dd-item.danger:hover{background:#F5E0E4}
+
+/* ============ STATS ============ */
+.stats{
+  max-width:1200px;margin:0 auto;padding:1.25rem 1rem 0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;
+}
+.stat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:.9rem 1rem;
+  display:flex;align-items:center;gap:.75rem;
+  transition:box-shadow .2s;
+}
+.stat:hover{box-shadow:var(--shadow-sm)}
+.stat-ic{
+  width:38px;height:38px;border-radius:10px;
+  display:grid;place-items:center;flex-shrink:0;
+}
+.stat-ic .icon{width:18px;height:18px;stroke-width:1.9}
+.stat-ic.book{background:var(--sky);color:var(--m-bindo-i)}
+.stat-ic.class{background:var(--lavender);color:var(--m-agama-i)}
+.stat-ic.subject{background:var(--peach);color:var(--m-mtk-i)}
+.stat-ic.teacher{background:var(--mint);color:var(--m-bing-i)}
+.stat-val{font-size:1.35rem;font-weight:800;line-height:1;letter-spacing:-.02em;color:var(--text)}
+.stat-lbl{font-size:.72rem;color:var(--muted);margin-top:.2rem;font-weight:500}
+
+/* ============ CONTROLS ============ */
+.container{max-width:1200px;margin:0 auto;padding:1.25rem 1rem 3rem}
+.controls{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:.7rem;
+  display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;
+  margin-bottom:1.25rem;box-shadow:var(--shadow-sm);
+}
+.search{
+  position:relative;flex:1 1 260px;min-width:200px;
+}
+.search input{
+  width:100%;padding:.6rem .85rem .6rem 2.4rem;
+  border:1.5px solid var(--border);border-radius:10px;
+  background:var(--surface-2);color:var(--text);
+  font-size:.88rem;font-family:inherit;outline:none;
+  transition:all .2s var(--ease);
+}
+.search input:focus{
+  border-color:var(--primary);background:var(--surface);
+  box-shadow:0 0 0 3px var(--primary-ring);
+}
+.search input::placeholder{color:var(--muted)}
+.search .icon{
+  position:absolute;left:.75rem;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;stroke-width:2;color:var(--muted);
+  pointer-events:none;
+}
+.search-clear{
+  position:absolute;right:.4rem;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:6px;border:none;
+  background:transparent;color:var(--muted);cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+}
+.search-clear:hover{background:var(--surface-2);color:var(--text)}
+.search.has-val .search-clear{display:flex}
+.search-clear .icon{position:static;transform:none;width:14px;height:14px;stroke-width:2.4}
+
+.select{position:relative}
+.select select{
+  appearance:none;
+  padding:.6rem 2rem .6rem .85rem;
+  border:1.5px solid var(--border);border-radius:10px;
+  background:var(--surface-2);color:var(--text);
+  font-size:.85rem;font-family:inherit;font-weight:500;
+  outline:none;cursor:pointer;transition:all .2s var(--ease);
+}
+.select select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-ring);background:var(--surface)}
+.select .icon{
+  position:absolute;right:.7rem;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;stroke-width:2.2;color:var(--muted);
+  pointer-events:none;
+}
+
+/* Result meta */
+.result-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;
+  font-size:.82rem;color:var(--muted);
+}
+.result-bar strong{color:var(--text);font-weight:700}
+.chips{display:flex;gap:.35rem;flex-wrap:wrap}
+.chip{
+  display:inline-flex;align-items:center;gap:.3rem;
+  padding:.25rem .6rem .25rem .75rem;border-radius:999px;
+  background:var(--primary-soft);color:var(--primary);
+  font-size:.74rem;font-weight:600;
+}
+.chip button{
+  background:transparent;border:none;cursor:pointer;
+  color:inherit;padding:0;line-height:1;display:grid;place-items:center;
+  width:16px;height:16px;border-radius:50%;
+}
+.chip button:hover{background:var(--primary);color:#fff}
+.chip .icon{width:10px;height:10px;stroke-width:2.5}
+
+/* ============ CLASS SECTION ============ */
+.class-section{margin-bottom:2rem}
+.class-head{
+  display:flex;align-items:center;gap:.7rem;
+  margin-bottom:.9rem;padding-bottom:.6rem;
+  border-bottom:1px solid var(--border);
+}
+.class-num{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--lavender);color:var(--m-agama-i);
+  display:grid;place-items:center;
+  font-weight:800;font-size:.95rem;
+}
+.class-head h2{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
+.class-count{
+  font-size:.72rem;color:var(--muted);font-weight:600;
+  background:var(--surface-2);padding:.15rem .55rem;border-radius:999px;
+}
+
+/* ============ GRID & CARD ============ */
+.grid{
+  display:grid;gap:1rem;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s;
+  animation:fadeIn .35s var(--ease) backwards;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-md);
+  border-color:var(--primary-ring);
+}
+.thumb{
+  position:relative;aspect-ratio:16/9;overflow:hidden;
+  display:grid;place-items:center;
+}
+.thumb.img{background:var(--surface-2)}
+.thumb.fallback{background:var(--thumb-bg,var(--primary-soft))}
+.thumb img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:2;transition:transform .4s var(--ease);
+}
+.card:hover .thumb img{transform:scale(1.04)}
+.thumb .thumb-ic{
+  color:var(--thumb-fg,var(--primary));
+  opacity:.65;
+}
+.thumb .thumb-ic svg{width:52px;height:52px;stroke-width:1.2}
+.badge{
+  position:absolute;top:.6rem;left:.6rem;z-index:3;
+  padding:.25rem .6rem;border-radius:8px;
+  background:rgba(255,255,255,.95);
+  color:var(--text-soft);
+  font-size:.68rem;font-weight:700;letter-spacing:.02em;
+  box-shadow:0 1px 3px rgba(46,46,63,.08);
+}
+[data-theme="dark"] .badge{background:rgba(36,36,47,.92);color:var(--text-soft)}
+
+.body{padding:1rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.card h3{
+  font-size:.95rem;font-weight:700;line-height:1.35;
+  letter-spacing:-.005em;color:var(--text);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.card .desc{
+  font-size:.82rem;color:var(--muted);line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.meta{
+  display:flex;align-items:center;gap:.45rem;
+  font-size:.75rem;color:var(--muted);margin-top:auto;
+  padding-top:.4rem;
+}
+.meta .av{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--butter);color:var(--m-jawa-i);
+  display:grid;place-items:center;font-size:.62rem;font-weight:800;
+  flex-shrink:0;
+}
+.meta .name{color:var(--text-soft);font-weight:600}
+.actions{
+  display:flex;gap:.4rem;margin-top:.65rem;
+  padding-top:.75rem;border-top:1px solid var(--border);
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.55rem .9rem;border-radius:9px;
+  font-size:.83rem;font-weight:700;text-decoration:none;
+  border:none;cursor:pointer;font-family:inherit;
+  transition:all .2s var(--ease);
+}
+.btn-primary{
+  flex:1;background:var(--primary);color:#fff;
+}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-primary .icon{width:14px;height:14px;stroke-width:2.2}
+.btn-ghost{
+  flex:0 0 auto;padding:.55rem .7rem;
+  background:var(--surface-2);color:var(--text-soft);
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
+.btn-ghost .icon{width:15px;height:15px;stroke-width:2}
+
+/* ============ SKELETON ============ */
+.sk{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.sk-th{aspect-ratio:16/9;background:var(--surface-2);
+  animation:pulse 1.6s ease-in-out infinite}
+.sk-bd{padding:1rem;display:flex;flex-direction:column;gap:.55rem}
+.sk-l{height:11px;border-radius:5px;background:var(--surface-2);
+  animation:pulse 1.6s ease-in-out infinite}
+.sk-l.a{width:55%} .sk-l.b{width:85%} .sk-l.c{width:70%}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ============ EMPTY ============ */
+.empty{
+  text-align:center;padding:3.5rem 1.5rem;
+  background:var(--surface);border:1px dashed var(--border);
+  border-radius:var(--radius);
+}
+.empty-ic{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--primary-soft);color:var(--primary);
+  display:grid;place-items:center;margin:0 auto 1rem;
+}
+.empty h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.empty p{color:var(--muted);font-size:.86rem;margin-bottom:1.25rem}
+
+/* ============ TOAST ============ */
+.toast{
+  position:fixed;bottom:1.5rem;left:50%;
+  transform:translateX(-50%) translateY(120px);
+  background:var(--text);color:var(--bg);
+  padding:.7rem 1.15rem;border-radius:11px;
+  font-size:.85rem;font-weight:600;
+  box-shadow:var(--shadow-lg);z-index:999;
+  transition:transform .3s var(--ease);
+  max-width:90vw;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ============ BACK TO TOP ============ */
+.to-top{
+  position:fixed;bottom:1.25rem;right:1.25rem;
+  width:40px;height:40px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-soft);cursor:pointer;
+  box-shadow:var(--shadow);
+  display:grid;place-items:center;
+  opacity:0;pointer-events:none;transform:translateY(20px);
+  transition:all .3s var(--ease);z-index:99;
+}
+.to-top.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+.to-top:hover{color:var(--primary);border-color:var(--primary-ring);transform:translateY(-2px)}
+.to-top .icon{width:18px;height:18px;stroke-width:2}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:768px){
+  .stats{grid-template-columns:repeat(2,1fr);gap:.6rem;padding:1rem .85rem 0}
+  .stat{padding:.75rem .85rem;gap:.6rem}
+  .stat-ic{width:34px;height:34px}
+  .stat-val{font-size:1.15rem}
+}
+@media(max-width:640px){
+  .topbar{padding:1rem .85rem}
+  .brand-mark{width:42px;height:42px}
+  .brand-text h1{font-size:1rem}
+  .brand-text p{font-size:.75rem}
+  .top-actions{gap:.35rem}
+  .btn-icon{width:34px;height:34px}
+  .btn-pill{padding:.5rem .75rem;font-size:.8rem}
+  .btn-pill span.label{display:none}
+  .container{padding:1rem .85rem 2.5rem}
+  .grid{grid-template-columns:1fr}
+  .class-head{gap:.55rem}
+  .class-num{width:32px;height:32px;font-size:.85rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>Katalog MPI</h1>
+        <p>SD Negeri 1 Godegan</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <a class="btn-pill solid" href="upload.html" id="addBtn" style="display:none">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="label">Tambah</span>
+      </a>
+      <a class="btn-pill" href="login.html" id="loginBtn">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5M15 12H3"/></svg>
+        <span class="label">Masuk</span>
+      </a>
+
+      <div class="user-menu" id="userMenu" style="display:none">
+        <button class="user-trigger" id="userBtn">
+          <span class="user-av" id="userAvatar">?</span>
+          <span id="userName">User</span>
+          <svg class="icon" style="width:12px;height:12px;stroke-width:2.4;opacity:.6" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="dropdown" id="dropdown">
+          <div class="dd-head">
+            <strong id="dropName">User</strong>
+            <span class="role" id="dropRole">guru</span>
+          </div>
+          <a href="upload.html" class="dd-item">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M12 3v12M7 8l5-5 5 5"/></svg>
+            Upload MPI
+          </a>
+          <a href="ganti-pin.html" class="dd-item">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="3.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+            Ganti PIN
+          </a>
+          <button class="dd-item danger" id="logoutBtn">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+            Keluar
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-icon" id="themeToggle" title="Ganti tema">
+        <svg class="icon" id="themeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-icon" id="refreshBtn" title="Muat ulang">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-9-9 9 9 0 0 1 9-9c2.5 0 4.8 1 6.5 2.6L21 8"/><path d="M21 3v5h-5"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STATS ============ -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-ic book">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg>
+    </div>
+    <div><div class="stat-val" id="statTotal">–</div><div class="stat-lbl">Total MPI</div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-ic class">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/></svg>
+    </div>
+    <div><div class="stat-val" id="statKelas">–</div><div class="stat-lbl">Kelas</div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-ic subject">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <div><div class="stat-val" id="statMapel">–</div><div class="stat-lbl">Mapel</div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-ic teacher">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1"/></svg>
+    </div>
+    <div><div class="stat-val" id="statGuru">–</div><div class="stat-lbl">Guru</div></div>
+  </div>
+</div>
+
+<!-- ============ MAIN ============ -->
+<main class="container">
+  <div class="controls">
+    <div class="search" id="searchWrap">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="search" placeholder="Cari judul, mapel, atau guru..." autocomplete="off">
+      <button class="search-clear" id="clearSearch">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="select">
+      <select id="filterKelas"><option value="">Semua Kelas</option></select>
+      <svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+
+    <div class="select">
+      <select id="filterMapel"><option value="">Semua Mapel</option></select>
+      <svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+
+    <div class="select">
+      <select id="sortBy">
+        <option value="kelas">Urut: Kelas</option>
+        <option value="judul">Urut: Judul</option>
+        <option value="guru">Urut: Guru</option>
+        <option value="terbaru">Urut: Terbaru</option>
+      </select>
+      <svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+  </div>
+
+  <div class="result-bar" id="resultMeta" style="display:none">
+    <div>Menampilkan <strong id="countShown">0</strong> dari <strong id="countTotal">0</strong> MPI</div>
+    <div class="chips" id="activeChips"></div>
+  </div>
+
+  <div id="content">
+    <div class="grid">
+      <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
+      <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
+      <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
+    </div>
+  </div>
+</main>
+
+<button class="to-top" id="toTop">
+  <svg class="icon" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
+</button>
+
+<script>
+/* ===== KONFIG ===== */
+const API_URL = "https://script.google.com/macros/s/AKfycbxQ7Ve-VLGJIYqJqxHJEfJnnpeq_rw3cGs-LlmRqD81md_GMtPx4H44r6QptEkfF2QGRg/exec";
+
+/* ===== HELPERS ===== */
+const Auth = {
+  KEY: 'mpi_auth_v3',
+  get() { try { return JSON.parse(localStorage.getItem(this.KEY) || 'null'); } catch { return null; } },
+  set(d) { localStorage.setItem(this.KEY, JSON.stringify(d)); },
+  clear() { localStorage.removeItem(this.KEY); },
+  isValid() { const a = this.get(); return !!(a && a.username && a.pin); }
+};
+
+const API = {
+  async get(params) {
+    const qs = new URLSearchParams(params).toString();
+    const res = await fetch(`${API_URL}?${qs}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+    return json;
+  }
+};
+
+const ClientCache = {
+  PREFIX: 'mpi_c_',
+  get(k, ttl) {
+    try {
+      const raw = localStorage.getItem(this.PREFIX + k);
+      if (!raw) return null;
+      const o = JSON.parse(raw);
+      if (Date.now() - o.t > ttl * 1000) { localStorage.removeItem(this.PREFIX + k); return null; }
+      return o.d;
+    } catch { return null; }
+  },
+  set(k, d) { try { localStorage.setItem(this.PREFIX + k, JSON.stringify({ t: Date.now(), d })); } catch {} },
+  remove(k) { localStorage.removeItem(this.PREFIX + k); },
+  clearAll() { Object.keys(localStorage).filter(k => k.startsWith(this.PREFIX)).forEach(k => localStorage.removeItem(k)); }
+};
+
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+function debounce(fn, ms = 300) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+let _toastTimer;
+function toast(msg, ms = 2200) {
+  let el = document.getElementById('toast');
+  if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), ms);
+}
+
+/* ===== MAPEL CONFIG ===== */
+const MAPEL_META = [
+  { keys:['agama'],                    short:'Agama',      cls:'agama',     bg:'--m-agama',     fg:'--m-agama-i',     svg:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>' },
+  { keys:['pancasila'],                short:'Pancasila',  cls:'pancasila', bg:'--m-pancasila', fg:'--m-pancasila-i', svg:'<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>' },
+  { keys:['bahasa indonesia'],         short:'B. Indonesia',cls:'bindo',    bg:'--m-bindo',     fg:'--m-bindo-i',     svg:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
+  { keys:['bahasa inggris'],           short:'B. Inggris', cls:'bing',     bg:'--m-bing',      fg:'--m-bing-i',      svg:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>' },
+  { keys:['matematika'],               short:'Matematika', cls:'mtk',      bg:'--m-mtk',       fg:'--m-mtk-i',       svg:'<rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>' },
+  { keys:['seni'],                     short:'Seni Budaya',cls:'seni',     bg:'--m-seni',      fg:'--m-seni-i',      svg:'<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.8-.15 2.6-.4a2.5 2.5 0 0 0 .9-4.5 2.5 2.5 0 0 1 1.5-4.6h2c2.2 0 4-1.8 4-4 0-3.9-5.4-6.5-10-6.5z"/>' },
+  { keys:['pjok','jasmani'],           short:'PJOK',       cls:'pjok',     bg:'--m-pjok',      fg:'--m-pjok-i',      svg:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>' },
+  { keys:['ipas','alam'],              short:'IPAS',       cls:'ipas',     bg:'--m-ipas',      fg:'--m-ipas-i',      svg:'<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>' },
+  { keys:['tik','informasi','komunikasi'],short:'TIK',      cls:'tik',      bg:'--m-tik',       fg:'--m-tik-i',       svg:'<rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/>' },
+  { keys:['jawa'],                     short:'B. Jawa',    cls:'jawa',     bg:'--m-jawa',      fg:'--m-jawa-i',      svg:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>' },
+  { keys:['membatik','batik'],         short:'Membatik',   cls:'batik',    bg:'--m-batik',     fg:'--m-batik-i',     svg:'<path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>' }
+];
+const MAPEL_DEFAULT = { short:'Mapel', cls:'default', bg:'--primary-soft', fg:'--primary', svg:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' };
+
+function getMapelMeta(m) {
+  const x = (m || '').toLowerCase();
+  for (const meta of MAPEL_META) {
+    if (meta.keys.some(k => x.includes(k))) return meta;
+  }
+  return MAPEL_DEFAULT;
+}
+function mapelShort(m) { return getMapelMeta(m).short; }
+function mapelSVG(m) { return getMapelMeta(m).svg; }
+
+/* ===== THEME ===== */
+const Theme = {
+  KEY: 'mpi_theme',
+  init() {
+    const s = localStorage.getItem(this.KEY) || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    this.apply(s);
+  },
+  toggle() {
+    const c = document.documentElement.getAttribute('data-theme');
+    this.apply(c === 'dark' ? 'light' : 'dark');
+  },
+  apply(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem(this.KEY, t);
+    const ic = document.getElementById('themeIcon');
+    if (ic) ic.innerHTML = t === 'dark'
+      ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>'
+      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  }
+};
+
+/* ===== SHARE ===== */
+async function shareMPI(link, judul, guru) {
+  const u = new URL('viewer.html', location.href);
+  u.searchParams.set('file', link);
+  u.searchParams.set('title', judul);
+  u.searchParams.set('guru', guru || '');
+  const text = `Coba MPI ini: ${judul}\n${guru || '-'} — SD Negeri 1 Godegan\n${u.href}`;
+  if (navigator.share) { try { await navigator.share({ title: judul, text, url: u.href }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+function logout() {
+  Auth.clear(); ClientCache.clearAll();
+  toast('Berhasil keluar');
+  setTimeout(() => location.href = 'index.html', 500);
+}
+
+/* ===== PAGE LOGIC ===== */
+const $ = id => document.getElementById(id);
+const content = $('content'), resultMeta = $('resultMeta');
+const searchEl = $('search'), searchWrap = $('searchWrap');
+const filterKelas = $('filterKelas'), filterMapel = $('filterMapel'), sortBy = $('sortBy');
+
+let allData = [], serverVersion = 0;
+
+async function loadData(force = false) {
+  if (!force) {
+    const c = ClientCache.get('mpi_list', 30);
+    if (c) { allData = c.data; serverVersion = c.version; buildFilters(); render(); silentRefresh(); return; }
+  }
+  try {
+    const params = { action: 'list', limit: 2000 };
+    if (!force && serverVersion) params.version = serverVersion;
+    const res = await API.get(params);
+    if (res.unchanged) { const c = ClientCache.get('mpi_list', 99999); if (c) { allData = c.data; render(); return; } }
+    allData = res.data || []; serverVersion = res.version || 0;
+    ClientCache.set('mpi_list', { data: allData, version: serverVersion });
+    buildFilters(); render();
+  } catch (err) {
+    content.innerHTML = `<div class="empty">
+      <div class="empty-ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+      <h3>Gagal memuat data</h3>
+      <p>${esc(err.message)}</p>
+      <button class="btn btn-primary" style="flex:0 0 auto;padding:.7rem 1.4rem" onclick="loadData(true)">Coba Lagi</button>
+    </div>`;
+  }
+}
+
+async function silentRefresh() {
+  try {
+    const res = await API.get({ action: 'list', limit: 2000, version: serverVersion });
+    if (res.unchanged) return;
+    allData = res.data || []; serverVersion = res.version || 0;
+    ClientCache.set('mpi_list', { data: allData, version: serverVersion });
+    buildFilters(); render();
+  } catch (e) {}
+}
+
+function buildFilters() {
+  const cK = filterKelas.value, cM = filterMapel.value;
+  filterKelas.length = 1; filterMapel.length = 1;
+  const ks = new Set(), ms = new Set(), gs = new Set();
+  allData.forEach(r => { if (r.k) ks.add(r.k); if (r.m) ms.add(r.m); if (r.g) gs.add(r.g); });
+  [...ks].sort((a,b) => a.localeCompare(b, 'id', { numeric: true })).forEach(k => {
+    const o = document.createElement('option'); o.value = k; o.textContent = 'Kelas ' + k; filterKelas.appendChild(o);
+  });
+  [...ms].sort().forEach(m => {
+    const o = document.createElement('option'); o.value = m; o.textContent = mapelShort(m); filterMapel.appendChild(o);
+  });
+  filterKelas.value = cK; filterMapel.value = cM;
+  animateNum('statTotal', allData.length); animateNum('statKelas', ks.size);
+  animateNum('statMapel', ms.size); animateNum('statGuru', gs.size);
+}
+
+function animateNum(id, target) {
+  const el = $(id); const start = parseInt(el.textContent) || 0;
+  const t0 = performance.now(); const dur = 500;
+  function step(now) {
+    const p = Math.min((now - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(start + (target - start) * e);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function render() {
+  const q = searchEl.value.toLowerCase().trim();
+  const kf = filterKelas.value, mf = filterMapel.value;
+  let filtered = allData.filter(r => {
+    if (kf && r.k !== kf) return false;
+    if (mf && r.m !== mf) return false;
+    if (q) { const t = `${r.j} ${r.m} ${r.g} ${r.d}`.toLowerCase(); if (!t.includes(q)) return false; }
+    return true;
+  });
+  const sort = sortBy.value;
+  if (sort === 'judul') filtered.sort((a,b) => a.j.localeCompare(b.j, 'id'));
+  else if (sort === 'guru') filtered.sort((a,b) => a.g.localeCompare(b.g, 'id'));
+  else if (sort === 'terbaru') filtered.sort((a,b) => (b.ts||'').localeCompare(a.ts||''));
+  else filtered.sort((a,b) => { const c = String(a.k).localeCompare(String(b.k), 'id', { numeric: true }); return c !== 0 ? c : a.j.localeCompare(b.j, 'id'); });
+
+  $('countShown').textContent = filtered.length;
+  $('countTotal').textContent = allData.length;
+  resultMeta.style.display = 'flex';
+  renderChips(kf, mf, q);
+
+  if (!filtered.length) {
+    content.innerHTML = `<div class="empty">
+      <div class="empty-ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+      <h3>Tidak ada MPI</h3>
+      <p>Coba ubah kata kunci atau filter.</p>
+      <button class="btn btn-primary" style="flex:0 0 auto;padding:.7rem 1.4rem;margin:0 auto" onclick="resetFilters()">Hapus Filter</button>
+    </div>`;
+    return;
+  }
+
+  const useGroup = sort === 'kelas' && !kf;
+  if (useGroup) {
+    const g = {};
+    filtered.forEach(r => { const k = r.k || 'Lainnya'; (g[k] = g[k] || []).push(r); });
+    const sortedK = Object.keys(g).sort((a,b) => a.localeCompare(b, 'id', { numeric: true }));
+    content.innerHTML = sortedK.map(k => `
+      <section class="class-section">
+        <div class="class-head">
+          <div class="class-num">${esc(k)}</div>
+          <h2>Kelas ${esc(k)}</h2>
+          <span class="class-count">${g[k].length} MPI</span>
+        </div>
+        <div class="grid">${g[k].map((r,i) => cardHTML(r, i)).join('')}</div>
+      </section>
+    `).join('');
+  } else {
+    content.innerHTML = `<div class="grid">${filtered.map((r,i) => cardHTML(r, i)).join('')}</div>`;
+  }
+}
+
+function cardHTML(r, i) {
+  const delay = Math.min(i * 25, 400);
+  const thumb = r.t || '';
+  const meta = getMapelMeta(r.m);
+  const initials = r.g ? r.g.split(' ').filter(w => /^[A-Z]/i.test(w[0])).slice(0,2).map(w => w[0]).join('').toUpperCase() : '?';
+  const thumbHTML = thumb
+    ? `<img src="${esc(thumb)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+       <div class="thumb-ic" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">${meta.svg}</svg></div>`
+    : `<div class="thumb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">${meta.svg}</svg></div>`;
+
+  const thumbStyle = thumb ? '' : `style="--thumb-bg:var(${meta.bg});--thumb-fg:var(${meta.fg})"`;
+  const vUrl = `viewer.html?file=${encodeURIComponent(r.l)}&title=${encodeURIComponent(r.j)}&guru=${encodeURIComponent(r.g)}`;
+
+  return `<article class="card" style="animation-delay:${delay}ms">
+    <div class="thumb ${thumb ? 'img' : 'fallback'}" ${thumbStyle}>
+      ${thumbHTML}
+      ${r.m ? `<div class="badge">${esc(meta.short)}</div>` : ''}
+    </div>
+    <div class="body">
+      <h3>${esc(r.j)}</h3>
+      ${r.d ? `<p class="desc">${esc(r.d)}</p>` : ''}
+      <div class="meta">
+        <span class="av">${esc(initials)}</span>
+        <span class="name">${esc(r.g||'-')}</span>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href="${vUrl}">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          Buka MPI
+        </a>
+        <button class="btn btn-ghost" onclick="shareMPI('${esc(r.l)}','${esc(r.j)}','${esc(r.g)}')" title="Bagikan">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+        </button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderChips(kf, mf, q) {
+  const c = [];
+  const X = '<svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  if (kf) c.push(`<span class="chip">Kelas ${esc(kf)} <button onclick="filterKelas.value='';render()">${X}</button></span>`);
+  if (mf) c.push(`<span class="chip">${esc(mapelShort(mf))} <button onclick="filterMapel.value='';render()">${X}</button></span>`);
+  if (q) c.push(`<span class="chip">"${esc(q)}" <button onclick="searchEl.value='';searchWrap.classList.remove('has-val');render()">${X}</button></span>`);
+  $('activeChips').innerHTML = c.join('');
+}
+
+window.resetFilters = () => {
+  searchEl.value = ''; filterKelas.value = ''; filterMapel.value = '';
+  sortBy.value = 'kelas'; searchWrap.classList.remove('has-val');
+  render();
+};
+
+async function refreshAuthUI() {
+  const a = Auth.get();
+  const loginBtn = $('loginBtn'), addBtn = $('addBtn'), userMenu = $('userMenu');
+  if (!a) {
+    loginBtn.style.display = ''; addBtn.style.display = 'none'; userMenu.style.display = 'none';
+    return;
+  }
+  const u = a.user || {};
+  const initials = (u.nama || '?').split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
+  loginBtn.style.display = 'none'; addBtn.style.display = ''; userMenu.style.display = '';
+  $('userAvatar').textContent = initials || '?';
+  $('userName').textContent = (u.nama || '').split(' ')[0] || 'User';
+  $('dropName').textContent = u.nama || 'User';
+  $('dropRole').textContent = (u.role || 'guru') + (u.kelas && u.kelas !== '-' ? ' · Kelas ' + u.kelas : '');
+}
+
+/* ===== EVENTS ===== */
+searchEl.addEventListener('input', () => {
+  searchWrap.classList.toggle('has-val', searchEl.value.length > 0);
+  debounce(render, 250)();
+});
+$('clearSearch').addEventListener('click', () => {
+  searchEl.value = ''; searchWrap.classList.remove('has-val');
+  render(); searchEl.focus();
+});
+filterKelas.addEventListener('change', render);
+filterMapel.addEventListener('change', render);
+sortBy.addEventListener('change', render);
+$('refreshBtn').addEventListener('click', () => { ClientCache.remove('mpi_list'); loadData(true); toast('Memuat ulang...'); });
+$('themeToggle').addEventListener('click', () => Theme.toggle());
+$('userBtn')?.addEventListener('click', e => { e.stopPropagation(); $('dropdown').classList.toggle('show'); });
+document.addEventListener('click', e => { if (!e.target.closest('.user-menu')) $('dropdown')?.classList.remove('show'); });
+$('logoutBtn')?.addEventListener('click', logout);
+window.addEventListener('scroll', () => $('toTop').classList.toggle('show', window.scrollY > 400));
+$('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); searchEl.focus(); searchEl.select(); }
+});
+
+/* ===== START ===== */
+Theme.init();
+refreshAuthUI();
+loadData();
+</script>
+</body>
+</html>
