@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memuat MPI...</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<style>
+:root{
+  --bg:#FAF8F5;
+  --surface:#FFFFFF;
+  --surface-2:#F5F2EC;
+  --border:#ECE7DE;
+  --text:#2E2E3F;
+  --text-soft:#5A5A70;
+  --muted:#8E8EA0;
+  --primary:#8899C4;
+  --primary-hover:#7386B5;
+  --primary-soft:#EDF0F8;
+  --primary-ring:#DDE4F2;
+  --lavender:#E0D7EE;
+  --m-agama-i:#7E6BA5;
+  --shadow:0 2px 10px rgba(46,46,63,.05);
+  --shadow-lg:0 12px 32px rgba(46,46,63,.10);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --header-h:56px;
+  --footer-h:52px;
+}
+[data-theme="dark"]{
+  --bg:#1C1C28;
+  --surface:#24242F;
+  --surface-2:#2A2A38;
+  --border:#35353F;
+  --text:#ECEAF2;
+  --text-soft:#B8B6C8;
+  --muted:#8E8CA0;
+  --primary:#98A8D0;
+  --primary-hover:#A8B8DD;
+  --primary-soft:#2E3245;
+  --primary-ring:#3A4058;
+  --lavender:#3A3248;
+  --m-agama-i:#B8A8D8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;height:100vh;overflow:hidden;
+  transition:background .3s,color .3s;
+}
+svg{display:block}
+.icon{
+  width:18px;height:18px;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0;
+}
+.icon-lg{width:28px;height:28px;stroke-width:1.5}
+
+/* ===== HEADER ===== */
+.vh{
+  height:var(--header-h);flex-shrink:0;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.6rem;
+  padding:0 .85rem;z-index:10;
+}
+.vh-back{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.5rem .85rem;border-radius:9px;
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--text-soft);font-size:.83rem;font-weight:600;
+  text-decoration:none;transition:all .2s var(--ease);
+  font-family:inherit;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;
+}
+.vh-back:hover{
+  background:var(--primary-soft);color:var(--primary);
+  border-color:var(--primary-ring);
+}
+.vh-back .icon{width:15px;height:15px;stroke-width:2.2}
+.vh-title{
+  flex:1;min-width:0;display:flex;flex-direction:column;
+  line-height:1.15;overflow:hidden;padding:0 .25rem;
+}
+.vh-title .label{
+  font-size:.62rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.6px;font-weight:600;
+}
+.vh-title .judul{
+  font-size:.92rem;font-weight:700;letter-spacing:-.005em;
+  color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.vh-actions{display:flex;gap:.35rem;flex-shrink:0}
+.vh-btn{
+  width:36px;height:36px;border-radius:9px;
+  display:grid;place-items:center;
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--text-soft);cursor:pointer;
+  transition:all .2s var(--ease);font-family:inherit;
+}
+.vh-btn:hover{
+  background:var(--primary-soft);color:var(--primary);
+  border-color:var(--primary-ring);
+}
+
+/* ===== FRAME ===== */
+.vframe{
+  flex:1;position:relative;background:var(--surface);
+  overflow:hidden;
+}
+.vframe iframe{
+  position:absolute;inset:0;width:100%;height:100%;
+  border:none;display:block;background:var(--surface);
+}
+
+/* ===== LOADING ===== */
+.loading{
+  position:absolute;inset:0;display:grid;place-items:center;
+  background:var(--bg);z-index:5;transition:opacity .3s;
+}
+.loading.hide{opacity:0;pointer-events:none}
+.spinner{
+  width:38px;height:38px;
+  border:3px solid var(--border);border-top-color:var(--primary);
+  border-radius:50%;animation:spin .85s linear infinite;
+  margin:0 auto .85rem;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:.85rem;color:var(--muted);text-align:center}
+
+/* ===== ERROR ===== */
+.error{
+  position:absolute;inset:0;display:grid;place-items:center;
+  padding:1.5rem;background:var(--bg);z-index:6;
+}
+.error.hidden{display:none}
+.empty{
+  text-align:center;padding:2.5rem 1.75rem;max-width:400px;
+  background:var(--surface);border:1px dashed var(--border);
+  border-radius:14px;
+}
+.empty-ic{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--primary-soft);color:var(--primary);
+  display:grid;place-items:center;margin:0 auto 1rem;
+}
+.empty h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.empty p{color:var(--muted);font-size:.85rem;margin-bottom:1.25rem;line-height:1.5}
+.empty code{
+  background:var(--surface-2);padding:.15rem .4rem;
+  border-radius:4px;font-size:.8rem;color:var(--text-soft);
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.65rem 1.25rem;border-radius:9px;
+  background:var(--primary);color:#fff;
+  font-size:.86rem;font-weight:700;text-decoration:none;
+  border:none;cursor:pointer;font-family:inherit;
+  transition:all .2s var(--ease);
+}
+.btn:hover{background:var(--primary-hover)}
+.btn .icon{width:15px;height:15px;stroke-width:2.2}
+
+/* ===== FOOTER ===== */
+.vf{
+  height:var(--footer-h);flex-shrink:0;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  padding:0 1rem;font-size:.78rem;color:var(--muted);
+  text-align:center;line-height:1.3;
+}
+.vf .author{color:var(--text-soft);font-weight:700}
+.vf .school{color:var(--primary);font-weight:600}
+.vf .dot{margin:0 .4rem;color:var(--border)}
+
+/* ===== FULLSCREEN ===== */
+body.fullscreen .vh,
+body.fullscreen .vf{display:none}
+
+@media(max-width:560px){
+  :root{--header-h:52px;--footer-h:48px}
+  .vh .text{display:none}
+  .vh-back{padding:.5rem .7rem}
+  .vh-title .judul{font-size:.85rem}
+  .vf{font-size:.72rem;padding:0 .6rem}
+  .vf .dot{margin:0 .25rem}
+}
+</style>
+</head>
+<body>
+
+<header class="vh">
+  <a class="vh-back" href="index.html" title="Kembali ke Katalog">
+    <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+    <span class="text">Kembali</span>
+  </a>
+
+  <div class="vh-title">
+    <span class="label">Multimedia Pembelajaran</span>
+    <span class="judul" id="mpiTitle">Memuat...</span>
+  </div>
+
+  <div class="vh-actions">
+    <button class="vh-btn" id="reloadBtn" title="Muat ulang">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-9-9 9 9 0 0 1 9-9c2.5 0 4.8 1 6.5 2.6L21 8"/><path d="M21 3v5h-5"/></svg>
+    </button>
+    <button class="vh-btn" id="fsBtn" title="Layar penuh">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="vframe">
+  <div class="loading" id="loading">
+    <div>
+      <div class="spinner"></div>
+      <div class="loading-text">Memuat MPI...</div>
+    </div>
+  </div>
+
+  <div class="error hidden" id="errorBox">
+    <div class="empty">
+      <div class="empty-ic">
+        <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      </div>
+      <h3>MPI tidak dapat dimuat</h3>
+      <p id="errorMsg">File tidak ditemukan atau rusak.</p>
+      <a class="btn" href="index.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        Kembali ke Katalog
+      </a>
+    </div>
+  </div>
+
+  <iframe id="mpiFrame" src="" allow="autoplay; fullscreen; clipboard-write" allowfullscreen referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation-by-user-activation"></iframe>
+</div>
+
+<footer class="vf">
+  Dibuat oleh <span class="author" id="footerGuru">Guru</span>
+  <span class="dot">·</span>
+  <span class="school">SD Negeri 1 Godegan</span>
+</footer>
+
+<script>
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+const params = new URLSearchParams(location.search);
+const fileUrl = params.get('file') || '';
+const titleIn = params.get('title') || 'MPI';
+const guruIn = params.get('guru') || 'Guru SD Negeri 1 Godegan';
+
+const frame = document.getElementById('mpiFrame');
+const loading = document.getElementById('loading');
+const errorBox = document.getElementById('errorBox');
+const errorMsg = document.getElementById('errorMsg');
+const mpiTitle = document.getElementById('mpiTitle');
+
+document.title = titleIn + ' · MPI SDN 1 Godegan';
+mpiTitle.textContent = titleIn;
+document.getElementById('footerGuru').textContent = guruIn;
+
+function showError(msg) {
+  loading.classList.add('hide');
+  errorMsg.innerHTML = msg;
+  errorBox.classList.remove('hidden');
+}
+
+if (!fileUrl) {
+  showError('Parameter file tidak ditemukan di URL.');
+} else {
+  const sep = fileUrl.includes('?') ? '&' : '?';
+  frame.src = fileUrl + sep + '_viewer=1';
+
+  const guard = setTimeout(() => {
+    if (!loading.classList.contains('hide')) {
+      showError('File terlalu lama dimuat: <code>' + esc(fileUrl) + '</code>');
+    }
+  }, 15000);
+
+  frame.addEventListener('load', () => {
+    clearTimeout(guard);
+    loading.classList.add('hide');
+    errorBox.classList.add('hidden');
+    try {
+      const t = frame.contentDocument?.title;
+      if (t && t !== titleIn) {
+        document.title = t + ' · SDN 1 Godegan';
+        mpiTitle.textContent = t;
+      }
+    } catch (e) {}
+  });
+
+  frame.addEventListener('error', () => {
+    clearTimeout(guard);
+    showError('File tidak dapat dimuat.');
+  });
+}
+
+document.getElementById('reloadBtn').addEventListener('click', () => {
+  loading.classList.remove('hide');
+  errorBox.classList.add('hidden');
+  frame.src = frame.src;
+});
+
+document.getElementById('fsBtn').addEventListener('click', () => {
+  const d = document.documentElement;
+  if (!document.fullscreenElement) {
+    (d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen).call(d).catch(() => {});
+    document.body.classList.add('fullscreen');
+  } else {
+    (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document).catch(() => {});
+    document.body.classList.remove('fullscreen');
+  }
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) document.body.classList.remove('fullscreen');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.altKey && e.key === 'Home') location.href = 'index.html';
+});
+</script>
+</body>
+</html>
