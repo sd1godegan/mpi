@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload MPI · SDN 1 Godegan</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📤</text></svg>">
+<style>
+:root{
+  --bg:#FAF8F5;
+  --surface:#FFFFFF;
+  --surface-2:#F5F2EC;
+  --border:#ECE7DE;
+  --text:#2E2E3F;
+  --text-soft:#5A5A70;
+  --muted:#8E8EA0;
+  --primary:#8899C4;
+  --primary-hover:#7386B5;
+  --primary-soft:#EDF0F8;
+  --primary-ring:#DDE4F2;
+  --lavender:#E0D7EE;
+  --m-agama-i:#7E6BA5;
+  --mint:#D4E8DC;
+  --m-bing-i:#5E8F84;
+  --butter:#F5EBC8;
+  --m-jawa-i:#A89454;
+  --err:#B8707A;
+  --ok:#6B8F62;
+  --rose:#F5DCE2;
+  --shadow:0 2px 10px rgba(46,46,63,.05);
+  --shadow-lg:0 12px 32px rgba(46,46,63,.10);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --radius:14px;
+}
+[data-theme="dark"]{
+  --bg:#1C1C28;
+  --surface:#24242F;
+  --surface-2:#2A2A38;
+  --border:#35353F;
+  --text:#ECEAF2;
+  --text-soft:#B8B6C8;
+  --muted:#8E8CA0;
+  --primary:#98A8D0;
+  --primary-hover:#A8B8DD;
+  --primary-soft:#2E3245;
+  --primary-ring:#3A4058;
+  --lavender:#3A3248;
+  --m-agama-i:#B8A8D8;
+  --mint:#2A3630;
+  --m-bing-i:#98D0C0;
+  --butter:#3A3428;
+  --m-jawa-i:#D8C898;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;min-height:100vh;
+  transition:background .3s,color .3s;
+}
+svg{display:block}
+.icon{
+  width:20px;height:20px;stroke:currentColor;stroke-width:1.75;
+  stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0;
+}
+.icon-sm{width:15px;height:15px;stroke-width:2.2}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:.85rem 1rem;
+  position:sticky;top:0;z-index:20;
+}
+.topbar-inner{
+  max-width:720px;margin:0 auto;
+  display:flex;align-items:center;gap:.75rem;
+}
+.back-btn{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.5rem .8rem;border-radius:9px;
+  background:var(--surface-2);border:1px solid var(--border);
+  color:var(--text-soft);font-size:.83rem;font-weight:600;
+  text-decoration:none;transition:all .2s var(--ease);
+  white-space:nowrap;flex-shrink:0;
+}
+.back-btn:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
+.back-btn .icon{width:15px;height:15px;stroke-width:2.2}
+.topbar h1{
+  flex:1;font-size:.98rem;font-weight:700;
+  letter-spacing:-.01em;color:var(--text);
+  display:flex;align-items:center;gap:.5rem;
+}
+.topbar h1 .icon{width:17px;height:17px;stroke-width:2}
+.user-chip{
+  display:flex;align-items:center;gap:.45rem;
+  padding:.35rem .75rem .35rem .35rem;
+  border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--border);
+  font-size:.78rem;font-weight:600;color:var(--text-soft);
+}
+.user-chip .av{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--butter);color:var(--m-jawa-i);
+  display:grid;place-items:center;
+  font-size:.62rem;font-weight:800;
+}
+
+/* ===== WRAP ===== */
+.wrap{max-width:720px;margin:0 auto;padding:1.25rem 1rem 3rem}
+
+/* ===== PANEL ===== */
+.panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.5rem;
+  box-shadow:var(--shadow);
+}
+.panel-head{margin-bottom:1.5rem}
+.panel-head h2{
+  font-size:1.1rem;font-weight:700;
+  letter-spacing:-.01em;margin-bottom:.25rem;
+}
+.panel-head .sub{color:var(--muted);font-size:.85rem}
+
+/* ===== FIELDS ===== */
+.field{margin-bottom:1.15rem}
+.field label{
+  display:block;font-size:.82rem;font-weight:600;
+  color:var(--text);margin-bottom:.4rem;
+}
+.field label .req{color:var(--err)}
+.field label .opt{color:var(--muted);font-weight:500;font-size:.75rem}
+
+.input,select{
+  width:100%;padding:.7rem .9rem;
+  border:1.5px solid var(--border);border-radius:10px;
+  background:var(--surface-2);color:var(--text);
+  font-size:.92rem;font-family:inherit;outline:none;
+  transition:all .2s var(--ease);
+}
+.input:focus,select:focus{
+  border-color:var(--primary);background:var(--surface);
+  box-shadow:0 0 0 3px var(--primary-ring);
+}
+.input::placeholder{color:var(--muted);opacity:.7}
+select{
+  appearance:none;cursor:pointer;padding-right:2.4rem;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238E8EA0' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right .85rem center;
+}
+textarea.input{resize:vertical;min-height:80px;font-family:inherit}
+
+/* ===== FILE DROP ===== */
+.drop{
+  border:1.5px dashed var(--border);border-radius:12px;
+  padding:1.5rem 1rem;text-align:center;
+  cursor:pointer;transition:all .2s var(--ease);
+  background:var(--surface-2);
+}
+.drop:hover{border-color:var(--primary);background:var(--primary-soft)}
+.drop.has{border-color:var(--ok);background:#E8F0E4}
+[data-theme="dark"] .drop.has{background:#2A3628}
+.drop input{display:none}
+.drop-ic{
+  width:42px;height:42px;border-radius:12px;
+  background:var(--surface);color:var(--primary);
+  display:grid;place-items:center;margin:0 auto .65rem;
+  border:1px solid var(--border);
+  transition:all .2s;
+}
+.drop.has .drop-ic{background:var(--mint);color:var(--m-bing-i);border-color:transparent}
+.drop-ic .icon{width:20px;height:20px;stroke-width:2}
+.drop .text{font-size:.86rem;font-weight:600;color:var(--text);margin-bottom:.15rem}
+.drop .hint{font-size:.75rem;color:var(--muted)}
+.drop .file-name{
+  margin-top:.6rem;font-size:.78rem;color:var(--muted);
+  padding:.35rem .7rem;border-radius:8px;
+  background:var(--surface);border:1px solid var(--border);
+  display:inline-block;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.drop .file-name.has{color:var(--ok);font-weight:600;border-color:var(--ok)}
+
+.preview{
+  margin-top:.75rem;border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);display:none;
+}
+.preview.show{display:block}
+.preview img{width:100%;height:auto;display:block;max-height:220px;object-fit:cover}
+
+/* ===== LINK PREVIEW ===== */
+.link-preview{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.7rem .9rem;border-radius:10px;
+  background:var(--primary-soft);
+  border:1.5px dashed var(--primary-ring);
+  font-size:.82rem;color:var(--primary);
+  word-break:break-all;
+}
+.link-preview .icon{width:16px;height:16px;stroke-width:2;flex-shrink:0}
+.link-preview code{
+  font-family:'Courier New',monospace;
+  font-weight:700;font-size:.8rem;
+}
+
+/* ===== SUBMIT ===== */
+.submit-area{
+  margin-top:1.5rem;padding-top:1.25rem;
+  border-top:1px solid var(--border);
+}
+.submit-btn{
+  width:100%;padding:.9rem;border-radius:10px;border:none;
+  background:var(--primary);color:#fff;
+  font-weight:700;font-size:.92rem;cursor:pointer;
+  font-family:inherit;transition:all .2s var(--ease);
+  display:flex;align-items:center;justify-content:center;gap:.55rem;
+  letter-spacing:-.005em;
+}
+.submit-btn:hover:not(:disabled){
+  background:var(--primary-hover);
+  transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(136,153,196,.35);
+}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.submit-btn .icon{width:17px;height:17px;stroke-width:2.2}
+.spinner-sm{
+  width:16px;height:16px;
+  border:2px solid rgba(255,255,255,.4);border-top-color:#fff;
+  border-radius:50%;animation:spin .7s linear infinite;
+  display:none;
+}
+.submit-btn.loading .spinner-sm{display:inline-block}
+.submit-btn.loading .icon{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== PROGRESS ===== */
+.progress{margin-top:1rem;display:none}
+.progress.show{display:block}
+.bar{
+  height:6px;background:var(--surface-2);border-radius:3px;
+  overflow:hidden;border:1px solid var(--border);
+}
+.bar span{
+  display:block;height:100%;width:0%;
+  background:var(--primary);border-radius:3px;
+  transition:width .35s var(--ease);
+}
+.progress-text{
+  margin-top:.5rem;font-size:.78rem;color:var(--muted);
+  text-align:center;
+}
+
+/* ===== SUCCESS ===== */
+.success{display:none;text-align:center;padding:2rem 1rem}
+.success.show{display:block;animation:fadeUp .4s var(--ease)}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.success-ic{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--mint);color:var(--m-bing-i);
+  display:grid;place-items:center;margin:0 auto 1rem;
+}
+.success-ic .icon{width:32px;height:32px;stroke-width:2}
+.success h3{
+  font-size:1.15rem;font-weight:700;
+  letter-spacing:-.01em;margin-bottom:.4rem;
+}
+.success p{color:var(--muted);font-size:.88rem;margin-bottom:1.5rem}
+.success-actions{
+  display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap;
+}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+  padding:.7rem 1.25rem;border-radius:10px;
+  background:var(--surface-2);color:var(--text-soft);
+  border:1px solid var(--border);
+  font-weight:700;font-size:.88rem;text-decoration:none;
+  cursor:pointer;font-family:inherit;transition:all .2s var(--ease);
+}
+.btn-secondary:hover{
+  background:var(--primary-soft);color:var(--primary);
+  border-color:var(--primary-ring);
+}
+.btn-secondary .icon{width:15px;height:15px;stroke-width:2.2}
+
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+  padding:.7rem 1.25rem;border-radius:10px;
+  background:var(--primary);color:#fff;
+  font-weight:700;font-size:.88rem;text-decoration:none;
+  cursor:pointer;font-family:inherit;transition:all .2s var(--ease);
+  border:none;
+}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-primary .icon{width:15px;height:15px;stroke-width:2.2}
+
+@media(max-width:640px){
+  .panel{padding:1.15rem}
+  .topbar-inner{gap:.5rem}
+  .topbar h1{font-size:.88rem}
+  .topbar h1 .text{display:none}
+  .user-chip .name{display:none}
+  .user-chip{padding:.35rem .35rem}
+  .wrap{padding:1rem .85rem 2.5rem}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back-btn" href="index.html" title="Kembali">
+      <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+      <span class="label">Katalog</span>
+    </a>
+    <h1>
+      <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M12 3v12M7 8l5-5 5 5"/></svg>
+      <span class="text">Upload MPI</span>
+    </h1>
+    <div class="user-chip">
+      <span class="av" id="userAvatar">?</span>
+      <span class="name" id="userName">User</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="panel" id="panelForm">
+    <div class="panel-head">
+      <h2>Tambah MPI Baru</h2>
+      <p class="sub">Pilih file HTML, isi informasi, lalu klik Upload.</p>
+    </div>
+
+    <form id="form">
+      <!-- File MPI -->
+      <div class="field">
+        <label>File MPI (.html) <span class="req">*</span></label>
+        <div class="drop" id="dropMPI">
+          <input type="file" id="fileMPI" accept=".html,.htm">
+          <div class="drop-ic">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          </div>
+          <div class="text">Klik untuk pilih file HTML</div>
+          <div class="hint">Maks 2 MB · dari AI (Claude, ChatGPT, dll)</div>
+          <div class="file-name" id="fileNameMPI">Belum ada file</div>
+        </div>
+      </div>
+
+      <!-- Thumbnail -->
+      <div class="field">
+        <label>Screenshot MPI <span class="opt">(opsional, biar menarik)</span></label>
+        <div class="drop" id="dropThumb">
+          <input type="file" id="fileThumb" accept="image/*">
+          <div class="drop-ic">
+            <svg class="icon" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          </div>
+          <div class="text">Klik untuk pilih screenshot</div>
+          <div class="hint">Maks 5 MB · otomatis dikompres</div>
+          <div class="file-name" id="fileNameThumb">Belum ada gambar</div>
+        </div>
+        <div class="preview" id="thumbPreview">
+          <img id="thumbImg" alt="Preview">
+        </div>
+      </div>
+
+      <!-- Kelas -->
+      <div class="field">
+        <label for="kelas">Kelas <span class="req">*</span></label>
+        <select id="kelas" required>
+          <option value="">-- Pilih Kelas --</option>
+          <option value="1">Kelas 1</option>
+          <option value="2">Kelas 2</option>
+          <option value="3">Kelas 3</option>
+          <option value="4">Kelas 4</option>
+          <option value="5">Kelas 5</option>
+          <option value="6">Kelas 6</option>
+        </select>
+      </div>
+
+      <!-- Mapel -->
+      <div class="field">
+        <label for="mapel">Mata Pelajaran <span class="req">*</span></label>
+        <select id="mapel" required>
+          <option value="">-- Pilih Mata Pelajaran --</option>
+        </select>
+      </div>
+
+      <!-- Judul -->
+      <div class="field">
+        <label for="judul">Judul MPI <span class="req">*</span></label>
+        <input type="text" id="judul" class="input" placeholder="Contoh: Penjumlahan 1-10" required maxlength="100">
+      </div>
+
+      <!-- Deskripsi -->
+      <div class="field">
+        <label for="deskripsi">Deskripsi <span class="opt">(opsional)</span></label>
+        <textarea id="deskripsi" class="input" placeholder="Penjelasan singkat tentang MPI..." maxlength="300"></textarea>
+      </div>
+
+      <!-- Link Preview -->
+      <div class="field">
+        <label>Link otomatis</label>
+        <div class="link-preview">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <code id="linkText">Pilih file & kelas dulu...</code>
+        </div>
+      </div>
+
+      <div class="submit-area">
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="spinner-sm"></span>
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M12 3v12M7 8l5-5 5 5"/></svg>
+          <span>Upload MPI</span>
+        </button>
+
+        <div class="progress" id="progress">
+          <div class="bar"><span id="progressBar"></span></div>
+          <div class="progress-text" id="progressText">Menyiapkan...</div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Success -->
+  <div class="panel success" id="panelSuccess">
+    <div class="success-ic">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h3>MPI Berhasil Diupload!</h3>
+    <p id="successMsg">File sudah masuk ke katalog.</p>
+    <div class="success-actions">
+      <a class="btn-primary" href="index.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        Lihat Katalog
+      </a>
+      <button class="btn-secondary" onclick="resetForm()">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Upload Lagi
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxQ7Ve-VLGJIYqJqxHJEfJnnpeq_rw3cGs-LlmRqD81md_GMtPx4H44r6QptEkfF2QGRg/exec";
+
+const Auth = {
+  KEY: 'mpi_auth_v3',
+  get() { try { return JSON.parse(localStorage.getItem(this.KEY) || 'null'); } catch { return null; } },
+  clear() { localStorage.removeItem(this.KEY); },
+  isValid() { const a = this.get(); return !!(a && a.username && a.pin); }
+};
+
+const API = {
+  async postAuth(action, data) {
+    const a = Auth.get();
+    if (!a) throw new Error('Silakan login terlebih dahulu');
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action, username: a.username, pin: a.pin, ...data })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+    return json;
+  }
+};
+
+const ClientCache = { remove(k) { localStorage.removeItem('mpi_c_' + k); } };
+
+function sanitizeFilename(name) {
+  let b = name.replace(/\.html?$/i, '').toLowerCase();
+  b = b.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  b = b.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  if (b.length > 60) b = b.substring(0, 60).replace(/-+$/, '');
+  if (!b) b = 'mpi-' + Math.floor(Date.now() / 1000);
+  return b + '.html';
+}
+
+async function compressImage(file, maxW = 800, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = e => img.src = e.target.result;
+    reader.onerror = reject;
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      let { width, height } = img;
+      if (width > maxW) { height = Math.round(height * (maxW / width)); width = maxW; }
+      c.width = width; c.height = height;
+      c.getContext('2d').drawImage(img, 0, 0, width, height);
+      c.toBlob(blob => {
+        if (!blob) return reject(new Error('Kompres gagal'));
+        const r2 = new FileReader();
+        r2.onload = () => resolve({ base64: r2.result.split(',')[1], size: blob.size });
+        r2.readAsDataURL(blob);
+      }, 'image/jpeg', quality);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function readBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result.split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+const DAFTAR_MAPEL = [
+  'Pendidikan Agama dan Budi Pekerti','Pendidikan Pancasila','Bahasa Indonesia','Bahasa Inggris','Matematika','Seni Budaya','Pendidikan Jasmani Olahraga dan Kesehatan (PJOK)','Ilmu Pengetahuan Alam dan Sosial (IPAS)','Teknologi Informasi dan Komunikasi (TIK)','Bahasa Jawa','Membatik'
+];
+
+if (!Auth.isValid()) location.replace('login.html?redirect=' + encodeURIComponent('upload.html'));
+
+const $ = id => document.getElementById(id);
+
+(function () {
+  const a = Auth.get();
+  if (!a) return;
+  const u = a.user || {};
+  const ini = (u.nama || '?').split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
+  $('userAvatar').textContent = ini || '?';
+  $('userName').textContent = (u.nama || '').split(' ')[0] || 'User';
+})();
+
+DAFTAR_MAPEL.forEach(m => {
+  const o = document.createElement('option');
+  o.value = m; o.textContent = m;
+  $('mapel').appendChild(o);
+});
+
+let fileMPI = null, fileThumb = null;
+
+$('dropMPI').addEventListener('click', () => $('fileMPI').click());
+$('fileMPI').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (!/\.html?$/i.test(f.name)) { alert('File harus .html atau .htm'); e.target.value = ''; return; }
+  if (f.size > 2 * 1024 * 1024) { alert('File MPI maksimal 2 MB'); e.target.value = ''; return; }
+  fileMPI = f;
+  $('fileNameMPI').textContent = `${f.name} (${(f.size/1024).toFixed(1)} KB)`;
+  $('fileNameMPI').classList.add('has');
+  $('dropMPI').classList.add('has');
+  updateLinkPreview();
+});
+
+$('dropThumb').addEventListener('click', () => $('fileThumb').click());
+$('fileThumb').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (!/^image\//.test(f.type)) { alert('File harus gambar'); e.target.value = ''; return; }
+  if (f.size > 5 * 1024 * 1024) { alert('Gambar maksimal 5 MB'); e.target.value = ''; return; }
+  fileThumb = f;
+  $('fileNameThumb').textContent = `${f.name} (${(f.size/1024).toFixed(1)} KB)`;
+  $('fileNameThumb').classList.add('has');
+  $('dropThumb').classList.add('has');
+  const r = new FileReader();
+  r.onload = ev => { $('thumbImg').src = ev.target.result; $('thumbPreview').classList.add('show'); };
+  r.readAsDataURL(f);
+});
+
+function updateLinkPreview() {
+  const k = $('kelas').value;
+  if (!fileMPI || !k) { $('linkText').textContent = 'Pilih file & kelas dulu...'; return; }
+  const fn = sanitizeFilename(fileMPI.name);
+  $('linkText').textContent = `kelas${k}/${fn}`;
+  window._genLink = `kelas${k}/${fn}`;
+  window._genFilename = fn;
+}
+$('kelas').addEventListener('change', updateLinkPreview);
+
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!fileMPI) { alert('Pilih file MPI dulu'); return; }
+  if (!window._genLink) { alert('Pilih kelas dulu'); return; }
+
+  const btn = $('submitBtn'), prog = $('progress'), pbar = $('progressBar'), ptxt = $('progressText');
+  btn.disabled = true; btn.classList.add('loading');
+  prog.classList.add('show'); pbar.style.width = '10%'; ptxt.textContent = 'Membaca file...';
+
+  try {
+    const mpiB64 = await readBase64(fileMPI);
+    pbar.style.width = '30%'; ptxt.textContent = 'Memproses...';
+
+    let thumbB64 = null;
+    if (fileThumb) {
+      ptxt.textContent = 'Mengompres gambar...';
+      const c = await compressImage(fileThumb);
+      thumbB64 = c.base64;
+      pbar.style.width = '50%';
+    }
+
+    ptxt.textContent = 'Mengunggah...'; pbar.style.width = '60%';
+    const rid = `${Auth.get().username}_${Date.now()}_${Math.random().toString(36).slice(2,10)}`;
+
+    await API.postAuth('upload', {
+      requestId: rid,
+      filename: window._genFilename,
+      content: mpiB64,
+      thumbnailContent: thumbB64,
+      kelas: `kelas${$('kelas').value}`,
+      mapel: $('mapel').value,
+      judul: $('judul').value.trim(),
+      deskripsi: $('deskripsi').value.trim()
+    });
+
+    pbar.style.width = '100%'; ptxt.textContent = 'Selesai!';
+    ClientCache.remove('mpi_list');
+
+    setTimeout(() => {
+      $('panelForm').style.display = 'none';
+      $('panelSuccess').classList.add('show');
+      $('successMsg').textContent = `"${$('judul').value.trim()}" sudah masuk ke katalog.`;
+    }, 500);
+  } catch (err) {
+    if (/login|PIN|dinonaktifkan/i.test(err.message)) {
+      Auth.clear(); alert('Sesi tidak valid. Silakan login ulang.');
+      location.replace('login.html?redirect=upload.html');
+      return;
+    }
+    alert('Gagal: ' + err.message);
+    btn.disabled = false; btn.classList.remove('loading');
+    prog.classList.remove('show'); pbar.style.width = '0%';
+  }
+});
+
+function resetForm() {
+  $('form').reset();
+  fileMPI = null; fileThumb = null;
+  $('fileNameMPI').textContent = 'Belum ada file'; $('fileNameMPI').classList.remove('has'); $('dropMPI').classList.remove('has');
+  $('fileNameThumb').textContent = 'Belum ada gambar'; $('fileNameThumb').classList.remove('has'); $('dropThumb').classList.remove('has');
+  $('thumbPreview').classList.remove('show');
+  $('linkText').textContent = 'Pilih file & kelas dulu...';
+  $('submitBtn').disabled = false; $('submitBtn').classList.remove('loading');
+  $('progress').classList.remove('show'); $('progressBar').style.width = '0%';
+  $('panelSuccess').classList.remove('show'); $('panelForm').style.display = '';
+  window._genLink = null; window._genFilename = null;
+}
+</script>
+</body>
+</html>
