@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Angka - MPI Matematika Kelas 4 SD</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Comic Sans MS', 'Segoe UI', sans-serif; }
+  
+  body {
+    background: linear-gradient(135deg, #43cea2 0%, #185a9d 50%, #7b4397 100%);
+    min-height: 100vh;
+    color: #333;
+    overflow-x: hidden;
+  }
+  
+  .container { max-width: 1050px; margin: 0 auto; padding: 20px; }
+  
+  /* HEADER */
+  header {
+    background: linear-gradient(90deg, #f7971e, #ffd200, #21d4fd, #b721ff);
+    padding: 25px;
+    border-radius: 25px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  header h1 { font-size: 2.2em; text-shadow: 3px 3px 0 rgba(0,0,0,0.25); }
+  header p { font-size: 1.1em; margin-top: 8px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+  .numbers-float { font-size: 1.8em; animation: float 3s infinite; display:inline-block; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  
+  /* NAVIGATION */
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+  nav button {
+    background: white;
+    border: 3px solid transparent;
+    padding: 12px 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    color: #185a9d;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  nav button:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+  nav button.active {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #7b4397;
+    transform: scale(1.05);
+  }
+  
+  /* SECTIONS */
+  section { display: none; animation: fadeIn 0.5s; }
+  section.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  
+  .card {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-top: 8px solid #f7971e;
+  }
+  .card h2 {
+    color: #185a9d;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card h3 { color: #7b4397; margin: 15px 0 10px; font-size: 1.25em; }
+  .card p, .card li { line-height: 1.8; font-size: 1.05em; margin-bottom: 8px; }
+  .card ul, .card ol { padding-left: 30px; }
+  
+  /* HIGHLIGHT BOXES */
+  .highlight {
+    background: linear-gradient(135deg, #fff5e1, #ffe8cc);
+    border-left: 6px solid #f7971e;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    font-size: 1.05em;
+  }
+  .example-box {
+    background: #e8f5ff;
+    border-left: 6px solid #185a9d;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+  }
+  .tip-box {
+    background: linear-gradient(135deg, #e0ffe0, #c8ffc8);
+    border-left: 6px solid #38b000;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    font-size: 1.05em;
+  }
+  .warn-box {
+    background: linear-gradient(135deg, #ffe0e0, #ffc8c8);
+    border-left: 6px solid #e63946;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    font-size: 1.05em;
+  }
+  
+  /* PLACE VALUE TABLE */
+  .pv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    text-align: center;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  }
+  .pv-table th {
+    background: linear-gradient(90deg, #185a9d, #7b4397);
+    color: white;
+    padding: 14px 8px;
+    font-size: 1em;
+  }
+  .pv-table td {
+    padding: 18px 8px;
+    font-size: 1.6em;
+    font-weight: bold;
+    background: #f9f4ff;
+    border: 2px solid #fff;
+    color: #185a9d;
+  }
+  .pv-table td.ribuan { background: #ffe8cc; color: #b85c00; }
+  .pv-table td.ratusan { background: #d4f1ff; color: #005f99; }
+  .pv-table td.puluhan { background: #e0ffe0; color: #1b5e20; }
+  .pv-table td.satuan { background: #ffd6e8; color: #b71c5c; }
+  
+  /* NUMBER CARD */
+  .number-display {
+    text-align: center;
+    font-size: 4em;
+    font-weight: bold;
+    background: linear-gradient(90deg, #f7971e, #b721ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 20px 0;
+    letter-spacing: 8px;
+  }
+  
+  /* INTERACTIVE CARDS */
+  .interactive-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+  .flip-card {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: #7b4397;
+    padding: 22px 15px;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    font-weight: bold;
+  }
+  .flip-card:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+  .flip-card.flipped {
+    background: linear-gradient(135deg, #185a9d, #7b4397);
+    color: white;
+    transform: rotateY(360deg);
+  }
+  .flip-card .icon { font-size: 2.5em; margin-bottom: 8px; }
+  .flip-card .content { font-size: 0.95em; line-height: 1.5; }
+  
+  /* TABLE */
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  table.data th, table.data td { padding: 12px 15px; text-align: left; }
+  table.data th { background: linear-gradient(90deg, #185a9d, #7b4397); color: white; }
+  table.data tr:nth-child(even) { background: #f9f4ff; }
+  table.data tr:nth-child(odd) { background: #fff; }
+  
+  /* BUTTONS */
+  .btn {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    color: #7b4397;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 1.05em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(247,151,30,0.4);
+    margin: 5px;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(247,151,30,0.5); }
+  .btn:active { transform: translateY(0); }
+  .btn-green { background: linear-gradient(90deg, #38b000, #70e000); color:white; box-shadow: 0 5px 15px rgba(56,176,0,0.4); }
+  .btn-blue { background: linear-gradient(90deg, #185a9d, #7b4397); color:white; box-shadow: 0 5px 15px rgba(24,90,157,0.4); }
+  .btn-red { background: linear-gradient(90deg, #e63946, #ff6b6b); color:white; box-shadow: 0 5px 15px rgba(230,57,70,0.4); }
+  
+  /* QUIZ */
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 15px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 200px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38b000, #70e000);
+    width: 0%;
+    transition: width 0.4s;
+  }
+  .score-badge {
+    background: linear-gradient(90deg, #ffd60a, #f7971e);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(247,151,30,0.4);
+  }
+  
+  .question {
+    background: #f9f4ff;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border-left: 6px solid #7b4397;
+  }
+  .question h3 { color: #7b4397; margin-bottom: 15px; }
+  .question p.passage {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+    font-style: italic;
+    border: 2px dashed #f7971e;
+    line-height: 1.7;
+    font-size: 1.15em;
+    text-align: center;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+  .option {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 3px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1em;
+    text-align: left;
+    font-family: inherit;
+  }
+  .option:hover { border-color: #f7971e; transform: translateX(5px); }
+  .option.correct { background: #d4ffd4; border-color: #38b000; animation: pulse 0.5s; }
+  .option.wrong { background: #ffd4d4; border-color: #e63946; }
+  .option.disabled { cursor: not-allowed; opacity: 0.7; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+  
+  .feedback {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    display: none;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.4s; }
+  .feedback.correct { background: #d4ffd4; color: #1b5e20; border-left: 6px solid #38b000; }
+  .feedback.wrong { background: #ffd4d4; color: #b71c1c; border-left: 6px solid #e63946; }
+  
+  /* INPUT & RESULT */
+  .input-answer {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 3px solid #ddd;
+    font-size: 1.1em;
+    font-family: inherit;
+    margin-top: 10px;
+  }
+  .input-answer:focus { border-color: #f7971e; outline: none; }
+  
+  .result-screen {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .result-screen .badge { font-size: 6em; animation: bounce 1s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+  .result-screen h2 { font-size: 2.5em; color: #7b4397; margin: 20px 0; }
+  .result-screen .final-score {
+    font-size: 4em;
+    font-weight: bold;
+    background: linear-gradient(90deg, #f7971e, #b721ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* GAME */
+  .game-container {
+    background: linear-gradient(135deg, #fff5e1, #ffe8cc);
+    padding: 25px;
+    border-radius: 20px;
+    margin: 20px 0;
+  }
+  .game-sentence {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin: 10px 0;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    font-size: 1.05em;
+  }
+  .game-sentence:hover { border-color: #f7971e; transform: translateX(5px); }
+  .game-sentence.selected-correct { background: #d4ffd4; border-color: #38b000; }
+  .game-sentence.selected-wrong { background: #ffd4d4; border-color: #e63946; }
+  
+  /* BLOCK BUILDER */
+  .blocks-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .block {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+    user-select: none;
+  }
+  .block.ribuan { background: #f7971e; }
+  .block.ratusan { background: #185a9d; }
+  .block.puluhan { background: #38b000; }
+  .block.satuan { background: #e63946; }
+  .block:hover { transform: translateY(-5px); box-shadow: 0 11px 0 rgba(0,0,0,0.2); }
+  .block:active { transform: translateY(0); box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+  
+  /* REFLECTION */
+  .reflection textarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 3px solid #e0e0e0;
+    font-size: 1em;
+    font-family: inherit;
+    min-height: 80px;
+    resize: vertical;
+  }
+  .reflection textarea:focus { border-color: #f7971e; outline: none; }
+  .emoji-check { display: flex; gap: 20px; justify-content: center; margin: 20px 0; }
+  .emoji-check span {
+    font-size: 3em;
+    cursor: pointer;
+    transition: all 0.3s;
+    filter: grayscale(1);
+  }
+  .emoji-check span:hover, .emoji-check span.selected { filter: grayscale(0); transform: scale(1.2); }
+  
+  /* FOOTER */
+  footer {
+    text-align: center;
+    color: white;
+    padding: 20px;
+    font-size: 0.95em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
+  
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.4em; }
+    .card { padding: 20px; }
+    nav button { padding: 8px 12px; font-size: 0.85em; }
+    .number-display { font-size: 2.5em; letter-spacing: 4px; }
+    .pv-table td { font-size: 1.2em; padding: 12px 4px; }
+    .block { width: 55px; height: 55px; font-size: 1.2em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="numbers-float">1️⃣ 2️⃣ 3️⃣ 4️⃣</div>
+    <h1>PETUALANGAN ANGKA 🔢</h1>
+    <p>MPI Matematika Kelas 4 SD — Komposisi & Dekomposisi Bilangan sampai 10.000</p>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <button class="nav-btn active" data-target="home">🏠 Home</button>
+    <button class="nav-btn" data-target="tujuan">🎯 Tujuan</button>
+    <button class="nav-btn" data-target="materi">📚 Materi</button>
+    <button class="nav-btn" data-target="latihan">🎮 Latihan</button>
+    <button class="nav-btn" data-target="kuis">📝 Kuis</button>
+    <button class="nav-btn" data-target="refleksi">🔄 Refleksi</button>
+  </nav>
+
+  <!-- HOME -->
+  <section id="home" class="active">
+    <div class="card" style="text-align:center;">
+      <h2 style="justify-content:center;">👋 Selamat Datang, Petualang Angka!</h2>
+      <p style="font-size:1.15em; margin: 15px 0;">Hari ini kamu akan menjelajahi <b>dunia bilangan</b> sampai <b>10.000</b>!</p>
+      <p style="font-size:1.05em;">Kamu akan belajar bagaimana bilangan <b>disusun (komposisi)</b> dan <b>diuraikan (dekomposisi)</b> berdasarkan nilai tempatnya.</p>
+      <div class="highlight" style="text-align:left; margin-top:20px;">
+        <b>🎁 Yang akan kamu dapatkan:</b>
+        <ul>
+          <li>📖 Materi lengkap tentang nilai tempat, komposisi, dan dekomposisi</li>
+          <li>🎬 Animasi & visualisasi angka yang menarik</li>
+          <li>🎮 4 game interaktif dengan blok angka</li>
+          <li>📝 25 soal kuis dengan skor otomatis</li>
+          <li>🏆 Badge Master Angka!</li>
+        </ul>
+      </div>
+      <button class="btn" style="font-size:1.2em; margin-top:20px;" onclick="goTo('tujuan')">🚀 MULAI PETUALANGAN!</button>
+    </div>
+  </section>
+
+  <!-- TUJUAN -->
+  <section id="tujuan">
+    <div class="card">
+      <h2>🎯 Tujuan Pembelajaran</h2>
+      <p>Setelah belajar, kamu diharapkan bisa:</p>
+      <div class="interactive-cards">
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🔢</div>
+          <div class="content">Menjelaskan nilai tempat bilangan sampai 10.000</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🧩</div>
+          <div class="content">Menguraikan (dekomposisi) bilangan berdasarkan nilai tempat</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🔨</div>
+          <div class="content">Menyusun (komposisi) bilangan dari nilai tempatnya</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">✍️</div>
+          <div class="content">Menuliskan bilangan dalam bentuk panjang dan pendek</div>
+        </div>
+      </div>
+      <p style="text-align:center; color:#185a9d; font-style:italic; margin-top:15px;">👆 Klik kartu untuk membalik!</p>
+    </div>
+  </section>
+
+  <!-- MATERI -->
+  <section id="materi">
+    <!-- MATERI 1: NILAI TEMPAT -->
+    <div class="card">
+      <h2>📚 Materi 1: Nilai Tempat Bilangan</h2>
+      <div class="highlight">
+        <b>📌 Penting!</b><br>
+        Setiap angka punya <b>nilai tempat</b> yang berbeda. Semakin ke kiri, nilainya semakin besar!
+      </div>
+      
+      <h3>🎯 Nilai Tempat pada Bilangan 4 Digit</h3>
+      <table class="pv-table">
+        <tr>
+          <th>Ribuan</th>
+          <th>Ratusan</th>
+          <th>Puluhan</th>
+          <th>Satuan</th>
+        </tr>
+        <tr>
+          <td class="ribuan">1.000</td>
+          <td class="ratusan">100</td>
+          <td class="puluhan">10</td>
+          <td class="satuan">1</td>
+        </tr>
+      </table>
+      
+      <h3>📖 Contoh: Bilangan 3.472</h3>
+      <div class="number-display">3.472</div>
+      <table class="pv-table">
+        <tr>
+          <th>Angka</th>
+          <th>Nilai Tempat</th>
+          <th>Nilai Angka</th>
+        </tr>
+        <tr><td class="ribuan">3</td><td>Ribuan</td><td>3 × 1.000 = <b>3.000</b></td></tr>
+        <tr><td class="ratusan">4</td><td>Ratusan</td><td>4 × 100 = <b>400</b></td></tr>
+        <tr><td class="puluhan">7</td><td>Puluhan</td><td>7 × 10 = <b>70</b></td></tr>
+        <tr><td class="satuan">2</td><td>Satuan</td><td>2 × 1 = <b>2</b></td></tr>
+      </table>
+      
+      <div class="tip-box">
+        💡 <b>Ingat!</b> Membaca bilangan 3.472 = <b>"tiga ribu empat ratus tujuh puluh dua"</b>
+      </div>
+    </div>
+
+    <!-- MATERI 2: DEKOMPOSISI -->
+    <div class="card">
+      <h2>📚 Materi 2: Dekomposisi (Menguraikan) Bilangan</h2>
+      <div class="highlight">
+        <b>📌 Apa itu dekomposisi?</b><br>
+        <b>Dekomposisi</b> = <b>menguraikan</b> bilangan menjadi bagian-bagian sesuai nilai tempatnya.
+      </div>
+      
+      <h3>🎬 Analogi mudah:</h3>
+      <p>Bayangkan bilangan seperti <b>Lego</b> 🧱 yang bisa dibongkar menjadi bagian-bagian kecil!</p>
+      
+      <h3>📝 Contoh 1: Dekomposisi 2.537</h3>
+      <div class="example-box">
+        <p style="text-align:center; font-size:1.2em;"><b>2.537 = 2.000 + 500 + 30 + 7</b></p>
+        <ul>
+          <li>2 → ribuan → 2 × 1.000 = <b>2.000</b></li>
+          <li>5 → ratusan → 5 × 100 = <b>500</b></li>
+          <li>3 → puluhan → 3 × 10 = <b>30</b></li>
+          <li>7 → satuan → 7 × 1 = <b>7</b></li>
+        </ul>
+      </div>
+      
+      <h3>📝 Contoh 2: Dekomposisi 8.064</h3>
+      <div class="example-box">
+        <p style="text-align:center; font-size:1.2em;"><b>8.064 = 8.000 + 0 + 60 + 4</b></p>
+        <p>Atau bisa ditulis: <b>8.064 = 8.000 + 60 + 4</b></p>
+        <p><i>(Angka 0 pada ratusan tidak perlu ditulis karena nilainya 0)</i></p>
+      </div>
+      
+      <h3>📝 Contoh 3: Dekomposisi 9.999</h3>
+      <div class="example-box">
+        <p style="text-align:center; font-size:1.2em;"><b>9.999 = 9.000 + 900 + 90 + 9</b></p>
+      </div>
+      
+      <div class="warn-box">
+        ⚠️ <b>Hati-hati!</b> Jika ada angka <b>0</b> di posisi tertentu, nilainya tetap 0 dan bisa tidak ditulis.
+      </div>
+    </div>
+
+    <!-- MATERI 3: KOMPOSISI -->
+    <div class="card">
+      <h2>📚 Materi 3: Komposisi (Menyusun) Bilangan</h2>
+      <div class="highlight">
+        <b>📌 Apa itu komposisi?</b><br>
+        <b>Komposisi</b> = <b>menyusun</b> bilangan dari nilai-nilai tempat menjadi satu bilangan utuh.
+      </div>
+      
+      <h3>🎬 Analogi mudah:</h3>
+      <p>Kalau dekomposisi <b>membongkar</b> Lego, komposisi <b>merakit</b> Lego menjadi bentuk utuh! 🧱🔨</p>
+      
+      <h3>📝 Contoh 1: Komposisi dari nilai tempat</h3>
+      <div class="example-box">
+        <p style="text-align:center; font-size:1.2em;">
+          <b>4.000 + 200 + 50 + 6 = ?</b>
+        </p>
+        <p style="text-align:center; font-size:1.5em; color:#f7971e;">
+          <b>= 4.256</b>
+        </p>
+      </div>
+      
+      <h3>📝 Contoh 2:</h3>
+      <div class="example-box">
+        <p style="text-align:center; font-size:1.2em;">
+          <b>7.000 + 300 + 0 + 9 = ?</b>
+        </p>
+        <p style="text-align:center; font-size:1.5em; color:#f7971e;">
+          <b>= 7.309</b>
+        </p>
+        <p><i>Perhatikan: puluhan = 0, jadi angka di posisi puluhan adalah 0.</i></p>
+      </div>
+      
+      <h3>📝 Contoh 3:</h3>
+      <div class="example-box">
+        <p style="text-align:center; font-size:1.2em;">
+          <b>5.000 + 600 + 20 + 3 = ?</b>
+        </p>
+        <p style="text-align:center; font-size:1.5em; color:#f7971e;">
+          <b>= 5.623</b>
+        </p>
+      </div>
+      
+      <div class="tip-box">
+        💡 <b>Tips Cepat!</b><br>
+        Susun angka dari kiri ke kanan: <b>ribuan → ratusan → puluhan → satuan</b>
+      </div>
+    </div>
+
+    <!-- MATERI 4: HUBUNGAN KOMPOSISI & DEKOMPOSISI -->
+    <div class="card">
+      <h2>📚 Materi 4: Hubungan Komposisi & Dekomposisi</h2>
+      <p>Komposisi dan dekomposisi adalah <b>kebalikan</b> satu sama lain! 🔄</p>
+      
+      <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center; align-items:center; margin:25px 0;">
+        <div style="background:linear-gradient(135deg,#f7971e,#ffd200); padding:25px; border-radius:20px; text-align:center; min-width:200px; color:#7b4397; font-weight:bold;">
+          <div style="font-size:2em;">3.742</div>
+          <div style="margin-top:10px;">Bilangan Utuh</div>
+        </div>
+        <div style="font-size:3em;">⇄</div>
+        <div style="background:linear-gradient(135deg,#185a9d,#7b4397); padding:25px; border-radius:20px; text-align:center; min-width:200px; color:white; font-weight:bold;">
+          <div style="font-size:1.3em;">3.000 + 700 + 40 + 2</div>
+          <div style="margin-top:10px;">Bentuk Panjang</div>
+        </div>
+      </div>
+      
+      <table class="data">
+        <tr>
+          <th>Arah</th>
+          <th>Proses</th>
+          <th>Contoh</th>
+        </tr>
+        <tr>
+          <td><b>Komposisi</b> ➡️</td>
+          <td>Dari bentuk panjang → bilangan utuh</td>
+          <td>2.000 + 300 + 50 + 4 = 2.354</td>
+        </tr>
+        <tr>
+          <td><b>Dekomposisi</b> ⬅️</td>
+          <td>Dari bilangan utuh → bentuk panjang</td>
+          <td>2.354 = 2.000 + 300 + 50 + 4</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- MATERI 5: LATIHAN VISUAL DENGAN BLOK -->
+    <div class="card">
+      <h2>📚 Materi 5: Membaca Bilangan Sampai 10.000</h2>
+      <div class="highlight">
+        <b>📌 Cara Membaca Bilangan 4 Digit:</b><br>
+        Ribuan → "ribu" &nbsp;|&nbsp; Ratusan → "ratus" &nbsp;|&nbsp; Puluhan → "puluh" &nbsp;|&nbsp; Satuan → "..." 
+      </div>
+      
+      <table class="data">
+        <tr>
+          <th>Bilangan</th>
+          <th>Cara Membaca</th>
+        </tr>
+        <tr><td>1.000</td><td>seribu</td></tr>
+        <tr><td>1.500</td><td>seribu lima ratus</td></tr>
+        <tr><td>2.000</td><td>dua ribu</td></tr>
+        <tr><td>3.250</td><td>tiga ribu dua ratus lima puluh</td></tr>
+        <tr><td>5.678</td><td>lima ribu enam ratus tujuh puluh delapan</td></tr>
+        <tr><td>7.009</td><td>tujuh ribu sembilan</td></tr>
+        <tr><td>8.100</td><td>delapan ribu seratus</td></tr>
+        <tr><td>9.999</td><td>sembilan ribu sembilan ratus sembilan puluh sembilan</td></tr>
+        <tr><td>10.000</td><td>sepuluh ribu</td></tr>
+      </table>
+      
+      <div class="tip-box">
+        💡 <b>Catatan:</b> Angka <b>1</b> di posisi ribuan dibaca <b>"seribu"</b> (bukan satu ribu), dan angka <b>1</b> di posisi ratusan dibaca <b>"seratus"</b>.
+      </div>
+    </div>
+  </section>
+
+  <!-- LATIHAN -->
+  <section id="latihan">
+    <!-- GAME 1 -->
+    <div class="card">
+      <h2>🎮 Game 1: Tebak Nilai Tempat</h2>
+      <p>Klik jawaban yang benar untuk setiap soal!</p>
+      
+      <div class="game-container">
+        <p><b>Soal 1:</b> Berapa nilai angka <b>5</b> pada bilangan <b>5.234</b>?</p>
+        <div class="game-sentence" onclick="checkGame1(this, true)">a) 5.000</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">b) 500</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) 50</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) 5</div>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Soal 2:</b> Berapa nilai angka <b>7</b> pada bilangan <b>3.742</b>?</p>
+        <div class="game-sentence" onclick="checkGame1(this, false)">a) 7.000</div>
+        <div class="game-sentence" onclick="checkGame1(this, true)">b) 700</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) 70</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) 7</div>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Soal 3:</b> Berapa nilai angka <b>9</b> pada bilangan <b>8.090</b>?</p>
+        <div class="game-sentence" onclick="checkGame1(this, false)">a) 900</div>
+        <div class="game-sentence" onclick="checkGame1(this, true)">b) 90</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) 9</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) 0</div>
+      </div>
+    </div>
+
+    <!-- GAME 2 -->
+    <div class="card">
+      <h2>🎮 Game 2: Pilih Bentuk Dekomposisi yang Benar</h2>
+      
+      <div class="game-container">
+        <p><b>Soal 1:</b> Dekomposisi dari <b>4.356</b> adalah …</p>
+        <div class="game-sentence" onclick="checkGame1(this, true)">a) 4.000 + 300 + 50 + 6</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">b) 4.000 + 30 + 500 + 6</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) 400 + 300 + 50 + 6</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) 4.000 + 300 + 56</div>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Soal 2:</b> Dekomposisi dari <b>7.005</b> adalah …</p>
+        <div class="game-sentence" onclick="checkGame1(this, false)">a) 7.000 + 5</div>
+        <div class="game-sentence" onclick="checkGame1(this, true)">b) 7.000 + 0 + 0 + 5</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) 700 + 5</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) 7.000 + 50</div>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Soal 3:</b> Dekomposisi dari <b>9.876</b> adalah …</p>
+        <div class="game-sentence" onclick="checkGame1(this, true)">a) 9.000 + 800 + 70 + 6</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">b) 9.000 + 87 + 6</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) 900 + 800 + 70 + 6</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) 9.000 + 800 + 76</div>
+      </div>
+    </div>
+
+    <!-- GAME 3 -->
+    <div class="card">
+      <h2>🎮 Game 3: Komposisi Bilangan (Ketik Jawaban)</h2>
+      <p>Hitung dan ketik bilangan utuh hasil komposisinya.</p>
+      
+      <div class="game-container">
+        <p><b>Soal 1:</b> 3.000 + 200 + 40 + 5 = ?</p>
+        <input type="text" id="komp1" class="input-answer" placeholder="Ketik jawaban (contoh: 3245)">
+        <button class="btn btn-green" onclick="checkTyping('komp1','3245','fbKomp1')">Cek</button>
+        <p id="fbKomp1" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Soal 2:</b> 5.000 + 700 + 0 + 8 = ?</p>
+        <input type="text" id="komp2" class="input-answer" placeholder="Ketik jawaban">
+        <button class="btn btn-green" onclick="checkTyping('komp2','5708','fbKomp2')">Cek</button>
+        <p id="fbKomp2" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Soal 3:</b> 8.000 + 60 + 4 = ?</p>
+        <input type="text" id="komp3" class="input-answer" placeholder="Ketik jawaban">
+        <button class="btn btn-green" onclick="checkTyping('komp3','8064','fbKomp3')">Cek</button>
+        <p id="fbKomp3" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Soal 4:</b> 9.000 + 900 + 90 + 9 = ?</p>
+        <input type="text" id="komp4" class="input-answer" placeholder="Ketik jawaban">
+        <button class="btn btn-green" onclick="checkTyping('komp4','9999','fbKomp4')">Cek</button>
+        <p id="fbKomp4" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+    </div>
+
+    <!-- GAME 4 -->
+    <div class="card">
+      <h2>🎮 Game 4: Bangun Bilangan dengan Blok! 🧱</h2>
+      <p>Bilangan target: <b style="font-size:1.8em; color:#f7971e;" id="targetNumber">2.345</b></p>
+      <p>Klik blok untuk menambah nilai. Capai target!</p>
+      
+      <div class="blocks-row">
+        <div class="block ribuan" onclick="addBlock(1000)">+1000</div>
+        <div class="block ratusan" onclick="addBlock(100)">+100</div>
+        <div class="block puluhan" onclick="addBlock(10)">+10</div>
+        <div class="block satuan" onclick="addBlock(1)">+1</div>
+      </div>
+      
+      <div style="background:white; padding:20px; border-radius:15px; text-align:center; margin-top:20px;">
+        <p>Nilai saat ini:</p>
+        <div style="font-size:2.5em; font-weight:bold; color:#7b4397;" id="currentValue">0</div>
+        <div style="font-size:1.2em; margin-top:10px;">Bentuk panjang: <span id="currentBreakdown" style="color:#185a9d;">-</span></div>
+        <p id="blockFeedback" style="margin-top:15px; font-weight:bold;"></p>
+        <button class="btn btn-red" onclick="resetBlocks()">🔄 Reset</button>
+        <button class="btn" onclick="newTarget()">🎲 Target Baru</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- KUIS -->
+  <section id="kuis">
+    <div class="card">
+      <h2>📝 Kuis Interaktif — 25 Soal</h2>
+      <div class="quiz-header">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="score-badge">⭐ Skor: <span id="scoreDisplay">0</span></div>
+      </div>
+      <div id="quizArea"></div>
+      <div id="resultArea"></div>
+    </div>
+  </section>
+
+  <!-- REFLEKSI -->
+  <section id="refleksi">
+    <div class="card reflection">
+      <h2>🔄 Refleksi Pembelajaran</h2>
+      <p style="margin-bottom:20px;">Bagaimana perasaanmu setelah belajar hari ini?</p>
+      <div class="emoji-check">
+        <span onclick="selectEmoji(this)">😄</span>
+        <span onclick="selectEmoji(this)">🙂</span>
+        <span onclick="selectEmoji(this)">😕</span>
+      </div>
+      
+      <h3>1. Apa hal baru yang kamu pelajari tentang komposisi & dekomposisi bilangan?</h3>
+      <textarea placeholder="Tulis di sini..."></textarea>
+      
+      <h3 style="margin-top:20px;">2. Bagian mana yang paling kamu sukai?</h3>
+      <textarea placeholder="Tulis di sini..."></textarea>
+      
+      <h3 style="margin-top:20px;">3. Bagian mana yang masih membuatmu bingung?</h3>
+      <textarea placeholder="Tulis di sini..."></textarea>
+      
+      <h3 style="margin-top:20px;">4. Lengkapi kalimat ini:</h3>
+      <p style="font-style:italic; background:#fff5e1; padding:15px; border-radius:10px;">"Hari ini aku belajar bahwa dekomposisi bilangan adalah ..."</p>
+      <textarea placeholder="Lanjutkan kalimat di atas..."></textarea>
+      
+      <div style="text-align:center; margin-top:25px;">
+        <button class="btn" onclick="saveReflection()">💾 Simpan Refleksi</button>
+      </div>
+      <p id="reflectionMsg" style="text-align:center; font-weight:bold; color:#38b000; margin-top:15px;"></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 MPI Matematika Kelas 4 SD — "Petualangan Angka"</p>
+    <p>Komposisi & Dekomposisi Bilangan Cacah sampai 10.000 🔢🎉</p>
+  </footer>
+</div>
+
+<script>
+/* ============ NAVIGASI ============ */
+function goTo(target) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(target).classList.add('active');
+  document.querySelector(`.nav-btn[data-target="${target}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => goTo(btn.dataset.target));
+});
+
+/* ============ GAME 1 & 2 ============ */
+function checkGame1(el, isCorrect) {
+  if (el.classList.contains('selected-correct') || el.classList.contains('selected-wrong')) return;
+  if (isCorrect) {
+    el.classList.add('selected-correct');
+    el.innerHTML = "✅ " + el.innerHTML;
+  } else {
+    el.classList.add('selected-wrong');
+    el.innerHTML = "❌ " + el.innerHTML;
+  }
+}
+
+/* ============ GAME 3 TYPING ============ */
+function checkTyping(inputId, correct, feedbackId) {
+  const val = document.getElementById(inputId).value.trim().replace(/\./g,'').replace(/\s/g,'');
+  const fb = document.getElementById(feedbackId);
+  if (val === correct) {
+    fb.innerHTML = '✅ Benar sekali! Hebat! 🎉';
+    fb.style.color = '#38b000';
+  } else {
+    fb.innerHTML = '❌ Belum tepat. Jawaban benar: <b>' + correct + '</b>';
+    fb.style.color = '#e63946';
+  }
+}
+
+/* ============ GAME 4 BLOCKS ============ */
+let currentValue = 0;
+let targetValue = 2345;
+
+function addBlock(val) {
+  currentValue += val;
+  updateBlockDisplay();
+  
+  if (currentValue === targetValue) {
+    document.getElementById('blockFeedback').innerHTML = '🎉 Hebat! Kamu berhasil membangun bilangan ' + targetValue + '!';
+    document.getElementById('blockFeedback').style.color = '#38b000';
+  } else if (currentValue > targetValue) {
+    document.getElementById('blockFeedback').innerHTML = '❌ Terlalu besar! Coba reset dan ulangi.';
+    document.getElementById('blockFeedback').style.color = '#e63946';
+  } else {
+    document.getElementById('blockFeedback').innerHTML = 'Terus tambahkan blok... Nilai masih kurang dari target.';
+    document.getElementById('blockFeedback').style.color = '#f7971e';
+  }
+}
+
+function updateBlockDisplay() {
+  document.getElementById('currentValue').textContent = currentValue.toLocaleString('id-ID');
+  
+  if (currentValue === 0) {
+    document.getElementById('currentBreakdown').textContent = '-';
+    return;
+  }
+  
+  let parts = [];
+  let n = currentValue;
+  if (n >= 1000) { const r = Math.floor(n/1000)*1000; parts.push(r.toLocaleString('id-ID')); n %= 1000; }
+  if (n >= 100) { const r = Math.floor(n/100)*100; parts.push(r.toString()); n %= 100; }
+  if (n >= 10) { const r = Math.floor(n/10)*10; parts.push(r.toString()); n %= 10; }
+  if (n >= 1) parts.push(n.toString());
+  
+  document.getElementById('currentBreakdown').textContent = parts.join(' + ');
+}
+
+function resetBlocks() {
+  currentValue = 0;
+  updateBlockDisplay();
+  document.getElementById('blockFeedback').innerHTML = '';
+}
+
+function newTarget() {
+  targetValue = Math.floor(Math.random() * 9000) + 1000;
+  document.getElementById('targetNumber').textContent = targetValue.toLocaleString('id-ID');
+  resetBlocks();
+}
+
+/* ============ KUIS 25 SOAL ============ */
+const quizData = [
+  // BAGIAN 1: NILAI TEMPAT (8 soal)
+  { q: "Nilai tempat angka 4 pada bilangan 4.256 adalah …", opts: ["Ribuan", "Ratusan", "Puluhan", "Satuan"], correct: 0 },
+  { q: "Nilai angka 7 pada bilangan 3.752 adalah …", opts: ["7", "70", "700", "7.000"], correct: 2 },
+  { q: "Nilai angka 5 pada bilangan 9.580 adalah …", opts: ["5", "50", "500", "5.000"], correct: 2 },
+  { q: "Nilai angka 8 pada bilangan 1.268 adalah …", opts: ["8", "80", "800", "8.000"], correct: 1 },
+  { q: "Pada bilangan 6.431, angka yang menempati nilai tempat puluhan adalah …", opts: ["6", "4", "3", "1"], correct: 2 },
+  { q: "Pada bilangan 2.089, angka yang menempati nilai tempat ratusan adalah …", opts: ["2", "0", "8", "9"], correct: 1 },
+  { q: "Nilai angka 3 pada bilangan 7.304 adalah …", opts: ["3", "30", "300", "3.000"], correct: 2 },
+  { q: "Pada bilangan 5.678, angka 5 menempati nilai tempat …", opts: ["Ribuan", "Ratusan", "Puluhan", "Satuan"], correct: 0 },
+  
+  // BAGIAN 2: DEKOMPOSISI (9 soal)
+  { q: "Bentuk dekomposisi dari 3.456 adalah …", opts: ["3.000 + 400 + 50 + 6", "3.000 + 40 + 500 + 6", "300 + 400 + 50 + 6", "3.000 + 456"], correct: 0 },
+  { q: "Bentuk dekomposisi dari 5.208 adalah …", opts: ["5.000 + 200 + 8", "5.000 + 20 + 8", "5.000 + 2 + 8", "5.000 + 28"], correct: 0 },
+  { q: "Bentuk dekomposisi dari 7.090 adalah …", opts: ["7.000 + 90", "7.000 + 900", "7.000 + 9", "7.000 + 90 + 0"], correct: 0 },
+  { q: "Bentuk dekomposisi dari 4.600 adalah …", opts: ["4.000 + 600", "4.000 + 60", "4.000 + 6", "4.600 + 0"], correct: 0 },
+  { q: "Dekomposisi dari 9.999 adalah …", opts: ["9.000 + 900 + 90 + 9", "9.000 + 99 + 99", "9 + 9 + 9 + 9", "9.999 + 0"], correct: 0 },
+  { q: "Dekomposisi dari 8.045 adalah …", opts: ["8.000 + 40 + 5", "8.000 + 400 + 5", "8.000 + 45", "8.000 + 4 + 5"], correct: 0 },
+  { q: "Dekomposisi dari 1.072 adalah …", opts: ["1.000 + 70 + 2", "1.000 + 700 + 2", "1.000 + 72", "1.000 + 7 + 2"], correct: 0 },
+  { q: "Bentuk dekomposisi dari 6.308 adalah …", opts: ["6.000 + 300 + 8", "6.000 + 30 + 8", "6.000 + 3 + 8", "6.000 + 308"], correct: 0 },
+  { q: "Bentuk dekomposisi dari 2.750 adalah …", opts: ["2.000 + 700 + 50", "2.000 + 70 + 50", "2.000 + 750", "2.000 + 700 + 5"], correct: 0 },
+  
+  // BAGIAN 3: KOMPOSISI (8 soal)
+  { q: "Hasil dari 3.000 + 200 + 40 + 5 adalah …", opts: ["3.245", "3.254", "3.425", "3.542"], correct: 0 },
+  { q: "Hasil dari 5.000 + 400 + 60 + 8 adalah …", opts: ["5.468", "5.648", "5.864", "5.486"], correct: 0 },
+  { q: "Hasil dari 7.000 + 90 + 3 adalah …", opts: ["7.093", "7.903", "7.930", "7.390"], correct: 0 },
+  { q: "Hasil dari 4.000 + 500 + 7 adalah …", opts: ["4.507", "4.057", "4.570", "4.750"], correct: 0 },
+  { q: "Hasil dari 8.000 + 20 + 1 adalah …", opts: ["8.021", "8.201", "8.210", "8.120"], correct: 0 },
+  { q: "Hasil dari 1.000 + 300 + 30 + 3 adalah …", opts: ["1.333", "1.303", "1.330", "1.033"], correct: 0 },
+  { q: "Hasil dari 9.000 + 900 + 90 + 9 adalah …", opts: ["9.999", "9.099", "9.990", "9.909"], correct: 0 },
+  { q: "Hasil dari 6.000 + 40 + 6 adalah …", opts: ["6.046", "6.406", "6.460", "6.064"], correct: 0 }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+  const area = document.getElementById('quizArea');
+  const resultArea = document.getElementById('resultArea');
+  
+  if (currentQ >= quizData.length) {
+    area.innerHTML = '';
+    const benar = score;
+    const total = quizData.length;
+    const persen = Math.round((benar/total)*100);
+    const badge = persen >= 90 ? '🥇' : persen >= 75 ? '🥈' : persen >= 60 ? '🥉' : '🎯';
+    const predikat = persen >= 90 ? 'Master Angka' : persen >= 75 ? 'Ahli Bilangan' : persen >= 60 ? 'Petualang Muda' : 'Calon Petualang';
+    const msg = persen >= 90 ? 'Luar biasa! Kamu jenius matematika!' : persen >= 75 ? 'Hebat! Pertahankan ya!' : persen >= 60 ? 'Bagus, terus berlatih!' : 'Ayo coba lagi, kamu pasti bisa!';
+    resultArea.innerHTML = `
+      <div class="result-screen">
+        <div class="badge">${badge}</div>
+        <h2>${predikat}</h2>
+        <p style="font-size:1.2em;">Skor Akhir Kamu:</p>
+        <div class="final-score">${score * 4}</div>
+        <p style="font-size:1.1em; margin-top:15px;">${msg}</p>
+        <p style="margin-top:10px; color:#185a9d;">Benar: ${benar} dari ${total} soal (${persen}%)</p>
+        <button class="btn" style="margin-top:20px;" onclick="restartQuiz()">🔄 Ulangi Kuis</button>
+      </div>`;
+    document.getElementById('progressFill').style.width = '100%';
+    return;
+  }
+  
+  answered = false;
+  const q = quizData[currentQ];
+  document.getElementById('progressFill').style.width = ((currentQ / quizData.length) * 100) + '%';
+  
+  let html = `<div class="question">
+    <h3>Soal ${currentQ + 1} dari ${quizData.length}</h3>
+    <p>${q.q}</p>
+    <div class="options">`;
+  q.opts.forEach((opt, i) => {
+    html += `<button class="option" onclick="answerQuestion(${i})">${String.fromCharCode(65+i)}. ${opt}</button>`;
+  });
+  html += `</div><div class="feedback" id="feedback"></div></div>`;
+  area.innerHTML = html;
+  resultArea.innerHTML = '';
+}
+
+function answerQuestion(idx) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[currentQ];
+  const opts = document.querySelectorAll('.option');
+  const feedback = document.getElementById('feedback');
+  
+  opts.forEach(o => o.classList.add('disabled'));
+  
+  if (idx === q.correct) {
+    opts[idx].classList.add('correct');
+    feedback.className = 'feedback correct show';
+    feedback.innerHTML = '✅ Benar! Hebat sekali! ⭐';
+    score++;
+    document.getElementById('scoreDisplay').textContent = score * 4;
+  } else {
+    opts[idx].classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+    feedback.className = 'feedback wrong show';
+    feedback.innerHTML = '❌ Belum tepat. Jawaban benar: <b>' + q.opts[q.correct] + '</b>';
+  }
+  
+  setTimeout(() => { currentQ++; renderQuestion(); }, 1800);
+}
+
+function restartQuiz() {
+  currentQ = 0; score = 0;
+  document.getElementById('scoreDisplay').textContent = 0;
+  document.getElementById('progressFill').style.width = '0%';
+  renderQuestion();
+}
+
+/* ============ REFLEKSI ============ */
+function selectEmoji(el) {
+  document.querySelectorAll('.emoji-check span').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function saveReflection() {
+  document.getElementById('reflectionMsg').textContent = '✅ Refleksimu sudah tersimpan! Terima kasih sudah belajar hari ini. 🎉';
+}
+
+/* ============ INIT ============ */
+renderQuestion();
+updateBlockDisplay();
+</script>
+</body>
+</html>
