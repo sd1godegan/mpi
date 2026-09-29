@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI — Volume Kubus</title>
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --accent:#1f6f5c;
+    --accent-2:#2a8b72;
+    --accent-soft:#e8f3ef;
+    --head:#0f3d33;
+    --line:#dcdcdc;
+    --gold:#ffb400;
+    --red:#e05252;
+    --green:#37a05a;
+    --blue:#5aa9e6;
+    --purple:#9b7ede;
+    --yellow:#ffd166;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html,body{
+    height:100%;
+    overflow:hidden;
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(135deg, #0f3d33 0%, #1f6f5c 100%);
+    user-select:none;
+  }
+
+  button{font-family:inherit;cursor:pointer;border:none;}
+
+  /* ===== APP ===== */
+  .app{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+  }
+
+  .screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    background:#fff;
+    padding:3vh 4vw;
+    animation:fadeIn .4s ease;
+    overflow-y:auto;
+  }
+  .screen.active{display:flex;}
+
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(12px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-bottom:10px;
+    border-bottom:2px solid var(--accent-soft);
+    margin-bottom:2vh;
+    flex-shrink:0;
+  }
+  .topbar .brand{
+    font-family:Georgia,serif;
+    font-weight:bold;
+    color:var(--head);
+    font-size:1.4vw;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .topbar .brand .logo{
+    width:2em;height:2em;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1em;
+  }
+  .topbar .score-badge{
+    background:var(--accent-soft);
+    color:var(--head);
+    padding:6px 16px;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:1.1vw;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .topbar .score-badge .star{color:var(--gold);}
+
+  /* ===== BERANDA ===== */
+  #beranda{
+    background:linear-gradient(160deg,#fff 0%,var(--accent-soft) 100%);
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+  }
+  .hero-badge{
+    display:inline-block;
+    background:var(--accent);
+    color:#fff;
+    padding:6px 20px;
+    border-radius:30px;
+    font-size:1.1vw;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:2vh;
+    font-weight:600;
+  }
+  .hero-title{
+    font-family:Georgia,serif;
+    color:var(--head);
+    font-size:5.5vw;
+    line-height:1.05;
+    margin-bottom:1.5vh;
+  }
+  .hero-sub{
+    color:#555;
+    font-size:1.6vw;
+    margin-bottom:3vh;
+  }
+
+  .cube-hero{
+    perspective:1200px;
+    width:22vw;height:22vw;
+    margin:1vh auto 2vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .cube-3d{
+    position:relative;
+    transform-style:preserve-3d;
+    animation:spinCube 14s infinite linear;
+  }
+  @keyframes spinCube{
+    from{transform:rotateX(-22deg) rotateY(0deg);}
+    to{transform:rotateX(-22deg) rotateY(360deg);}
+  }
+  .face{
+    position:absolute;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+    border:2px solid #0a2f26;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    font-family:Georgia,serif;
+    font-weight:bold;
+    font-size:2vw;
+    box-shadow:inset 0 0 30px rgba(0,0,0,0.15);
+  }
+
+  .btn-primary{
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;
+    padding:1.2em 3em;
+    border-radius:50px;
+    font-size:1.6vw;
+    font-weight:700;
+    letter-spacing:0.5px;
+    box-shadow:0 6px 0 #0a2f26, 0 10px 20px rgba(0,0,0,0.2);
+    transition:transform .12s, box-shadow .12s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 0 #0a2f26,0 12px 24px rgba(0,0,0,0.25);}
+  .btn-primary:active{transform:translateY(4px);box-shadow:0 2px 0 #0a2f26;}
+
+  .menu-row{
+    display:flex;
+    gap:2vw;
+    margin-top:2vh;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .menu-btn{
+    background:#fff;
+    color:var(--head);
+    border:2px solid var(--accent);
+    padding:0.9em 2em;
+    border-radius:40px;
+    font-size:1.2vw;
+    font-weight:600;
+    transition:all .15s;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .menu-btn:hover{background:var(--accent);color:#fff;transform:translateY(-2px);}
+
+  /* ===== HEADER SECTION ===== */
+  .section-head{
+    text-align:center;
+    margin-bottom:2vh;
+  }
+  .section-head h2{
+    font-family:Georgia,serif;
+    color:var(--head);
+    font-size:2.6vw;
+    margin-bottom:6px;
+  }
+  .section-head p{
+    color:#666;
+    font-size:1.1vw;
+    font-style:italic;
+  }
+
+  /* ===== SIMULASI ===== */
+  .simu-layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:3vw;
+    flex:1;
+    align-items:center;
+  }
+
+  .simu-cube-area{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    perspective:1500px;
+    min-height:40vh;
+  }
+  .simu-cube{
+    position:relative;
+    transform-style:preserve-3d;
+    animation:spinCube 16s infinite linear;
+    transition:width .3s, height .3s;
+  }
+
+  .simu-controls{
+    background:var(--accent-soft);
+    border-radius:20px;
+    padding:2.5vh 2vw;
+    border:2px solid var(--accent);
+  }
+  .simu-controls label{
+    display:block;
+    font-size:1.2vw;
+    color:var(--head);
+    font-weight:600;
+    margin-bottom:0.8vh;
+  }
+
+  .slider-wrap{
+    display:flex;
+    align-items:center;
+    gap:1.5vw;
+    margin-bottom:2.5vh;
+  }
+  input[type="range"]{
+    flex:1;
+    -webkit-appearance:none;
+    height:14px;
+    border-radius:10px;
+    background:linear-gradient(90deg,var(--accent) 0%,var(--accent-2) 100%);
+    outline:none;
+    cursor:pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:36px;height:36px;
+    border-radius:50%;
+    background:#fff;
+    border:4px solid var(--accent);
+    box-shadow:0 3px 8px rgba(0,0,0,0.25);
+    cursor:pointer;
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:36px;height:36px;
+    border-radius:50%;
+    background:#fff;
+    border:4px solid var(--accent);
+    box-shadow:0 3px 8px rgba(0,0,0,0.25);
+    cursor:pointer;
+  }
+
+  .slider-value{
+    min-width:5vw;
+    text-align:center;
+    background:var(--accent);
+    color:#fff;
+    padding:0.4em 0.9em;
+    border-radius:12px;
+    font-weight:700;
+    font-size:1.4vw;
+  }
+
+  .info-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1vw;
+    margin-bottom:1.5vh;
+  }
+  .info-card{
+    background:#fff;
+    border-radius:14px;
+    padding:1.2vh 1.2vw;
+    border:2px solid var(--line);
+    text-align:center;
+  }
+  .info-card .lbl{
+    font-size:0.95vw;
+    color:#666;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:4px;
+  }
+  .info-card .val{
+    font-family:Georgia,serif;
+    font-size:1.8vw;
+    color:var(--head);
+    font-weight:bold;
+  }
+
+  .formula-display{
+    background:#fff;
+    border:2px dashed var(--accent);
+    border-radius:14px;
+    padding:1.4vh 1vw;
+    text-align:center;
+    font-family:"Cambria Math",Georgia,serif;
+    font-size:1.5vw;
+    color:var(--head);
+    margin-top:1vh;
+    line-height:1.4;
+  }
+  .formula-display .big{
+    font-size:2vw;
+    font-weight:bold;
+    color:var(--accent);
+  }
+
+  /* ===== KUBUS SATUAN ===== */
+  .satuan-layout{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:2vh;
+    justify-content:center;
+    align-items:center;
+  }
+  .satuan-info{
+    text-align:center;
+    font-size:1.3vw;
+    color:var(--head);
+  }
+  .satuan-info strong{color:var(--accent);font-size:1.6vw;}
+
+  .layers-grid{
+    display:flex;
+    gap:2vw;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .layer{
+    text-align:center;
+  }
+  .layer-title{
+    font-size:1vw;
+    color:var(--head);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .layer-grid{
+    display:grid;
+    gap:5px;
+    background:var(--accent-soft);
+    padding:12px;
+    border-radius:14px;
+    border:2px solid var(--accent);
+  }
+  .ucube{
+    width:3.2vw;
+    height:3.2vw;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+    border-radius:5px;
+    box-shadow:inset -3px -3px 0 rgba(0,0,0,0.18), inset 3px 3px 0 rgba(255,255,255,0.15);
+    animation:pop .3s ease;
+  }
+  @keyframes pop{
+    from{transform:scale(0);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+  }
+  .layer-total{
+    margin-top:6px;
+    font-weight:700;
+    color:var(--accent);
+    font-size:1vw;
+  }
+
+  .total-callout{
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;
+    padding:1.4vh 3vw;
+    border-radius:50px;
+    font-family:Georgia,serif;
+    font-size:1.8vw;
+    font-weight:bold;
+    box-shadow:0 6px 0 #0a2f26;
+    text-align:center;
+  }
+
+  /* ===== KUIS ===== */
+  #kuis{
+    padding:0;
+    background:#fff;
+  }
+  .quiz-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:3vh 6vw;
+    overflow-y:auto;
+  }
+  .quiz-progress{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-bottom:2vh;
+  }
+  .dot{
+    width:14px;height:14px;
+    border-radius:50%;
+    background:#e0e0e0;
+    transition:all .3s;
+  }
+  .dot.done{background:var(--accent);}
+  .dot.current{background:var(--gold);transform:scale(1.35);}
+
+  .quiz-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:2vh;
+    font-size:1.1vw;
+    color:#666;
+  }
+
+  .question-box{
+    background:linear-gradient(160deg,#fff 0%,var(--accent-soft) 100%);
+    border:3px solid var(--accent);
+    border-radius:20px;
+    padding:4vh 3vw;
+    text-align:center;
+    margin-bottom:2.5vh;
+    box-shadow:0 8px 0 rgba(31,111,92,0.15);
+  }
+  .question-box .q-icon{
+    font-size:2.5vw;
+    margin-bottom:1vh;
+  }
+  .question-box .q-text{
+    font-family:Georgia,serif;
+    font-size:1.9vw;
+    color:var(--head);
+    line-height:1.4;
+  }
+
+  .options-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.5vh 2vw;
+    margin-bottom:2vh;
+  }
+  .option-btn{
+    background:#fff;
+    border:3px solid var(--line);
+    border-radius:16px;
+    padding:2vh 1.5vw;
+    font-size:1.5vw;
+    font-weight:600;
+    color:var(--head);
+    display:flex;
+    align-items:center;
+    gap:1vw;
+    transition:all .18s;
+    text-align:left;
+  }
+  .option-btn .lbl{
+    background:var(--accent-soft);
+    color:var(--accent);
+    width:2.4em;height:2.4em;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    flex-shrink:0;
+  }
+  .option-btn:hover:not(.disabled){
+    border-color:var(--accent);
+    transform:translateY(-3px);
+    box-shadow:0 6px 0 rgba(31,111,92,0.2);
+  }
+  .option-btn.correct{
+    background:#e0f5e5;
+    border-color:var(--green);
+    color:var(--green);
+    animation:shake .4s;
+  }
+  .option-btn.correct .lbl{background:var(--green);color:#fff;}
+  .option-btn.wrong{
+    background:#ffe5e5;
+    border-color:var(--red);
+    color:var(--red);
+  }
+  .option-btn.wrong .lbl{background:var(--red);color:#fff;}
+  .option-btn.disabled{cursor:not-allowed;opacity:0.9;}
+
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+
+  .feedback-box{
+    border-radius:16px;
+    padding:2vh 2vw;
+    text-align:center;
+    font-size:1.3vw;
+    margin-bottom:2vh;
+    display:none;
+    animation:fadeIn .3s;
+  }
+  .feedback-box.show{display:block;}
+  .feedback-box.ok{
+    background:#e0f5e5;
+    color:var(--green);
+    border:2px solid var(--green);
+  }
+  .feedback-box.no{
+    background:#ffe5e5;
+    color:var(--red);
+    border:2px solid var(--red);
+  }
+  .feedback-box .fb-icon{font-size:2vw;display:block;margin-bottom:4px;}
+  .feedback-box .fb-explain{
+    color:#555;
+    font-size:1.05vw;
+    margin-top:6px;
+  }
+
+  .quiz-actions{
+    display:flex;
+    justify-content:center;
+    gap:1.5vw;
+    padding-bottom:2vh;
+  }
+
+  /* ===== HASIL ===== */
+  #hasil{
+    background:linear-gradient(160deg,#fff 0%,var(--accent-soft) 100%);
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+  }
+  .result-emoji{
+    font-size:8vw;
+    line-height:1;
+    margin-bottom:1vh;
+    animation:bounce 2s infinite;
+  }
+  @keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-14px);}
+  }
+  .result-title{
+    font-family:Georgia,serif;
+    color:var(--head);
+    font-size:3vw;
+    margin-bottom:1vh;
+  }
+  .result-score{
+    font-family:Georgia,serif;
+    font-size:5vw;
+    color:var(--accent);
+    font-weight:bold;
+    line-height:1;
+  }
+  .result-score small{
+    font-size:1.4vw;
+    color:#666;
+    font-family:"Segoe UI",sans-serif;
+    font-weight:400;
+  }
+  .result-message{
+    font-size:1.5vw;
+    color:#555;
+    margin:2vh 0 3vh;
+    max-width:60%;
+  }
+  .result-stars{
+    font-size:3vw;
+    color:var(--gold);
+    letter-spacing:8px;
+    margin-bottom:3vh;
+  }
+  .result-stars .off{color:#ddd;}
+
+  /* ===== NAV BOTTOM ===== */
+  .nav-bottom{
+    position:fixed;
+    bottom:2vh;
+    left:0;
+    right:0;
+    display:flex;
+    justify-content:center;
+    gap:1vw;
+    z-index:50;
+    pointer-events:none;
+  }
+  .nav-bottom button{
+    pointer-events:auto;
+    background:rgba(255,255,255,0.95);
+    color:var(--head);
+    padding:0.7em 1.6em;
+    border-radius:30px;
+    font-size:1vw;
+    font-weight:600;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    transition:all .15s;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:2px solid var(--accent-soft);
+  }
+  .nav-bottom button:hover{
+    background:var(--accent);
+    color:#fff;
+    transform:translateY(-2px);
+  }
+  .nav-bottom button.ghost{
+    background:transparent;
+    color:#fff;
+    border:2px solid rgba(255,255,255,0.5);
+  }
+
+  /* ===== TOAST ===== */
+  .toast{
+    position:fixed;
+    top:3vh;
+    left:50%;
+    transform:translateX(-50%) translateY(-100px);
+    background:var(--head);
+    color:#fff;
+    padding:12px 28px;
+    border-radius:30px;
+    font-weight:600;
+    font-size:1.1vw;
+    box-shadow:0 8px 24px rgba(0,0,0,0.3);
+    z-index:200;
+    transition:transform .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.ok{background:var(--green);}
+  .toast.no{background:var(--red);}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:900px){
+    .simu-layout{grid-template-columns:1fr;}
+    .options-grid{grid-template-columns:1fr;}
+    .hero-title{font-size:8vw;}
+    .hero-sub{font-size:3vw;}
+    .btn-primary{font-size:3vw;}
+    .menu-btn{font-size:2.2vw;}
+    .cube-hero{width:40vw;height:40vw;}
+    .section-head h2{font-size:5vw;}
+    .section-head p{font-size:2.2vw;}
+    .question-box .q-text{font-size:3.5vw;}
+    .option-btn{font-size:2.8vw;}
+    .feedback-box{font-size:2.4vw;}
+    .feedback-box .fb-explain{font-size:2vw;}
+    .topbar .brand{font-size:2.5vw;}
+    .topbar .score-badge{font-size:2.2vw;}
+    .simu-controls label{font-size:2.4vw;}
+    .slider-value{font-size:2.6vw;min-width:12vw;}
+    .info-card .lbl{font-size:1.9vw;}
+    .info-card .val{font-size:3.4vw;}
+    .formula-display{font-size:2.6vw;}
+    .formula-display .big{font-size:3.6vw;}
+    .satuan-info{font-size:2.4vw;}
+    .satuan-info strong{font-size:3vw;}
+    .ucube{width:6vw;height:6vw;}
+    .layer-title{font-size:2vw;}
+    .layer-total{font-size:2vw;}
+    .total-callout{font-size:3vw;padding:1.4vh 6vw;}
+    .result-title{font-size:6vw;}
+    .result-score{font-size:10vw;}
+    .result-score small{font-size:3vw;}
+    .result-message{font-size:3vw;max-width:85%;}
+    .result-stars{font-size:6vw;}
+    .nav-bottom button{font-size:2.4vw;}
+    .toast{font-size:2.4vw;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ====== BERANDA ====== -->
+  <section class="screen active" id="beranda">
+    <div class="hero-badge">Matematika Kelas 6</div>
+    <h1 class="hero-title">Volume Kubus</h1>
+    <p class="hero-sub">Media Pembelajaran Interaktif</p>
+
+    <div class="cube-hero">
+      <div class="cube-3d" id="heroCube">
+        <div class="face" data-face="front">s</div>
+        <div class="face" data-face="back">s</div>
+        <div class="face" data-face="right">s</div>
+        <div class="face" data-face="left">s</div>
+        <div class="face" data-face="top">s</div>
+        <div class="face" data-face="bottom">s</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="goTo('simulasi')">🚀 Mulai Belajar</button>
+
+    <div class="menu-row">
+      <button class="menu-btn" onclick="goTo('kubusSatuan')">🧊 Kubus Satuan</button>
+      <button class="menu-btn" onclick="goTo('kuis')">🎯 Mulai Kuis</button>
+    </div>
+  </section>
+
+  <!-- ====== SIMULASI ====== -->
+  <section class="screen" id="simulasi">
+    <div class="topbar">
+      <div class="brand"><div class="logo">V</div> Simulasi Volume Kubus</div>
+      <div class="score-badge"><span class="star">★</span> <span id="scoreDisplay1">0</span> poin</div>
+    </div>
+
+    <div class="simu-layout">
+      <div class="simu-cube-area">
+        <div class="simu-cube" id="simuCube">
+          <div class="face" data-face="front">s</div>
+          <div class="face" data-face="back">s</div>
+          <div class="face" data-face="right">s</div>
+          <div class="face" data-face="left">s</div>
+          <div class="face" data-face="top">s</div>
+          <div class="face" data-face="bottom">s</div>
+        </div>
+      </div>
+
+      <div class="simu-controls">
+        <label>🔧 Atur panjang rusuk (s):</label>
+        <div class="slider-wrap">
+          <input type="range" id="rusukSlider" min="1" max="10" value="3" step="1">
+          <div class="slider-value"><span id="rusukValue">3</span> cm</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-card">
+            <div class="lbl">Panjang Rusuk</div>
+            <div class="val"><span id="sVal">3</span> cm</div>
+          </div>
+          <div class="info-card">
+            <div class="lbl">Volume</div>
+            <div class="val"><span id="vVal">27</span> cm³</div>
+          </div>
+        </div>
+
+        <div class="formula-display">
+          V = s × s × s<br>
+          V = <span id="fS1">3</span> × <span id="fS2">3</span> × <span id="fS3">3</span> =
+          <span class="big"><span id="fV">27</span> cm³</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== KUBUS SATUAN ====== -->
+  <section class="screen" id="kubusSatuan">
+    <div class="topbar">
+      <div class="brand"><div class="logo">🧊</div> Kubus Satuan</div>
+      <div class="score-badge"><span class="star">★</span> <span id="scoreDisplay2">0</span> poin</div>
+    </div>
+
+    <div class="section-head">
+      <h2>Mengisi Kubus dengan Kubus Satuan</h2>
+      <p>Pilih ukuran kubus dan hitung jumlah kubus kecil di dalamnya</p>
+    </div>
+
+    <div class="satuan-layout">
+      <div class="satuan-info">
+        Kubus berukuran <strong><span id="satuanSize">3</span> × <span id="satuanSize2">3</span> × <span id="satuanSize3">3</span></strong>
+        memiliki volume <strong><span id="satuanVolume">27</span> kubus satuan</strong>
+      </div>
+
+      <div class="layers-grid" id="layersGrid"></div>
+
+      <div class="total-callout">
+        Total = <span id="totalSatuan">27</span> kubus satuan
+      </div>
+
+      <div class="menu-row">
+        <button class="menu-btn" onclick="changeSatuanSize(-1)">− Kecilkan</button>
+        <button class="menu-btn" onclick="changeSatuanSize(1)">+ Besarkan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== KUIS ====== -->
+  <section class="screen" id="kuis">
+    <div class="quiz-wrap">
+      <div class="topbar">
+        <div class="brand"><div class="logo">🎯</div> Kuis Volume Kubus</div>
+        <div class="score-badge"><span class="star">★</span> <span id="scoreDisplay3">0</span> poin</div>
+      </div>
+
+      <div class="quiz-progress" id="quizProgress"></div>
+
+      <div class="quiz-header">
+        <div>Soal <strong id="qNum">1</strong> dari <strong id="qTotal">10</strong></div>
+        <div>Skor: <strong id="quizScore">0</strong></div>
+      </div>
+
+      <div class="question-box">
+        <div class="q-icon" id="qIcon">📦</div>
+        <div class="q-text" id="qText">Memuat soal...</div>
+      </div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="feedback-box" id="feedbackBox"></div>
+
+      <div class="quiz-actions">
+        <button class="btn-primary" id="nextBtn" style="display:none;" onclick="nextQuestion()">Lanjut →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== HASIL ====== -->
+  <section class="screen" id="hasil">
+    <div class="result-emoji" id="resultEmoji">🎉</div>
+    <h1 class="result-title" id="resultTitle">Hebat!</h1>
+    <div class="result-score">
+      <span id="resultScore">0</span><small> / 100</small>
+    </div>
+    <div class="result-stars" id="resultStars"></div>
+    <p class="result-message" id="resultMessage">Kamu telah menyelesaikan kuis volume kubus.</p>
+
+    <div class="menu-row">
+      <button class="btn-primary" onclick="restartQuiz()">🔄 Ulangi Kuis</button>
+      <button class="menu-btn" onclick="goTo('beranda')">🏠 Beranda</button>
+    </div>
+  </section>
+
+  <!-- ====== NAV BAWAH ====== -->
+  <div class="nav-bottom" id="navBottom">
+    <button class="ghost" id="backBtn" style="display:none;" onclick="goBack()">← Kembali</button>
+    <button class="ghost" onclick="goTo('beranda')">🏠 Beranda</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========== STATE ========== */
+const state = {
+  currentScreen: 'beranda',
+  history: [],
+  score: 0,
+  rusuk: 3,
+  satuanSize: 3,
+  quiz: {
+    questions: [],
+    current: 0,
+    score: 0,
+    answered: false,
+    done: false
+  }
+};
+
+/* ========== SCREEN NAVIGATION ========== */
+function goTo(id){
+  if(state.currentScreen !== id){
+    state.history.push(state.currentScreen);
+  }
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  state.currentScreen = id;
+
+  const backBtn = document.getElementById('backBtn');
+  if(id === 'beranda'){
+    backBtn.style.display = 'none';
+  } else {
+    backBtn.style.display = 'flex';
+  }
+
+  // Reset scroll
+  window.scrollTo(0,0);
+  document.querySelectorAll('.screen').forEach(s => s.scrollTop = 0);
+
+  // Setup on entry
+  if(id === 'simulasi') updateCube();
+  if(id === 'kubusSatuan') renderLayers();
+  if(id === 'kuis' && state.quiz.questions.length === 0) startQuiz();
+}
+
+function goBack(){
+  if(state.history.length > 0){
+    const prev = state.history.pop();
+    state.currentScreen = prev;
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(prev).classList.add('active');
+    if(prev === 'beranda') document.getElementById('backBtn').style.display = 'none';
+    else document.getElementById('backBtn').style.display = 'flex';
+  } else {
+    goTo('beranda');
+  }
+}
+
+/* ========== TOAST ========== */
+function showToast(msg, type=''){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => {
+    t.className = 'toast ' + type;
+  }, 1800);
+}
+
+/* ========== SCORE ========== */
+function updateScoreDisplays(){
+  document.getElementById('scoreDisplay1').textContent = state.score;
+  document.getElementById('scoreDisplay2').textContent = state.score;
+  document.getElementById('scoreDisplay3').textContent = state.score;
+}
+
+function addScore(p){
+  state.score += p;
+  updateScoreDisplays();
+}
+
+/* ========== HERO CUBE — sizing ========== */
+function setupHeroCube(){
+  const size = Math.min(window.innerWidth * 0.14, window.innerHeight * 0.18);
+  const cube = document.getElementById('heroCube');
+  cube.style.width = size + 'px';
+  cube.style.height = size + 'px';
+  const half = size / 2;
+  cube.querySelectorAll('.face').forEach(f => {
+    f.style.width = size + 'px';
+    f.style.height = size + 'px';
+    f.style.transform = faceTransform(f.dataset.face, half);
+  });
+}
+
+function faceTransform(face, half){
+  switch(face){
+    case 'front': return `translateZ(${half}px)`;
+    case 'back': return `rotateY(180deg) translateZ(${half}px)`;
+    case 'right': return `rotateY(90deg) translateZ(${half}px)`;
+    case 'left': return `rotateY(-90deg) translateZ(${half}px)`;
+    case 'top': return `rotateX(90deg) translateZ(${half}px)`;
+    case 'bottom': return `rotateX(-90deg) translateZ(${half}px)`;
+  }
+}
+
+/* ========== SIMULASI ========== */
+function setupSimuCube(){
+  const s = state.rusuk;
+  const baseSize = Math.min(window.innerWidth * 0.24, window.innerHeight * 0.32);
+  // Skala: rusuk 1 → 40% dari base, rusuk 10 → 100%
+  const scale = 0.4 + (s - 1) / 9 * 0.6;
+  const size = baseSize * scale;
+
+  const cube = document.getElementById('simuCube');
+  cube.style.width = size + 'px';
+  cube.style.height = size + 'px';
+  const half = size / 2;
+
+  cube.querySelectorAll('.face').forEach(f => {
+    f.style.width = size + 'px';
+    f.style.height = size + 'px';
+    f.style.transform = faceTransform(f.dataset.face, half);
+    f.style.fontSize = (size * 0.22) + 'px';
+    f.textContent = 's';
+  });
+}
+
+function updateCube(){
+  const s = state.rusuk;
+  document.getElementById('rusukValue').textContent = s;
+  document.getElementById('sVal').textContent = s;
+  const v = s * s * s;
+  document.getElementById('vVal').textContent = v;
+  document.getElementById('fS1').textContent = s;
+  document.getElementById('fS2').textContent = s;
+  document.getElementById('fS3').textContent = s;
+  document.getElementById('fV').textContent = v;
+  setupSimuCube();
+}
+
+/* ========== KUBUS SATUAN ========== */
+function renderLayers(){
+  const s = state.satuanSize;
+  const v = s * s * s;
+  document.getElementById('satuanSize').textContent = s;
+  document.getElementById('satuanSize2').textContent = s;
+  document.getElementById('satuanSize3').textContent = s;
+  document.getElementById('satuanVolume').textContent = v;
+  document.getElementById('totalSatuan').textContent = v;
+
+  const grid = document.getElementById('layersGrid');
+  grid.innerHTML = '';
+
+  // Batasi jumlah layer yang ditampilkan agar tidak terlalu banyak (maks 5 layer)
+  const shownLayers = Math.min(s, 5);
+  const cols = Math.min(s, 4); // maks 4x4 grid yang ditampilkan
+
+  for(let l = 0; l < shownLayers; l++){
+    const wrap = document.createElement('div');
+    wrap.className = 'layer';
+    wrap.innerHTML = `<div class="layer-title">Lapisan ${l+1}</div>`;
+
+    const g = document.createElement('div');
+    g.className = 'layer-grid';
+    g.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+    const cellsInDisplay = cols * cols;
+    for(let i = 0; i < cellsInDisplay; i++){
+      const c = document.createElement('div');
+      c.className = 'ucube';
+      c.style.animationDelay = (i * 15) + 'ms';
+      g.appendChild(c);
+    }
+
+    wrap.appendChild(g);
+    const total = s * s;
+    const lbl = document.createElement('div');
+    lbl.className = 'layer-total';
+    lbl.textContent = `${total} kubus`;
+    wrap.appendChild(lbl);
+
+    grid.appendChild(wrap);
+  }
+
+  // Jika s > 5, tampilkan teks tambahan
+  if(s > 5){
+    const extra = document.createElement('div');
+    extra.style.cssText = 'align-self:center;color:#666;font-style:italic;font-size:0.95vw;';
+    extra.textContent = `+ ${s - 5} lapisan lainnya...`;
+    grid.appendChild(extra);
+  }
+}
+
+function changeSatuanSize(delta){
+  const newSize = state.satuanSize + delta;
+  if(newSize < 1 || newSize > 10){
+    showToast('Ukuran harus antara 1 dan 10', 'no');
+    return;
+  }
+  state.satuanSize = newSize;
+  renderLayers();
+  addScore(1);
+  showToast('Bagus! +1 poin', 'ok');
+}
+
+/* ========== KUIS ========== */
+const QUIZ_BANK = [
+  { q: "Sebuah kubus memiliki panjang rusuk 3 cm. Berapa volumenya?",
+    opts: ["9 cm³", "27 cm³", "12 cm³", "18 cm³"], correct: 1,
+    explain: "V = s × s × s = 3 × 3 × 3 = 27 cm³" },
+  { q: "Sebuah kubus memiliki panjang rusuk 5 cm. Berapa volumenya?",
+    opts: ["25 cm³", "75 cm³", "125 cm³", "100 cm³"], correct: 2,
+    explain: "V = 5 × 5 × 5 = 125 cm³" },
+  { q: "Volume sebuah kubus adalah 64 cm³. Berapa panjang rusuknya?",
+    opts: ["2 cm", "4 cm", "6 cm", "8 cm"], correct: 1,
+    explain: "s = ∛64 = 4 cm" },
+  { q: "Sebuah kubus memiliki rusuk 4 cm. Berapa volumenya?",
+    opts: ["16 cm³", "32 cm³", "48 cm³", "64 cm³"], correct: 3,
+    explain: "V = 4 × 4 × 4 = 64 cm³" },
+  { q: "Volume sebuah kubus adalah 125 cm³. Berapa panjang rusuknya?",
+    opts: ["3 cm", "4 cm", "5 cm", "6 cm"], correct: 2,
+    explain: "s = ∛125 = 5 cm" },
+  { q: "Sebuah akuarium berbentuk kubus dengan rusuk 5 dm. Berapa liter air yang dapat ditampung?",
+    opts: ["25 liter", "75 liter", "100 liter", "125 liter"], correct: 3,
+    explain: "V = 5 × 5 × 5 = 125 dm³ = 125 liter" },
+  { q: "Sebuah dadu berbentuk kubus dengan rusuk 2 cm. Berapa volumenya?",
+    opts: ["4 cm³", "6 cm³", "8 cm³", "12 cm³"], correct: 2,
+    explain: "V = 2 × 2 × 2 = 8 cm³" },
+  { q: "Volume sebuah kubus adalah 1.000 cm³. Berapa panjang rusuknya?",
+    opts: ["5 cm", "10 cm", "20 cm", "25 cm"], correct: 1,
+    explain: "s = ∛1.000 = 10 cm" },
+  { q: "Sebuah kotak kado berbentuk kubus dengan rusuk 6 cm. Berapa volumenya?",
+    opts: ["36 cm³", "108 cm³", "216 cm³", "256 cm³"], correct: 2,
+    explain: "V = 6 × 6 × 6 = 216 cm³" },
+  { q: "Sebuah kubus memiliki rusuk 7 cm. Berapa volumenya?",
+    opts: ["49 cm³", "243 cm³", "343 cm³", "423 cm³"], correct: 2,
+    explain: "V = 7 × 7 × 7 = 343 cm³" }
+];
+
+function startQuiz(){
+  state.quiz.questions = [...QUIZ_BANK].sort(() => Math.random() - 0.5);
+  state.quiz.current = 0;
+  state.quiz.score = 0;
+  state.quiz.answered = false;
+  state.quiz.done = false;
+  document.getElementById('qTotal').textContent = state.quiz.questions.length;
+  renderProgressDots();
+  renderQuestion();
+}
+
+function renderProgressDots(){
+  const wrap = document.getElementById('quizProgress');
+  wrap.innerHTML = '';
+  state.quiz.questions.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    if(i < state.quiz.current) d.classList.add('done');
+    if(i === state.quiz.current) d.classList.add('current');
+    wrap.appendChild(d);
+  });
+}
+
+function renderQuestion(){
+  const q = state.quiz.questions[state.quiz.current];
+  document.getElementById('qNum').textContent = state.quiz.current + 1;
+  document.getElementById('quizScore').textContent = state.quiz.score;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qIcon').textContent = ['📦','📐','🎲','📏','🧊'][Math.floor(Math.random()*5)];
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const labels = ['A','B','C','D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="lbl">${labels[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectAnswer(i, btn);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('feedbackBox').innerHTML = '';
+  document.getElementById('nextBtn').style.display = 'none';
+  state.quiz.answered = false;
+
+  renderProgressDots();
+}
+
+function selectAnswer(idx, btn){
+  if(state.quiz.answered) return;
+  state.quiz.answered = true;
+
+  const q = state.quiz.questions[state.quiz.current];
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.classList.add('disabled'));
+
+  const fb = document.getElementById('feedbackBox');
+
+  if(idx === q.correct){
+    btn.classList.add('correct');
+    state.quiz.score += 10;
+    document.getElementById('quizScore').textContent = state.quiz.score;
+    addScore(10);
+    fb.className = 'feedback-box show ok';
+    fb.innerHTML = `<span class="fb-icon">✅</span><strong>Benar! +10 poin</strong><div class="fb-explain">${q.explain}</div>`;
+    showToast('Jawaban benar! +10 poin', 'ok');
+  } else {
+    btn.classList.add('wrong');
+    allBtns[q.correct].classList.add('correct');
+    fb.className = 'feedback-box show no';
+    fb.innerHTML = `<span class="fb-icon">❌</span><strong>Belum tepat</strong><div class="fb-explain">Jawaban benar: <b>${q.opts[q.correct]}</b><br>${q.explain}</div>`;
+    showToast('Belum tepat, coba lagi di soal berikutnya', 'no');
+  }
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  document.getElementById('nextBtn').textContent = (state.quiz.current === state.quiz.questions.length - 1) ? 'Lihat Hasil →' : 'Lanjut →';
+}
+
+function nextQuestion(){
+  if(state.quiz.current < state.quiz.questions.length - 1){
+    state.quiz.current++;
+    renderQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz(){
+  state.quiz.done = true;
+  const maxScore = state.quiz.questions.length * 10;
+  const percent = Math.round((state.quiz.score / maxScore) * 100);
+
+  // Skor total = skor kuis + bonus eksplorasi
+  const finalScore = state.score;
+
+  document.getElementById('resultScore').textContent = percent;
+
+  let emoji, title, msg, stars;
+  if(percent >= 90){
+    emoji = '🏆'; title = 'Luar Biasa!'; msg = 'Kamu sudah sangat menguasai volume kubus. Pertahankan!'; stars = 5;
+  } else if(percent >= 75){
+    emoji = '🎉'; title = 'Hebat!'; msg = 'Kamu sudah paham volume kubus dengan baik. Sedikit latihan lagi!'; stars = 4;
+  } else if(percent >= 60){
+    emoji = '👍'; title = 'Bagus!'; msg = 'Kamu sudah cukup paham. Ayo latihan lagi supaya makin mahir!'; stars = 3;
+  } else if(percent >= 40){
+    emoji = '💪'; title = 'Semangat!'; msg = 'Kamu perlu berlatih lagi. Coba ulangi simulasi dan kuisnya ya!'; stars = 2;
+  } else {
+    emoji = '🌱'; title = 'Jangan Menyerah!'; msg = 'Ayo belajar lagi dari simulasi kubus. Kamu pasti bisa!'; stars = 1;
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMessage').textContent = msg;
+
+  const starsEl = document.getElementById('resultStars');
+  starsEl.innerHTML = '';
+  for(let i = 0; i < 5; i++){
+    const s = document.createElement('span');
+    s.textContent = '★';
+    if(i >= stars) s.classList.add('off');
+    starsEl.appendChild(s);
+  }
+
+  goTo('hasil');
+}
+
+function restartQuiz(){
+  state.quiz.questions = [];
+  state.quiz.current = 0;
+  state.quiz.score = 0;
+  document.getElementById('quizScore').textContent = '0';
+  startQuiz();
+  goTo('kuis');
+}
+
+/* ========== INIT ========== */
+window.addEventListener('load', () => {
+  setupHeroCube();
+  updateCube();
+  renderLayers();
+  updateScoreDisplays();
+
+  // Slider
+  document.getElementById('rusukSlider').addEventListener('input', (e) => {
+    const newVal = parseInt(e.target.value);
+    if(newVal !== state.rusuk){
+      state.rusuk = newVal;
+      updateCube();
+      addScore(1);
+    }
+  });
+
+  // Resize
+  window.addEventListener('resize', () => {
+    setupHeroCube();
+    setupSimuCube();
+  });
+});
+
+/* ========== KEYBOARD NAV ========== */
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') goTo('beranda');
+  if(state.currentScreen === 'kuis'){
+    if(['1','2','3','4'].includes(e.key)){
+      const idx = parseInt(e.key) - 1;
+      const btn = document.querySelectorAll('.option-btn')[idx];
+      if(btn) btn.click();
+    }
+    if(e.key === 'Enter' && document.getElementById('nextBtn').style.display !== 'none'){
+      nextQuestion();
+    }
+  }
+});
+</script>
+
+</body>
+</html>
