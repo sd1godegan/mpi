@@ -2,75 +2,71 @@
 <html lang="id" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upload MPI · SDN 1 Godegan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Upload MPI · Portal Rumah MPI</title>
+<meta name="description" content="Upload MPI ke Portal Rumah MPI SD Negeri 1 Godegan">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📤</text></svg>">
+
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('mpi_theme');
+    if(!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
 <style>
 :root{
-  --bg:#FAF8F5;
-  --surface:#FFFFFF;
-  --surface-2:#F5F2EC;
-  --border:#ECE7DE;
-  --text:#2E2E3F;
-  --text-soft:#5A5A70;
-  --muted:#8E8EA0;
-  --primary:#8899C4;
-  --primary-hover:#7386B5;
-  --primary-soft:#EDF0F8;
-  --primary-ring:#DDE4F2;
-  --lavender:#E0D7EE;
-  --m-agama-i:#7E6BA5;
-  --mint:#D4E8DC;
-  --m-bing-i:#5E8F84;
-  --butter:#F5EBC8;
-  --m-jawa-i:#A89454;
-  --err:#B8707A;
-  --ok:#6B8F62;
-  --rose:#F5DCE2;
+  --bg:#FAF8F5;--surface:#FFFFFF;--surface-2:#F5F2EC;--border:#ECE7DE;
+  --text:#2E2E3F;--text-soft:#5A5A70;--muted:#8E8EA0;
+  --primary:#8899C4;--primary-hover:#7386B5;--primary-soft:#EDF0F8;--primary-ring:#DDE4F2;
+  --lavender:#E0D7EE;--m-agama-i:#7E6BA5;
+  --mint:#D4E8DC;--m-bing-i:#5E8F84;
+  --butter:#F5EBC8;--m-jawa-i:#A89454;
+  --err:#B8707A;--ok:#6B8F62;
+  --radius:12px;
+  --shadow-sm:0 1px 2px rgba(46,46,63,.04);
   --shadow:0 2px 10px rgba(46,46,63,.05);
+  --shadow-md:0 6px 20px rgba(46,46,63,.08);
   --shadow-lg:0 12px 32px rgba(46,46,63,.10);
   --ease:cubic-bezier(.2,.8,.2,1);
-  --radius:14px;
 }
 [data-theme="dark"]{
-  --bg:#1C1C28;
-  --surface:#24242F;
-  --surface-2:#2A2A38;
-  --border:#35353F;
-  --text:#ECEAF2;
-  --text-soft:#B8B6C8;
-  --muted:#8E8CA0;
-  --primary:#98A8D0;
-  --primary-hover:#A8B8DD;
-  --primary-soft:#2E3245;
-  --primary-ring:#3A4058;
-  --lavender:#3A3248;
-  --m-agama-i:#B8A8D8;
-  --mint:#2A3630;
-  --m-bing-i:#98D0C0;
-  --butter:#3A3428;
-  --m-jawa-i:#D8C898;
+  --bg:#1C1C28;--surface:#24242F;--surface-2:#2A2A38;--border:#35353F;
+  --text:#ECEAF2;--text-soft:#B8B6C8;--muted:#8E8CA0;
+  --primary:#98A8D0;--primary-hover:#A8B8DD;--primary-soft:#2E3245;--primary-ring:#3A4058;
+  --lavender:#3A3248;--m-agama-i:#B8A8D8;
+  --mint:#2A3630;--m-bing-i:#98D0C0;
+  --butter:#3A3428;--m-jawa-i:#D8C898;
+  --err:#E0A8B0;--ok:#A8D098;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.2);
+  --shadow:0 2px 10px rgba(0,0,0,.25);
+  --shadow-md:0 6px 20px rgba(0,0,0,.3);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
 body{
-  font-family:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
-  background:var(--bg);color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.55;
   -webkit-font-smoothing:antialiased;min-height:100vh;
+  display:flex;flex-direction:column;
   transition:background .3s,color .3s;
 }
 svg{display:block}
-.icon{
-  width:20px;height:20px;stroke:currentColor;stroke-width:1.75;
-  stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0;
-}
-.icon-sm{width:15px;height:15px;stroke-width:2.2}
+.icon{width:20px;height:20px;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
+.icon-sm{width:16px;height:16px;stroke-width:2}
+input,select,textarea,button{font-family:inherit}
 
 /* ===== TOPBAR ===== */
 .topbar{
   background:var(--surface);
   border-bottom:1px solid var(--border);
-  padding:.85rem 1rem;
+  padding:.75rem 1rem;
   position:sticky;top:0;z-index:20;
+  flex-shrink:0;
 }
 .topbar-inner{
   max-width:720px;margin:0 auto;
@@ -80,7 +76,7 @@ svg{display:block}
   display:inline-flex;align-items:center;gap:.4rem;
   padding:.5rem .8rem;border-radius:9px;
   background:var(--surface-2);border:1px solid var(--border);
-  color:var(--text-soft);font-size:.83rem;font-weight:600;
+  color:var(--text-soft);font-size:.82rem;font-weight:600;
   text-decoration:none;transition:all .2s var(--ease);
   white-space:nowrap;flex-shrink:0;
 }
@@ -90,14 +86,17 @@ svg{display:block}
   flex:1;font-size:.98rem;font-weight:700;
   letter-spacing:-.01em;color:var(--text);
   display:flex;align-items:center;gap:.5rem;
+  min-width:0;
 }
 .topbar h1 .icon{width:17px;height:17px;stroke-width:2}
+.topbar h1 span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .user-chip{
-  display:flex;align-items:center;gap:.45rem;
-  padding:.35rem .75rem .35rem .35rem;
+  display:flex;align-items:center;gap:.4rem;
+  padding:.3rem .7rem .3rem .3rem;
   border-radius:999px;
   background:var(--surface-2);border:1px solid var(--border);
   font-size:.78rem;font-weight:600;color:var(--text-soft);
+  flex-shrink:0;
 }
 .user-chip .av{
   width:22px;height:22px;border-radius:50%;
@@ -107,22 +106,17 @@ svg{display:block}
 }
 
 /* ===== WRAP ===== */
-.wrap{max-width:720px;margin:0 auto;padding:1.25rem 1rem 3rem}
+.wrap{max-width:720px;margin:0 auto;padding:1.25rem 1rem 3rem;width:100%;flex:1}
 
-/* ===== PANEL ===== */
 .panel{
   background:var(--surface);border:1px solid var(--border);
   border-radius:var(--radius);padding:1.5rem;
   box-shadow:var(--shadow);
 }
 .panel-head{margin-bottom:1.5rem}
-.panel-head h2{
-  font-size:1.1rem;font-weight:700;
-  letter-spacing:-.01em;margin-bottom:.25rem;
-}
+.panel-head h2{font-size:1.1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.25rem}
 .panel-head .sub{color:var(--muted);font-size:.85rem}
 
-/* ===== FIELDS ===== */
 .field{margin-bottom:1.15rem}
 .field label{
   display:block;font-size:.82rem;font-weight:600;
@@ -135,7 +129,7 @@ svg{display:block}
   width:100%;padding:.7rem .9rem;
   border:1.5px solid var(--border);border-radius:10px;
   background:var(--surface-2);color:var(--text);
-  font-size:.92rem;font-family:inherit;outline:none;
+  font-size:.92rem;outline:none;
   transition:all .2s var(--ease);
 }
 .input:focus,select:focus{
@@ -146,12 +140,10 @@ svg{display:block}
 select{
   appearance:none;cursor:pointer;padding-right:2.4rem;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238E8EA0' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:right .85rem center;
+  background-repeat:no-repeat;background-position:right .85rem center;
 }
-textarea.input{resize:vertical;min-height:80px;font-family:inherit}
+textarea.input{resize:vertical;min-height:80px}
 
-/* ===== FILE DROP ===== */
 .drop{
   border:1.5px dashed var(--border);border-radius:12px;
   padding:1.5rem 1rem;text-align:center;
@@ -189,7 +181,6 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
 .preview.show{display:block}
 .preview img{width:100%;height:auto;display:block;max-height:220px;object-fit:cover}
 
-/* ===== LINK PREVIEW ===== */
 .link-preview{
   display:flex;align-items:center;gap:.6rem;
   padding:.7rem .9rem;border-radius:10px;
@@ -204,16 +195,12 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
   font-weight:700;font-size:.8rem;
 }
 
-/* ===== SUBMIT ===== */
-.submit-area{
-  margin-top:1.5rem;padding-top:1.25rem;
-  border-top:1px solid var(--border);
-}
+.submit-area{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
 .submit-btn{
   width:100%;padding:.9rem;border-radius:10px;border:none;
   background:var(--primary);color:#fff;
   font-weight:700;font-size:.92rem;cursor:pointer;
-  font-family:inherit;transition:all .2s var(--ease);
+  transition:all .2s var(--ease);
   display:flex;align-items:center;justify-content:center;gap:.55rem;
   letter-spacing:-.005em;
 }
@@ -234,7 +221,6 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
 .submit-btn.loading .icon{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ===== PROGRESS ===== */
 .progress{margin-top:1rem;display:none}
 .progress.show{display:block}
 .bar{
@@ -246,32 +232,20 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
   background:var(--primary);border-radius:3px;
   transition:width .35s var(--ease);
 }
-.progress-text{
-  margin-top:.5rem;font-size:.78rem;color:var(--muted);
-  text-align:center;
-}
+.progress-text{margin-top:.5rem;font-size:.78rem;color:var(--muted);text-align:center}
 
-/* ===== SUCCESS ===== */
 .success{display:none;text-align:center;padding:2rem 1rem}
 .success.show{display:block;animation:fadeUp .4s var(--ease)}
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .success-ic{
   width:64px;height:64px;border-radius:50%;
   background:var(--mint);color:var(--m-bing-i);
   display:grid;place-items:center;margin:0 auto 1rem;
 }
 .success-ic .icon{width:32px;height:32px;stroke-width:2}
-.success h3{
-  font-size:1.15rem;font-weight:700;
-  letter-spacing:-.01em;margin-bottom:.4rem;
-}
+.success h3{font-size:1.15rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.4rem}
 .success p{color:var(--muted);font-size:.88rem;margin-bottom:1.5rem}
-.success-actions{
-  display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap;
-}
+.success-actions{display:flex;gap:.55rem;justify-content:center;flex-wrap:wrap}
 
 .btn-secondary{
   display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
@@ -279,12 +253,9 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
   background:var(--surface-2);color:var(--text-soft);
   border:1px solid var(--border);
   font-weight:700;font-size:.88rem;text-decoration:none;
-  cursor:pointer;font-family:inherit;transition:all .2s var(--ease);
+  cursor:pointer;transition:all .2s var(--ease);
 }
-.btn-secondary:hover{
-  background:var(--primary-soft);color:var(--primary);
-  border-color:var(--primary-ring);
-}
+.btn-secondary:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
 .btn-secondary .icon{width:15px;height:15px;stroke-width:2.2}
 
 .btn-primary{
@@ -292,8 +263,7 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
   padding:.7rem 1.25rem;border-radius:10px;
   background:var(--primary);color:#fff;
   font-weight:700;font-size:.88rem;text-decoration:none;
-  cursor:pointer;font-family:inherit;transition:all .2s var(--ease);
-  border:none;
+  cursor:pointer;transition:all .2s var(--ease);border:none;
 }
 .btn-primary:hover{background:var(--primary-hover)}
 .btn-primary .icon{width:15px;height:15px;stroke-width:2.2}
@@ -302,10 +272,13 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
   .panel{padding:1.15rem}
   .topbar-inner{gap:.5rem}
   .topbar h1{font-size:.88rem}
-  .topbar h1 .text{display:none}
+  .topbar h1 span{display:none}
   .user-chip .name{display:none}
-  .user-chip{padding:.35rem .35rem}
+  .user-chip{padding:.3rem}
   .wrap{padding:1rem .85rem 2.5rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
 }
 </style>
 </head>
@@ -313,13 +286,13 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="back-btn" href="index.html" title="Kembali">
+    <a class="back-btn" href="index.html" title="Kembali ke Rumah MPI">
       <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
-      <span class="label">Katalog</span>
+      <span class="label">Rumah MPI</span>
     </a>
     <h1>
       <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M12 3v12M7 8l5-5 5 5"/></svg>
-      <span class="text">Upload MPI</span>
+      <span>Upload MPI</span>
     </h1>
     <div class="user-chip">
       <span class="av" id="userAvatar">?</span>
@@ -336,7 +309,6 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
     </div>
 
     <form id="form">
-      <!-- File MPI -->
       <div class="field">
         <label>File MPI (.html) <span class="req">*</span></label>
         <div class="drop" id="dropMPI">
@@ -350,7 +322,6 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
         </div>
       </div>
 
-      <!-- Thumbnail -->
       <div class="field">
         <label>Screenshot MPI <span class="opt">(opsional, biar menarik)</span></label>
         <div class="drop" id="dropThumb">
@@ -367,7 +338,6 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
         </div>
       </div>
 
-      <!-- Kelas -->
       <div class="field">
         <label for="kelas">Kelas <span class="req">*</span></label>
         <select id="kelas" required>
@@ -381,7 +351,6 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
         </select>
       </div>
 
-      <!-- Mapel -->
       <div class="field">
         <label for="mapel">Mata Pelajaran <span class="req">*</span></label>
         <select id="mapel" required>
@@ -389,19 +358,16 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
         </select>
       </div>
 
-      <!-- Judul -->
       <div class="field">
         <label for="judul">Judul MPI <span class="req">*</span></label>
         <input type="text" id="judul" class="input" placeholder="Contoh: Penjumlahan 1-10" required maxlength="100">
       </div>
 
-      <!-- Deskripsi -->
       <div class="field">
         <label for="deskripsi">Deskripsi <span class="opt">(opsional)</span></label>
         <textarea id="deskripsi" class="input" placeholder="Penjelasan singkat tentang MPI..." maxlength="300"></textarea>
       </div>
 
-      <!-- Link Preview -->
       <div class="field">
         <label>Link otomatis</label>
         <div class="link-preview">
@@ -425,7 +391,6 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
     </form>
   </div>
 
-  <!-- Success -->
   <div class="panel success" id="panelSuccess">
     <div class="success-ic">
       <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
@@ -435,9 +400,9 @@ textarea.input{resize:vertical;min-height:80px;font-family:inherit}
     <div class="success-actions">
       <a class="btn-primary" href="index.html">
         <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
-        Lihat Katalog
+        Lihat Rumah MPI
       </a>
-      <button class="btn-secondary" onclick="resetForm()">
+      <button class="btn-secondary" onclick="resetForm()" type="button">
         <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         Upload Lagi
       </button>
@@ -471,7 +436,7 @@ const API = {
   }
 };
 
-const ClientCache = { remove(k) { localStorage.removeItem('mpi_c_' + k); } };
+const ClientCache = { remove(k) { localStorage.removeItem('mpi_c_v5_' + k); } };
 
 function sanitizeFilename(name) {
   let b = name.replace(/\.html?$/i, '').toLowerCase();
@@ -522,7 +487,7 @@ if (!Auth.isValid()) location.replace('login.html?redirect=' + encodeURIComponen
 
 const $ = id => document.getElementById(id);
 
-(function () {
+(function initUser() {
   const a = Auth.get();
   if (!a) return;
   const u = a.user || {};
@@ -618,7 +583,7 @@ $('form').addEventListener('submit', async e => {
     setTimeout(() => {
       $('panelForm').style.display = 'none';
       $('panelSuccess').classList.add('show');
-      $('successMsg').textContent = `"${$('judul').value.trim()}" sudah masuk ke katalog.`;
+      $('successMsg').textContent = `"${$('judul').value.trim()}" sudah masuk ke Rumah MPI.`;
     }, 500);
   } catch (err) {
     if (/login|PIN|dinonaktifkan/i.test(err.message)) {
