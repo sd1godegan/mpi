@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penjumlahan Sederhana - Kelas 1 SD</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #a8e6ff 0%, #ffd6f5 50%, #fff5b8 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ==== KONTAINER UTAMA 16:9 ==== */
+  .stage {
+    width: 100vw;
+    height: 100vh;
+    max-width: 177.78vh;   /* rasio 16:9 */
+    max-height: 56.25vw;
+    aspect-ratio: 16 / 9;
+    background: #ffffff;
+    border-radius: 1.5vw;
+    box-shadow: 0 0 4vw rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    padding: 2vh 2vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ==== HEADER ==== */
+  header {
+    text-align: center;
+    padding-bottom: 1.5vh;
+    border-bottom: 0.6vh dashed #ffb703;
+    margin-bottom: 1.5vh;
+  }
+
+  header h1 {
+    font-size: 4vh;
+    color: #ff6b00;
+    text-shadow: 0.4vh 0.4vh 0 #ffe0a3;
+    letter-spacing: 0.1vw;
+  }
+
+  header p {
+    font-size: 2.2vh;
+    color: #444;
+    margin-top: 0.5vh;
+  }
+
+  /* ==== AREA SOAL ==== */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3vh;
+  }
+
+  .question-box {
+    background: #fff8e1;
+    border: 0.6vh solid #ffb703;
+    border-radius: 2vh;
+    padding: 2vh 3vw;
+    text-align: center;
+    min-width: 70%;
+    box-shadow: 0 1vh 2vh rgba(255,183,3,0.3);
+  }
+
+  .question {
+    font-size: 5vh;
+    font-weight: bold;
+    color: #023047;
+  }
+
+  .visual {
+    font-size: 5vh;
+    margin: 1.5vh 0;
+    letter-spacing: 0.8vw;
+  }
+
+  .visual span {
+    display: inline-block;
+    animation: pop 0.5s ease;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+
+  /* ==== PILIHAN JAWABAN ==== */
+  .options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2vw;
+    width: 90%;
+  }
+
+  .option-btn {
+    background: #4cc9f0;
+    color: white;
+    font-size: 5vh;
+    font-weight: bold;
+    padding: 2.5vh 0;
+    border: none;
+    border-radius: 2vh;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1vh 0 #2a9dc4;
+    touch-action: manipulation;
+  }
+
+  .option-btn:hover {
+    background: #3ab8dd;
+    transform: translateY(-0.5vh);
+  }
+
+  .option-btn:active {
+    transform: translateY(1vh);
+    box-shadow: 0 0 0 #2a9dc4;
+  }
+
+  .option-btn.correct {
+    background: #06d6a0 !important;
+    box-shadow: 0 1vh 0 #049e77;
+    animation: jump 0.5s;
+  }
+
+  .option-btn.wrong {
+    background: #ef476f !important;
+    box-shadow: 0 1vh 0 #b0304e;
+    animation: shake 0.5s;
+  }
+
+  @keyframes jump {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2vh); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-1.5vw); }
+    75% { transform: translateX(1.5vw); }
+  }
+
+  /* ==== FOOTER / SKOR ==== */
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5vh;
+    border-top: 0.6vh dashed #ffb703;
+    font-size: 2.8vh;
+    font-weight: bold;
+    color: #023047;
+  }
+
+  .score-box {
+    background: #ffb703;
+    color: white;
+    padding: 1vh 2.5vw;
+    border-radius: 5vh;
+    font-size: 3vh;
+  }
+
+  .progress {
+    display: flex;
+    gap: 0.8vw;
+  }
+
+  .dot {
+    width: 1.8vh;
+    height: 1.8vh;
+    border-radius: 50%;
+    background: #ccc;
+  }
+
+  .dot.active {
+    background: #06d6a0;
+  }
+
+  /* ==== OVERLAY AKHIR ==== */
+  .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.97);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3vh;
+    z-index: 10;
+    border-radius: 1.5vw;
+  }
+
+  .overlay.show { display: flex; }
+
+  .overlay h2 {
+    font-size: 8vh;
+    color: #ff6b00;
+    text-shadow: 0.5vh 0.5vh 0 #ffe0a3;
+  }
+
+  .overlay p {
+    font-size: 4vh;
+    color: #023047;
+  }
+
+  .overlay button {
+    font-size: 4vh;
+    padding: 2vh 5vw;
+    background: #06d6a0;
+    color: white;
+    border: none;
+    border-radius: 2vh;
+    cursor: pointer;
+    box-shadow: 0 1vh 0 #049e77;
+    font-weight: bold;
+  }
+
+  .overlay button:active {
+    transform: translateY(1vh);
+    box-shadow: 0 0 0 #049e77;
+  }
+
+  /* ==== EMOJI HUJAN ==== */
+  .confetti {
+    position: absolute;
+    font-size: 4vh;
+    animation: fall 3s linear forwards;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <header>
+    <h1>🍎 Penjumlahan Sederhana 🍎</h1>
+    <p>Ayo hitung bersama! Pilih jawaban yang benar ya...</p>
+  </header>
+
+  <div class="content">
+    <div class="question-box">
+      <div class="visual" id="visual"></div>
+      <div class="question" id="question"></div>
+    </div>
+
+    <div class="options" id="options"></div>
+  </div>
+
+  <footer>
+    <div class="progress" id="progress"></div>
+    <div class="score-box">⭐ Skor: <span id="score">0</span></div>
+  </footer>
+
+  <!-- Overlay akhir -->
+  <div class="overlay" id="overlay">
+    <h2 id="overlayTitle">🎉 Hebat! 🎉</h2>
+    <p>Skor Akhir Kamu: <span id="finalScore">0</span> / 10</p>
+    <button onclick="restartGame()">🔄 Main Lagi</button>
+  </div>
+</div>
+
+<script>
+  // ==== BANK SOAL ====
+  const questions = [
+    { a: 2, b: 3, emoji: '🍎' },
+    { a: 4, b: 2, emoji: '⭐' },
+    { a: 5, b: 3, emoji: '🐟' },
+    { a: 3, b: 3, emoji: '🍌' },
+    { a: 6, b: 2, emoji: '🐥' },
+    { a: 4, b: 4, emoji: '🌸' },
+    { a: 7, b: 2, emoji: '🍓' },
+    { a: 5, b: 5, emoji: '⚽' },
+    { a: 8, b: 1, emoji: '🎈' },
+    { a: 6, b: 4, emoji: '🍭' }
+  ];
+
+  let currentIndex = 0;
+  let score = 0;
+  let locked = false;
+
+  const visualEl = document.getElementById('visual');
+  const questionEl = document.getElementById('question');
+  const optionsEl = document.getElementById('options');
+  const scoreEl = document.getElementById('score');
+  const progressEl = document.getElementById('progress');
+  const overlay = document.getElementById('overlay');
+  const overlayTitle = document.getElementById('overlayTitle');
+  const finalScore = document.getElementById('finalScore');
+
+  // Buat titik progress
+  function buildProgress() {
+    progressEl.innerHTML = '';
+    questions.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i < currentIndex ? ' active' : '');
+      progressEl.appendChild(dot);
+    });
+  }
+
+  // Buat pilihan jawaban acak
+  function generateOptions(correct) {
+    const opts = new Set([correct]);
+    while (opts.size < 4) {
+      const rand = Math.floor(Math.random() * 20) + 1;
+      if (rand !== correct) opts.add(rand);
+    }
+    return [...opts].sort(() => Math.random() - 0.5);
+  }
+
+  // Tampilkan soal
+  function loadQuestion() {
+    locked = false;
+    if (currentIndex >= questions.length) {
+      showEnd();
+      return;
+    }
+
+    const q = questions[currentIndex];
+    const correct = q.a + q.b;
+
+    // Visual emoji
+    visualEl.innerHTML = '';
+    for (let i = 0; i < q.a; i++) {
+      const s = document.createElement('span');
+      s.textContent = q.emoji;
+      visualEl.appendChild(s);
+    }
+    const plus = document.createElement('span');
+    plus.textContent = '➕';
+    visualEl.appendChild(plus);
+    for (let i = 0; i < q.b; i++) {
+      const s = document.createElement('span');
+      s.textContent = q.emoji;
+      visualEl.appendChild(s);
+    }
+
+    questionEl.textContent = `${q.a} + ${q.b} = ?`;
+
+    // Pilihan
+    optionsEl.innerHTML = '';
+    const opts = generateOptions(correct);
+    opts.forEach(num => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = num;
+      btn.onclick = () => checkAnswer(btn, num, correct);
+      optionsEl.appendChild(btn);
+    });
+
+    buildProgress();
+  }
+
+  // Cek jawaban
+  function checkAnswer(btn, chosen, correct) {
+    if (locked) return;
+    locked = true;
+
+    if (chosen === correct) {
+      btn.classList.add('correct');
+      score++;
+      scoreEl.textContent = score;
+      spawnConfetti();
+      setTimeout(() => {
+        currentIndex++;
+        loadQuestion();
+      }, 1200);
+    } else {
+      btn.classList.add('wrong');
+      // Tampilkan jawaban benar
+      document.querySelectorAll('.option-btn').forEach(b => {
+        if (parseInt(b.textContent) === correct) {
+          b.classList.add('correct');
+        }
+      });
+      setTimeout(() => {
+        currentIndex++;
+        loadQuestion();
+      }, 1800);
+    }
+  }
+
+  // Confetti emoji
+  function spawnConfetti() {
+    const emojis = ['🎉', '⭐', '✨', '🎊', '💖', '🌟'];
+    for (let i = 0; i < 15; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDelay = Math.random() * 0.5 + 's';
+      el.style.fontSize = (3 + Math.random() * 3) + 'vh';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
+    }
+  }
+
+  // Tampilkan akhir
+  function showEnd() {
+    finalScore.textContent = score;
+    if (score === questions.length) {
+      overlayTitle.textContent = '🏆 Sempurna! 🏆';
+    } else if (score >= 7) {
+      overlayTitle.textContent = '🎉 Hebat Sekali! 🎉';
+    } else {
+      overlayTitle.textContent = '👍 Bagus, Ayo Coba Lagi! 👍';
+    }
+    overlay.classList.add('show');
+    spawnConfetti();
+  }
+
+  // Restart
+  function restartGame() {
+    currentIndex = 0;
+    score = 0;
+    scoreEl.textContent = 0;
+    overlay.classList.remove('show');
+    loadQuestion();
+  }
+
+  // Mulai
+  loadQuestion();
+</script>
+</body>
+</html>
