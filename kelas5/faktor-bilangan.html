@@ -1,0 +1,3089 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Faktor — Belajar & Kuis</title>
+<style>
+/* ============================================================
+   ROOT & RESET
+============================================================ */
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #3730a3;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --text: #1f2937;
+  --gap: clamp(6px, 1vmin, 16px);
+  --gap-sm: clamp(4px, 0.7vmin, 12px);
+  --radius: clamp(8px, 1.4vmin, 22px);
+  --radius-sm: clamp(6px, 1vmin, 14px);
+  --fs-xs: clamp(10px, 1.05vmin, 15px);
+  --fs-sm: clamp(12px, 1.3vmin, 20px);
+  --fs-md: clamp(14px, 1.55vmin, 24px);
+  --fs-lg: clamp(16px, 1.9vmin, 30px);
+  --fs-xl: clamp(20px, 2.6vmin, 44px);
+
+  /* Global toggle geometry (used for positioning all top buttons) */
+  --toggle-size: clamp(34px, 4.6vmin, 58px);
+  --toggle-gap: clamp(8px, 1.2vmin, 16px);
+  --toggle-step: calc(var(--toggle-size) + var(--toggle-gap));
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100vh; height: 100dvh; overflow: hidden; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #f1f5f9;
+  color: var(--text);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ============================================================
+   SCREEN SWITCHER
+============================================================ */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gap);
+  z-index: 1;
+}
+.screen.active { display: flex; }
+
+/* ============================================================
+   GLOBAL CONTROLS (top-right toggles)
+============================================================ */
+.global-toggle {
+  position: fixed;
+  top: var(--toggle-gap);
+  right: var(--toggle-gap);
+  width: var(--toggle-size);
+  height: var(--toggle-size);
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #cbd5e1;
+  font-size: clamp(15px, 2vmin, 26px);
+  cursor: pointer;
+  z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  font-family: inherit; padding: 0; line-height: 1;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+.global-toggle:hover { transform: scale(1.08); border-color: var(--primary); }
+.global-toggle.off { opacity: 0.55; }
+/* Voice button = 2nd from right */
+.global-toggle.voice { right: calc(var(--toggle-gap) + var(--toggle-step)); }
+/* Fullscreen button = 3rd from right */
+.global-toggle.fullscreen { right: calc(var(--toggle-gap) + var(--toggle-step) * 2); }
+.global-toggle.fullscreen svg { width: 55%; height: 55%; }
+
+.menu-btn {
+  position: fixed;
+  top: var(--toggle-gap);
+  left: var(--toggle-gap);
+  height: var(--toggle-size);
+  padding: 0 clamp(12px, 1.6vmin, 24px);
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid #cbd5e1;
+  font-size: clamp(12px, 1.5vmin, 18px);
+  font-weight: 700;
+  color: var(--primary-dark);
+  cursor: pointer;
+  z-index: 999;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  font-family: inherit;
+  line-height: 1;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+.menu-btn.visible { display: inline-flex; }
+.menu-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateX(-2px); }
+
+/* ============================================================
+   WELCOME SCREEN — CINEMATIC
+============================================================ */
+#welcomeScreen {
+  padding: 0;
+  background: #0f172a;
+  overflow: hidden;
+}
+
+.welcome-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, #6366f1 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 30%, #ec4899 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 90%, #f59e0b 0%, transparent 60%),
+    linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+  animation: bgShift 18s ease-in-out infinite alternate;
+}
+@keyframes bgShift {
+  0%   { filter: hue-rotate(0deg) brightness(1); }
+  100% { filter: hue-rotate(15deg) brightness(1.08); }
+}
+.welcome-bg::before,
+.welcome-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+.welcome-bg::before {
+  width: 45vmin; height: 45vmin;
+  background: #a78bfa;
+  top: -10vmin; left: -10vmin;
+  animation: blobFloat 14s ease-in-out infinite;
+}
+.welcome-bg::after {
+  width: 50vmin; height: 50vmin;
+  background: #f472b6;
+  bottom: -15vmin; right: -12vmin;
+  animation: blobFloat 18s ease-in-out infinite reverse;
+}
+@keyframes blobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(6vmin, 4vmin) scale(1.15); }
+}
+
+.welcome-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.float-item {
+  position: absolute;
+  font-size: clamp(24px, 4vmin, 64px);
+  line-height: 1;
+  opacity: 0.7;
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,0.35));
+  animation: floatY 6s ease-in-out infinite;
+  user-select: none;
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50%      { transform: translateY(-18px) rotate(calc(var(--rot, 0deg) + 6deg)); }
+}
+.sparkle {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: sparkleTwinkle 2.5s ease-in-out infinite;
+  pointer-events: none;
+  box-shadow: 0 0 12px 3px rgba(255,255,255,0.8);
+}
+@keyframes sparkleTwinkle {
+  0%, 100% { opacity: 0; transform: scale(0.3); }
+  50%      { opacity: 1; transform: scale(1.4); }
+}
+
+/* Main card — proportional to viewport, works on IFP 4K */
+.welcome-card {
+  position: relative;
+  z-index: 2;
+  /* Scalable: min(94vw, aspect-preserving width from vh, vmin-based upper bound) */
+  width: min(94vw, 94vh * 1.15, 200vmin);
+  max-width: 1700px;
+  max-height: 94vh;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  border-radius: clamp(20px, 3vmin, 44px);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(255,255,255,0.6) inset,
+    0 1px 0 rgba(255,255,255,0.9) inset;
+  padding: clamp(20px, 3.5vmin, 60px) clamp(20px, 3.5vmin, 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.4vmin, 36px);
+  overflow: auto;
+  animation: cardEnter 0.7s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+@keyframes cardEnter {
+  0%   { opacity: 0; transform: translateY(30px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.welcome-hero { text-align: center; position: relative; }
+.welcome-hero .hero-emoji {
+  position: relative;
+  display: inline-block;
+  font-size: clamp(60px, 9vmin, 150px);
+  line-height: 1;
+  margin-bottom: clamp(8px, 1.2vmin, 20px);
+  animation: heroBounce 3.2s ease-in-out infinite;
+  filter: drop-shadow(0 10px 26px rgba(99,102,241,0.35));
+}
+.welcome-hero .hero-emoji::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle, rgba(99,102,241,0.28) 0%, transparent 65%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: heroGlow 3.2s ease-in-out infinite;
+}
+@keyframes heroBounce {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-12px) rotate(3deg); }
+}
+@keyframes heroGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+.welcome-hero h1 {
+  font-size: clamp(28px, 4.6vmin, 76px);
+  line-height: 1.05;
+  margin-bottom: clamp(6px, 1vmin, 16px);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 40%, #ec4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.welcome-hero p {
+  font-size: clamp(13px, 1.7vmin, 24px);
+  color: #475569;
+  line-height: 1.55;
+  max-width: 44ch;
+  margin: 0 auto;
+}
+.welcome-hero p b { color: var(--primary-dark); font-weight: 800; }
+
+.welcome-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 2vmin, 32px);
+  width: 100%;
+  max-width: min(100%, 78vmin);
+  margin-top: clamp(4px, 0.8vmin, 14px);
+}
+.welcome-option {
+  position: relative;
+  padding: clamp(20px, 3vmin, 52px) clamp(16px, 2.2vmin, 36px) clamp(24px, 3.4vmin, 52px);
+  border: none;
+  background: #fff;
+  border-radius: clamp(16px, 2.2vmin, 36px);
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 0.9vmin, 16px);
+  transition: all 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
+  text-align: center;
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.1),
+    0 1px 0 rgba(255,255,255,0.9) inset;
+  overflow: hidden;
+  isolation: isolate;
+}
+.welcome-option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--card-c1), var(--card-c2));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1;
+}
+.welcome-option::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--card-bg1), var(--card-bg2));
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+.welcome-option.learn {
+  --card-c1: #6366f1;
+  --card-c2: #8b5cf6;
+  --card-bg1: #eef2ff;
+  --card-bg2: #f5f3ff;
+  --accent: #4f46e5;
+}
+.welcome-option.quiz {
+  --card-c1: #f59e0b;
+  --card-c2: #ec4899;
+  --card-bg1: #fffbeb;
+  --card-bg2: #fef2f2;
+  --accent: #d97706;
+}
+.welcome-option:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 22px 48px rgba(15, 23, 42, 0.18),
+    0 1px 0 rgba(255,255,255,0.9) inset;
+}
+.welcome-option:hover::before { opacity: 1; }
+.welcome-option:hover::after  { opacity: 1; }
+.welcome-option:active { transform: translateY(-3px) scale(0.99); }
+.welcome-option .opt-icon {
+  position: relative;
+  font-size: clamp(44px, 7vmin, 110px);
+  line-height: 1;
+  margin-bottom: clamp(2px, 0.5vmin, 8px);
+  transition: transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.14));
+}
+.welcome-option:hover .opt-icon {
+  transform: scale(1.15) rotate(-6deg);
+}
+.welcome-option .opt-title {
+  font-size: clamp(19px, 2.6vmin, 40px);
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1.1;
+  letter-spacing: -0.3px;
+}
+.welcome-option .opt-desc {
+  font-size: clamp(11px, 1.4vmin, 19px);
+  color: #64748b;
+  line-height: 1.45;
+  max-width: 26ch;
+  margin: 0 auto;
+}
+.welcome-option .opt-arrow {
+  position: absolute;
+  bottom: clamp(10px, 1.4vmin, 20px);
+  right: clamp(14px, 1.8vmin, 26px);
+  font-size: clamp(16px, 2.2vmin, 32px);
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.3s;
+  font-weight: 800;
+}
+.welcome-option:hover .opt-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+.welcome-footer {
+  font-size: clamp(10px, 1.3vmin, 16px);
+  color: #94a3b8;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding-top: clamp(4px, 0.8vmin, 10px);
+}
+@media (max-width: 640px) {
+  .welcome-cards { grid-template-columns: 1fr; }
+  .welcome-card { padding: 20px; }
+}
+
+/* ============================================================
+   LEARN SCREEN
+============================================================ */
+.container {
+  position: relative;
+  width: 100%; height: 100%;
+  max-width: 2400px;
+  display: flex; flex-direction: column;
+  gap: var(--gap);
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  padding: clamp(10px, 1.6vmin, 26px);
+  overflow: hidden;
+}
+.header { text-align: center; flex: 0 0 auto; padding: 0 clamp(90px, 12vmin, 160px); }
+.header h1 { font-size: var(--fs-xl); color: var(--primary); line-height: 1.1; margin-bottom: 2px; }
+.header .subtitle { font-size: var(--fs-sm); color: #6b7280; }
+.toolbar {
+  display: flex; align-items: center;
+  gap: var(--gap-sm); flex-wrap: wrap;
+  flex: 0 0 auto;
+  background: #f1f5f9;
+  border-radius: var(--radius-sm);
+  padding: clamp(6px, 0.9vmin, 14px) clamp(8px, 1.2vmin, 20px);
+}
+.toolbar .label {
+  font-size: var(--fs-xs); font-weight: 700; color: #475569;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.toolbar .divider { width: 1px; height: clamp(20px, 3vmin, 36px); background: #cbd5e1; margin: 0 4px; }
+.num-chip {
+  padding: clamp(4px, 0.7vmin, 11px) clamp(10px, 1.5vmin, 24px);
+  border: 2px solid #cbd5e1; background: #fff;
+  border-radius: 999px;
+  font-size: var(--fs-sm); font-weight: 700; color: #64748b;
+  cursor: pointer; font-family: inherit; transition: all 0.15s;
+  min-width: clamp(34px, 4.4vmin, 68px); line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 3px;
+}
+.num-chip:hover { border-color: var(--primary); color: var(--primary); }
+.num-chip.active { background: var(--primary); border-color: var(--primary); color: #fff;
+  box-shadow: 0 4px 12px rgba(79,70,229,0.35); }
+.num-chip.done { background: #d1fae5; border-color: var(--success); color: #065f46; }
+.num-chip.done.active { background: var(--success); color: #fff; }
+.num-chip .check { font-size: 0.85em; line-height: 1; }
+.theme-chip {
+  width: clamp(30px, 3.9vmin, 58px); height: clamp(30px, 3.9vmin, 58px);
+  border: 2px solid #cbd5e1; background: #fff;
+  border-radius: 50%; font-size: clamp(15px, 2vmin, 28px);
+  cursor: pointer; font-family: inherit; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1; transition: all 0.15s; overflow: hidden; flex: 0 0 auto;
+}
+.theme-chip:hover { border-color: var(--warning); transform: translateY(-2px) scale(1.05); }
+.theme-chip.active { background: #fef3c7; border-color: var(--warning); transform: scale(1.12);
+  box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
+.mode-group {
+  display: inline-flex; background: #fff;
+  border: 2px solid #cbd5e1; border-radius: 999px;
+  padding: 2px; gap: 2px;
+}
+.mode-chip {
+  padding: clamp(3px, 0.5vmin, 9px) clamp(9px, 1.2vmin, 20px);
+  border: none; background: transparent;
+  border-radius: 999px;
+  font-size: var(--fs-xs); font-weight: 700; color: #64748b;
+  cursor: pointer; font-family: inherit; transition: all 0.15s;
+  line-height: 1; white-space: nowrap;
+}
+.mode-chip:hover { color: var(--primary); }
+.mode-chip.active { background: var(--primary); color: #fff;
+  box-shadow: 0 2px 6px rgba(79,70,229,0.35); }
+.custom-wrap { display: flex; gap: 6px; align-items: center; margin-left: auto; }
+.custom-wrap input {
+  width: clamp(58px, 7.5vmin, 108px);
+  padding: clamp(5px, 0.8vmin, 12px) clamp(8px, 1vmin, 16px);
+  border: 2px solid #cbd5e1; border-radius: 10px;
+  font-size: var(--fs-sm); font-family: inherit; text-align: center;
+  font-weight: 700; color: var(--text);
+}
+.custom-wrap input:focus { outline: none; border-color: var(--primary); }
+.custom-wrap button {
+  padding: clamp(5px, 0.8vmin, 12px) clamp(10px, 1.4vmin, 22px);
+  border: 2px solid var(--primary); background: #fff; color: var(--primary);
+  border-radius: 10px; font-weight: 700; cursor: pointer;
+  font-family: inherit; font-size: var(--fs-sm); transition: all 0.15s;
+}
+.custom-wrap button:hover { background: var(--primary); color: #fff; }
+.story {
+  background: #fef3c7;
+  border-left: 5px solid var(--warning);
+  padding: clamp(8px, 1.1vmin, 18px) clamp(12px, 1.6vmin, 26px);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-md); line-height: 1.45;
+  flex: 0 0 auto;
+  display: flex; align-items: center;
+  gap: clamp(8px, 1.2vmin, 20px);
+}
+.story .story-emoji { font-size: clamp(24px, 3.6vmin, 56px); line-height: 1; flex: 0 0 auto; }
+.story .story-text { flex: 1 1 auto; }
+.story b { color: var(--primary-dark); }
+.bag-section { flex: 0 0 auto; display: flex; flex-direction: column; min-height: 0; }
+.bag-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--gap-sm); margin-bottom: clamp(4px, 0.6vmin, 10px);
+  flex-wrap: wrap;
+}
+.section-title {
+  font-size: var(--fs-xs); font-weight: 700; color: var(--primary-dark);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.custom-bag { display: flex; gap: 5px; align-items: center; }
+.custom-bag input {
+  width: clamp(50px, 6.5vmin, 96px);
+  padding: clamp(3px, 0.5vmin, 9px) clamp(6px, 0.9vmin, 14px);
+  border: 2px solid #cbd5e1; border-radius: 8px;
+  font-size: var(--fs-xs); font-family: inherit; text-align: center;
+  font-weight: 700; color: var(--text);
+}
+.custom-bag input:focus { outline: none; border-color: var(--primary); }
+.custom-bag button {
+  padding: clamp(3px, 0.5vmin, 9px) clamp(8px, 1.1vmin, 18px);
+  border: 2px solid var(--primary); background: #fff; color: var(--primary);
+  border-radius: 8px; font-weight: 700; cursor: pointer;
+  font-family: inherit; font-size: var(--fs-xs); transition: all 0.15s;
+}
+.custom-bag button:hover { background: var(--primary); color: #fff; }
+.bag-selector {
+  display: flex; flex-wrap: wrap;
+  gap: clamp(3px, 0.5vmin, 10px);
+  justify-content: center; align-content: flex-start;
+  overflow: hidden;
+  --btn-size: clamp(36px, 5.2vmin, 84px);
+  --btn-font: var(--fs-md);
+}
+.bag-btn {
+  width: var(--btn-size); height: var(--btn-size);
+  border: 2px solid #cbd5e1; background: #fff;
+  border-radius: clamp(5px, 0.8vmin, 16px);
+  font-size: var(--btn-font); font-weight: 700; color: #64748b;
+  cursor: pointer; transition: all 0.15s;
+  font-family: inherit; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1; overflow: hidden; flex: 0 0 auto;
+}
+.bag-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+.bag-btn.selected { background: var(--primary); border-color: var(--primary); color: #fff;
+  transform: scale(1.08); box-shadow: 0 6px 16px rgba(79,70,229,0.4); }
+.bag-btn.factor { background: var(--success); border-color: var(--success); color: #fff; }
+.bag-btn.factor.selected { box-shadow: 0 6px 16px rgba(16,185,129,0.5); }
+.play-area { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 1fr 1.3fr; gap: var(--gap); }
+.panel {
+  background: #f8fafc; border-radius: var(--radius);
+  padding: clamp(6px, 1vmin, 18px);
+  border: 2px dashed #cbd5e1;
+  display: flex; flex-direction: column;
+  min-height: 0; min-width: 0; overflow: hidden;
+  transition: all 0.25s;
+}
+.panel.drop-active { border-color: var(--primary); background: #eef2ff;
+  box-shadow: inset 0 0 0 3px rgba(79,70,229,0.15); }
+.panel.pool-sisa { border-style: solid; border-color: var(--danger); background: #fef2f2; }
+.panel.pool-sisa .panel-title { color: #991b1b; }
+.panel.pool-success { border-style: solid; border-color: var(--success); background: #f0fdf4; }
+.panel.pool-success .panel-title { color: #065f46; }
+.panel-title {
+  font-size: var(--fs-xs); font-weight: 700; color: #64748b;
+  margin-bottom: clamp(4px, 0.7vmin, 10px);
+  text-align: center; text-transform: uppercase;
+  letter-spacing: 0.5px; flex: 0 0 auto; line-height: 1.2;
+  transition: color 0.25s;
+}
+.candy-pool {
+  flex: 1 1 auto; min-height: 0; min-width: 0;
+  display: flex; flex-wrap: wrap;
+  gap: clamp(2px, 0.5vmin, 10px);
+  align-content: center; justify-content: center;
+  overflow: hidden;
+  --candy-size: 40px;
+}
+.candy-pool span {
+  width: var(--candy-size); height: var(--candy-size);
+  display: flex; align-items: center; justify-content: center;
+  font-size: calc(var(--candy-size) * 0.82);
+  line-height: 1; overflow: hidden;
+  animation: pop 0.35s ease backwards;
+  flex: 0 0 auto;
+}
+@keyframes pop {
+  0%   { transform: scale(0) rotate(-30deg); }
+  70%  { transform: scale(1.15) rotate(8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.panel.pool-sisa .candy-pool span {
+  animation: sisaWiggle 0.6s ease backwards;
+  filter: drop-shadow(0 2px 4px rgba(239,68,68,0.4));
+}
+@keyframes sisaWiggle {
+  0%   { transform: scale(0) translateY(20px) rotate(-40deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(10deg); }
+  80%  { transform: scale(1.05) rotate(-4deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.pool-success-mark {
+  font-size: clamp(56px, 9vmin, 140px);
+  color: var(--success); font-weight: 700; line-height: 1;
+  animation: successPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-shadow: 0 4px 12px rgba(16,185,129,0.3);
+}
+@keyframes successPop {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  70%  { transform: scale(1.25) rotate(10deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.candy-pool span.draggable { cursor: grab; touch-action: none; transition: transform 0.15s; }
+.candy-pool span.draggable:hover { transform: scale(1.18) !important;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25)); }
+.candy-pool span.draggable:active { cursor: grabbing; }
+.candy-pool span.dragging { opacity: 0.25; }
+.drag-ghost {
+  position: fixed; display: flex; align-items: center; justify-content: center;
+  pointer-events: none; z-index: 9999;
+  font-size: clamp(28px, 4.6vmin, 72px); line-height: 1;
+  transform: translate(-50%, -50%) scale(1.25) rotate(-8deg);
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+}
+.bags-container {
+  flex: 1 1 auto; min-height: 0; min-width: 0;
+  display: grid;
+  gap: clamp(4px, 0.7vmin, 12px);
+  justify-content: center; align-content: center;
+  overflow: hidden;
+  --bag-size: 60px;
+}
+.bag {
+  width: var(--bag-size);
+  height: calc(var(--bag-size) * 1.12);
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  border-radius: 24% 24% 32% 32% / 20% 20% 34% 34%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2%; color: #fff; font-weight: 700;
+  box-shadow: 0 3px 8px rgba(245,158,11,0.4);
+  animation: dropIn 0.4s ease backwards;
+  position: relative; overflow: hidden;
+  padding: 6% 4%;
+  transition: all 0.2s;
+}
+.bag::before {
+  content: ''; position: absolute;
+  top: 0; left: 15%; width: 70%; height: 8%;
+  background: rgba(255,255,255,0.35);
+  border-radius: 0 0 40% 40%;
+}
+.bag .bag-candy { font-size: calc(var(--bag-size) * 0.42); line-height: 1;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15)); flex: 0 0 auto; }
+.bag .bag-count {
+  font-size: calc(var(--bag-size) * 0.24);
+  background: rgba(255,255,255,0.4);
+  border-radius: 5px; padding: 2% 12%; line-height: 1;
+  flex: 0 0 auto; min-width: 40%; text-align: center;
+}
+@keyframes dropIn {
+  0%   { transform: translateY(-30px) scale(0.7); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.bag.bag-unbalanced {
+  box-shadow: 0 0 0 4px var(--danger), 0 3px 8px rgba(239,68,68,0.5);
+  animation: shake 0.5s ease;
+}
+.bag.bag-unbalanced::after {
+  content: '!'; position: absolute;
+  top: 4%; right: 6%;
+  font-size: calc(var(--bag-size) * 0.28);
+  background: var(--danger); color: #fff;
+  width: calc(var(--bag-size) * 0.32);
+  height: calc(var(--bag-size) * 0.32);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; line-height: 1;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px) rotate(-2deg); }
+  40% { transform: translateX(5px) rotate(2deg); }
+  60% { transform: translateX(-4px) rotate(-1.5deg); }
+  80% { transform: translateX(4px) rotate(1.5deg); }
+}
+.bag.pickable { cursor: grab; touch-action: none; }
+.bag.pickable:hover {
+  filter: brightness(1.08);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 18px rgba(245,158,11,0.55);
+}
+.bag.drop-target.drop-active {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 4px var(--primary), 0 8px 20px rgba(79,70,229,0.5);
+  filter: brightness(1.15);
+}
+.sisa-visual {
+  flex: 0 0 auto;
+  background: linear-gradient(180deg, #fee2e2 0%, #fecaca 100%);
+  border: 3px dashed var(--danger);
+  border-radius: var(--radius-sm);
+  padding: clamp(6px, 0.9vmin, 16px) clamp(10px, 1.4vmin, 22px);
+  margin-top: clamp(5px, 0.8vmin, 12px);
+  display: flex; align-items: center;
+  gap: clamp(8px, 1.2vmin, 18px);
+  flex-wrap: wrap;
+  animation: sisaSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+@keyframes sisaSlideIn {
+  0%   { transform: translateY(-24px) scale(0.9); opacity: 0; }
+  60%  { transform: translateY(4px) scale(1.02); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.sisa-label {
+  display: flex; align-items: center; gap: 6px;
+  color: #991b1b; font-weight: 800; font-size: var(--fs-sm);
+  white-space: nowrap; line-height: 1; flex: 0 0 auto;
+}
+.sisa-label .sisa-icon { font-size: clamp(18px, 2.4vmin, 34px); line-height: 1;
+  animation: sisaIconPulse 1.4s ease-in-out infinite; }
+@keyframes sisaIconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+.sisa-candies {
+  display: flex; flex-wrap: wrap;
+  gap: clamp(2px, 0.4vmin, 8px);
+  align-items: center;
+  font-size: clamp(20px, 3vmin, 48px);
+  line-height: 1; flex: 1 1 auto; min-width: 0;
+}
+.sisa-candies span {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.15em; height: 1.15em; line-height: 1;
+  animation: sisaCandyDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  filter: drop-shadow(0 2px 3px rgba(239,68,68,0.4));
+}
+@keyframes sisaCandyDrop {
+  0%   { transform: scale(0) translateY(-30px) rotate(-40deg); opacity: 0; }
+  60%  { transform: scale(1.25) translateY(4px) rotate(12deg); }
+  80%  { transform: scale(1.05) translateY(-2px) rotate(-4deg); }
+  100% { transform: scale(1) translateY(0) rotate(0); opacity: 1; }
+}
+.sisa-more {
+  font-size: var(--fs-xs); color: #991b1b; font-weight: 800;
+  padding: 4px 10px; background: #fff;
+  border: 2px solid var(--danger); border-radius: 999px;
+  line-height: 1; flex: 0 0 auto;
+}
+.controls { display: flex; gap: var(--gap); justify-content: center; flex: 0 0 auto; }
+.btn {
+  padding: clamp(8px, 1.2vmin, 20px) clamp(20px, 2.6vmin, 52px);
+  border: none; border-radius: var(--radius-sm);
+  font-size: var(--fs-lg); font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12); line-height: 1.1;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79,70,229,0.35);
+}
+.btn-primary:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; }
+.btn-secondary { background: #fff; color: #64748b; border: 2px solid #cbd5e1; }
+.btn-secondary:hover { background: #f1f5f9; }
+.feedback {
+  min-height: clamp(44px, 5.4vmin, 80px);
+  padding: clamp(8px, 1.1vmin, 18px) clamp(12px, 1.6vmin, 26px);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-md); font-weight: 600;
+  text-align: center;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s; line-height: 1.4;
+  flex: 0 0 auto;
+}
+.feedback.neutral { background: #f1f5f9; color: #64748b; }
+.feedback.success { background: #d1fae5; color: #065f46; }
+.feedback.error { background: #fee2e2; color: #991b1b; }
+.feedback b { margin: 0 2px; }
+.progress-section {
+  background: #eff6ff; border-radius: var(--radius-sm);
+  padding: clamp(8px, 1.1vmin, 18px) clamp(12px, 1.5vmin, 26px);
+  flex: 0 0 auto;
+}
+.progress-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: clamp(4px, 0.6vmin, 10px);
+  font-weight: 700; color: var(--primary-dark); font-size: var(--fs-sm);
+}
+.progress-bar {
+  height: clamp(8px, 1vmin, 16px);
+  background: #dbeafe; border-radius: 999px;
+  overflow: hidden; margin-bottom: clamp(6px, 0.9vmin, 12px);
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), #34d399);
+  transition: width 0.4s ease; width: 0%;
+}
+.found-factors { display: flex; flex-wrap: wrap; gap: 5px; }
+.factor-chip {
+  background: #fff; border: 2px solid var(--success); color: var(--success);
+  padding: clamp(2px, 0.4vmin, 8px) clamp(8px, 1.1vmin, 18px);
+  border-radius: 999px; font-weight: 700; font-size: var(--fs-sm);
+  animation: pop 0.3s ease; line-height: 1;
+}
+.factor-chip.empty {
+  border-color: #cbd5e1; color: #94a3b8; font-weight: 500; font-style: italic;
+}
+.win-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none; align-items: center; justify-content: center;
+  z-index: 100; animation: fadeIn 0.3s;
+  padding: 20px; backdrop-filter: blur(4px);
+}
+.win-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.win-card {
+  background: #fff; border-radius: var(--radius);
+  padding: clamp(24px, 3.4vmin, 56px);
+  text-align: center;
+  width: min(92vw, 720px); max-height: 92vh; overflow: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.4s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.win-card .emoji { font-size: clamp(48px, 7vmin, 110px); margin-bottom: 8px; line-height: 1; }
+.win-card h2 { font-size: var(--fs-lg); color: var(--primary-dark); margin-bottom: 10px; }
+.win-card p { color: #4b5563; margin-bottom: 12px; font-size: var(--fs-md); line-height: 1.5; }
+.win-card .factors-list {
+  font-size: var(--fs-lg); font-weight: 700; color: var(--success);
+  letter-spacing: 2px; margin-bottom: 16px; word-break: break-word;
+}
+.win-card .bonus {
+  background: #fef3c7; border-radius: var(--radius-sm);
+  padding: clamp(10px, 1.4vmin, 22px);
+  font-size: var(--fs-sm); color: #92400e;
+  text-align: left; margin-bottom: 16px; line-height: 1.5;
+}
+.win-card .btn { padding: clamp(9px, 1.3vmin, 20px) clamp(20px, 2.6vmin, 42px); font-size: var(--fs-md); }
+@media (max-width: 900px) {
+  .play-area { grid-template-columns: 1fr; }
+  .custom-wrap { margin-left: 0; }
+}
+@media (max-height: 640px) {
+  .header h1 { font-size: clamp(16px, 2.2vmin, 28px); }
+  .header .subtitle { display: none; }
+  .story { font-size: var(--fs-sm); }
+}
+
+/* ============================================================
+   QUIZ SCREEN
+============================================================ */
+#quizScreen {
+  padding: var(--gap);
+  background:
+    radial-gradient(circle at 10% 0%, #c7d2fe 0%, transparent 45%),
+    radial-gradient(circle at 90% 100%, #fbcfe8 0%, transparent 45%),
+    linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+}
+#quizScreen .app {
+  position: relative;
+  width: 100%; height: 100%;
+  max-width: 2400px;
+  background: #fff;
+  border-radius: clamp(16px, 2.4vmin, 36px);
+  box-shadow:
+    0 24px 60px rgba(15, 23, 42, 0.12),
+    0 1px 0 rgba(255,255,255,0.9) inset;
+  padding: clamp(12px, 1.8vmin, 30px);
+  display: flex; flex-direction: column;
+  gap: var(--gap);
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+#quizScreen .quiz-header {
+  display: flex; align-items: center;
+  gap: clamp(10px, 1.6vmin, 26px);
+  flex-shrink: 0;
+  padding: clamp(6px, 1vmin, 16px) clamp(110px, 14vmin, 200px) 0;
+}
+#quizScreen .quiz-progress-info {
+  flex: 1; display: flex; align-items: center;
+  gap: clamp(8px, 1.4vmin, 20px);
+  min-width: 0;
+}
+#quizScreen .quiz-q-counter {
+  display: inline-flex; align-items: center;
+  gap: 6px;
+  font-size: clamp(11px, 1.5vmin, 20px);
+  font-weight: 800; color: var(--primary-dark);
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  padding: clamp(4px, 0.7vmin, 12px) clamp(10px, 1.4vmin, 22px);
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 2px solid #c7d2fe;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
+}
+#quizScreen .quiz-q-counter .num {
+  color: var(--primary);
+  font-size: 1.3em;
+  font-weight: 900;
+}
+#quizScreen .quiz-progress-bar {
+  flex: 1; height: clamp(10px, 1.4vmin, 22px);
+  background: #e2e8f0; border-radius: 999px;
+  overflow: hidden; min-width: 0;
+  position: relative;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+}
+#quizScreen .quiz-progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.34, 1.4, 0.64, 1);
+  position: relative;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.45);
+}
+#quizScreen .quiz-progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  animation: shine 2.2s ease-in-out infinite;
+  border-radius: inherit;
+}
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+#quizScreen .quiz-score-info {
+  display: inline-flex; align-items: center;
+  gap: clamp(6px, 0.9vmin, 14px);
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  padding: clamp(5px, 0.8vmin, 14px) clamp(12px, 1.6vmin, 26px);
+  border-radius: clamp(12px, 1.6vmin, 22px);
+  border: 2px solid #fbbf24;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+#quizScreen .quiz-score-info::before {
+  content: '⭐';
+  font-size: clamp(14px, 1.9vmin, 26px);
+  line-height: 1;
+}
+#quizScreen .quiz-score-label {
+  font-size: clamp(10px, 1.2vmin, 17px);
+  font-weight: 800; color: #92400e;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+#quizScreen .quiz-score-value {
+  font-size: clamp(18px, 2.4vmin, 36px);
+  font-weight: 900; color: #92400e;
+  min-width: 2ch; text-align: right;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#quizScreen .quiz-score-value.bump {
+  animation: scoreBump 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes scoreBump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); color: #16a34a; }
+  100% { transform: scale(1); }
+}
+#quizScreen .quiz-area {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  gap: clamp(10px, 1.8vmin, 28px);
+  padding: clamp(6px, 1vmin, 18px) 0;
+}
+#quizScreen .question-box {
+  position: relative;
+  flex-shrink: 0; text-align: center;
+  padding: clamp(14px, 2.4vmin, 38px) clamp(20px, 3.2vmin, 60px);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(236,72,153,0.12) 0%, transparent 55%),
+    radial-gradient(circle at 0% 100%, rgba(99,102,241,0.12) 0%, transparent 55%),
+    linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #fdf2f8 100%);
+  border-radius: clamp(14px, 2vmin, 32px);
+  border: 2px solid #e0e7ff;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.1);
+}
+#quizScreen .question-box::before,
+#quizScreen .question-box::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+#quizScreen .question-box::before {
+  width: 180px; height: 180px;
+  background: #a5b4fc;
+  top: -60px; left: -40px;
+}
+#quizScreen .question-box::after {
+  width: 160px; height: 160px;
+  background: #f9a8d4;
+  bottom: -50px; right: -30px;
+}
+#quizScreen .question-tag {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: clamp(10px, 1.3vmin, 18px);
+  font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
+  padding: clamp(4px, 0.6vmin, 10px) clamp(12px, 1.6vmin, 24px);
+  border-radius: 999px;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: clamp(8px, 1.2vmin, 18px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+}
+#quizScreen .question-tag::before {
+  content: '❓';
+  font-size: 1.1em;
+  line-height: 1;
+}
+#quizScreen .question-text {
+  position: relative;
+  font-size: clamp(18px, 2.8vmin, 48px);
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.35;
+  white-space: pre-line;
+  letter-spacing: -0.3px;
+}
+#quizScreen .answers-area {
+  flex: 1; min-height: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(4px, 0.8vmin, 14px) 0;
+}
+#quizScreen .pg-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.8vmin, 28px);
+  width: min(100%, 1200px); max-height: 100%;
+}
+#quizScreen .pg-btn {
+  position: relative;
+  padding: clamp(16px, 2.8vmin, 48px) clamp(16px, 2.4vmin, 40px);
+  background: #fff;
+  border: clamp(2px, 0.4vmin, 5px) solid #cbd5e1;
+  border-radius: clamp(14px, 2vmin, 30px);
+  font-size: clamp(20px, 3.2vmin, 56px);
+  font-weight: 900;
+  color: var(--primary-dark);
+  cursor: pointer; font-family: inherit;
+  transition: all 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+  box-shadow:
+    0 6px 16px rgba(15, 23, 42, 0.08),
+    0 2px 0 rgba(255,255,255,0.9) inset;
+  min-height: 0;
+  overflow: hidden;
+}
+#quizScreen .pg-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
+  opacity: 0;
+  transition: opacity 0.22s;
+  z-index: -1;
+}
+#quizScreen .pg-btn:hover:not(.disabled) {
+  border-color: var(--primary);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow:
+    0 14px 30px rgba(79, 70, 229, 0.22),
+    0 2px 0 rgba(255,255,255,0.9) inset;
+  color: var(--primary);
+}
+#quizScreen .pg-btn:hover:not(.disabled)::before { opacity: 1; }
+#quizScreen .pg-btn:active:not(.disabled) {
+  transform: translateY(-1px) scale(0.99);
+}
+#quizScreen .pg-btn.correct {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: var(--success);
+  color: #065f46;
+  animation: quizPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 10px 28px rgba(16, 185, 129, 0.35);
+}
+#quizScreen .pg-btn.wrong {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: var(--danger);
+  color: #991b1b;
+  animation: quizShake 0.5s;
+  box-shadow: 0 10px 28px rgba(239, 68, 68, 0.3);
+}
+#quizScreen .pg-btn.dimmed { opacity: 0.4; }
+#quizScreen .pg-btn.disabled { cursor: default; pointer-events: none; }
+@keyframes quizPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes quizShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+#quizScreen .tf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 2.2vmin, 34px);
+  width: min(100%, 1100px); max-height: 100%;
+}
+#quizScreen .tf-btn {
+  position: relative;
+  padding: clamp(22px, 4.4vmin, 84px) clamp(18px, 2.6vmin, 44px);
+  border: clamp(2px, 0.4vmin, 5px) solid #cbd5e1;
+  border-radius: clamp(16px, 2.2vmin, 34px);
+  font-size: clamp(22px, 3.6vmin, 60px);
+  font-weight: 900;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(6px, 1vmin, 18px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+#quizScreen .tf-btn .tf-emoji {
+  font-size: clamp(32px, 5vmin, 88px);
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+}
+#quizScreen .tf-btn.benar {
+  background: linear-gradient(160deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #047857;
+  border-color: #a7f3d0;
+}
+#quizScreen .tf-btn.salah {
+  background: linear-gradient(160deg, #fef2f2 0%, #fee2e2 100%);
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+#quizScreen .tf-btn:hover:not(.disabled) {
+  transform: translateY(-5px) scale(1.02);
+}
+#quizScreen .tf-btn.benar:hover:not(.disabled) {
+  box-shadow: 0 16px 36px rgba(16, 185, 129, 0.28);
+  border-color: var(--success);
+}
+#quizScreen .tf-btn.salah:hover:not(.disabled) {
+  box-shadow: 0 16px 36px rgba(239, 68, 68, 0.28);
+  border-color: var(--danger);
+}
+#quizScreen .tf-btn:hover:not(.disabled) .tf-emoji {
+  transform: scale(1.2) rotate(-8deg);
+}
+#quizScreen .tf-btn.correct {
+  background: linear-gradient(160deg, #d1fae5 0%, #6ee7b7 100%);
+  border-color: var(--success);
+  color: #065f46;
+  animation: quizPulse 0.6s;
+  box-shadow: 0 14px 36px rgba(16, 185, 129, 0.4);
+}
+#quizScreen .tf-btn.wrong {
+  background: linear-gradient(160deg, #fee2e2 0%, #fca5a5 100%);
+  border-color: var(--danger);
+  color: #991b1b;
+  animation: quizShake 0.5s;
+  box-shadow: 0 14px 36px rgba(239, 68, 68, 0.35);
+}
+#quizScreen .tf-btn.dimmed { opacity: 0.4; }
+#quizScreen .tf-btn.disabled { cursor: default; pointer-events: none; }
+#quizScreen .ms-wrap {
+  display: flex; flex-direction: column;
+  gap: clamp(10px, 1.4vmin, 22px);
+  width: min(100%, 1200px); max-height: 100%;
+}
+#quizScreen .ms-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(10px, 1.4vmin, 22px);
+}
+#quizScreen .ms-chip {
+  position: relative;
+  padding: clamp(14px, 2.2vmin, 40px) clamp(10px, 1.2vmin, 22px);
+  background: #fff;
+  border: clamp(2px, 0.4vmin, 5px) solid #cbd5e1;
+  border-radius: clamp(14px, 2vmin, 30px);
+  font-size: clamp(18px, 2.8vmin, 50px);
+  font-weight: 900;
+  color: var(--primary-dark);
+  cursor: pointer; font-family: inherit;
+  transition: all 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+#quizScreen .ms-chip:hover:not(.disabled) {
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  color: var(--primary);
+  box-shadow: 0 12px 26px rgba(79, 70, 229, 0.2);
+}
+#quizScreen .ms-chip.selected {
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.45);
+  transform: translateY(-3px) scale(1.03);
+}
+#quizScreen .ms-chip.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 6px; right: 10px;
+  font-size: 0.6em;
+  font-weight: 900;
+  opacity: 0.9;
+}
+#quizScreen .ms-chip.correct {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-color: var(--success);
+  color: #065f46;
+  animation: quizPulse 0.5s;
+}
+#quizScreen .ms-chip.wrong {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  border-color: var(--danger);
+  color: #991b1b;
+}
+#quizScreen .ms-chip.dimmed { opacity: 0.4; }
+#quizScreen .ms-chip.disabled { cursor: default; pointer-events: none; }
+#quizScreen .fill-wrap {
+  display: flex; flex-direction: column;
+  gap: clamp(10px, 1.5vmin, 22px);
+  width: min(100%, 1000px); align-items: center;
+}
+#quizScreen .fill-input {
+  width: 100%;
+  padding: clamp(16px, 2.4vmin, 42px) clamp(18px, 2.2vmin, 36px);
+  font-size: clamp(20px, 3vmin, 50px);
+  font-weight: 800; text-align: center;
+  border: clamp(2px, 0.4vmin, 5px) solid #cbd5e1;
+  border-radius: clamp(14px, 2vmin, 30px);
+  font-family: inherit;
+  color: var(--primary-dark);
+  background: #fff; transition: all 0.2s;
+  letter-spacing: 2px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+#quizScreen .fill-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.15), 0 6px 18px rgba(79, 70, 229, 0.15);
+  transform: translateY(-2px);
+}
+#quizScreen .fill-input.correct {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-color: var(--success);
+  color: #065f46;
+}
+#quizScreen .fill-input.wrong {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  border-color: var(--danger);
+  color: #991b1b;
+}
+#quizScreen .fill-input:disabled { opacity: 0.95; }
+#quizScreen .fill-hint {
+  font-size: clamp(11px, 1.5vmin, 20px);
+  color: #64748b; font-style: italic;
+  padding: 6px 14px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  border: 1px dashed #cbd5e1;
+}
+#quizScreen .quiz-feedback {
+  flex-shrink: 0;
+  display: flex; align-items: center;
+  gap: clamp(10px, 1.4vmin, 20px);
+  padding: clamp(10px, 1.4vmin, 22px) clamp(16px, 2.2vmin, 34px);
+  border-radius: clamp(12px, 1.6vmin, 26px);
+  font-size: clamp(12px, 1.6vmin, 22px);
+  font-weight: 600;
+  line-height: 1.45;
+  min-height: clamp(52px, 7vmin, 104px);
+  transition: all 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+  opacity: 0; pointer-events: none;
+  transform: translateY(6px);
+}
+#quizScreen .quiz-feedback.show { opacity: 1; transform: translateY(0); }
+#quizScreen .quiz-feedback.neutral { background: #f1f5f9; color: #475569; }
+#quizScreen .quiz-feedback.success {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border-left: clamp(4px, 0.7vmin, 9px) solid var(--success);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.18);
+}
+#quizScreen .quiz-feedback.error {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border-left: clamp(4px, 0.7vmin, 9px) solid var(--danger);
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.18);
+}
+#quizScreen .quiz-feedback .fb-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: clamp(22px, 3.2vmin, 48px);
+  flex-shrink: 0;
+  width: 1.6em; height: 1.6em;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  animation: fbIconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#quizScreen .quiz-feedback.success .fb-icon { background: #fff; color: var(--success); }
+#quizScreen .quiz-feedback.error .fb-icon { background: #fff; color: var(--danger); }
+@keyframes fbIconPop {
+  0%   { transform: scale(0) rotate(-90deg); }
+  70%  { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+#quizScreen .quiz-footer {
+  flex-shrink: 0;
+  display: flex; justify-content: center; align-items: center;
+  min-height: clamp(48px, 7vmin, 104px);
+}
+#quizScreen .q-btn {
+  padding: clamp(12px, 1.7vmin, 26px) clamp(32px, 4.4vmin, 80px);
+  border: none;
+  border-radius: 999px;
+  font-size: clamp(14px, 2vmin, 30px);
+  font-weight: 900;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+#quizScreen .q-btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+#quizScreen .q-btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: translateX(-100%);
+  animation: shine 3s ease-in-out infinite;
+}
+#quizScreen .q-btn-primary:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.45);
+}
+#quizScreen .q-btn-primary:active { transform: translateY(-1px) scale(0.99); }
+#quizScreen .q-btn.hidden { display: none; }
+@media (max-width: 720px) {
+  #quizScreen .ms-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-aspect-ratio: 4/3) {
+  #quizScreen .pg-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================= GLOBAL CONTROLS ================= -->
+<button id="soundToggle" class="global-toggle sound" title="Efek Suara">🔊</button>
+<button id="voiceToggle" class="global-toggle voice" title="Narasi Suara">🗣️</button>
+<button id="fullscreenToggle" class="global-toggle fullscreen" title="Layar Penuh">
+  <svg id="fsIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path id="fsPath" d="M4 9V4h5 M20 9V4h-5 M4 15v5h5 M20 15v5h-5"/>
+  </svg>
+</button>
+
+<button id="menuBtn" class="menu-btn" onclick="showScreen('welcomeScreen')">
+  <span>←</span><span>Menu</span>
+</button>
+
+<!-- ================= WELCOME SCREEN ================= -->
+<div id="welcomeScreen" class="screen active">
+  <div class="welcome-bg"></div>
+  <div class="welcome-decor" id="welcomeDecor"></div>
+
+  <div class="welcome-card">
+    <div class="welcome-hero">
+      <div class="hero-emoji">🎯</div>
+      <h1>Petualangan Faktor</h1>
+      <p>Ayo belajar dan bermain dengan <b>faktor bilangan</b>! Pilih <b>Belajar</b> untuk menemukan faktor lewat simulasi, atau <b>Kuis</b> untuk menguji pemahamanmu.</p>
+    </div>
+
+    <div class="welcome-cards">
+      <button class="welcome-option learn" onclick="showScreen('learnScreen')">
+        <div class="opt-icon">📚</div>
+        <div class="opt-title">Belajar</div>
+        <div class="opt-desc">Simulasi interaktif — bagi permen, jeruk, atau bola ke beberapa kantong</div>
+        <div class="opt-arrow">→</div>
+      </button>
+
+      <button class="welcome-option quiz" onclick="showScreen('quizScreen')">
+        <div class="opt-icon">✏️</div>
+        <div class="opt-title">Kuis</div>
+        <div class="opt-desc">10 soal acak — pilihan ganda, benar/salah, multi-pilih, dan isian</div>
+        <div class="opt-arrow">→</div>
+      </button>
+    </div>
+
+    <div class="welcome-footer">Kelas 5 · Matematika · Faktor Bilangan</div>
+  </div>
+</div>
+
+<!-- ================= LEARN SCREEN ================= -->
+<div id="learnScreen" class="screen">
+  <div class="container">
+    <div class="header">
+      <h1 id="mainTitle">🍬 Petualangan Membagi</h1>
+      <p class="subtitle">Ayo temukan faktor dari berbagai bilangan!</p>
+    </div>
+
+    <div class="toolbar">
+      <span class="label">Bilangan:</span>
+      <button class="num-chip" data-n="12">12</button>
+      <button class="num-chip" data-n="16">16</button>
+      <button class="num-chip" data-n="18">18</button>
+      <button class="num-chip" data-n="20">20</button>
+      <button class="num-chip active" data-n="24">24</button>
+      <button class="num-chip" data-n="30">30</button>
+      <button class="num-chip" data-n="36">36</button>
+
+      <div class="divider"></div>
+
+      <span class="label">Tema:</span>
+      <button class="theme-chip active" data-theme="permen" title="Permen">🍬</button>
+      <button class="theme-chip" data-theme="jeruk" title="Jeruk">🍊</button>
+      <button class="theme-chip" data-theme="kue" title="Kue">🍪</button>
+      <button class="theme-chip" data-theme="buku" title="Buku">📕</button>
+      <button class="theme-chip" data-theme="bola" title="Bola">⚽</button>
+      <button class="theme-chip" data-theme="telur" title="Telur">🥚</button>
+      <button class="theme-chip" data-theme="bunga" title="Bunga">🌸</button>
+      <button class="theme-chip" data-theme="ikan" title="Ikan">🐟</button>
+
+      <div class="divider"></div>
+
+      <span class="label">Mode:</span>
+      <div class="mode-group">
+        <button class="mode-chip active" data-mode="button">👆 Tombol</button>
+        <button class="mode-chip" data-mode="drag">✋ Tarik</button>
+      </div>
+
+      <div class="custom-wrap">
+        <input type="number" id="customNum" min="4" max="60" placeholder="Lainnya" />
+        <button id="btnCustom">Pakai</button>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-emoji" id="storyEmoji">🍬</div>
+      <div class="story-text" id="storyText">
+        <b>Bu Guru punya 24 permen.</b> Permen itu akan dibagi ke dalam beberapa kantong dengan isi sama banyak. Bantulah Bu Guru menemukan berapa kantong yang bisa dipakai <b>tanpa sisa</b>!
+      </div>
+    </div>
+
+    <div class="bag-section">
+      <div class="bag-header">
+        <div class="section-title">1️⃣ Pilih jumlah <span id="containerLabel">kantong</span> (1–<span id="maxBagsLabel">24</span>):</div>
+        <div class="custom-bag">
+          <input type="number" id="customBag" min="1" placeholder="Jumlah" />
+          <button id="btnCustomBag">Pakai</button>
+        </div>
+      </div>
+      <div class="bag-selector" id="bagSelector"></div>
+    </div>
+
+    <div class="play-area">
+      <div class="panel" id="poolPanel">
+        <div class="panel-title" id="poolTitle">🍬 Permen Bu Guru (24)</div>
+        <div class="candy-pool" id="candyPool"></div>
+      </div>
+      <div class="panel" id="bagPanel">
+        <div class="panel-title" id="bagPanelTitle">🛍️ Kantong</div>
+        <div class="bags-container" id="bagsContainer">
+          <p style="color:#94a3b8; font-style:italic; text-align:center; grid-column:1/-1;">Pilih jumlah kantong dulu ya...</p>
+        </div>
+        <div class="sisa-visual" id="sisaVisual" hidden></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" id="btnBagikan" disabled>Bagikan! 🎒</button>
+      <button class="btn btn-secondary" id="btnReset">Ulangi 🔄</button>
+    </div>
+
+    <div class="feedback neutral" id="feedback">
+      Pilih jumlah kantong, lalu tekan "Bagikan!"
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>⭐ Faktor dari <span id="currentNum">24</span> yang ditemukan</span>
+        <span id="progressText">0 / 0</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="found-factors" id="foundFactors">
+        <span class="factor-chip empty">Belum ada. Ayo mulai!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= QUIZ SCREEN ================= -->
+<div id="quizScreen" class="screen">
+  <div class="app">
+    <div class="quiz-header">
+      <div class="quiz-progress-info">
+        <span class="quiz-q-counter">Soal <span class="num" id="qNum">1</span>/<span id="qTotal">10</span></span>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+      </div>
+      <div class="quiz-score-info">
+        <span class="quiz-score-label">Skor</span>
+        <span class="quiz-score-value" id="scoreVal">0</span>
+      </div>
+    </div>
+
+    <div class="quiz-area">
+      <div class="question-box">
+        <div class="question-tag" id="questionTag">Pilihan Ganda</div>
+        <div class="question-text" id="questionText"></div>
+      </div>
+      <div class="answers-area" id="answersArea"></div>
+    </div>
+
+    <div class="quiz-feedback" id="quizFeedback">
+      <span class="fb-icon" id="fbIcon">✓</span>
+      <span class="fb-text" id="fbText"></span>
+    </div>
+
+    <div class="quiz-footer">
+      <button class="q-btn q-btn-primary hidden" id="actionBtn">Lanjut ➡</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SIM WIN OVERLAY ================= -->
+<div class="win-overlay" id="winOverlay">
+  <div class="win-card">
+    <div class="emoji">🏆</div>
+    <h2>Hebat! Kamu Detektif Faktor!</h2>
+    <p>Kamu berhasil menemukan semua faktor dari <span id="winNum">24</span>:</p>
+    <p class="factors-list" id="winFactors">1 · 2 · 3 · 4 · 6 · 8 · 12 · 24</p>
+    <div class="bonus" id="winBonus"></div>
+    <button class="btn btn-primary" id="btnCloseWin">Coba Angka Lain 🚀</button>
+  </div>
+</div>
+
+<!-- ================= QUIZ WIN OVERLAY ================= -->
+<div class="win-overlay" id="quizWinOverlay">
+  <div class="win-card">
+    <div class="emoji" id="winEmoji">🏆</div>
+    <h2 id="winTitle">Hebat!</h2>
+    <div style="font-size:clamp(28px,5vmin,72px); letter-spacing:6px; margin-bottom:14px; line-height:1;" id="winStars">⭐⭐⭐</div>
+    <div style="font-size:clamp(16px,2.2vmin,32px); font-weight:800; color:var(--primary); background:#eef2ff; padding:clamp(8px,1.2vmin,20px) clamp(16px,2vmin,36px); border-radius:clamp(10px,1.4vmin,22px); display:inline-block; margin-bottom:14px;">
+      Skor: <span id="winScore">0</span> / <span id="winMax">100</span>
+    </div>
+    <p style="font-size:clamp(13px,1.6vmin,22px); color:#4b5563; line-height:1.55; margin-bottom:20px;" id="winMsg"></p>
+    <button class="btn btn-primary" id="btnRestart">Ulangi dengan Soal Baru 🔄</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   FULLSCREEN TOGGLE
+============================================================ */
+(function initFullscreen() {
+  const btn = document.getElementById('fullscreenToggle');
+  const fsPath = document.getElementById('fsPath');
+
+  // Icon paths
+  const PATH_ENTER = 'M4 9V4h5 M20 9V4h-5 M4 15v5h5 M20 15v5h-5';
+  const PATH_EXIT  = 'M9 4v5H4 M15 4v5h5 M9 20v-5H4 M15 20v-5h5';
+
+  function updateIcon() {
+    const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    fsPath.setAttribute('d', isFs ? PATH_EXIT : PATH_ENTER);
+    btn.title = isFs ? 'Keluar Layar Penuh' : 'Layar Penuh';
+    btn.classList.toggle('off', false); // always active
+  }
+
+  function requestFs() {
+    const el = document.documentElement;
+    const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+    if (req) {
+      try { req.call(el).catch(() => {}); } catch(e) {}
+    }
+  }
+  function exitFs() {
+    const fn = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+    if (fn) {
+      try { fn.call(document).catch(() => {}); } catch(e) {}
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    ensureAudio(); SFX.select();
+    const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    if (isFs) exitFs(); else requestFs();
+  });
+
+  document.addEventListener('fullscreenchange', updateIcon);
+  document.addEventListener('webkitfullscreenchange', updateIcon);
+  document.addEventListener('msfullscreenchange', updateIcon);
+  updateIcon();
+
+  // Auto re-layout saat masuk/keluar fullscreen
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      setTimeout(() => {
+        try { window.dispatchEvent(new Event('resize')); } catch(e) {}
+      }, 100);
+    });
+  });
+})();
+
+/* ============================================================
+   WELCOME DECORATION
+============================================================ */
+(function generateWelcomeDecor() {
+  const decor = document.getElementById('welcomeDecor');
+  if (!decor) return;
+  const items = ['🍬','🍊','⚽','📚','✏️','🎯','🍪','🌸','🐟','🥚','📕','🍎'];
+  const nums = ['1','2','3','4','6','8','12','24','1×24','2×12','3×8','4×6'];
+  const syms = ['×','÷','=','+','−'];
+
+  const emojiPositions = [
+    { t: 8,  l: 6,  rot: -12 },
+    { t: 18, l: 88, rot: 15 },
+    { t: 78, l: 10, rot: 8 },
+    { t: 84, l: 84, rot: -10 },
+    { t: 42, l: 3,  rot: 0 },
+    { t: 50, l: 95, rot: 12 },
+    { t: 4,  l: 46, rot: -18 },
+    { t: 92, l: 40, rot: 20 },
+  ];
+  emojiPositions.forEach((p, i) => {
+    const el = document.createElement('span');
+    el.className = 'float-item';
+    el.textContent = items[i % items.length];
+    el.style.top = p.t + '%';
+    el.style.left = p.l + '%';
+    el.style.setProperty('--rot', p.rot + 'deg');
+    el.style.animationDelay = (i * 0.4) + 's';
+    el.style.animationDuration = (5 + (i % 3)) + 's';
+    decor.appendChild(el);
+  });
+
+  nums.forEach((n, i) => {
+    const el = document.createElement('span');
+    el.className = 'float-item';
+    el.textContent = n;
+    el.style.fontSize = 'clamp(16px, 2.2vmin, 40px)';
+    el.style.fontWeight = '900';
+    el.style.color = 'rgba(255,255,255,0.9)';
+    el.style.textShadow = '0 0 20px rgba(255,255,255,0.6)';
+    el.style.top = (12 + (i * 7.5)) + '%';
+    el.style.left = (i % 2 === 0 ? (2 + i * 2) : (92 - i * 1.5)) + '%';
+    el.style.setProperty('--rot', (i * 4 - 8) + 'deg');
+    el.style.animationDelay = (i * 0.55) + 's';
+    el.style.animationDuration = (6 + (i % 3)) + 's';
+    decor.appendChild(el);
+  });
+
+  syms.forEach((s, i) => {
+    const el = document.createElement('span');
+    el.className = 'float-item';
+    el.textContent = s;
+    el.style.fontSize = 'clamp(28px, 4.5vmin, 80px)';
+    el.style.fontWeight = '900';
+    el.style.color = 'rgba(255,255,255,0.28)';
+    el.style.top = (20 + i * 15) + '%';
+    el.style.left = (10 + (i * 20) % 80) + '%';
+    el.style.setProperty('--rot', (i * 30) + 'deg');
+    el.style.animationDelay = (i * 0.7) + 's';
+    el.style.animationDuration = (7 + i) + 's';
+    decor.appendChild(el);
+  });
+
+  for (let i = 0; i < 24; i++) {
+    const s = document.createElement('span');
+    s.className = 'sparkle';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDelay = Math.random() * 3 + 's';
+    s.style.animationDuration = (1.8 + Math.random() * 2) + 's';
+    const size = 3 + Math.random() * 6;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    decor.appendChild(s);
+  }
+})();
+
+/* ============================================================
+   SHARED AUDIO
+============================================================ */
+let audioCtx = null;
+let soundEnabled = true;
+let voiceEnabled = true;
+
+function ensureAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+}
+function tone(freq, dur, type = 'sine', vol = 0.1, delay = 0) {
+  if (!soundEnabled || !audioCtx) return;
+  try {
+    const t0 = audioCtx.currentTime + delay;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(vol, t0 + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t0); osc.stop(t0 + dur + 0.05);
+  } catch(e) {}
+}
+const SFX = {
+  click()  { tone(660, 0.07, 'square', 0.05); },
+  select() { tone(880, 0.09, 'triangle', 0.07); },
+  pop(i=0) { tone(500 + Math.min(i, 20) * 25, 0.05, 'triangle', 0.035, i * 0.012); },
+  pick()   { tone(780, 0.06, 'triangle', 0.06); },
+  drop()   { tone(420, 0.09, 'triangle', 0.07); },
+  invalid(){ tone(240, 0.12, 'square', 0.05); },
+  sisa()   {
+    tone(340, 0.12, 'triangle', 0.06, 0);
+    tone(300, 0.14, 'triangle', 0.06, 0.10);
+    tone(260, 0.16, 'triangle', 0.06, 0.22);
+  },
+  success() {
+    tone(523, 0.14, 'sine', 0.10, 0);
+    tone(659, 0.14, 'sine', 0.10, 0.10);
+    tone(784, 0.20, 'sine', 0.10, 0.20);
+  },
+  error() {
+    tone(280, 0.16, 'sawtooth', 0.07, 0);
+    tone(180, 0.22, 'sawtooth', 0.07, 0.13);
+  },
+  win() {
+    [523, 659, 784, 1047, 1319].forEach((f, i) =>
+      tone(f, 0.32, 'sine', 0.10, i * 0.14));
+  },
+  correctQuiz() {
+    tone(659.25, 0.14, 'sine', 0.16, 0);
+    tone(880, 0.14, 'sine', 0.16, 0.08);
+    tone(1174.66, 0.28, 'sine', 0.16, 0.16);
+  },
+  wrongQuiz() {
+    tone(220, 0.16, 'square', 0.09, 0);
+    tone(165, 0.28, 'square', 0.09, 0.13);
+  }
+};
+
+/* ---- Narration ---- */
+let voicesReady = false;
+let idVoice = null;
+function pickIndonesianVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  let v = voices.find(v => v.lang === 'id-ID');
+  if (!v) v = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('id'));
+  if (!v) v = voices.find(v => /indonesia/i.test(v.name));
+  return v || voices.find(v => v.default) || voices[0];
+}
+function initVoices() {
+  if (!('speechSynthesis' in window)) return;
+  const v = pickIndonesianVoice();
+  if (v) { idVoice = v; voicesReady = true; }
+}
+if ('speechSynthesis' in window) {
+  initVoices();
+  window.speechSynthesis.onvoiceschanged = initVoices;
+}
+function speak(text, opts = {}) {
+  if (!voiceEnabled || !('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'id-ID';
+    u.rate = opts.rate ?? 0.95;
+    u.pitch = opts.pitch ?? 1.05;
+    if (idVoice) u.voice = idVoice;
+    window.speechSynthesis.speak(u);
+  } catch(e) {}
+}
+function cancelSpeech() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+document.addEventListener('pointerdown', () => {
+  ensureAudio();
+  if ('speechSynthesis' in window && !voicesReady) {
+    const u = new SpeechSynthesisUtterance(' ');
+    u.volume = 0;
+    window.speechSynthesis.speak(u);
+    initVoices();
+  }
+}, { capture: true });
+
+/* ---- Global toggles ---- */
+const soundToggle = document.getElementById('soundToggle');
+const voiceToggle = document.getElementById('voiceToggle');
+const menuBtn = document.getElementById('menuBtn');
+
+soundToggle.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+  soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+  soundToggle.classList.toggle('off', !soundEnabled);
+  if (soundEnabled) { ensureAudio(); SFX.select(); }
+});
+voiceToggle.addEventListener('click', () => {
+  voiceEnabled = !voiceEnabled;
+  voiceToggle.textContent = voiceEnabled ? '🗣️' : '🤐';
+  voiceToggle.classList.toggle('off', !voiceEnabled);
+  if (!voiceEnabled) cancelSpeech();
+  else speak('Narasi suara aktif');
+});
+
+/* ---- Navigation ---- */
+function showScreen(id) {
+  cancelSpeech();
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.toggle('active', s.id === id);
+  });
+  menuBtn.classList.toggle('visible', id !== 'welcomeScreen');
+  document.getElementById('winOverlay').classList.remove('show');
+  document.getElementById('quizWinOverlay').classList.remove('show');
+}
+window.showScreen = showScreen;
+
+/* ============================================================
+   LEARN MODULE
+============================================================ */
+(function initLearnModule() {
+  const THEMES = {
+    permen: { emoji:'🍬', name:'permen', nameCap:'Permen',
+              container:'kantong', containerCap:'Kantong', icon:'🛍️',
+              person:'Bu Guru', verb:'dibagi ke dalam' },
+    jeruk:  { emoji:'🍊', name:'jeruk', nameCap:'Jeruk',
+              container:'keranjang', containerCap:'Keranjang', icon:'🧺',
+              person:'Pak Tani', verb:'dimasukkan ke dalam' },
+    kue:    { emoji:'🍪', name:'kue', nameCap:'Kue',
+              container:'kotak', containerCap:'Kotak', icon:'📦',
+              person:'Bu Sari', verb:'dimasukkan ke dalam' },
+    buku:   { emoji:'📕', name:'buku', nameCap:'Buku',
+              container:'rak', containerCap:'Rak', icon:'📚',
+              person:'Pak Budi', verb:'ditata di' },
+    bola:   { emoji:'⚽', name:'bola', nameCap:'Bola',
+              container:'keranjang', containerCap:'Keranjang', icon:'🧺',
+              person:'Pak Rudi', verb:'dimasukkan ke dalam' },
+    telur:  { emoji:'🥚', name:'telur', nameCap:'Telur',
+              container:'keranjang', containerCap:'Keranjang', icon:'🧺',
+              person:'Pak Ternak', verb:'dimasukkan ke dalam' },
+    bunga:  { emoji:'🌸', name:'bunga', nameCap:'Bunga',
+              container:'vas', containerCap:'Vas', icon:'🏺',
+              person:'Bu Mawar', verb:'dimasukkan ke dalam' },
+    ikan:   { emoji:'🐟', name:'ikan', nameCap:'Ikan',
+              container:'akuarium', containerCap:'Akuarium', icon:'🐠',
+              person:'Pak Nelayan', verb:'dimasukkan ke dalam' }
+  };
+  let currentTheme = 'permen';
+  function T() { return THEMES[currentTheme]; }
+
+  function saySuccess(total, n, perBag) {
+    SFX.success();
+    speak(`Hebat! ${total} dibagi ${n} sama dengan ${perBag}. Tidak ada sisa.`);
+  }
+  function sayError(total, n, perBag, sisa) {
+    SFX.sisa();
+    speak(`Ups, masih ada sisa. ${total} dibagi ${n} sama dengan ${perBag}, sisa ${sisa}.`);
+  }
+  function sayWin(total) {
+    SFX.win();
+    speak(`Luar biasa! Kamu berhasil menemukan semua faktor dari ${total}. Kamu detektif faktor!`);
+  }
+
+  let TOTAL = 24;
+  let ALL_FACTORS = [];
+  let MAX_BAGS = 0;
+  let selectedBags = null;
+  const foundFactors = new Set();
+  const completedNumbers = new Set();
+  let mode = 'button';
+  let dragCandies = new Map();
+  let dragBagCount = 0;
+  let dragCounter = 0;
+  let dragCtx = null;
+
+  const bagSelector    = document.getElementById('bagSelector');
+  const candyPool      = document.getElementById('candyPool');
+  const bagsContainer  = document.getElementById('bagsContainer');
+  const sisaVisual     = document.getElementById('sisaVisual');
+  const btnBagikan     = document.getElementById('btnBagikan');
+  const btnReset       = document.getElementById('btnReset');
+  const feedback       = document.getElementById('feedback');
+  const foundFactorsEl = document.getElementById('foundFactors');
+  const progressText   = document.getElementById('progressText');
+  const progressFill   = document.getElementById('progressFill');
+  const currentNumEl   = document.getElementById('currentNum');
+  const poolTitle      = document.getElementById('poolTitle');
+  const bagPanelTitle  = document.getElementById('bagPanelTitle');
+  const storyText      = document.getElementById('storyText');
+  const storyEmoji     = document.getElementById('storyEmoji');
+  const mainTitle      = document.getElementById('mainTitle');
+  const winOverlay     = document.getElementById('winOverlay');
+  const winNum         = document.getElementById('winNum');
+  const winFactors     = document.getElementById('winFactors');
+  const winBonus       = document.getElementById('winBonus');
+  const customNum      = document.getElementById('customNum');
+  const btnCustom      = document.getElementById('btnCustom');
+  const customBag      = document.getElementById('customBag');
+  const btnCustomBag   = document.getElementById('btnCustomBag');
+  const maxBagsLabel   = document.getElementById('maxBagsLabel');
+  const containerLabel = document.getElementById('containerLabel');
+  const poolPanel      = document.getElementById('poolPanel');
+  const bagPanel       = document.getElementById('bagPanel');
+
+  function getFactors(n) {
+    const f = [];
+    for (let i = 1; i <= n; i++) if (n % i === 0) f.push(i);
+    return f;
+  }
+
+  function sizeCandyPool() {
+    const rect = candyPool.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const renderCount = candyPool.querySelectorAll('span').length;
+    if (!renderCount) return;
+    const gap = parseFloat(getComputedStyle(candyPool).gap) || 4;
+    const padding = 4;
+    const availW = rect.width  - padding * 2;
+    const availH = rect.height - padding * 2;
+    let best = 0;
+    const maxCols = Math.min(renderCount, 12);
+    for (let cols = 1; cols <= maxCols; cols++) {
+      const rows = Math.ceil(renderCount / cols);
+      const wByWidth  = (availW - (cols - 1) * gap) / cols;
+      const wByHeight = (availH - (rows - 1) * gap) / rows;
+      const s = Math.min(wByWidth, wByHeight);
+      if (s > best) best = s;
+    }
+    let cap;
+    if (renderCount <= 6) cap = 130;
+    else if (renderCount <= 12) cap = 100;
+    else if (renderCount <= 20) cap = 76;
+    else if (renderCount <= 30) cap = 60;
+    else if (renderCount <= 45) cap = 50;
+    else cap = 40;
+    const size = Math.max(16, Math.min(best, cap));
+    candyPool.style.setProperty('--candy-size', size.toFixed(1) + 'px');
+  }
+
+  function sizeBags(n) {
+    const rect = bagsContainer.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const gap = parseFloat(getComputedStyle(bagsContainer).columnGap) || 6;
+    const padding = 4;
+    const aspect = 1.12;
+    const availW = rect.width  - padding * 2;
+    const availH = rect.height - padding * 2;
+    let bestW = 0, bestCols = 1;
+    const maxCols = Math.min(n, 12);
+    for (let cols = 1; cols <= maxCols; cols++) {
+      const rows = Math.ceil(n / cols);
+      const wByWidth  = (availW - (cols - 1) * gap) / cols;
+      const wByHeight = (availH - (rows - 1) * gap) / (rows * aspect);
+      const w = Math.min(wByWidth, wByHeight);
+      if (w > bestW) { bestW = w; bestCols = cols; }
+    }
+    bestW = Math.max(18, Math.min(bestW, 320));
+    bagsContainer.style.setProperty('--bag-size', bestW.toFixed(1) + 'px');
+    bagsContainer.style.gridTemplateColumns = `repeat(${bestCols}, ${bestW.toFixed(1)}px)`;
+  }
+
+  function layoutAll() {
+    requestAnimationFrame(() => {
+      sizeCandyPool();
+      if (selectedBags !== null) sizeBags(selectedBags);
+    });
+  }
+  window.addEventListener('resize', layoutAll);
+  window.addEventListener('orientationchange', () => setTimeout(layoutAll, 200));
+
+  function showSisaVisual(sisa) {
+    const t = T();
+    sisaVisual.hidden = false;
+    sisaVisual.innerHTML = '';
+    const label = document.createElement('div');
+    label.className = 'sisa-label';
+    label.innerHTML = `<span class="sisa-icon">⚠️</span> Sisa ${sisa} ${t.name}:`;
+    sisaVisual.appendChild(label);
+    const candies = document.createElement('div');
+    candies.className = 'sisa-candies';
+    const maxShow = 20;
+    const showCount = Math.min(sisa, maxShow);
+    for (let i = 0; i < showCount; i++) {
+      const span = document.createElement('span');
+      span.textContent = t.emoji;
+      span.style.animationDelay = (i * 0.07) + 's';
+      candies.appendChild(span);
+    }
+    if (sisa > maxShow) {
+      const more = document.createElement('span');
+      more.className = 'sisa-more';
+      more.textContent = '+' + (sisa - maxShow);
+      candies.appendChild(more);
+    }
+    sisaVisual.appendChild(candies);
+  }
+
+  function hideSisaVisual() {
+    sisaVisual.hidden = true;
+    sisaVisual.innerHTML = '';
+  }
+
+  function renderCandyPool() {
+    candyPool.innerHTML = '';
+    const t = T();
+    const render = Math.min(TOTAL, 60);
+    for (let i = 0; i < render; i++) {
+      const span = document.createElement('span');
+      span.textContent = t.emoji;
+      span.style.animationDelay = (i * 0.012) + 's';
+      candyPool.appendChild(span);
+    }
+    poolTitle.textContent = `${t.emoji} ${t.nameCap} ${t.person} (${TOTAL})`;
+    poolPanel.classList.remove('pool-sisa', 'pool-success');
+    layoutAll();
+  }
+
+  function sizeBagButtons(count) {
+    let size, font;
+    if (count <= 12)      { size = 'clamp(36px, 5.2vmin, 88px)'; font = 'clamp(14px, 1.8vmin, 28px)'; }
+    else if (count <= 20) { size = 'clamp(32px, 4.4vmin, 72px)'; font = 'clamp(13px, 1.6vmin, 24px)'; }
+    else if (count <= 30) { size = 'clamp(28px, 3.7vmin, 58px)'; font = 'clamp(12px, 1.4vmin, 22px)'; }
+    else if (count <= 45) { size = 'clamp(24px, 3.1vmin, 48px)'; font = 'clamp(11px, 1.2vmin, 18px)'; }
+    else                  { size = 'clamp(22px, 2.7vmin, 42px)'; font = 'clamp(10px, 1.05vmin, 16px)'; }
+    bagSelector.style.setProperty('--btn-size', size);
+    bagSelector.style.setProperty('--btn-font', font);
+  }
+
+  function renderBagSelector() {
+    bagSelector.innerHTML = '';
+    sizeBagButtons(MAX_BAGS);
+    const frag = document.createDocumentFragment();
+    for (let i = 1; i <= MAX_BAGS; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'bag-btn';
+      btn.textContent = i;
+      btn.dataset.n = i;
+      btn.addEventListener('click', () => selectBags(i));
+      frag.appendChild(btn);
+    }
+    bagSelector.appendChild(frag);
+    maxBagsLabel.textContent = MAX_BAGS;
+    containerLabel.textContent = T().container;
+  }
+
+  function updateStory() {
+    const t = T();
+    storyEmoji.textContent = t.emoji;
+    storyText.innerHTML = `<b>${t.person} punya ${TOTAL} ${t.name}.</b> ${t.nameCap} itu akan ${t.verb} beberapa ${t.container} dengan isi sama banyak. Bantulah ${t.person} menemukan berapa ${t.container} yang bisa dipakai <b>tanpa sisa</b>!`;
+    currentNumEl.textContent = TOTAL;
+    mainTitle.textContent = `${t.emoji} Petualangan Membagi`;
+    bagPanelTitle.textContent = `${t.icon} ${t.containerCap}`;
+  }
+
+  function refreshBagsEmoji() {
+    const t = T();
+    document.querySelectorAll('.bag .bag-candy').forEach(el => { el.textContent = t.emoji; });
+    if (!sisaVisual.hidden) {
+      sisaVisual.querySelectorAll('.sisa-candies span:not(.sisa-more)').forEach(el => {
+        el.textContent = t.emoji;
+      });
+      const lbl = sisaVisual.querySelector('.sisa-label');
+      if (lbl && lbl.textContent.match(/\d+/)) {
+        const sisa = Number(lbl.textContent.match(/\d+/)[0]);
+        lbl.innerHTML = `<span class="sisa-icon">⚠️</span> Sisa ${sisa} ${t.name}:`;
+      }
+    }
+  }
+
+  function initDragMode() {
+    dragCandies.clear();
+    dragCounter = 0;
+    for (let i = 0; i < TOTAL; i++) {
+      dragCandies.set('c' + (dragCounter++), 'pool');
+    }
+    dragBagCount = selectedBags || 0;
+  }
+
+  function renderDragMode() {
+    const t = T();
+    candyPool.innerHTML = '';
+    const poolCandies = [];
+    dragCandies.forEach((zone, id) => { if (zone === 'pool') poolCandies.push(id); });
+    const frag = document.createDocumentFragment();
+    poolCandies.forEach((id, i) => {
+      const span = document.createElement('span');
+      span.textContent = t.emoji;
+      span.dataset.cid = id;
+      span.classList.add('draggable');
+      span.style.animationDelay = (i * 0.012) + 's';
+      span.addEventListener('pointerdown', (e) => onCandyDown(e, id));
+      frag.appendChild(span);
+    });
+    candyPool.appendChild(frag);
+    poolTitle.textContent = `${t.emoji} ${t.nameCap} ${t.person} — sisa ${poolCandies.length} dari ${TOTAL}`;
+    poolPanel.classList.remove('pool-sisa', 'pool-success');
+
+    bagsContainer.innerHTML = '';
+    if (dragBagCount <= 0) {
+      const p = document.createElement('p');
+      p.style.cssText = 'color:#94a3b8; font-style:italic; text-align:center; grid-column:1/-1;';
+      p.textContent = `Pilih jumlah ${t.container} dulu ya...`;
+      bagsContainer.appendChild(p);
+    } else {
+      for (let i = 0; i < dragBagCount; i++) {
+        const bag = document.createElement('div');
+        bag.className = 'bag drop-target';
+        bag.dataset.bagIndex = i;
+        const count = countInBag(i);
+        if (count > 0) bag.classList.add('pickable');
+        bag.innerHTML = `
+          <div class="bag-candy">${t.emoji}</div>
+          <div class="bag-count">${count}</div>
+        `;
+        bag.addEventListener('pointerdown', (e) => onBagDown(e, i));
+        bagsContainer.appendChild(bag);
+      }
+    }
+    hideSisaVisual();
+
+    const placed = TOTAL - poolCandies.length;
+    if (placed === 0) {
+      feedback.className = 'feedback neutral';
+      feedback.innerHTML = `Tarik ${t.emoji} ke ${t.container}. Sisa di tumpukan: <b>${poolCandies.length}</b> / ${TOTAL}`;
+    } else if (poolCandies.length > 0) {
+      feedback.className = 'feedback neutral';
+      feedback.innerHTML = `Sudah ditempatkan <b>${placed}</b> / ${TOTAL}. Lanjutkan menarik ${t.emoji} ya!`;
+    }
+    layoutAll();
+    if (dragBagCount > 0) sizeBags(dragBagCount);
+  }
+
+  function countInBag(idx) {
+    let c = 0;
+    dragCandies.forEach(zone => { if (zone === 'bag-' + idx) c++; });
+    return c;
+  }
+
+  function onCandyDown(e, candyId) {
+    if (mode !== 'drag' || dragCtx) return;
+    e.preventDefault(); e.stopPropagation();
+    SFX.pick();
+    startDrag(e, candyId, 'pool');
+  }
+
+  function onBagDown(e, bagIndex) {
+    if (mode !== 'drag' || dragCtx) return;
+    const inBag = [];
+    dragCandies.forEach((zone, id) => { if (zone === 'bag-' + bagIndex) inBag.push(id); });
+    if (inBag.length === 0) return;
+    e.preventDefault(); e.stopPropagation();
+    SFX.pick();
+    startDrag(e, inBag[inBag.length - 1], 'bag-' + bagIndex);
+  }
+
+  function startDrag(e, candyId, fromZone) {
+    const t = T();
+    const ghost = document.createElement('div');
+    ghost.className = 'drag-ghost';
+    ghost.textContent = t.emoji;
+    ghost.style.left = e.clientX + 'px';
+    ghost.style.top = e.clientY + 'px';
+    document.body.appendChild(ghost);
+
+    if (fromZone === 'pool') {
+      const el = candyPool.querySelector(`[data-cid="${candyId}"]`);
+      if (el) el.classList.add('dragging');
+    } else {
+      const bIdx = Number(fromZone.split('-')[1]);
+      const bagEl = bagsContainer.querySelector(`[data-bag-index="${bIdx}"]`);
+      if (bagEl) bagEl.style.opacity = '0.4';
+    }
+    dragCtx = { candyId, fromZone, ghost };
+    document.addEventListener('pointermove', onDragMove);
+    document.addEventListener('pointerup', onDragEnd);
+    document.addEventListener('pointercancel', onDragEnd);
+  }
+
+  function onDragMove(e) {
+    if (!dragCtx) return;
+    dragCtx.ghost.style.left = e.clientX + 'px';
+    dragCtx.ghost.style.top = e.clientY + 'px';
+    document.querySelectorAll('.drop-active').forEach(el => el.classList.remove('drop-active'));
+    const zone = getZoneAt(e.clientX, e.clientY);
+    if (zone) {
+      if (zone.type === 'pool') poolPanel.classList.add('drop-active');
+      else {
+        const bagEl = bagsContainer.querySelector(`[data-bag-index="${zone.index}"]`);
+        if (bagEl) bagEl.classList.add('drop-active');
+      }
+    }
+  }
+
+  function onDragEnd(e) {
+    if (!dragCtx) return;
+    const { candyId, fromZone, ghost } = dragCtx;
+    const zone = getZoneAt(e.clientX, e.clientY);
+    ghost.remove();
+    document.querySelectorAll('.drop-active').forEach(el => el.classList.remove('drop-active'));
+    document.querySelectorAll('.bag').forEach(el => { el.style.opacity = ''; });
+    document.removeEventListener('pointermove', onDragMove);
+    document.removeEventListener('pointerup', onDragEnd);
+    document.removeEventListener('pointercancel', onDragEnd);
+    dragCtx = null;
+
+    let targetZone = null;
+    if (zone) {
+      if (zone.type === 'pool') targetZone = 'pool';
+      else if (zone.type === 'bag') targetZone = 'bag-' + zone.index;
+    }
+    if (!targetZone) { SFX.invalid(); renderDragMode(); return; }
+    if (targetZone === fromZone) { renderDragMode(); return; }
+
+    dragCandies.set(candyId, targetZone);
+    SFX.drop();
+    renderDragMode();
+    checkDragComplete();
+  }
+
+  function getZoneAt(x, y) {
+    const el = document.elementFromPoint(x, y);
+    if (!el) return null;
+    if (el.closest('#poolPanel')) return { type: 'pool' };
+    const bag = el.closest('[data-bag-index]');
+    if (bag) return { type: 'bag', index: Number(bag.dataset.bagIndex) };
+    return null;
+  }
+
+  function checkDragComplete() {
+    const t = T();
+    let poolCount = 0;
+    dragCandies.forEach(z => { if (z === 'pool') poolCount++; });
+    document.querySelectorAll('.bag-unbalanced').forEach(el => el.classList.remove('bag-unbalanced'));
+    if (poolCount > 0) return;
+
+    const counts = [];
+    for (let i = 0; i < dragBagCount; i++) counts.push(countInBag(i));
+    const allEqual = counts.every(c => c === counts[0]);
+    const perBag = counts[0];
+
+    if (allEqual && perBag > 0) {
+      feedback.className = 'feedback success';
+      feedback.innerHTML = `🎉 <b>Habis!</b> ${TOTAL} ÷ ${dragBagCount} = ${perBag}. Setiap ${t.container} berisi ${perBag} ${t.name}. Jadi <b>${dragBagCount}</b> dan <b>${perBag}</b> adalah faktor dari ${TOTAL}.`;
+      setTimeout(() => saySuccess(TOTAL, dragBagCount, perBag), 400);
+      addFactor(dragBagCount);
+      addFactor(perBag);
+      updateBagButtons();
+    } else if (!allEqual) {
+      const freq = {};
+      counts.forEach(c => freq[c] = (freq[c] || 0) + 1);
+      let maxFreq = 0, modeCount = counts[0];
+      for (const c in freq) {
+        if (freq[c] > maxFreq) { maxFreq = freq[c]; modeCount = Number(c); }
+      }
+      for (let i = 0; i < dragBagCount; i++) {
+        const bagEl = bagsContainer.querySelector(`[data-bag-index="${i}"]`);
+        if (bagEl && counts[i] !== modeCount) bagEl.classList.add('bag-unbalanced');
+      }
+      feedback.className = 'feedback error';
+      feedback.innerHTML = `❌ Belum rata. Ada ${t.container} yang isinya berbeda (ditandai merah). Pindahkan lagi ya!`;
+      setTimeout(() => SFX.error(), 250);
+    }
+  }
+
+  function applyTheme(key) {
+    if (!THEMES[key]) return;
+    currentTheme = key;
+    document.querySelectorAll('.theme-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.theme === key);
+    });
+    updateStory();
+    if (mode === 'drag') {
+      renderDragMode();
+    } else {
+      const wasSisa = poolPanel.classList.contains('pool-sisa');
+      if (!wasSisa) {
+        renderCandyPool();
+      } else {
+        const t = T();
+        candyPool.querySelectorAll('span').forEach(el => { el.textContent = t.emoji; });
+        const sisaText = poolTitle.textContent.match(/\d+/);
+        if (sisaText) poolTitle.textContent = `⚠️ Sisa ${sisaText[0]} ${t.name}`;
+        refreshBagsEmoji();
+      }
+      refreshBagsEmoji();
+      if (selectedBags === null) {
+        bagsContainer.innerHTML = `<p style="color:#94a3b8; font-style:italic; text-align:center; grid-column:1/-1;">Pilih jumlah ${T().container} dulu ya...</p>`;
+      } else {
+        bagsContainer.querySelectorAll('p').forEach(p => {
+          p.textContent = `${selectedBags} ${T().container} siap dipakai. Tekan "Bagikan!"`;
+        });
+      }
+    }
+    renderBagSelector();
+    layoutAll();
+  }
+
+  function setMode(m) {
+    if (m === mode) return;
+    mode = m;
+    document.querySelectorAll('.mode-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.mode === m);
+    });
+    if (m === 'drag') {
+      btnBagikan.style.display = 'none';
+      if (selectedBags) {
+        initDragMode();
+        renderDragMode();
+      } else {
+        dragCandies.clear();
+        dragCounter = 0;
+        for (let i = 0; i < TOTAL; i++) dragCandies.set('c' + (dragCounter++), 'pool');
+        dragBagCount = 0;
+        renderDragMode();
+      }
+    } else {
+      btnBagikan.style.display = '';
+      selectedBags = null;
+      document.querySelectorAll('.bag-btn').forEach(b => b.classList.remove('selected'));
+      renderCandyPool();
+      resetUI();
+    }
+    layoutAll();
+  }
+
+  function selectBags(n) {
+    ensureAudio(); SFX.click();
+    selectedBags = n;
+    document.querySelectorAll('.bag-btn').forEach(b => {
+      b.classList.toggle('selected', Number(b.dataset.n) === n);
+    });
+    const sel = bagSelector.querySelector('.bag-btn.selected');
+    if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    if (mode === 'drag') {
+      initDragMode();
+      renderDragMode();
+      return;
+    }
+    const t = T();
+    btnBagikan.disabled = false;
+    bagsContainer.innerHTML = `<p style="color:#94a3b8; font-style:italic; text-align:center; grid-column:1/-1;">${n} ${t.container} siap dipakai. Tekan "Bagikan!"</p>`;
+    bagsContainer.style.gridTemplateColumns = '';
+    poolPanel.classList.remove('pool-sisa', 'pool-success');
+    hideSisaVisual();
+    feedback.className = 'feedback neutral';
+    feedback.innerHTML = `Kamu memilih <b>${n} ${t.container}</b>. Tekan "Bagikan!" untuk mencoba.`;
+  }
+
+  function bagikan() {
+    if (!selectedBags || mode !== 'button') return;
+    ensureAudio();
+    btnBagikan.disabled = true;
+    const t = T();
+    const n = selectedBags;
+    const perBag = Math.floor(TOTAL / n);
+    const sisa = TOTAL % n;
+
+    candyPool.innerHTML = '';
+    bagsContainer.innerHTML = '';
+    poolPanel.classList.remove('pool-sisa', 'pool-success');
+    hideSisaVisual();
+
+    for (let i = 0; i < n; i++) {
+      const bag = document.createElement('div');
+      bag.className = 'bag';
+      bag.style.animationDelay = (i * 0.05) + 's';
+      bag.innerHTML = `
+        <div class="bag-candy">${t.emoji}</div>
+        <div class="bag-count">${perBag}</div>
+      `;
+      bagsContainer.appendChild(bag);
+      if (i < 12) setTimeout(() => SFX.pop(i), i * 50);
+    }
+
+    if (sisa > 0) {
+      for (let i = 0; i < sisa; i++) {
+        const span = document.createElement('span');
+        span.textContent = t.emoji;
+        span.style.animationDelay = (i * 0.08) + 's';
+        candyPool.appendChild(span);
+      }
+      poolPanel.classList.add('pool-sisa');
+      poolTitle.textContent = `⚠️ Sisa ${sisa} ${t.name}`;
+      showSisaVisual(sisa);
+      feedback.className = 'feedback error';
+      feedback.innerHTML = `❌ <b>Ada sisa!</b> ${TOTAL} ÷ ${n} = ${perBag} sisa ${sisa}. Jadi <b>${n}</b> bukan faktor dari ${TOTAL}. Coba angka lain ya!`;
+      setTimeout(() => sayError(TOTAL, n, perBag, sisa), 500);
+    } else {
+      const mark = document.createElement('div');
+      mark.className = 'pool-success-mark';
+      mark.textContent = '✓';
+      candyPool.appendChild(mark);
+      poolPanel.classList.add('pool-success');
+      poolTitle.textContent = `✓ Semua ${t.name} sudah dibagi`;
+      feedback.className = 'feedback success';
+      feedback.innerHTML = `🎉 <b>Habis!</b> ${TOTAL} ÷ ${n} = ${perBag}. Setiap ${t.container} berisi ${perBag} ${t.name}. Jadi <b>${n}</b> dan <b>${perBag}</b> adalah faktor dari ${TOTAL}.`;
+      setTimeout(() => saySuccess(TOTAL, n, perBag), 500);
+      addFactor(n);
+      addFactor(perBag);
+    }
+    updateBagButtons();
+    layoutAll();
+    setTimeout(() => { btnBagikan.disabled = false; }, 700);
+  }
+
+  function addFactor(n) {
+    if (n < 1 || n > TOTAL) return;
+    foundFactors.add(n);
+    updateProgress();
+    updateBagButtons();
+    checkWin();
+  }
+
+  function updateProgress() {
+    const count = foundFactors.size;
+    const total = ALL_FACTORS.length;
+    progressText.textContent = `${count} / ${total}`;
+    progressFill.style.width = ((count / total) * 100) + '%';
+    if (count === 0) {
+      foundFactorsEl.innerHTML = '<span class="factor-chip empty">Belum ada. Ayo mulai!</span>';
+    } else {
+      foundFactorsEl.innerHTML = '';
+      Array.from(foundFactors).sort((a, b) => a - b).forEach(f => {
+        const chip = document.createElement('span');
+        chip.className = 'factor-chip';
+        chip.textContent = f;
+        foundFactorsEl.appendChild(chip);
+      });
+    }
+  }
+
+  function updateBagButtons() {
+    document.querySelectorAll('.bag-btn').forEach(b => {
+      b.classList.toggle('factor', foundFactors.has(Number(b.dataset.n)));
+    });
+  }
+
+  function checkWin() {
+    if (ALL_FACTORS.every(f => foundFactors.has(f))) {
+      completedNumbers.add(TOTAL);
+      markChipDone(TOTAL);
+      setTimeout(() => showWin(), 700);
+    }
+  }
+
+  function showWin() {
+    winNum.textContent = TOTAL;
+    winFactors.textContent = ALL_FACTORS.join(' · ');
+    const pairs = ALL_FACTORS
+      .filter(f => f <= Math.sqrt(TOTAL))
+      .map(f => `${f} × ${TOTAL / f}`)
+      .join(', ');
+    winBonus.innerHTML = `<b>💡 Pasangan faktornya:</b><br>${pairs}.<br>Itulah sebabnya faktor selalu berpasangan!`;
+    winOverlay.classList.add('show');
+    sayWin(TOTAL);
+  }
+
+  function closeWin() {
+    winOverlay.classList.remove('show');
+    cancelSpeech();
+  }
+
+  function markChipDone(n) {
+    document.querySelectorAll('.num-chip').forEach(c => {
+      if (Number(c.dataset.n) === n) {
+        if (!c.querySelector('.check')) {
+          const s = document.createElement('span');
+          s.className = 'check';
+          s.textContent = '✓';
+          c.appendChild(s);
+        }
+      }
+    });
+  }
+
+  function setNumber(n) {
+    n = Math.floor(n);
+    if (isNaN(n) || n < 4 || n > 60) {
+      alert('Pilih bilangan antara 4 sampai 60 ya!');
+      return;
+    }
+    TOTAL = n;
+    ALL_FACTORS = getFactors(n);
+    MAX_BAGS = n;
+    foundFactors.clear();
+    selectedBags = null;
+    document.querySelectorAll('.num-chip').forEach(c => {
+      c.classList.toggle('active', Number(c.dataset.n) === n);
+    });
+    updateStory();
+    renderBagSelector();
+    if (mode === 'drag') {
+      dragCandies.clear();
+      dragCounter = 0;
+      for (let i = 0; i < TOTAL; i++) dragCandies.set('c' + (dragCounter++), 'pool');
+      dragBagCount = 0;
+      renderDragMode();
+      bagsContainer.innerHTML = `<p style="color:#94a3b8; font-style:italic; text-align:center; grid-column:1/-1;">Pilih jumlah ${T().container} dulu ya...</p>`;
+      feedback.className = 'feedback neutral';
+      feedback.textContent = `Pilih jumlah ${T().container}, lalu tarik ${T().emoji} ke dalamnya!`;
+    } else {
+      renderCandyPool();
+      resetUI();
+    }
+    hideSisaVisual();
+  }
+
+  function resetUI() {
+    const t = T();
+    btnBagikan.disabled = true;
+    selectedBags = null;
+    bagsContainer.style.gridTemplateColumns = '';
+    bagsContainer.innerHTML = `<p style="color:#94a3b8; font-style:italic; text-align:center; grid-column:1/-1;">Pilih jumlah ${t.container} dulu ya...</p>`;
+    poolPanel.classList.remove('pool-sisa', 'pool-success');
+    hideSisaVisual();
+    feedback.className = 'feedback neutral';
+    feedback.textContent = `Pilih jumlah ${t.container}, lalu tekan "Bagikan!"`;
+    document.querySelectorAll('.bag-btn').forEach(b => b.classList.remove('selected'));
+    updateProgress();
+  }
+
+  function reset() {
+    ensureAudio(); SFX.click();
+    cancelSpeech();
+    foundFactors.clear();
+    selectedBags = null;
+    if (mode === 'drag') {
+      dragCandies.clear();
+      dragCounter = 0;
+      for (let i = 0; i < TOTAL; i++) dragCandies.set('c' + (dragCounter++), 'pool');
+      dragBagCount = 0;
+      renderDragMode();
+      bagsContainer.innerHTML = `<p style="color:#94a3b8; font-style:italic; text-align:center; grid-column:1/-1;">Pilih jumlah ${T().container} dulu ya...</p>`;
+      feedback.className = 'feedback neutral';
+      feedback.textContent = `Pilih jumlah ${T().container}, lalu tarik ${T().emoji} ke dalamnya!`;
+    } else {
+      renderCandyPool();
+      resetUI();
+    }
+    updateBagButtons();
+    layoutAll();
+  }
+
+  document.querySelectorAll('.num-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      ensureAudio(); SFX.select();
+      setNumber(Number(chip.dataset.n));
+    });
+  });
+  document.querySelectorAll('.theme-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      ensureAudio(); SFX.select();
+      applyTheme(chip.dataset.theme);
+    });
+  });
+  document.querySelectorAll('.mode-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      ensureAudio(); SFX.select();
+      setMode(chip.dataset.mode);
+    });
+  });
+
+  btnCustom.addEventListener('click', () => {
+    ensureAudio();
+    const v = Number(customNum.value);
+    if (v) { SFX.click(); setNumber(v); }
+  });
+  customNum.addEventListener('keydown', e => { if (e.key === 'Enter') btnCustom.click(); });
+
+  btnCustomBag.addEventListener('click', () => {
+    ensureAudio();
+    const v = Math.floor(Number(customBag.value));
+    if (!v || v < 1 || v > TOTAL) {
+      alert(`Jumlah ${T().container} harus antara 1 sampai ${TOTAL}`);
+      return;
+    }
+    SFX.select();
+    selectBags(v);
+    customBag.value = '';
+  });
+  customBag.addEventListener('keydown', e => { if (e.key === 'Enter') btnCustomBag.click(); });
+
+  btnBagikan.addEventListener('click', bagikan);
+  btnReset.addEventListener('click', reset);
+  document.getElementById('btnCloseWin').addEventListener('click', () => {
+    closeWin(); SFX.click(); reset();
+  });
+
+  setNumber(24);
+})();
+
+/* ============================================================
+   QUIZ MODULE
+============================================================ */
+(function initQuizModule() {
+  const QUESTION_BANK = [
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Manakah yang termasuk faktor dari 12?',
+      options: ['3', '5', '7', '9'], answer: '3',
+      explain: '12 ÷ 3 = 4 (habis). Jadi 3 adalah faktor dari 12.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Manakah yang BUKAN faktor dari 18?',
+      options: ['3', '6', '7', '9'], answer: '7',
+      explain: 'Faktor 18: 1, 2, 3, 6, 9, 18. Jadi 7 BUKAN faktor dari 18.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Faktor dari 30 yang lebih dari 10 dan kurang dari 20 adalah...',
+      options: ['12', '15', '18', '25'], answer: '15',
+      explain: 'Faktor 30: 1, 2, 3, 5, 6, 10, 15, 30. Yang antara 10 dan 20 hanya 15.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Ada berapa banyak faktor dari 16?',
+      options: ['3', '4', '5', '6'], answer: '5',
+      explain: 'Faktor 16: 1, 2, 4, 8, 16. Jadi ada 5 faktor.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Faktor terbesar dari 28 (selain 28 sendiri) adalah...',
+      options: ['7', '14', '21', '27'], answer: '14',
+      explain: '28 ÷ 14 = 2. Jadi 14 adalah faktor terbesar sebelum 28.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Manakah yang termasuk faktor dari 45?',
+      options: ['7', '8', '9', '11'], answer: '9',
+      explain: '45 ÷ 9 = 5 (habis). Jadi 9 adalah faktor dari 45.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Manakah yang BUKAN faktor dari 24?',
+      options: ['4', '6', '7', '8'], answer: '7',
+      explain: 'Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24. Jadi 7 BUKAN faktor dari 24.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Faktor dari 40 yang lebih dari 5 adalah...',
+      options: ['6', '7', '8', '9'], answer: '8',
+      explain: '40 ÷ 8 = 5. Jadi 8 faktor dari 40.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Faktor dari 36 yang merupakan bilangan ganjil adalah...',
+      options: ['2', '4', '6', '9'], answer: '9',
+      explain: 'Faktor 36: 1, 2, 3, 4, 6, 9, 12, 18, 36. Yang ganjil: 1, 3, 9. Dari pilihan, hanya 9.' },
+    { type: 'pg', tag: 'Pilihan Ganda',
+      q: 'Faktor dari 20 yang kurang dari 5 adalah...',
+      options: ['3', '4', '5', '6'], answer: '4',
+      explain: '20 ÷ 4 = 5 (habis). Jadi 4 faktor dari 20 dan kurang dari 5.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '6 adalah faktor dari 24.', answer: true,
+      explain: '24 ÷ 6 = 4 (habis). Jadi benar, 6 faktor dari 24.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '9 adalah faktor dari 27.', answer: true,
+      explain: '27 ÷ 9 = 3 (habis). Jadi benar, 9 faktor dari 27.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '5 adalah faktor dari 30.', answer: true,
+      explain: '30 ÷ 5 = 6 (habis). Jadi benar, 5 faktor dari 30.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '7 adalah faktor dari 28.', answer: true,
+      explain: '28 ÷ 7 = 4 (habis). Jadi benar, 7 faktor dari 28.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '11 adalah faktor dari 33.', answer: true,
+      explain: '33 ÷ 11 = 3 (habis). Jadi benar, 11 faktor dari 33.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '4 adalah faktor dari 14.', answer: false,
+      explain: '14 ÷ 4 = 3 sisa 2. Jadi 4 BUKAN faktor dari 14.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '9 adalah faktor dari 21.', answer: false,
+      explain: '21 ÷ 9 = 2 sisa 3. Jadi 9 BUKAN faktor dari 21.' },
+    { type: 'tf', tag: 'Benar atau Salah',
+      q: '3 adalah faktor dari 22.', answer: false,
+      explain: '22 ÷ 3 = 7 sisa 1. Jadi 3 BUKAN faktor dari 22.' },
+    { type: 'ms', tag: 'Pilih Semua yang Benar',
+      q: 'Pilih semua faktor dari 20:',
+      options: ['1', '2', '3', '4', '5', '6', '10', '20'],
+      answers: ['1', '2', '4', '5', '10', '20'],
+      explain: '20 = 1×20 = 2×10 = 4×5. Jadi: 1, 2, 4, 5, 10, 20.' },
+    { type: 'ms', tag: 'Pilih Semua yang Benar',
+      q: 'Pilih semua faktor dari 24:',
+      options: ['1', '2', '3', '4', '5', '6', '8', '12', '24'],
+      answers: ['1', '2', '3', '4', '6', '8', '12', '24'],
+      explain: '24 = 1×24 = 2×12 = 3×8 = 4×6. Jadi: 1, 2, 3, 4, 6, 8, 12, 24.' },
+    { type: 'ms', tag: 'Pilih Semua yang Benar',
+      q: 'Pilih semua faktor dari 30:',
+      options: ['1', '2', '3', '5', '7', '10', '15', '30'],
+      answers: ['1', '2', '3', '5', '10', '15', '30'],
+      explain: '30 = 1×30 = 2×15 = 3×10 = 5×6. Jadi: 1, 2, 3, 5, 10, 15, 30.' },
+    { type: 'ms', tag: 'Pilih Semua yang Benar',
+      q: 'Pilih semua faktor dari 18:',
+      options: ['1', '2', '3', '6', '9', '12', '18'],
+      answers: ['1', '2', '3', '6', '9', '18'],
+      explain: '18 = 1×18 = 2×9 = 3×6. Jadi: 1, 2, 3, 6, 9, 18.' },
+    { type: 'ms', tag: 'Pilih Semua yang Benar',
+      q: 'Pilih semua faktor dari 16:',
+      options: ['1', '2', '4', '6', '8', '16'],
+      answers: ['1', '2', '4', '8', '16'],
+      explain: '16 = 1×16 = 2×8 = 4×4. Jadi: 1, 2, 4, 8, 16.' },
+    { type: 'ms', tag: 'Pilih Semua yang Benar',
+      q: 'Pilih semua faktor dari 28:',
+      options: ['1', '2', '4', '7', '8', '14', '28'],
+      answers: ['1', '2', '4', '7', '14', '28'],
+      explain: '28 = 1×28 = 2×14 = 4×7. Jadi: 1, 2, 4, 7, 14, 28.' },
+    { type: 'fill', tag: 'Isian',
+      q: 'Sebutkan semua faktor dari 15!',
+      hint: 'Pisahkan dengan koma. Contoh: 1, 2, 3',
+      answer: [1, 3, 5, 15],
+      explain: '15 = 1×15 = 3×5. Jadi faktornya 1, 3, 5, 15.' },
+    { type: 'fill', tag: 'Isian',
+      q: 'Sebutkan semua faktor dari 21!',
+      hint: 'Pisahkan dengan koma.',
+      answer: [1, 3, 7, 21],
+      explain: '21 = 1×21 = 3×7. Jadi faktornya 1, 3, 7, 21.' },
+    { type: 'fill', tag: 'Isian',
+      q: 'Sebutkan semua faktor dari 22!',
+      hint: 'Pisahkan dengan koma.',
+      answer: [1, 2, 11, 22],
+      explain: '22 = 1×22 = 2×11. Jadi faktornya 1, 2, 11, 22.' },
+    { type: 'fill', tag: 'Isian',
+      q: 'Sebutkan semua faktor dari 25!',
+      hint: 'Pisahkan dengan koma.',
+      answer: [1, 5, 25],
+      explain: '25 = 1×25 = 5×5. Jadi faktornya 1, 5, 25.' },
+    { type: 'fill', tag: 'Isian',
+      q: 'Sebutkan semua faktor dari 32!',
+      hint: 'Pisahkan dengan koma.',
+      answer: [1, 2, 4, 8, 16, 32],
+      explain: '32 = 1×32 = 2×16 = 4×8. Jadi faktornya 1, 2, 4, 8, 16, 32.' },
+    { type: 'fill', tag: 'Isian',
+      q: 'Sebutkan semua faktor dari 35!',
+      hint: 'Pisahkan dengan koma.',
+      answer: [1, 5, 7, 35],
+      explain: '35 = 1×35 = 5×7. Jadi faktornya 1, 5, 7, 35.' }
+  ];
+
+  const SESSION_SIZE = 10;
+  const POINTS_PER_CORRECT = 10;
+
+  let sessionQuestions = [];
+  let currentIdx = 0;
+  let score = 0;
+  let answered = false;
+  let selectedMS = new Set();
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function buildSession() {
+    const size = Math.min(SESSION_SIZE, QUESTION_BANK.length);
+    const picked = shuffle(QUESTION_BANK).slice(0, size);
+    sessionQuestions = picked.map(q => {
+      const copy = { ...q };
+      if ((copy.type === 'pg' || copy.type === 'ms') && copy.options) {
+        copy.options = shuffle(copy.options);
+      }
+      return copy;
+    });
+  }
+
+  function parseNums(str) {
+    return (str.match(/\d+/g) || []).map(Number).sort((a, b) => a - b);
+  }
+  function sameArray(a, b) {
+    if (a.length !== b.length) return false;
+    return a.every((v, i) => v === b[i]);
+  }
+
+  const qNumEl       = document.getElementById('qNum');
+  const qTotalEl     = document.getElementById('qTotal');
+  const quizProgressFill = document.getElementById('quizProgressFill');
+  const scoreVal     = document.getElementById('scoreVal');
+  const questionTag  = document.getElementById('questionTag');
+  const questionText = document.getElementById('questionText');
+  const answersArea  = document.getElementById('answersArea');
+  const quizFeedback = document.getElementById('quizFeedback');
+  const fbIcon       = document.getElementById('fbIcon');
+  const fbText       = document.getElementById('fbText');
+  const actionBtn    = document.getElementById('actionBtn');
+  const quizWinOverlay = document.getElementById('quizWinOverlay');
+  const winEmoji     = document.getElementById('winEmoji');
+  const winTitle     = document.getElementById('winTitle');
+  const winStars     = document.getElementById('winStars');
+  const winScore     = document.getElementById('winScore');
+  const winMax       = document.getElementById('winMax');
+  const winMsg       = document.getElementById('winMsg');
+  const btnRestart   = document.getElementById('btnRestart');
+
+  function loadQuestion() {
+    const q = sessionQuestions[currentIdx];
+    answered = false;
+    selectedMS.clear();
+
+    qNumEl.textContent = currentIdx + 1;
+    qTotalEl.textContent = sessionQuestions.length;
+    quizProgressFill.style.width = ((currentIdx) / sessionQuestions.length * 100) + '%';
+
+    questionTag.textContent = q.tag;
+    questionText.textContent = q.q;
+    answersArea.innerHTML = '';
+
+    if (q.type === 'pg')   renderPG(q);
+    if (q.type === 'tf')   renderTF(q);
+    if (q.type === 'ms')   renderMS(q);
+    if (q.type === 'fill') renderFill(q);
+
+    quizFeedback.className = 'quiz-feedback';
+    fbIcon.textContent = '';
+    fbText.textContent = '';
+
+    if (q.type === 'ms' || q.type === 'fill') {
+      actionBtn.textContent = 'Periksa Jawaban ✏️';
+      actionBtn.className = 'q-btn q-btn-primary';
+      actionBtn.disabled = false;
+    } else {
+      actionBtn.classList.add('hidden');
+    }
+  }
+
+  function renderPG(q) {
+    const grid = document.createElement('div');
+    grid.className = 'pg-grid';
+    q.options.forEach(opt => {
+      const b = document.createElement('button');
+      b.className = 'pg-btn';
+      b.textContent = opt;
+      b.dataset.value = opt;
+      b.addEventListener('click', () => {
+        if (answered) return;
+        ensureAudio(); SFX.click();
+        submitAnswer(opt, b);
+      });
+      grid.appendChild(b);
+    });
+    answersArea.appendChild(grid);
+  }
+
+  function renderTF(q) {
+    const grid = document.createElement('div');
+    grid.className = 'tf-grid';
+    const benar = document.createElement('button');
+    benar.className = 'tf-btn benar';
+    benar.dataset.value = 'true';
+    benar.innerHTML = '<span class="tf-emoji">✅</span><span>Benar</span>';
+    benar.addEventListener('click', () => {
+      if (answered) return;
+      ensureAudio(); SFX.click();
+      submitAnswer(true, benar);
+    });
+    const salah = document.createElement('button');
+    salah.className = 'tf-btn salah';
+    salah.dataset.value = 'false';
+    salah.innerHTML = '<span class="tf-emoji">❌</span><span>Salah</span>';
+    salah.addEventListener('click', () => {
+      if (answered) return;
+      ensureAudio(); SFX.click();
+      submitAnswer(false, salah);
+    });
+    grid.appendChild(benar);
+    grid.appendChild(salah);
+    answersArea.appendChild(grid);
+  }
+
+  function renderMS(q) {
+    const wrap = document.createElement('div');
+    wrap.className = 'ms-wrap';
+    const grid = document.createElement('div');
+    grid.className = 'ms-grid';
+    q.options.forEach(opt => {
+      const chip = document.createElement('button');
+      chip.className = 'ms-chip';
+      chip.textContent = opt;
+      chip.dataset.value = opt;
+      chip.addEventListener('click', () => {
+        if (answered) return;
+        ensureAudio(); SFX.click();
+        if (selectedMS.has(opt)) {
+          selectedMS.delete(opt);
+          chip.classList.remove('selected');
+        } else {
+          selectedMS.add(opt);
+          chip.classList.add('selected');
+        }
+      });
+      grid.appendChild(chip);
+    });
+    wrap.appendChild(grid);
+    answersArea.appendChild(wrap);
+  }
+
+  function renderFill(q) {
+    const wrap = document.createElement('div');
+    wrap.className = 'fill-wrap';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'fill-input';
+    input.id = 'fillInput';
+    input.placeholder = 'Tulis jawabanmu di sini...';
+    input.autocomplete = 'off';
+    const hint = document.createElement('div');
+    hint.className = 'fill-hint';
+    hint.textContent = q.hint || '';
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); actionBtn.click(); }
+    });
+    wrap.appendChild(input);
+    if (q.hint) wrap.appendChild(hint);
+    answersArea.appendChild(wrap);
+    setTimeout(() => input.focus(), 100);
+  }
+
+  function submitAnswer(userAnswer, clickedEl) {
+    if (answered) return;
+    const q = sessionQuestions[currentIdx];
+    let correct = false;
+    if (q.type === 'pg') {
+      correct = String(userAnswer) === String(q.answer);
+      document.querySelectorAll('#quizScreen .pg-btn').forEach(b => {
+        b.classList.add('disabled');
+        if (b.dataset.value === String(q.answer)) b.classList.add('correct');
+        else if (b === clickedEl) b.classList.add('wrong');
+        else b.classList.add('dimmed');
+      });
+    }
+    if (q.type === 'tf') {
+      correct = userAnswer === q.answer;
+      document.querySelectorAll('#quizScreen .tf-btn').forEach(b => {
+        b.classList.add('disabled');
+        const isCorrect = (b.dataset.value === 'true') === q.answer;
+        if (isCorrect) b.classList.add('correct');
+        else if (b === clickedEl) b.classList.add('wrong');
+        else b.classList.add('dimmed');
+      });
+    }
+    finishAnswer(correct, q);
+  }
+
+  function submitMS() {
+    if (answered) return;
+    const q = sessionQuestions[currentIdx];
+    const selected = Array.from(selectedMS).sort();
+    const answerSorted = q.answers.slice().sort();
+    const correct = sameArray(selected, answerSorted);
+    document.querySelectorAll('#quizScreen .ms-chip').forEach(chip => {
+      chip.classList.add('disabled');
+      const v = chip.dataset.value;
+      const isCorrect = q.answers.includes(v);
+      if (isCorrect) chip.classList.add('correct');
+      else if (selectedMS.has(v)) chip.classList.add('wrong');
+      else chip.classList.add('dimmed');
+    });
+    finishAnswer(correct, q);
+  }
+
+  function submitFill() {
+    if (answered) return;
+    const q = sessionQuestions[currentIdx];
+    const input = document.getElementById('fillInput');
+    if (!input) return;
+    const userNums = parseNums(input.value);
+    const correct = sameArray(userNums, q.answer);
+    input.disabled = true;
+    input.classList.add(correct ? 'correct' : 'wrong');
+    finishAnswer(correct, q);
+  }
+
+  function finishAnswer(correct, q) {
+    answered = true;
+    quizFeedback.className = 'quiz-feedback show ' + (correct ? 'success' : 'error');
+    fbIcon.textContent = correct ? '✓' : '✗';
+    fbText.textContent = (correct ? 'Tepat! ' : 'Belum tepat. ') + q.explain;
+    if (correct) {
+      score += POINTS_PER_CORRECT;
+      scoreVal.textContent = score;
+      scoreVal.classList.remove('bump');
+      void scoreVal.offsetWidth;
+      scoreVal.classList.add('bump');
+      SFX.correctQuiz();
+      speak('Tepat!');
+    } else {
+      SFX.wrongQuiz();
+      speak('Belum tepat.');
+    }
+    quizProgressFill.style.width = ((currentIdx + 1) / sessionQuestions.length * 100) + '%';
+    const isLast = currentIdx === sessionQuestions.length - 1;
+    actionBtn.textContent = isLast ? 'Lihat Hasil 🏆' : 'Lanjut ➡';
+    actionBtn.className = 'q-btn q-btn-primary';
+    actionBtn.disabled = false;
+    actionBtn.classList.remove('hidden');
+  }
+
+  function handleAction() {
+    ensureAudio(); SFX.click();
+    const q = sessionQuestions[currentIdx];
+    if (!answered) {
+      if (q.type === 'ms')   return submitMS();
+      if (q.type === 'fill') return submitFill();
+      return;
+    }
+    if (currentIdx < sessionQuestions.length - 1) {
+      currentIdx++;
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    const max = sessionQuestions.length * POINTS_PER_CORRECT;
+    const pct = score / max;
+    let stars, emoji, title, msg;
+    if (pct === 1) {
+      stars = '⭐⭐⭐'; emoji = '🏆'; title = 'Sempurna!';
+      msg = 'Kamu benar semua! Kamu benar-benar Detektif Faktor!';
+    } else if (pct >= 0.75) {
+      stars = '⭐⭐'; emoji = '🎉'; title = 'Hebat!';
+      msg = 'Kamu sudah sangat paham tentang faktor bilangan. Sedikit lagi sempurna!';
+    } else if (pct >= 0.5) {
+      stars = '⭐'; emoji = '👍'; title = 'Bagus!';
+      msg = 'Kamu sudah memahami dasarnya. Ayo terus berlatih untuk lebih mahir!';
+    } else {
+      stars = '💪'; emoji = '📚'; title = 'Ayo Coba Lagi!';
+      msg = 'Belajar faktor bilangan perlu latihan. Yuk ulangi lagi — soalnya akan berbeda!';
+    }
+    winEmoji.textContent = emoji;
+    winTitle.textContent = title;
+    winStars.textContent = stars;
+    winScore.textContent = score;
+    winMax.textContent = max;
+    winMsg.textContent = msg;
+    quizWinOverlay.classList.add('show');
+    if (pct >= 0.75) {
+      SFX.win();
+      speak(`Skor kamu ${score} dari ${max}. ${title}`);
+    } else {
+      speak(`Skor kamu ${score} dari ${max}. Ayo coba lagi ya.`);
+    }
+  }
+
+  function restart() {
+    ensureAudio(); SFX.click();
+    cancelSpeech();
+    buildSession();
+    currentIdx = 0;
+    score = 0;
+    scoreVal.textContent = '0';
+    quizWinOverlay.classList.remove('show');
+    quizProgressFill.style.width = '0%';
+    loadQuestion();
+  }
+
+  actionBtn.addEventListener('click', handleAction);
+  btnRestart.addEventListener('click', restart);
+
+  buildSession();
+  loadQuestion();
+})();
+</script>
+
+</body>
+</html>
