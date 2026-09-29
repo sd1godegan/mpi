@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Leo - Penjumlahan Kelas 1</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Comic Sans MS','Segoe UI',cursive,sans-serif; }
+  body {
+    background: linear-gradient(135deg, #87CEEB, #98D8C8, #FFE5B4);
+    min-height: 100vh; padding: 15px;
+    display: flex; justify-content: center; align-items: flex-start;
+  }
+  .container {
+    background: white; border-radius: 28px;
+    padding: 25px; max-width: 800px; width: 100%;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    margin-top: 15px;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex; align-items: center; gap: 12px;
+    background: linear-gradient(135deg, #FFB347, #FF8C42);
+    padding: 15px 18px; border-radius: 20px;
+    color: white; margin-bottom: 18px;
+  }
+  .leo-avatar {
+    font-size: 42px;
+    background: white; border-radius: 50%;
+    width: 60px; height: 60px;
+    display: flex; align-items:center; justify-content:center;
+    animation: bounce 1.5s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  .header-text { flex: 1; }
+  .header-text h1 { font-size: 18px; margin-bottom: 3px; }
+  .header-text p { font-size: 13px; opacity: 0.95; }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: #F0F0F0; border-radius: 15px;
+    padding: 8px; margin-bottom: 20px;
+  }
+  .progress-bar {
+    height: 22px; background: linear-gradient(90deg, #4ECDC4, #44B39D);
+    border-radius: 12px; width: 0%;
+    transition: width 0.6s ease;
+    display: flex; align-items:center; justify-content:center;
+    color: white; font-size: 12px; font-weight: bold;
+  }
+
+  /* PETA LEVEL */
+  .peta {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .level-card {
+    background: #FFF8DC;
+    border: 3px solid #FFD700;
+    border-radius: 18px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.25s;
+    position: relative;
+  }
+  .level-card:hover:not(.locked) { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
+  .level-card.locked {
+    background: #E0E0E0; border-color: #BDBDBD;
+    cursor: not-allowed; opacity: 0.7;
+  }
+  .level-card.selesai {
+    background: #D5F5E3; border-color: #28a745;
+  }
+  .level-card .nomor {
+    position: absolute; top: -8px; left: -8px;
+    background: #FF6B6B; color: white;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items:center; justify-content:center;
+    font-weight: bold; font-size: 14px;
+  }
+  .level-card.selesai .nomor { background: #28a745; }
+  .level-card.locked .nomor { background: #757575; }
+  .level-card .ikon { font-size: 40px; display: block; margin: 5px 0; }
+  .level-card .nama { font-weight: bold; font-size: 13px; color: #333; }
+  .level-card .status { font-size: 11px; color: #666; margin-top: 4px; }
+  .level-card .cek {
+    position: absolute; top: 5px; right: 8px;
+    font-size: 20px;
+  }
+
+  /* ARENA LEVEL */
+  .arena {
+    background: #E8F8F5;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    min-height: 300px;
+  }
+  .misi-judul {
+    font-size: 18px; color: #2C3E50;
+    margin-bottom: 15px; font-weight: bold;
+  }
+  .benda-row {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 6px; margin: 15px 0; min-height: 55px;
+  }
+  .benda {
+    font-size: 38px; cursor: pointer;
+    transition: 0.25s; user-select: none;
+  }
+  .benda.dihitung { transform: scale(1.25); filter: drop-shadow(0 0 8px gold); }
+  .benda.sudah { opacity: 0.35; }
+
+  .soal-besar {
+    font-size: 36px; font-weight: bold;
+    color: #9B59B6; margin: 15px 0;
+    letter-spacing: 3px;
+  }
+  .grup-gambar {
+    display: inline-flex; flex-wrap: wrap;
+    justify-content: center; gap: 3px;
+    max-width: 180px; vertical-align: middle;
+  }
+  .grup-gambar span { font-size: 26px; }
+
+  .opsi-grid {
+    display: flex; justify-content: center;
+    gap: 10px; flex-wrap: wrap; margin-top: 15px;
+  }
+  .opsi-btn {
+    width: 62px; height: 62px;
+    font-size: 24px; font-weight: bold;
+    border: 3px solid #3498DB; background: white;
+    color: #3498DB; border-radius: 15px;
+    cursor: pointer; font-family: inherit;
+    transition: 0.2s;
+  }
+  .opsi-btn:hover { background: #3498DB; color: white; transform: scale(1.08); }
+  .opsi-btn.benar { background:#90EE90; border-color:#28a745; color:white; animation: pop 0.4s; }
+  .opsi-btn.salah { background:#FFB6C1; border-color:#dc3545; color:white; animation: shake 0.4s; }
+  @keyframes pop { 0%,100%{transform:scale(1);} 50%{transform:scale(1.2);} }
+  @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+
+  .cerita-teks {
+    background: white; padding: 15px;
+    border-radius: 15px; border-left: 6px solid #16A085;
+    font-size: 17px; line-height: 1.6;
+    text-align: left; margin-bottom: 12px;
+    color: #2C3E50;
+  }
+  .cerita-emoji { font-size: 36px; margin: 10px 0; text-align:center; }
+
+  .feedback {
+    margin-top: 15px; font-size: 18px;
+    font-weight: bold; min-height: 26px;
+    color: #28a745;
+  }
+  .feedback.salah { color: #E74C3C; }
+
+  /* POPUP REWARD */
+  .popup {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100; justify-content: center; align-items: center;
+  }
+  .popup.aktif { display: flex; }
+  .popup-box {
+    background: white; padding: 30px;
+    border-radius: 25px; text-align: center;
+    max-width: 340px; width: 90%;
+    animation: popIn 0.4s;
+  }
+  @keyframes popIn { from{transform:scale(0.5);opacity:0;} to{transform:scale(1);opacity:1;} }
+  .popup-box .stiker {
+    font-size: 90px; margin: 10px 0;
+    animation: spin 1s;
+  }
+  @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
+  .popup-box h2 { color: #FF6B6B; margin-bottom: 8px; font-size: 22px; }
+  .popup-box p { color: #555; margin-bottom: 18px; font-size: 15px; }
+  .popup-box button {
+    padding: 12px 28px; background: #4ECDC4;
+    color: white; border: none; border-radius: 15px;
+    font-size: 16px; font-weight: bold;
+    cursor: pointer; font-family: inherit;
+    transition: 0.2s;
+  }
+  .popup-box button:hover { background: #44B39D; transform: scale(1.05); }
+
+  /* SERTIFIKAT */
+  .sertifikat {
+    background: linear-gradient(135deg, #FFF8DC, #FFE5B4);
+    border: 8px double #FFB347;
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+  }
+  .sertifikat h2 {
+    color: #FF6B6B; font-size: 26px;
+    margin-bottom: 15px; letter-spacing: 2px;
+  }
+  .sertifikat .medali { font-size: 70px; margin: 10px 0; }
+  .sertifikat p { font-size: 16px; margin: 8px 0; color: #555; }
+  .sertifikat .nama-juara {
+    font-size: 24px; font-weight: bold;
+    color: #9B59B6; margin: 15px 0;
+    border-bottom: 3px dotted #9B59B6;
+    padding-bottom: 8px;
+  }
+  .stiker-row {
+    font-size: 40px; margin: 15px 0;
+    letter-spacing: 8px;
+  }
+
+  .btn {
+    padding: 12px 25px; border: none; border-radius: 15px;
+    font-size: 15px; font-weight: bold; cursor: pointer;
+    font-family: inherit; margin: 5px;
+    transition: 0.2s;
+  }
+  .btn-back { background: #95A5A6; color: white; }
+  .btn-next { background: #4ECDC4; color: white; }
+  .btn:hover { transform: scale(1.05); }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 500px) {
+    .header-text h1 { font-size: 15px; }
+    .soal-besar { font-size: 28px; }
+    .benda { font-size: 30px; }
+    .opsi-btn { width: 52px; height: 52px; font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="leo-avatar">🦁</div>
+    <div class="header-text">
+      <h1>Petualangan Leo di Kebun Binatang</h1>
+      <p id="sapaanLeo">Halo teman! Ayo bantu aku berhitung! 🎉</p>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar" style="width:0%">0%</div>
+  </div>
+
+  <!-- PETA LEVEL -->
+  <div id="petaView">
+    <div class="peta" id="peta"></div>
+    <div style="text-align:center; margin-top:10px;">
+      <button class="btn btn-back" onclick="resetPetualangan()">🔄 Mulai Ulang</button>
+    </div>
+  </div>
+
+  <!-- ARENA LEVEL -->
+  <div id="arenaView" class="hidden">
+    <button class="btn btn-back" onclick="kembaliKePeta()" style="margin-bottom:12px;">⬅ Kembali ke Peta</button>
+    <div class="arena" id="arena"></div>
+  </div>
+
+  <!-- SERTIFIKAT -->
+  <div id="sertifikatView" class="hidden">
+    <div class="sertifikat">
+      <h2>🏆 SERTIFIKAT 🏆</h2>
+      <p>Diberikan kepada</p>
+      <div class="nama-juara">🌟 JUARA BERHITUNG 🌟</div>
+      <p>Telah menyelesaikan seluruh petualangan bersama Leo!</p>
+      <div class="medali">🥇</div>
+      <div class="stiker-row">🐘🦒🐧🐵🦁</div>
+      <p style="font-style:italic; color:#9B59B6;">"Hebat! Kamu pintar berhitung!" - Leo 🦁</p>
+    </div>
+    <div style="text-align:center; margin-top:15px;">
+      <button class="btn btn-next" onclick="resetPetualangan()">🔄 Main Lagi</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- POPUP REWARD -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <h2 id="popupJudul">🎉 Hebat!</h2>
+    <div class="stiker" id="popupStiker">🐘</div>
+    <p id="popupPesan">Kamu mendapat stiker Gajah!</p>
+    <button onclick="tutupPopup()">Lanjut ➡</button>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+const state = {
+  levelSelesai: [], // nomor level yang sudah selesai
+  levelAktif: null,
+  soalKe: 0,
+  benarDiLevel: 0,
+  totalSoalPerLevel: 3
+};
+
+// Data level
+const levels = [
+  { no:1, ikon:'🐘', nama:'Hitung Gajah', jenis:'hitung', stiker:'🐘', stikerNama:'Gajah' },
+  { no:2, ikon:'🦒', nama:'Tambah Jerapah', jenis:'tambah_gambar', stiker:'🦒', stikerNama:'Jerapah' },
+  { no:3, ikon:'🐧', nama:'Cepat Penguin', jenis:'tambah_angka', stiker:'🐧', stikerNama:'Penguin' },
+  { no:4, ikon:'🐵', nama:'Cerita Monyet', jenis:'cerita', stiker:'🐵', stikerNama:'Monyet' },
+  { no:5, ikon:'🦁', nama:'Tantangan Leo', jenis:'campuran', stiker:'🦁', stikerNama:'Singa' }
+];
+
+// ============ SUARA ============
+function baca(teks) {
+  if ('speechSynthesis' in window) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(teks);
+    u.lang = 'id-ID'; u.rate = 0.85; u.pitch = 1.15;
+    speechSynthesis.speak(u);
+  }
+}
+
+// ============ PETA ============
+function renderPeta() {
+  const peta = document.getElementById('peta');
+  peta.innerHTML = '';
+  levels.forEach(lv => {
+    const selesai = state.levelSelesai.includes(lv.no);
+    const terbuka = lv.no === 1 || state.levelSelesai.includes(lv.no - 1);
+
+    const card = document.createElement('div');
+    card.className = 'level-card';
+    if (selesai) card.classList.add('selesai');
+    else if (!terbuka) card.classList.add('locked');
+
+    card.innerHTML = `
+      <span class="nomor">${lv.no}</span>
+      ${selesai ? '<span class="cek">✅</span>' : (!terbuka ? '<span class="cek">🔒</span>' : '')}
+      <span class="ikon">${lv.ikon}</span>
+      <span class="nama">${lv.nama}</span>
+      <span class="status">${selesai ? 'Selesai' : (terbuka ? 'Buka' : 'Terkunci')}</span>
+    `;
+
+    if (terbuka && !selesai) card.onclick = () => mulaiLevel(lv.no);
+    peta.appendChild(card);
+  });
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const persen = Math.round((state.levelSelesai.length / levels.length) * 100);
+  const bar = document.getElementById('progressBar');
+  bar.style.width = persen + '%';
+  bar.textContent = persen + '% Selesai';
+}
+
+// ============ MULAI LEVEL ============
+function mulaiLevel(no) {
+  state.levelAktif = no;
+  state.soalKe = 0;
+  state.benarDiLevel = 0;
+
+  document.getElementById('petaView').classList.add('hidden');
+  document.getElementById('arenaView').classList.remove('hidden');
+  document.getElementById('sertifikatView').classList.add('hidden');
+
+  const lv = levels.find(l => l.no === no);
+  baca(`Level ${no}. ${lv.nama}. Ayo mulai!`);
+
+  buatSoal();
+}
+
+function kembaliKePeta() {
+  document.getElementById('petaView').classList.remove('hidden');
+  document.getElementById('arenaView').classList.add('hidden');
+  document.getElementById('sertifikatView').classList.add('hidden');
+  renderPeta();
+}
+
+// ============ BUAT SOAL ============
+function buatSoal() {
+  const lv = levels.find(l => l.no === state.levelAktif);
+  const arena = document.getElementById('arena');
+
+  // cek apakah misi selesai
+  if (state.soalKe >= state.totalSoalPerLevel) {
+    selesaikanLevel();
+    return;
+  }
+
+  const nomorSoal = state.soalKe + 1;
+  arena.innerHTML = `
+    <div class="misi-judul">${lv.ikon} ${lv.nama} — Soal ${nomorSoal}/${state.totalSoalPerLevel}</div>
+    <div id="soalArea"></div>
+    <div class="feedback" id="feedback"></div>
+  `;
+
+  // Pilih jenis soal
+  let jenis = lv.jenis;
+  if (jenis === 'campuran') {
+    const pilihan = ['hitung', 'tambah_gambar', 'tambah_angka', 'cerita'];
+    jenis = pilihan[Math.floor(Math.random()*pilihan.length)];
+  }
+
+  if (jenis === 'hitung') soalHitung();
+  else if (jenis === 'tambah_gambar') soalTambahGambar();
+  else if (jenis === 'tambah_angka') soalTambahAngka();
+  else if (jenis === 'cerita') soalCerita();
+}
+
+// ============ JENIS SOAL ============
+const emojiHewan = ['🐘','🦒','🐧','🐵','🦁','🐯','🐰','🐸','🐼','🐨'];
+
+function soalHitung() {
+  const emoji = emojiHewan[Math.floor(Math.random()*emojiHewan.length)];
+  const jumlah = Math.floor(Math.random()*8) + 3; // 3-10
+  const area = document.getElementById('soalArea');
+
+  let html = `<p style="color:#666; margin-bottom:8px;">Hitung ${emoji} berikut, klik satu-satu!</p>`;
+  html += `<div class="benda-row" id="bendaRow">`;
+  for (let i = 0; i < jumlah; i++) html += `<span class="benda" onclick="hitungIni(this)">${emoji}</span>`;
+  html += `</div>`;
+  html += `<p style="color:#9B59B6; font-weight:bold; font-size:18px;">Ada berapa ${emoji}?</p>`;
+  html += `<div class="opsi-grid" id="opsiGrid"></div>`;
+  area.innerHTML = html;
+
+  baca(`Hitung ${emoji} di layar`);
+  buatOpsi(jumlah);
+}
+
+let hitungCounter = 0;
+function hitungIni(el) {
+  if (el.classList.contains('sudah')) return;
+  el.classList.add('sudah', 'dihitung');
+  hitungCounter++;
+  baca(hitungCounter.toString());
+  setTimeout(() => el.classList.remove('dihitung'), 300);
+}
+
+function soalTambahGambar() {
+  const emoji = emojiHewan[Math.floor(Math.random()*emojiHewan.length)];
+  const a = Math.floor(Math.random()*5) + 1;
+  const b = Math.floor(Math.random()*5) + 1;
+  const hasil = a + b;
+  const area = document.getElementById('soalArea');
+
+  const g1 = Array(a).fill(emoji).join('');
+  const g2 = Array(b).fill(emoji).join('');
+
+  area.innerHTML = `
+    <p style="color:#666;">Hitung gambar lalu pilih jawabannya!</p>
+    <div class="soal-besar">
+      <span class="grup-gambar">${g1.split('').map(e=>`<span>${e}</span>`).join('')}</span>
+      <span style="color:#E74C3C;">+</span>
+      <span class="grup-gambar">${g2.split('').map(e=>`<span>${e}</span>`).join('')}</span>
+      <span style="color:#E74C3C;">= ?</span>
+    </div>
+    <div class="opsi-grid" id="opsiGrid"></div>
+  `;
+
+  baca(`${a} plus ${b} sama dengan berapa?`);
+  buatOpsi(hasil);
+}
+
+function soalTambahAngka() {
+  const a = Math.floor(Math.random()*8) + 2;
+  const b = Math.floor(Math.random()*8) + 2;
+  const hasil = a + b;
+  const area = document.getElementById('soalArea');
+
+  area.innerHTML = `
+    <p style="color:#666;">Jawab dengan cepat ya!</p>
+    <div class="soal-besar">${a} + ${b} = ?</div>
+    <div class="opsi-grid" id="opsiGrid"></div>
+  `;
+
+  baca(`${a} plus ${b} sama dengan berapa?`);
+  buatOpsi(hasil);
+}
+
+const daftarCerita = [
+  { teks: "Di kebun binatang ada 3 gajah. Datang 2 gajah lagi. Berapa jumlah gajah semuanya?", emoji: "🐘🐘🐘 + 🐘🐘" },
+  { teks: "Leo melihat 4 jerapah. Lalu ada 3 jerapah baru datang. Berapa jumlah jerapah?", emoji: "🦒🦒🦒🦒 + 🦒🦒🦒" },
+  { teks: "Ada 5 monyet di pohon. Datang 2 monyet lagi. Berapa jumlah monyet?", emoji: "🐵🐵🐵🐵🐵 + 🐵🐵" },
+  { teks: "Ada 6 penguin berenang. Datang 4 penguin lagi. Berapa jumlah penguin?", emoji: "🐧🐧🐧🐧🐧🐧 + 🐧🐧🐧🐧" },
+  { teks: "Leo punya 5 balon. Diberi 3 balon lagi. Berapa jumlah balon Leo?", emoji: "🎈🎈🎈🎈🎈 + 🎈🎈🎈" }
+];
+
+function soalCerita() {
+  const s = daftarCerita[Math.floor(Math.random()*daftarCerita.length)];
+  // cari jawaban dari emoji: hitung total emoji hewan/balon
+  const totalEmoji = (s.emoji.match(/[🐘🦒🐵🐧🎈]/gu) || []).length;
+  const area = document.getElementById('soalArea');
+
+  area.innerHTML = `
+    <div class="cerita-teks">📖 ${s.teks}</div>
+    <div class="cerita-emoji">${s.emoji}</div>
+    <div class="opsi-grid" id="opsiGrid"></div>
+  `;
+
+  baca(s.teks);
+  buatOpsi(totalEmoji);
+}
+
+// ============ OPSI JAWABAN ============
+function buatOpsi(jawabanBenar) {
+  const opsiBox = document.getElementById('opsiGrid');
+  const opsi = new Set([jawabanBenar]);
+  while (opsi.size < 4) {
+    const v = Math.max(1, jawabanBenar + Math.floor(Math.random()*7) - 3);
+    if (v !== jawabanBenar || opsi.size < 1) opsi.add(v);
+  }
+  const opsiAcak = [...opsi].sort(() => Math.random() - 0.5);
+
+  opsiAcak.forEach(v => {
+    const btn = document.createElement('button');
+    btn.className = 'opsi-btn';
+    btn.textContent = v;
+    btn.onclick = () => cekJawaban(v, jawabanBenar, btn);
+    opsiBox.appendChild(btn);
+  });
+}
+
+function cekJawaban(pilih, benar, btn) {
+  const semua = btn.parentElement.querySelectorAll('button');
+  semua.forEach(b => b.disabled = true);
+
+  const feedback = document.getElementById('feedback');
+
+  if (pilih === benar) {
+    btn.classList.add('benar');
+    state.benarDiLevel++;
+    feedback.textContent = '✅ Benar! Hebat!';
+    feedback.classList.remove('salah');
+    baca('Benar!');
+
+    setTimeout(() => {
+      state.soalKe++;
+      buatSoal();
+    }, 1400);
+  } else {
+    btn.classList.add('salah');
+    semua.forEach(b => {
+      if (parseInt(b.textContent) === benar) b.classList.add('benar');
+    });
+    feedback.textContent = `❌ Belum tepat. Jawaban benar: ${benar}`;
+    feedback.classList.add('salah');
+    baca(`Belum tepat. Jawaban yang benar adalah ${benar}`);
+
+    setTimeout(() => {
+      state.soalKe++;
+      buatSoal();
+    }, 2200);
+  }
+}
+
+// ============ SELESAIKAN LEVEL ============
+function selesaikanLevel() {
+  const lv = levels.find(l => l.no === state.levelAktif);
+
+  if (!state.levelSelesai.includes(lv.no)) {
+    state.levelSelesai.push(lv.no);
+  }
+
+  // Tampilkan popup reward
+  document.getElementById('popupJudul').textContent = `🎉 Level ${lv.no} Selesai!`;
+  document.getElementById('popupStiker').textContent = lv.stiker;
+  document.getElementById('popupPesan').textContent = `Kamu mendapat stiker ${lv.stikerNama}! ${state.benarDiLevel} dari ${state.totalSoalPerLevel} benar.`;
+
+  baca(`Hebat! Level ${lv.no} selesai. Kamu mendapat stiker ${lv.stikerNama}!`);
+  document.getElementById('popup').classList.add('aktif');
+}
+
+function tutupPopup() {
+  document.getElementById('popup').classList.remove('aktif');
+
+  if (state.levelSelesai.length === levels.length) {
+    // semua level selesai → sertifikat
+    document.getElementById('petaView').classList.add('hidden');
+    document.getElementById('arenaView').classList.add('hidden');
+    document.getElementById('sertifikatView').classList.remove('hidden');
+    baca('Selamat! Kamu mendapatkan sertifikat juara berhitung!');
+  } else {
+    kembaliKePeta();
+  }
+}
+
+// ============ RESET ============
+function resetPetualangan() {
+  state.levelSelesai = [];
+  state.levelAktif = null;
+  state.soalKe = 0;
+  state.benarDiLevel = 0;
+  document.getElementById('sertifikatView').classList.add('hidden');
+  document.getElementById('arenaView').classList.add('hidden');
+  document.getElementById('petaView').classList.remove('hidden');
+  renderPeta();
+  baca('Ayo mulai petualangan baru!');
+}
+
+// ============ INIT ============
+renderPeta();
+</script>
+</body>
+</html>
