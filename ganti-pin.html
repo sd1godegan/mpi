@@ -2,77 +2,68 @@
 <html lang="id" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ganti PIN · SDN 1 Godegan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ganti PIN · Portal Rumah MPI</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
+
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('mpi_theme');
+    if(!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+
 <style>
 :root{
-  --bg:#FAF8F5;
-  --surface:#FFFFFF;
-  --surface-2:#F5F2EC;
-  --border:#ECE7DE;
-  --text:#2E2E3F;
-  --text-soft:#5A5A70;
-  --muted:#8E8EA0;
-  --primary:#8899C4;
-  --primary-hover:#7386B5;
-  --primary-soft:#EDF0F8;
-  --primary-ring:#DDE4F2;
-  --lavender:#E0D7EE;
-  --m-agama-i:#7E6BA5;
-  --butter:#F5EBC8;
-  --m-jawa-i:#A89454;
+  --bg:#FAF8F5;--surface:#FFFFFF;--surface-2:#F5F2EC;--border:#ECE7DE;
+  --text:#2E2E3F;--text-soft:#5A5A70;--muted:#8E8EA0;
+  --primary:#8899C4;--primary-hover:#7386B5;--primary-soft:#EDF0F8;--primary-ring:#DDE4F2;
+  --butter:#F5EBC8;--m-jawa-i:#A89454;
   --sky:#DAE4F2;
-  --err:#B8707A;
-  --ok:#6B8F62;
-  --shadow-lg:0 12px 32px rgba(46,46,63,.10);
+  --err:#B8707A;--ok:#6B8F62;
   --ease:cubic-bezier(.2,.8,.2,1);
 }
 [data-theme="dark"]{
-  --bg:#1C1C28;
-  --surface:#24242F;
-  --surface-2:#2A2A38;
-  --border:#35353F;
-  --text:#ECEAF2;
-  --text-soft:#B8B6C8;
-  --muted:#8E8CA0;
-  --primary:#98A8D0;
-  --primary-hover:#A8B8DD;
-  --primary-soft:#2E3245;
-  --primary-ring:#3A4058;
-  --lavender:#3A3248;
-  --m-agama-i:#B8A8D8;
+  --bg:#1C1C28;--surface:#24242F;--surface-2:#2A2A38;--border:#35353F;
+  --text:#ECEAF2;--text-soft:#B8B6C8;--muted:#8E8CA0;
+  --primary:#98A8D0;--primary-hover:#A8B8DD;--primary-soft:#2E3245;--primary-ring:#3A4058;
+  --butter:#3A3428;--m-jawa-i:#D8C898;
   --sky:#2E3644;
+  --err:#E0A8B0;--ok:#A8D098;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
 body{
-  font-family:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
-  background:var(--bg);color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.55;
   -webkit-font-smoothing:antialiased;
   min-height:100vh;display:grid;place-items:center;padding:1.25rem;
   transition:background .3s,color .3s;
+  position:relative;overflow-x:hidden;
 }
 svg{display:block}
-.icon{
-  width:20px;height:20px;stroke:currentColor;stroke-width:1.75;
-  stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0;
-}
-.icon-sm{width:15px;height:15px;stroke-width:2.2}
+.icon{width:20px;height:20px;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
+button,input{font-family:inherit}
 
 body::before,body::after{
   content:'';position:fixed;border-radius:50%;
-  pointer-events:none;z-index:0;
+  pointer-events:none;z-index:0;filter:blur(70px);
 }
 body::before{
-  width:320px;height:320px;background:var(--butter);
-  top:-120px;right:-100px;opacity:.55;
+  width:min(440px,70vw);height:min(440px,70vw);
+  background:var(--butter);
+  top:-120px;right:-80px;opacity:.6;
 }
 body::after{
-  width:400px;height:400px;background:var(--sky);
-  bottom:-160px;left:-140px;opacity:.5;
+  width:min(500px,80vw);height:min(500px,80vw);
+  background:var(--sky);
+  bottom:-160px;left:-100px;opacity:.55;
 }
 [data-theme="dark"] body::before,
-[data-theme="dark"] body::after{opacity:.25}
+[data-theme="dark"] body::after{opacity:.15}
 
 .card{
   position:relative;z-index:1;
@@ -81,25 +72,30 @@ body::after{
   border-radius:20px;
   padding:2.25rem 2rem;
   width:100%;max-width:420px;
-  box-shadow:var(--shadow-lg);
+  box-shadow:
+    0 24px 60px -20px rgba(46,46,63,.14),
+    0 2px 8px rgba(46,46,63,.04);
   animation:slideUp .5s var(--ease);
 }
+[data-theme="dark"] .card{
+  box-shadow:
+    0 24px 60px -20px rgba(0,0,0,.5),
+    0 2px 8px rgba(0,0,0,.2);
+}
 @keyframes slideUp{
-  from{opacity:0;transform:translateY(16px)}
-  to{opacity:1;transform:translateY(0)}
+  from{opacity:0;transform:translateY(16px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
 }
 
 .brand{text-align:center;margin-bottom:1.75rem}
 .brand-mark{
-  width:60px;height:60px;border-radius:16px;
-  background:var(--butter);color:var(--m-jawa-i);
+  width:60px;height:60px;border-radius:18px;
+  background:var(--primary);color:#fff;
   display:grid;place-items:center;margin:0 auto .85rem;
+  box-shadow:0 10px 24px -8px rgba(136,153,196,.5);
 }
 .brand-mark .icon{width:26px;height:26px;stroke-width:1.7}
-.brand h1{
-  font-size:1.2rem;font-weight:700;
-  letter-spacing:-.015em;line-height:1.2;
-}
+.brand h1{font-size:1.2rem;font-weight:700;letter-spacing:-.015em;line-height:1.2}
 .brand p{color:var(--muted);font-size:.85rem;margin-top:.3rem}
 
 .field{margin-bottom:1rem;position:relative}
@@ -112,7 +108,7 @@ body::after{
   width:100%;padding:.75rem .9rem;
   border:1.5px solid var(--border);border-radius:10px;
   background:var(--surface-2);color:var(--text);
-  font-size:.95rem;font-family:inherit;outline:none;
+  font-size:.95rem;outline:none;
   transition:all .2s var(--ease);
 }
 .field input:focus{
@@ -129,7 +125,7 @@ body::after{
   width:100%;padding:.85rem;border-radius:10px;border:none;
   background:var(--primary);color:#fff;
   font-weight:700;font-size:.92rem;cursor:pointer;
-  font-family:inherit;transition:all .2s var(--ease);
+  transition:all .2s var(--ease);
   margin-top:1rem;
   display:flex;align-items:center;justify-content:center;gap:.5rem;
 }
@@ -174,6 +170,9 @@ body::after{
   .card{padding:1.75rem 1.4rem}
   body::before,body::after{display:none}
 }
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
 </style>
 </head>
 <body>
@@ -184,7 +183,7 @@ body::after{
       <svg class="icon" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="3.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
     </div>
     <h1>Ganti PIN</h1>
-    <p id="greet">SD Negeri 1 Godegan</p>
+    <p id="greet">Portal Rumah MPI</p>
   </div>
 
   <form id="form">
@@ -213,7 +212,7 @@ body::after{
 
   <a class="back-link" href="index.html">
     <svg class="icon" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
-    Kembali ke Katalog
+    Kembali ke Rumah MPI
   </a>
 </div>
 
