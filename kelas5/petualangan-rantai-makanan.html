@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Rantai Makanan</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --green: #3f8f63;
+  --dark-green: #236044;
+  --light-green: #e9f6e9;
+  --yellow: #f7c948;
+  --blue: #dff3ff;
+  --cream: #fffdf5;
+  --text: #294238;
+  --white: #ffffff;
+  --red: #e97878;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Nunito', Arial, sans-serif;
+  background: linear-gradient(135deg, #e8f7ed, #fff9df);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+button, input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+.app {
+  max-width: 1200px;
+  margin: auto;
+  padding: 18px;
+}
+
+/* HEADER */
+header {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 18px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 6px 20px rgba(45, 100, 65, 0.1);
+  margin-bottom: 18px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 42px;
+}
+
+.logo h1 {
+  color: var(--dark-green);
+  margin: 0;
+  font-size: clamp(20px, 3vw, 30px);
+}
+
+.logo p {
+  margin: 2px 0 0;
+  color: #6b8276;
+  font-size: 13px;
+}
+
+.progress-box {
+  text-align: right;
+  min-width: 150px;
+}
+
+.progress-box small {
+  color: #6b8276;
+  font-weight: 700;
+}
+
+.progress-bar {
+  width: 150px;
+  height: 10px;
+  background: #e5eee5;
+  border-radius: 20px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--green);
+  border-radius: 20px;
+  transition: width .4s;
+}
+
+/* NAVIGATION */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  background: var(--white);
+  color: var(--dark-green);
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-weight: 800;
+  transition: .2s;
+  border: 2px solid transparent;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background: var(--green);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* PAGES */
+.page {
+  display: none;
+  animation: fadeIn .35s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 6px 20px rgba(45, 100, 65, 0.08);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  color: var(--dark-green);
+  margin-top: 0;
+  font-size: clamp(22px, 4vw, 32px);
+}
+
+.section-subtitle {
+  color: #668073;
+  margin-top: -10px;
+}
+
+/* BUTTONS */
+.primary-btn {
+  background: var(--green);
+  color: white;
+  padding: 13px 24px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  transition: .2s;
+}
+
+.primary-btn:hover {
+  background: var(--dark-green);
+  transform: translateY(-2px);
+}
+
+.secondary-btn {
+  background: #edf5ed;
+  color: var(--dark-green);
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+.yellow-btn {
+  background: var(--yellow);
+  color: #634d0a;
+  padding: 13px 24px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+.danger-btn {
+  background: #fff0f0;
+  color: #b34e4e;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+/* WELCOME */
+.welcome {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  align-items: center;
+}
+
+.welcome-text h2 {
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 1.1;
+  color: var(--dark-green);
+  margin: 0 0 15px;
+}
+
+.welcome-text h2 span {
+  color: #e6a900;
+}
+
+.welcome-text p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #587064;
+}
+
+.name-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.name-form label {
+  font-weight: 800;
+}
+
+.name-form input {
+  border: 2px solid #d9e9dc;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 16px;
+  outline: none;
+}
+
+.name-form input:focus {
+  border-color: var(--green);
+}
+
+.welcome-illustration {
+  background: linear-gradient(180deg, #cceeff 0%, #e9f8d9 65%);
+  min-height: 350px;
+  border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sun {
+  position: absolute;
+  top: 25px;
+  right: 35px;
+  font-size: 65px;
+}
+
+.cloud {
+  position: absolute;
+  font-size: 45px;
+  opacity: .75;
+}
+
+.cloud.one { top: 35px; left: 25px; }
+.cloud.two { top: 90px; left: 150px; }
+
+.sawah {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 43%;
+  background: repeating-linear-gradient(
+    0deg,
+    #8acb75 0px,
+    #8acb75 20px,
+    #72b963 21px,
+    #72b963 25px
+  );
+}
+
+.eco-animals {
+  position: relative;
+  z-index: 2;
+  font-size: 58px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  max-width: 330px;
+  margin-top: 45px;
+}
+
+.eco-animals span {
+  background: rgba(255,255,255,.72);
+  border-radius: 20px;
+  padding: 8px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.eco-animals span:nth-child(2) { animation-delay: .4s; }
+.eco-animals span:nth-child(3) { animation-delay: .8s; }
+.eco-animals span:nth-child(4) { animation-delay: 1.2s; }
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* HOME CARDS */
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.feature-card {
+  padding: 22px;
+  border-radius: 20px;
+  background: #f7fbf4;
+  border: 2px solid #e2f0df;
+  text-align: center;
+  transition: .2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: #a8d5ad;
+}
+
+.feature-card .icon {
+  font-size: 38px;
+}
+
+.feature-card h3 {
+  margin: 10px 0 6px;
+  color: var(--dark-green);
+}
+
+.feature-card p {
+  font-size: 14px;
+  color: #6b8276;
+}
+
+/* MATERIAL */
+.material-layout {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 20px;
+}
+
+.material-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.material-tab {
+  background: #f2f8ef;
+  color: var(--dark-green);
+  text-align: left;
+  padding: 14px;
+  border-radius: 13px;
+  font-weight: 800;
+}
+
+.material-tab.active {
+  background: var(--green);
+  color: white;
+}
+
+.material-content {
+  min-height: 390px;
+}
+
+.material-slide {
+  display: none;
+}
+
+.material-slide.active {
+  display: block;
+  animation: fadeIn .3s;
+}
+
+.material-slide h3 {
+  color: var(--green);
+  font-size: 25px;
+}
+
+.material-slide p,
+.material-slide li {
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.info-box {
+  background: var(--light-green);
+  border-left: 6px solid var(--green);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin: 18px 0;
+}
+
+.chain-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 20px;
+  background: #f8fcf4;
+  border-radius: 18px;
+  margin: 20px 0;
+}
+
+.chain-item {
+  text-align: center;
+  min-width: 70px;
+}
+
+.chain-item .emoji {
+  display: block;
+  font-size: 42px;
+}
+
+.chain-item small {
+  font-weight: 800;
+  font-size: 11px;
+}
+
+.arrow {
+  font-size: 25px;
+  color: var(--green);
+  font-weight: 900;
+}
+
+/* ROLE ACTIVITY */
+.activity-instruction {
+  background: #fff8dc;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.role-question {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f8fcf5;
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+}
+
+.role-emoji {
+  font-size: 65px;
+  background: white;
+  padding: 12px;
+  border-radius: 18px;
+}
+
+.role-question h3 {
+  margin: 0 0 5px;
+  color: var(--dark-green);
+}
+
+.role-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.option-btn {
+  padding: 15px;
+  background: white;
+  border: 2px solid #dcebdd;
+  border-radius: 14px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: left;
+  transition: .2s;
+}
+
+.option-btn:hover {
+  border-color: var(--green);
+  background: #f1faef;
+}
+
+.option-btn.correct {
+  background: #d9f5dc;
+  border-color: #55aa64;
+  color: #277139;
+}
+
+.option-btn.wrong {
+  background: #ffe1e1;
+  border-color: #e77a7a;
+  color: #a44141;
+}
+
+.feedback {
+  padding: 15px;
+  border-radius: 14px;
+  margin-top: 15px;
+  font-weight: 700;
+  display: none;
+}
+
+.feedback.show {
+  display: block;
+}
+
+.feedback.success {
+  background: #dcf6df;
+  color: #28713a;
+}
+
+.feedback.error {
+  background: #fff0db;
+  color: #9b661f;
+}
+
+/* SORTING */
+.sort-area {
+  background: #f5faf1;
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.sort-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  min-height: 100px;
+  padding: 15px;
+  background: white;
+  border: 2px dashed #b8d8b5;
+  border-radius: 15px;
+}
+
+.sort-card {
+  background: #fffdf0;
+  border: 2px solid #eadb8d;
+  border-radius: 14px;
+  padding: 10px;
+  min-width: 85px;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  transition: .2s;
+}
+
+.sort-card:hover {
+  transform: scale(1.05);
+}
+
+.sort-card .emoji {
+  display: block;
+  font-size: 38px;
+}
+
+.sort-card small {
+  font-weight: 800;
+  font-size: 11px;
+}
+
+.drop-zone {
+  min-height: 125px;
+  border: 3px dashed #a9cfa5;
+  background: #ffffff;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px;
+  margin-top: 15px;
+}
+
+.drop-zone.over {
+  background: #e8f7e7;
+  border-color: var(--green);
+}
+
+.drop-placeholder {
+  color: #8aa28e;
+  font-weight: 700;
+  text-align: center;
+}
+
+.sort-result {
+  margin-top: 15px;
+  font-weight: 800;
+}
+
+/* GAME */
+.game-question {
+  background: #eef8ff;
+  border-radius: 18px;
+  padding: 22px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.game-chain {
+  font-size: clamp(28px, 5vw, 45px);
+  margin: 15px 0;
+}
+
+.game-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* QUIZ */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.quiz-counter {
+  background: #eaf5e8;
+  color: var(--dark-green);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 800;
+}
+
+.quiz-progress {
+  height: 10px;
+  background: #e8eee6;
+  border-radius: 20px;
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--yellow);
+  transition: .3s;
+}
+
+.quiz-question {
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.quiz-options {
+  display: grid;
+  gap: 12px;
+}
+
+.quiz-option {
+  padding: 16px;
+  border-radius: 14px;
+  background: #f8fbf6;
+  border: 2px solid #deebdc;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.quiz-option:hover:not(:disabled) {
+  border-color: var(--green);
+  background: #eef9ed;
+}
+
+.quiz-option:disabled {
+  cursor: default;
+}
+
+.quiz-option.correct {
+  background: #d9f5dc;
+  border-color: #54a765;
+}
+
+.quiz-option.wrong {
+  background: #ffe0e0;
+  border-color: #df7777;
+}
+
+.quiz-feedback {
+  display: none;
+  padding: 15px;
+  border-radius: 14px;
+  margin-top: 18px;
+  font-weight: 700;
+}
+
+.quiz-feedback.show {
+  display: block;
+}
+
+.quiz-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 22px;
+  gap: 10px;
+}
+
+/* RESULT */
+.result-box {
+  text-align: center;
+  padding: 35px 20px;
+}
+
+.trophy {
+  font-size: 80px;
+}
+
+.score-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: #eaf7e7;
+  border: 10px solid #86c98c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 20px auto;
+}
+
+.score-circle strong {
+  font-size: 42px;
+  color: var(--dark-green);
+}
+
+.score-circle small {
+  font-weight: 800;
+  color: #668073;
+}
+
+.result-message {
+  font-size: 20px;
+  color: #5d7567;
+  margin-bottom: 25px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progress-box {
+    text-align: left;
+  }
+
+  .welcome {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-illustration {
+    min-height: 280px;
+  }
+
+  .home-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .material-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .material-menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .app {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  nav {
+    gap: 5px;
+  }
+
+  .nav-btn {
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+
+  .home-grid,
+  .role-options,
+  .game-options {
+    grid-template-columns: 1fr;
+  }
+
+  .material-menu {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .role-question {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .chain-display {
+    gap: 3px;
+  }
+
+  .chain-item {
+    min-width: 52px;
+  }
+
+  .chain-item .emoji {
+    font-size: 30px;
+  }
+
+  .arrow {
+    font-size: 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🌿</div>
+    <div>
+      <h1>Petualangan Rantai Makanan</h1>
+      <p>Media Pembelajaran Interaktif • Kelas V SD</p>
+    </div>
+  </div>
+
+  <div class="progress-box">
+    <small>Perjalanan Belajar</small>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="showPage('home', this)">🏠 Beranda</button>
+  <button class="nav-btn" onclick="showPage('materi', this)">📖 Materi</button>
+  <button class="nav-btn" onclick="showPage('peran', this)">🔍 Kenali Peran</button>
+  <button class="nav-btn" onclick="showPage('susun', this)">🔗 Susun Rantai</button>
+  <button class="nav-btn" onclick="showPage('permainan', this)">🎮 Permainan</button>
+  <button class="nav-btn" onclick="showPage('kuis', this)">📝 Kuis</button>
+  <button class="nav-btn" onclick="showPage('hasil', this)">🏆 Hasil Belajar</button>
+</nav>
+
+<!-- BERANDA -->
+<section id="home" class="page active">
+  <div class="card welcome">
+    <div class="welcome-text">
+      <h2>Yuk, Jelajahi<br><span>Rantai Makanan!</span> 🌱</h2>
+      <p>
+        Ayo belajar mengenal hubungan makan dan dimakan
+        antarmakhluk hidup dalam suatu ekosistem.
+        Siapkan semangatmu untuk menjelajah!
+      </p>
+
+      <div class="name-form">
+        <label for="studentName">Nama Siswa</label>
+        <input type="text" id="studentName" placeholder="Tuliskan namamu di sini">
+
+        <label for="studentClass">Kelas</label>
+        <input type="text" id="studentClass" placeholder="Contoh: V">
+      </div>
+
+      <button class="primary-btn" onclick="startLearning()">🚀 Mulai Belajar</button>
+    </div>
+
+    <div class="welcome-illustration">
+      <div class="sun">☀️</div>
+      <div class="cloud one">☁️</div>
+      <div class="cloud two">☁️</div>
+      <div class="eco-animals">
+        <span>🌾</span>
+        <span>🦗</span>
+        <span>🐸</span>
+        <span>🐍</span>
+        <span>🦅</span>
+        <span>🍄</span>
+      </div>
+      <div class="sawah"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Apa yang akan kamu pelajari?</h2>
+    <div class="home-grid">
+      <div class="feature-card">
+        <div class="icon">☀️</div>
+        <h3>Sumber Energi</h3>
+        <p>Mengenal matahari sebagai sumber energi utama.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🌱</div>
+        <h3>Peran Makhluk Hidup</h3>
+        <p>Mengenal produsen, konsumen, dan pengurai.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🔗</div>
+        <h3>Menyusun Rantai</h3>
+        <p>Menyusun urutan rantai makanan dengan tepat.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🎮</div>
+        <h3>Bermain</h3>
+        <p>Menjawab tantangan “Siapa Memakan Siapa?”.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📝</div>
+        <h3>Kuis</h3>
+        <p>Uji pemahamanmu melalui 10 soal.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🏆</div>
+        <h3>Dapatkan Skor</h3>
+        <p>Lihat hasil belajar dan pesan motivasimu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERI -->
+<section id="materi" class="page">
+  <div class="card">
+    <h2 class="section-title">📖 Mari Mengenal Rantai Makanan</h2>
+    <p class="section-subtitle">Klik bagian materi yang ingin kamu pelajari.</p>
+
+    <div class="material-layout">
+      <div class="material-menu">
+        <button class="material-tab active" onclick="showMaterial(0, this)">🔗 Pengertian</button>
+        <button class="material-tab" onclick="showMaterial(1, this)">☀️ Sumber Energi</button>
+        <button class="material-tab" onclick="showMaterial(2, this)">🌱 Produsen</button>
+        <button class="material-tab" onclick="showMaterial(3, this)">🐾 Konsumen</button>
+        <button class="material-tab" onclick="showMaterial(4, this)">🍄 Pengurai</button>
+        <button class="material-tab" onclick="showMaterial(5, this)">🌾 Contoh Rantai</button>
+      </div>
+
+      <div class="material-content">
+
+        <div class="material-slide active">
+          <h3>Apa Itu Rantai Makanan?</h3>
+          <p>
+            Rantai makanan adalah hubungan makan dan dimakan
+            antarmakhluk hidup dalam suatu ekosistem dengan urutan tertentu.
+          </p>
+          <div class="info-box">
+            💡 <strong>Ingat!</strong> Dalam rantai makanan, makhluk hidup
+            saling bergantung untuk mendapatkan energi.
+          </div>
+          <p>
+            Contohnya, belalang memakan rumput, katak memakan belalang,
+            dan ular memakan katak.
+          </p>
+        </div>
+
+        <div class="material-slide">
+          <h3>Matahari: Sumber Energi Utama ☀️</h3>
+          <p>
+            Matahari merupakan sumber energi utama bagi kehidupan di Bumi.
+            Tumbuhan menggunakan cahaya matahari untuk membuat makanan.
+          </p>
+          <div class="info-box">
+            ☀️ Energi mengalir dari matahari → tumbuhan → hewan →
+            makhluk hidup lainnya.
+          </div>
+          <p>
+            Tanpa energi matahari, tumbuhan akan kesulitan membuat makanan
+            dan kehidupan dalam ekosistem dapat terganggu.
+          </p>
+        </div>
+
+        <div class="material-slide">
+          <h3>Produsen 🌱</h3>
+          <p>
+            Produsen adalah makhluk hidup yang dapat membuat makanan sendiri.
+            Contohnya adalah tumbuhan hijau seperti rumput, padi, dan pohon.
+          </p>
+          <div class="info-box">
+            🌿 Tumbuhan disebut produsen karena dapat membuat makanan
+            melalui proses fotosintesis.
+          </div>
+          <p>
+            Dalam rantai makanan, produsen biasanya menjadi sumber makanan
+            bagi konsumen tingkat I.
+          </p>
+        </div>
+
+        <div class="material-slide">
+          <h3>Konsumen 🐾</h3>
+          <p>
+            Konsumen adalah makhluk hidup yang mendapatkan makanan
+            dengan memakan makhluk hidup lain.
+          </p>
+          <ul>
+            <li><strong>Konsumen tingkat I:</strong> memakan tumbuhan, contohnya belalang dan tikus.</li>
+            <li><strong>Konsumen tingkat II:</strong> memakan konsumen tingkat I, contohnya katak.</li>
+            <li><strong>Konsumen tingkat III:</strong> memakan konsumen tingkat II, contohnya ular atau elang.</li>
+          </ul>
+        </div>
+
+        <div class="material-slide">
+          <h3>Pengurai 🍄</h3>
+          <p>
+            Pengurai adalah organisme yang menguraikan sisa-sisa makhluk hidup
+            yang telah mati menjadi zat-zat yang lebih sederhana.
+          </p>
+          <div class="info-box">
+            🍄 Contoh pengurai adalah jamur dan bakteri.
+            Pengurai membantu mengembalikan unsur hara ke dalam tanah.
+          </div>
+          <p>
+            Dengan adanya pengurai, lingkungan menjadi lebih bersih
+            dan unsur hara dapat dimanfaatkan kembali oleh tumbuhan.
+          </p>
+        </div>
+
+        <div class="material-slide">
+          <h3>Contoh Rantai Makanan 🌾</h3>
+          <p>Perhatikan contoh rantai makanan berikut:</p>
+
+          <div class="chain-display">
+            <div class="chain-item"><span class="emoji">☀️</span><small>Matahari</small></div>
+            <span class="arrow">→</span>
+            <div class="chain-item"><span class="emoji">🌾</span><small>Rumput</small></div>
+            <span class="arrow">→</span>
+            <div class="chain-item"><span class="emoji">🦗</span><small>Belalang</small></div>
+            <span class="arrow">→</span>
+            <div class="chain-item"><span class="emoji">🐸</span><small>Katak</small></div>
+            <span class="arrow">→</span>
+            <div class="chain-item"><span class="emoji">🐍</span><small>Ular</small></div>
+            <span class="arrow">→</span>
+            <div class="chain-item"><span class="emoji">🦅</span><small>Elang</small></div>
+          </div>
+
+          <div class="info-box">
+            ➡️ Arah panah menunjukkan aliran energi,
+            yaitu dari makhluk hidup yang dimakan menuju makhluk hidup yang memakan.
+          </div>
+
+          <p><strong>Contoh lain:</strong> 🌿 Padi → 🐭 Tikus → 🐍 Ular → 🦅 Elang → 🍄 Pengurai</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERAN -->
+<section id="peran" class="page">
+  <div class="card">
+    <h2 class="section-title">🔍 Kenali Peran Makhluk Hidup</h2>
+    <p class="section-subtitle">Pilih peran yang tepat untuk setiap makhluk hidup.</p>
+
+    <div class="activity-instruction">
+      💡 <strong>Petunjuk:</strong> Perhatikan makanan yang dimakan oleh makhluk hidup tersebut.
+    </div>
+
+    <div class="role-question">
+      <div class="role-emoji" id="roleEmoji">🌾</div>
+      <div>
+        <h3 id="roleName">Rumput</h3>
+        <p id="roleHint">Rumput dapat membuat makanan sendiri.</p>
+      </div>
+    </div>
+
+    <div class="role-options" id="roleOptions"></div>
+    <div class="feedback" id="roleFeedback"></div>
+
+    <br>
+    <button class="primary-btn" id="nextRoleBtn" onclick="nextRole()" style="display:none">
+      Berikutnya ➜
+    </button>
+  </div>
+</section>
+
+<!-- SUSUN RANTAI -->
+<section id="susun" class="page">
+  <div class="card">
+    <h2 class="section-title">🔗 Susun Rantai Makanan</h2>
+    <p class="section-subtitle">
+      Susun gambar dari sumber energi hingga pengurai.
+    </p>
+
+    <div class="activity-instruction">
+      🖱️ <strong>Petunjuk:</strong> Seret gambar ke kotak urutan.
+      Pada perangkat sentuh, kamu dapat mengetuk gambar untuk memilih,
+      lalu mengetuk kotak urutan.
+    </div>
+
+    <div class="sort-area">
+      <h3>Gambar yang tersedia:</h3>
+      <div class="sort-items" id="availableItems"></div>
+
+      <h3>Urutan rantai makanan:</h3>
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-placeholder" id="dropPlaceholder">
+          Seret gambar ke sini sesuai urutan 🌱
+        </div>
+      </div>
+
+      <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;">
+        <button class="primary-btn" onclick="checkSort()">🔎 Periksa Jawaban</button>
+        <button class="secondary-btn" onclick="resetSort()">🔄 Ulangi</button>
+      </div>
+      <div class="sort-result" id="sortResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PERMAINAN -->
+<section id="permainan" class="page">
+  <div class="card">
+    <h2 class="section-title">🎮 Siapa Memakan Siapa?</h2>
+    <p class="section-subtitle">Jawab pertanyaan berikut dengan tepat.</p>
+
+    <div class="game-question">
+      <h3 id="gameQuestion">Dalam rantai makanan berikut, siapa yang dimakan oleh ular?</h3>
+      <div class="game-chain" id="gameChain">🌾 → 🐭 → 🐍 → 🦅</div>
+    </div>
+
+    <div class="game-options" id="gameOptions"></div>
+    <div class="feedback" id="gameFeedback"></div>
+
+    <br>
+    <button class="primary-btn" id="nextGameBtn" onclick="nextGame()" style="display:none">
+      Tantangan Berikutnya ➜
+    </button>
+  </div>
+</section>
+
+<!-- KUIS -->
+<section id="kuis" class="page">
+  <div class="card">
+    <div class="quiz-header">
+      <h2 class="section-title" style="margin-bottom:0">📝 Kuis Evaluasi</h2>
+      <div class="quiz-counter" id="quizCounter">Soal 1 dari 10</div>
+    </div>
+
+    <div class="quiz-progress">
+      <div class="quiz-progress-fill" id="quizProgressFill"></div>
+    </div>
+
+    <div id="quizContent">
+      <div class="quiz-question" id="quizQuestion"></div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+
+      <div class="quiz-navigation">
+        <button class="secondary-btn" id="prevQuizBtn" onclick="prevQuiz()" disabled>← Sebelumnya</button>
+        <button class="primary-btn" id="nextQuizBtn" onclick="nextQuiz()" disabled>Berikutnya →</button>
+      </div>
+    </div>
+
+    <div id="quizFinished" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- HASIL -->
+<section id="hasil" class="page">
+  <div class="card result-box">
+    <div class="trophy">🏆</div>
+    <h2 class="section-title">Hasil Belajarmu</h2>
+    <p id="resultStudent">Tetap semangat belajar!</p>
+
+    <div class="score-circle">
+      <strong id="finalScore">0</strong>
+      <small>Nilai</small>
+    </div>
+
+    <h3 id="resultCategory" style="color:var(--green);"></h3>
+    <p class="result-message" id="resultMessage"></p>
+    <p id="resultCorrect"></p>
+
+    <button class="primary-btn" onclick="restartQuiz()">🔄 Coba Kuis Lagi</button>
+    <button class="secondary-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+      🏠 Kembali ke Beranda
+    </button>
+  </div>
+</section>
+
+</div>
+
+<script>
+// =============================
+// DATA DAN VARIABEL
+// =============================
+
+let studentName = "";
+let studentClass = "";
+let completedPages = new Set();
+
+const roleData = [
+  {
+    emoji: "🌾",
+    name: "Rumput",
+    hint: "Rumput dapat membuat makanan sendiri.",
+    answer: "Produsen",
+    explanation: "Hebat! Rumput termasuk produsen karena dapat membuat makanan sendiri."
+  },
+  {
+    emoji: "🦗",
+    name: "Belalang",
+    hint: "Belalang memakan tumbuhan seperti rumput.",
+    answer: "Konsumen Tingkat I",
+    explanation: "Benar! Belalang termasuk konsumen tingkat I karena memakan tumbuhan."
+  },
+  {
+    emoji: "🐸",
+    name: "Katak",
+    hint: "Katak memakan belalang.",
+    answer: "Konsumen Tingkat II",
+    explanation: "Tepat! Katak termasuk konsumen tingkat II karena memakan konsumen tingkat I."
+  },
+  {
+    emoji: "🐍",
+    name: "Ular",
+    hint: "Ular dapat memakan katak atau tikus.",
+    answer: "Konsumen Tingkat III",
+    explanation: "Benar! Ular dapat menjadi konsumen tingkat III dalam contoh rantai makanan ini."
+  },
+  {
+    emoji: "🍄",
+    name: "Jamur",
+    hint: "Jamur menguraikan sisa makhluk hidup.",
+    answer: "Pengurai",
+    explanation: "Hebat! Jamur termasuk pengurai yang membantu menguraikan sisa makhluk hidup."
+  }
+];
+
+const roleOptions = [
+  "Produsen",
+  "Konsumen Tingkat I",
+  "Konsumen Tingkat II",
+  "Konsumen Tingkat III",
+  "Pengurai"
+];
+
+let roleIndex = 0;
+let roleAnswered = false;
+
+const sortData = [
+  { id: "sun", emoji: "☀️", name: "Matahari" },
+  { id: "grass", emoji: "🌾", name: "Rumput" },
+  { id: "grasshopper", emoji: "🦗", name: "Belalang" },
+  { id: "frog", emoji: "🐸", name: "Katak" },
+  { id: "snake", emoji: "🐍", name: "Ular" },
+  { id: "eagle", emoji: "🦅", name: "Elang" },
+  { id: "mushroom", emoji: "🍄", name: "Pengurai" }
+];
+
+let selectedSortItem = null;
+
+const gameData = [
+  {
+    question: "Dalam rantai makanan padi → tikus → ular → elang, siapa yang dimakan oleh ular?",
+    chain: "🌾 → 🐭 → 🐍 → 🦅",
+    options: ["Padi", "Tikus", "Elang", "Pengurai"],
+    answer: "Tikus",
+    explanation: "Benar! Ular memakan tikus dalam rantai makanan tersebut."
+  },
+  {
+    question: "Dalam rantai makanan rumput → belalang → katak → ular, siapa yang dimakan oleh katak?",
+    chain: "🌾 → 🦗 → 🐸 → 🐍",
+    options: ["Rumput", "Belalang", "Ular", "Elang"],
+    answer: "Belalang",
+    explanation: "Tepat! Katak memakan belalang."
+  },
+  {
+    question: "Siapakah yang menjadi produsen dalam rantai makanan berikut?",
+    chain: "☀️ → 🌿 → 🐭 → 🐍",
+    options: ["Tikus", "Ular", "Tumbuhan", "Matahari"],
+    answer: "Tumbuhan",
+    explanation: "Benar! Tumbuhan merupakan produsen karena dapat membuat makanan sendiri."
+  },
+  {
+    question: "Jika jumlah belalang berkurang drastis, makhluk hidup yang mungkin kekurangan makanan adalah ...",
+    chain: "🌾 → 🦗 → 🐸 → 🐍",
+    options: ["Rumput", "Katak", "Matahari", "Pengurai"],
+    answer: "Katak",
+    explanation: "Benar! Katak memakan belalang sehingga dapat kekurangan makanan."
+  }
+];
+
+let gameIndex = 0;
+let gameAnswered = false;
+
+const quizData = [
+  {
+    q: "Apa yang dimaksud dengan rantai makanan?",
+    options: [
+      "Hubungan tempat tinggal makhluk hidup",
+      "Hubungan makan dan dimakan antarmakhluk hidup",
+      "Kumpulan tumbuhan di suatu tempat",
+      "Perubahan cuaca dalam ekosistem"
+    ],
+    answer: 1,
+    explanation: "Rantai makanan adalah hubungan makan dan dimakan antarmakhluk hidup dalam suatu ekosistem."
+  },
+  {
+    q: "Sumber energi utama bagi kehidupan di Bumi adalah ...",
+    options: ["Bulan", "Angin", "Matahari", "Tanah"],
+    answer: 2,
+    explanation: "Matahari merupakan sumber energi utama bagi kehidupan di Bumi."
+  },
+  {
+    q: "Makhluk hidup yang dapat membuat makanan sendiri disebut ...",
+    options: ["Konsumen", "Pengurai", "Produsen", "Predator"],
+    answer: 2,
+    explanation: "Produsen adalah makhluk hidup yang dapat membuat makanan sendiri."
+  },
+  {
+    q: "Contoh makhluk hidup yang termasuk produsen adalah ...",
+    options: ["Rumput", "Katak", "Ular", "Elang"],
+    answer: 0,
+    explanation: "Rumput merupakan tumbuhan yang dapat membuat makanan sendiri."
+  },
+  {
+    q: "Hewan pemakan tumbuhan disebut ...",
+    options: ["Karnivor", "Herbivor", "Omnivor", "Pengurai"],
+    answer: 1,
+    explanation: "Herbivor adalah hewan pemakan tumbuhan."
+  },
+  {
+    q: "Perhatikan rantai makanan: rumput → belalang → katak → ular. Belalang berperan sebagai ...",
+    options: [
+      "Produsen",
+      "Konsumen tingkat I",
+      "Konsumen tingkat II",
+      "Pengurai"
+    ],
+    answer: 1,
+    explanation: "Belalang memakan rumput sehingga termasuk konsumen tingkat I."
+  },
+  {
+    q: "Dalam rantai makanan rumput → belalang → katak → ular, katak berperan sebagai ...",
+    options: [
+      "Produsen",
+      "Konsumen tingkat I",
+      "Konsumen tingkat II",
+      "Pengurai"
+    ],
+    answer: 2,
+    explanation: "Katak memakan belalang sehingga termasuk konsumen tingkat II."
+  },
+  {
+    q: "Organisme yang menguraikan sisa makhluk hidup disebut ...",
+    options: ["Produsen", "Konsumen", "Pengurai", "Herbivor"],
+    answer: 2,
+    explanation: "Pengurai, seperti jamur dan bakteri, menguraikan sisa makhluk hidup."
+  },
+  {
+    q: "Arah panah dalam rantai makanan menunjukkan ...",
+    options: [
+      "Arah gerak hewan",
+      "Aliran energi",
+      "Arah angin",
+      "Tempat tinggal hewan"
+    ],
+    answer: 1,
+    explanation: "Arah panah menunjukkan aliran energi dari makhluk hidup yang dimakan menuju makhluk hidup yang memakan."
+  },
+  {
+    q: "Perhatikan rantai makanan: padi → tikus → ular → elang. Jika jumlah tikus berkurang, kemungkinan yang terjadi adalah ...",
+    options: [
+      "Ular kekurangan makanan",
+      "Padi langsung menghilang",
+      "Matahari menjadi lebih redup",
+      "Elang berubah menjadi produsen"
+    ],
+    answer: 0,
+    explanation: "Ular memakan tikus, sehingga berkurangnya tikus dapat menyebabkan ular kekurangan makanan."
+  }
+];
+
+let quizIndex = 0;
+let quizAnswers = Array(quizData.length).fill(null);
+let quizScore = 0;
+
+// =============================
+// NAVIGASI
+// =============================
+
+function showPage(pageId, button = null) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
+
+  const target = document.getElementById(pageId);
+  if (target) target.classList.add("active");
+
+  if (button) {
+    document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
+  }
+
+  completedPages.add(pageId);
+  updateProgress();
+
+  if (pageId === "peran") loadRole();
+  if (pageId === "susun") resetSort();
+  if (pageId === "permainan") loadGame();
+  if (pageId === "kuis") loadQuiz();
+  if (pageId === "hasil") updateResult();
+}
+
+function updateProgress() {
+  const total = 6;
+  const pages = ["materi", "peran", "susun", "permainan", "kuis", "hasil"];
+  let count = pages.filter(p => completedPages.has(p)).length;
+  document.getElementById("progressFill").style.width = (count / total * 100) + "%";
+}
+
+function startLearning() {
+  studentName = document.getElementById("studentName").value.trim() || "Petualang";
+  studentClass = document.getElementById("studentClass").value.trim() || "V";
+  alert("Selamat datang, " + studentName + "! Yuk mulai petualangan belajar!");
+  showPage("materi", document.querySelectorAll(".nav-btn")[1]);
+}
+
+// =============================
+// MATERI
+// =============================
+
+function showMaterial(index, button) {
+  document.querySelectorAll(".material-slide").forEach(slide => {
+    slide.classList.remove("active");
+  });
+
+  document.querySelectorAll(".material-tab").forEach(tab => {
+    tab.classList.remove("active");
+  });
+
+  document.querySelectorAll(".material-slide")[index].classList.add("active");
+  button.classList.add("active");
+}
+
+// =============================
+// AKTIVITAS PERAN
+// =============================
+
+function loadRole() {
+  const data = roleData[roleIndex];
+  roleAnswered = false;
+
+  document.getElementById("roleEmoji").textContent = data.emoji;
+  document.getElementById("roleName").textContent = data.name;
+  document.getElementById("roleHint").textContent = data.hint;
+  document.getElementById("roleFeedback").className = "feedback";
+  document.getElementById("roleFeedback").textContent = "";
+  document.getElementById("nextRoleBtn").style.display = "none";
+
+  const optionsContainer = document.getElementById("roleOptions");
+  optionsContainer.innerHTML = "";
+
+  roleOptions.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = option;
+    btn.onclick = () => checkRole(option, btn);
+    optionsContainer.appendChild(btn);
+  });
+}
+
+function checkRole(selected, button) {
+  if (roleAnswered) return;
+
+  roleAnswered = true;
+  const data = roleData[roleIndex];
+  const feedback = document.getElementById("roleFeedback");
+
+  document.querySelectorAll("#roleOptions .option-btn").forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === data.answer) btn.classList.add("correct");
+  });
+
+  if (selected === data.answer) {
+    button.classList.add("correct");
+    feedback.className = "feedback show success";
+    feedback.textContent = "✅ " + data.explanation;
+  } else {
+    button.classList.add("wrong");
+    feedback.className = "feedback show error";
+    feedback.textContent = "💡 Belum tepat. Jawaban yang benar adalah " + data.answer + ". " + data.explanation;
+  }
+
+  document.getElementById("nextRoleBtn").style.display = "inline-block";
+}
+
+function nextRole() {
+  roleIndex = (roleIndex + 1) % roleData.length;
+  loadRole();
+}
+
+// =============================
+// SUSUN RANTAI MAKANAN
+// =============================
+
+function createSortCard(item, inDropZone = false) {
+  const div = document.createElement("div");
+  div.className = "sort-card";
+  div.draggable = true;
+  div.dataset.id = item.id;
+  div.innerHTML = `<span class="emoji">${item.emoji}</span><small>${item.name}</small>`;
+
+  div.addEventListener("dragstart", e => {
+    e.dataTransfer.setData("text/plain", item.id);
+  });
+
+  div.addEventListener("click", () => {
+    selectedSortItem = item.id;
+    document.querySelectorAll(".sort-card").forEach(card => card.style.outline = "none");
+    div.style.outline = "3px solid #3f8f63";
+  });
+
+  return div;
+}
+
+function resetSort() {
+  const available = document.getElementById("availableItems");
+  const dropZone = document.getElementById("dropZone");
+
+  available.innerHTML = "";
+  dropZone.innerHTML = '<div class="drop-placeholder" id="dropPlaceholder">Seret gambar ke sini sesuai urutan 🌱</div>';
+
+  sortData.slice().sort(() => Math.random() - .5).forEach(item => {
+    available.appendChild(createSortCard(item));
+  });
+
+  document.getElementById("sortResult").textContent = "";
+  selectedSortItem = null;
+}
+
+const dropZone = document.getElementById("dropZone");
+
+dropZone.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropZone.classList.add("over");
+});
+
+dropZone.addEventListener("dragleave", () => {
+  dropZone.classList.remove("over");
+});
+
+dropZone.addEventListener("drop", e => {
+  e.preventDefault();
+  dropZone.classList.remove("over");
+
+  const id = e.dataTransfer.getData("text/plain");
+  moveToDropZone(id);
+});
+
+dropZone.addEventListener("click", () => {
+  if (selectedSortItem) {
+    moveToDropZone(selectedSortItem);
+    selectedSortItem = null;
+  }
+});
+
+function moveToDropZone(id) {
+  const item = sortData.find(x => x.id === id);
+  if (!item) return;
+
+  const existing = document.querySelector(`#dropZone .sort-card[data-id="${id}"]`);
+  if (existing) return;
+
+  const card = createSortCard(item, true);
+  document.getElementById("dropZone").appendChild(card);
+
+  const availableCard = document.querySelector(`#availableItems .sort-card[data-id="${id}"]`);
+  if (availableCard) availableCard.remove();
+
+  const placeholder = document.getElementById("dropPlaceholder");
+  if (placeholder) placeholder.remove();
+}
+
+function checkSort() {
+  const cards = [...document.querySelectorAll("#dropZone .sort-card")];
+  const answer = cards.map(card => card.dataset.id);
+  const correct = sortData.map(item => item.id);
+  const result = document.getElementById("sortResult");
+
+  if (answer.length !== correct.length) {
+    result.style.color = "#9b661f";
+    result.textContent = "💡 Susun semua gambar terlebih dahulu, ya!";
+    return;
+  }
+
+  if (JSON.stringify(answer) === JSON.stringify(correct)) {
+    result.style.color = "#28713a";
+    result.textContent = "🎉 Hebat! Urutan rantai makananmu sudah benar!";
+  } else {
+    result.style.color = "#9b661f";
+    result.textContent = "💡 Belum tepat. Ingat, urutannya dimulai dari matahari, tumbuhan, hewan, lalu pengurai.";
+  }
+}
+
+// =============================
+// PERMAINAN
+// =============================
+
+function loadGame() {
+  const data = gameData[gameIndex];
+  gameAnswered = false;
+
+  document.getElementById("gameQuestion").textContent = data.question;
+  document.getElementById("gameChain").textContent = data.chain;
+  document.getElementById("gameFeedback").className = "feedback";
+  document.getElementById("gameFeedback").textContent = "";
+  document.getElementById("nextGameBtn").style.display = "none";
+
+  const container = document.getElementById("gameOptions");
+  container.innerHTML = "";
+
+  data.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = option;
+    btn.onclick = () => checkGame(option, btn);
+    container.appendChild(btn);
+  });
+}
+
+function checkGame(selected, button) {
+  if (gameAnswered) return;
+
+  gameAnswered = true;
+  const data = gameData[gameIndex];
+  const feedback = document.getElementById("gameFeedback");
+
+  document.querySelectorAll("#gameOptions .option-btn").forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === data.answer) btn.classList.add("correct");
+  });
+
+  if (selected === data.answer) {
+    button.classList.add("correct");
+    feedback.className = "feedback show success";
+    feedback.textContent = "✅ " + data.explanation;
+  } else {
+    button.classList.add("wrong");
+    feedback.className = "feedback show error";
+    feedback.textContent = "💡 Jawaban yang benar adalah " + data.answer + ". " + data.explanation;
+  }
+
+  document.getElementById("nextGameBtn").style.display = "inline-block";
+}
+
+function nextGame() {
+  gameIndex = (gameIndex + 1) % gameData.length;
+  loadGame();
+}
+
+// =============================
+// KUIS
+// =============================
+
+function loadQuiz() {
+  if (quizIndex >= quizData.length) {
+    showQuizFinished();
+    return;
+  }
+
+  const data = quizData[quizIndex];
+  const savedAnswer = quizAnswers[quizIndex];
+
+  document.getElementById("quizCounter").textContent =
+    `Soal ${quizIndex + 1} dari ${quizData.length}`;
+
+  document.getElementById("quizProgressFill").style.width =
+    ((quizIndex + 1) / quizData.length * 100) + "%";
+
+  document.getElementById("quizQuestion").textContent =
+    `${quizIndex + 1}. ${data.q}`;
+
+  const optionsContainer = document.getElementById("quizOptions");
+  optionsContainer.innerHTML = "";
+
+  data.options.forEach((option, index) => {
+    const btn = document.createElement("button");
+    btn.className = "quiz-option";
+    btn.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+    btn.onclick = () => selectQuizAnswer(index);
+
+    if (savedAnswer !== null) {
+      btn.disabled = true;
+      if (index === data.answer) btn.classList.add("correct");
+      if (index === savedAnswer && savedAnswer !== data.answer) btn.classList.add("wrong");
+    }
+
+    optionsContainer.appendChild(btn);
+  });
+
+  const feedback = document.getElementById("quizFeedback");
+
+  if (savedAnswer !== null) {
+    feedback.className = "quiz-feedback show " +
+      (savedAnswer === data.answer ? "feedback success" : "feedback error");
+    feedback.textContent = savedAnswer === data.answer
+      ? "✅ Benar! " + data.explanation
+      : "💡 Belum tepat. " + data.explanation;
+  } else {
+    feedback.className = "quiz-feedback";
+    feedback.textContent = "";
+  }
+
+  document.getElementById("prevQuizBtn").disabled = quizIndex === 0;
+  document.getElementById("nextQuizBtn").disabled = savedAnswer === null;
+  document.getElementById("nextQuizBtn").textContent =
+    quizIndex === quizData.length - 1 ? "Selesai 🏆" : "Berikutnya →";
+}
+
+function selectQuizAnswer(index) {
+  if (quizAnswers[quizIndex] !== null) return;
+
+  quizAnswers[quizIndex] = index;
+  const data = quizData[quizIndex];
+  const feedback = document.getElementById("quizFeedback");
+
+  document.querySelectorAll(".quiz-option").forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === data.answer) btn.classList.add("correct");
+    if (i === index && index !== data.answer) btn.classList.add("wrong");
+  });
+
+  if (index === data.answer) {
+    feedback.className = "quiz-feedback show feedback success";
+    feedback.textContent = "✅ Jawabanmu benar! " + data.explanation;
+  } else {
+    feedback.className = "quiz-feedback show feedback error";
+    feedback.textContent = "💡 Belum tepat. " + data.explanation;
+  }
+
+  document.getElementById("nextQuizBtn").disabled = false;
+}
+
+function nextQuiz() {
+  if (quizIndex < quizData.length - 1) {
+    quizIndex++;
+    loadQuiz();
+  } else {
+    showQuizFinished();
+  }
+}
+
+function prevQuiz() {
+  if (quizIndex > 0) {
+    quizIndex--;
+    loadQuiz();
+  }
+}
+
+function showQuizFinished() {
+  quizScore = quizAnswers.reduce((total, answer, index) => {
+    return total + (answer === quizData[index].answer ? 1 : 0);
+  }, 0);
+
+  const score = quizScore * 10;
+
+  document.getElementById("quizContent").style.display = "none";
+  document.getElementById("quizFinished").style.display = "block";
+  document.getElementById("quizFinished").innerHTML = `
+    <div class="result-box">
+      <div class="trophy">🎉</div>
+      <h2>Kuis Selesai!</h2>
+      <p>Kamu menjawab <strong>${quizScore} dari ${quizData.length}</strong> soal dengan benar.</p>
+      <div class="score-circle">
+        <strong>${score}</strong>
+        <small>Nilai</small>
+      </div>
+      <button class="primary-btn" onclick="showPage('hasil', document.querySelectorAll('.nav-btn')[6])">
+        🏆 Lihat Hasil Belajar
+      </button>
+    </div>
+  `;
+}
+
+function restartQuiz() {
+  quizIndex = 0;
+  quizAnswers = Array(quizData.length).fill(null);
+  quizScore = 0;
+
+  document.getElementById("quizContent").style.display = "block";
+  document.getElementById("quizFinished").style.display = "none";
+
+  showPage("kuis", document.querySelectorAll(".nav-btn")[5]);
+}
+
+// =============================
+// HASIL BELAJAR
+// =============================
+
+function updateResult() {
+  const score = quizScore * 10;
+  const name = studentName || "Petualang";
+
+  document.getElementById("resultStudent").textContent =
+    `Nama: ${name} • Kelas: ${studentClass || "V"}`;
+
+  document.getElementById("finalScore").textContent = score;
+  document.getElementById("resultCorrect").textContent =
+    `Jawaban benar: ${quizScore} dari ${quizData.length} soal`;
+
+  let category = "";
+  let message = "";
+
+  if (score >= 90) {
+    category = "🌟 Sangat Baik!";
+    message = "Luar biasa! Kamu sudah memahami rantai makanan dengan sangat baik.";
+  } else if (score >= 75) {
+    category = "👏 Baik!";
+    message = "Bagus! Terus pertahankan semangat belajarmu.";
+  } else if (score >= 60) {
+    category = "🌱 Cukup, ayo belajar lagi!";
+    message = "Kamu sudah berusaha. Pelajari kembali materi yang belum dipahami.";
+  } else {
+    category = "💪 Tetap semangat!";
+    message = "Jangan menyerah! Ulangi materi dan coba kuis sekali lagi.";
+  }
+
+  document.getElementById("resultCategory").textContent = category;
+  document.getElementById("resultMessage").textContent = message;
+}
+
+// Inisialisasi
+loadRole();
+loadGame();
+loadQuiz();
+</script>
+
+</body>
+</html>
