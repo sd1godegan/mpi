@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detektif Ide Pokok - MPI Bahasa Indonesia Kelas 4</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Comic Sans MS', 'Segoe UI', sans-serif; }
+  
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    min-height: 100vh;
+    color: #333;
+    overflow-x: hidden;
+  }
+  
+  .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+  
+  /* HEADER */
+  header {
+    background: linear-gradient(90deg, #ff9a56, #ff6b9d, #c86dd7);
+    padding: 25px;
+    border-radius: 25px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  header h1 { font-size: 2.2em; text-shadow: 3px 3px 0 rgba(0,0,0,0.2); }
+  header p { font-size: 1.1em; margin-top: 8px; }
+  .magnifier { font-size: 2em; animation: wiggle 2s infinite; }
+  @keyframes wiggle { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
+  
+  /* NAVIGATION */
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+  nav button {
+    background: white;
+    border: 3px solid transparent;
+    padding: 12px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    color: #764ba2;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  nav button:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+  nav button.active {
+    background: linear-gradient(90deg, #ff9a56, #ff6b9d);
+    color: white;
+    transform: scale(1.05);
+  }
+  
+  /* SECTIONS */
+  section { display: none; animation: fadeIn 0.5s; }
+  section.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  
+  .card {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-top: 8px solid #ff6b9d;
+  }
+  .card h2 {
+    color: #764ba2;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card h3 { color: #ff6b9d; margin: 15px 0 10px; font-size: 1.3em; }
+  .card p, .card li { line-height: 1.8; font-size: 1.05em; margin-bottom: 8px; }
+  .card ul, .card ol { padding-left: 30px; }
+  
+  /* HIGHLIGHT BOXES */
+  .highlight {
+    background: linear-gradient(135deg, #fff5e1, #ffe8cc);
+    border-left: 6px solid #ff9a56;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    font-size: 1.05em;
+  }
+  .example-box {
+    background: #e8f5ff;
+    border-left: 6px solid #4a90e2;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+  }
+  .example-box .ide-pokok {
+    background: #ffe066;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #6a4c00;
+  }
+  .tip-box {
+    background: linear-gradient(135deg, #e0ffe0, #c8ffc8);
+    border-left: 6px solid #38b000;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    font-size: 1.05em;
+  }
+  
+  /* CARD INTERACTIVE */
+  .interactive-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+  .flip-card {
+    background: linear-gradient(135deg, #ff9a56, #ff6b9d);
+    color: white;
+    padding: 25px 15px;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  }
+  .flip-card:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+  .flip-card.flipped {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    transform: rotateY(360deg);
+  }
+  .flip-card .icon { font-size: 2.5em; margin-bottom: 10px; }
+  .flip-card .content { font-size: 0.95em; line-height: 1.5; }
+  
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  th, td { padding: 12px 15px; text-align: left; }
+  th { background: linear-gradient(90deg, #764ba2, #ff6b9d); color: white; font-size: 1.05em; }
+  tr:nth-child(even) { background: #f9f4ff; }
+  tr:nth-child(odd) { background: #fff; }
+  
+  /* BUTTONS */
+  .btn {
+    background: linear-gradient(90deg, #ff9a56, #ff6b9d);
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 30px;
+    font-size: 1.05em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(255,107,157,0.4);
+    margin: 5px;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,107,157,0.5); }
+  .btn:active { transform: translateY(0); }
+  .btn-green { background: linear-gradient(90deg, #38b000, #70e000); box-shadow: 0 5px 15px rgba(56,176,0,0.4); }
+  .btn-blue { background: linear-gradient(90deg, #4a90e2, #667eea); box-shadow: 0 5px 15px rgba(74,144,226,0.4); }
+  
+  /* QUIZ */
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 15px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 200px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38b000, #70e000);
+    width: 0%;
+    transition: width 0.4s;
+  }
+  .score-badge {
+    background: linear-gradient(90deg, #ffd60a, #ff9a56);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(255,154,86,0.4);
+  }
+  
+  .question {
+    background: #f9f4ff;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border-left: 6px solid #764ba2;
+  }
+  .question h3 { color: #764ba2; margin-bottom: 15px; }
+  .question p.passage {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+    font-style: italic;
+    border: 2px dashed #ff9a56;
+    line-height: 1.7;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+  .option {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 3px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1em;
+    text-align: left;
+  }
+  .option:hover { border-color: #ff9a56; transform: translateX(5px); }
+  .option.correct { background: #d4ffd4; border-color: #38b000; animation: pulse 0.5s; }
+  .option.wrong { background: #ffd4d4; border-color: #e63946; }
+  .option.disabled { cursor: not-allowed; opacity: 0.7; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+  
+  .feedback {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: bold;
+    display: none;
+  }
+  .feedback.show { display: block; animation: fadeIn 0.4s; }
+  .feedback.correct { background: #d4ffd4; color: #1b5e20; border-left: 6px solid #38b000; }
+  .feedback.wrong { background: #ffd4d4; color: #b71c1c; border-left: 6px solid #e63946; }
+  
+  /* RESULT */
+  .result-screen {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .result-screen .badge { font-size: 6em; animation: bounce 1s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+  .result-screen h2 { font-size: 2.5em; color: #764ba2; margin: 20px 0; }
+  .result-screen .final-score {
+    font-size: 4em;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff9a56, #ff6b9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* GAME */
+  .game-container {
+    background: linear-gradient(135deg, #fff5e1, #ffe8cc);
+    padding: 25px;
+    border-radius: 20px;
+    margin: 20px 0;
+  }
+  .game-sentence {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin: 10px 0;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+  }
+  .game-sentence:hover { border-color: #ff9a56; transform: translateX(5px); }
+  .game-sentence.selected-correct { background: #d4ffd4; border-color: #38b000; }
+  .game-sentence.selected-wrong { background: #ffd4d4; border-color: #e63946; }
+  
+  .drop-zones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  .drop-zone {
+    background: white;
+    border: 4px dashed #764ba2;
+    border-radius: 15px;
+    min-height: 200px;
+    padding: 15px;
+  }
+  .drop-zone h4 { color: #764ba2; text-align: center; margin-bottom: 15px; }
+  .drag-item {
+    background: linear-gradient(90deg, #ff9a56, #ff6b9d);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 8px 0;
+    cursor: grab;
+    font-size: 0.95em;
+  }
+  .drag-item:active { cursor: grabbing; }
+  .drag-item.dropped { opacity: 0.5; cursor: default; }
+  
+  /* REFLECTION */
+  .reflection textarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 3px solid #e0e0e0;
+    font-size: 1em;
+    font-family: inherit;
+    min-height: 80px;
+    resize: vertical;
+  }
+  .reflection textarea:focus { border-color: #ff9a56; outline: none; }
+  .emoji-check { display: flex; gap: 20px; justify-content: center; margin: 20px 0; }
+  .emoji-check span {
+    font-size: 3em;
+    cursor: pointer;
+    transition: all 0.3s;
+    filter: grayscale(1);
+  }
+  .emoji-check span:hover, .emoji-check span.selected { filter: grayscale(0); transform: scale(1.2); }
+  
+  /* FOOTER */
+  footer {
+    text-align: center;
+    color: white;
+    padding: 20px;
+    font-size: 0.95em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
+  
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.5em; }
+    .card { padding: 20px; }
+    .drop-zones { grid-template-columns: 1fr; }
+    nav button { padding: 8px 14px; font-size: 0.9em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="magnifier">🕵️‍♂️🔍</div>
+    <h1>DETEKTIF IDE POKOK</h1>
+    <p>MPI Bahasa Indonesia Kelas 4 SD — Ayo temukan petunjuk dalam paragraf!</p>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <button class="nav-btn active" data-target="home">🏠 Home</button>
+    <button class="nav-btn" data-target="tujuan">🎯 Tujuan</button>
+    <button class="nav-btn" data-target="materi">📚 Materi</button>
+    <button class="nav-btn" data-target="latihan">🎮 Latihan</button>
+    <button class="nav-btn" data-target="kuis">📝 Kuis</button>
+    <button class="nav-btn" data-target="refleksi">🔄 Refleksi</button>
+  </nav>
+
+  <!-- HOME -->
+  <section id="home" class="active">
+    <div class="card" style="text-align:center;">
+      <h2 style="justify-content:center;">👋 Selamat Datang, Detektif Cilik!</h2>
+      <p style="font-size:1.15em; margin: 15px 0;">Hari ini kamu akan belajar <b>IDE POKOK</b> — inti rahasia dalam setiap paragraf.</p>
+      <p style="font-size:1.05em;">Tugasmu: menemukan "harta karun" berupa gagasan utama yang tersembunyi di balik kalimat-kalimat.</p>
+      <div class="highlight" style="text-align:left; margin-top:20px;">
+        <b>🎁 Yang akan kamu dapatkan:</b>
+        <ul>
+          <li>📖 Materi lengkap tentang ide pokok & ide pendukung</li>
+          <li>🎬 Video animasi pembelajaran</li>
+          <li>🎮 4 game interaktif seru</li>
+          <li>📝 20 soal kuis dengan skor otomatis</li>
+          <li>🏆 Badge Detektif Senior!</li>
+        </ul>
+      </div>
+      <button class="btn" style="font-size:1.2em; margin-top:20px;" onclick="goTo('tujuan')">🚀 MULAI PETUALANGAN!</button>
+    </div>
+  </section>
+
+  <!-- TUJUAN -->
+  <section id="tujuan">
+    <div class="card">
+      <h2>🎯 Tujuan Pembelajaran</h2>
+      <p>Setelah belajar, kamu diharapkan bisa:</p>
+      <div class="interactive-cards">
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🧠</div>
+          <div class="content">Menjelaskan pengertian ide pokok</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🔍</div>
+          <div class="content">Menemukan ide pokok dalam paragraf</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">⭐</div>
+          <div class="content">Membedakan ide pokok & ide pendukung</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">✍️</div>
+          <div class="content">Menuliskan ide pokok dengan bahasa sendiri</div>
+        </div>
+      </div>
+      <p style="text-align:center; color:#764ba2; font-style:italic; margin-top:15px;">👆 Klik kartu untuk membalik!</p>
+    </div>
+  </section>
+
+  <!-- MATERI -->
+  <section id="materi">
+    <div class="card">
+      <h2>📚 Materi 1: Apa Itu Ide Pokok?</h2>
+      <div class="highlight">
+        <b>📌 Definisi:</b><br>
+        <b>Ide pokok</b> adalah <b>gagasan utama</b> yang menjadi <b>inti pembicaraan</b> dalam sebuah paragraf.
+      </div>
+      <p><b>🎯 Analogi mudah:</b></p>
+      <p>Bayangkan paragraf itu seperti <b>buah mangga</b> 🥭</p>
+      <ul>
+        <li><b>Ide pokok</b> = daging buahnya (isi utama)</li>
+        <li><b>Ide pendukung</b> = kulit & biji (pelengkap)</li>
+      </ul>
+      <div class="tip-box">
+        💡 <b>Kalimat kunci:</b> "Ide pokok itu seperti JUDUL tersembunyi di dalam paragraf."
+      </div>
+      <h3>Contoh:</h3>
+      <div class="example-box">
+        <p><span class="ide-pokok">Aku sangat menyayangi kucingku, Si Belang.</span> Setiap pagi aku memberinya makan. Aku juga memandikannya setiap minggu. Si Belang selalu tidur di samping tempat tidurku.</p>
+        <p><b>Ide Pokok:</b> Aku sangat menyayangi kucingku, Si Belang.</p>
+        <p><b>Ide Pendukung:</b> Memberi makan, memandikan, tidur di samping tempat tidur.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Materi 2: Ciri-Ciri Ide Pokok</h2>
+      <p>👆 Klik setiap kartu untuk melihat penjelasannya!</p>
+      <div class="interactive-cards">
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🎯</div>
+          <div class="content"><b>Inti Paragraf</b><br>Kalau ide pokok dihapus, paragraf jadi tidak jelas.</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🌐</div>
+          <div class="content"><b>Kalimat Umum</b><br>Tidak menyebut hal-hal kecil/rinci.</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">🔗</div>
+          <div class="content"><b>Dijelaskan Kalimat Lain</b><br>Semua kalimat lain menopang ide pokok.</div>
+        </div>
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="icon">1️⃣</div>
+          <div class="content"><b>Hanya Satu per Paragraf</b><br>Tidak boleh ada dua ide pokok!</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        🎵 <b>Jingle menghafal:</b><br>
+        "Inti, umum, dijelaskan, satu saja — itulah ide pokok, ayo cari sekarang juga!"
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Materi 3: Letak Kalimat Utama</h2>
+      <table>
+        <tr><th>Jenis</th><th>Letak</th><th>Contoh Posisi</th></tr>
+        <tr><td><b>Deduktif</b> ⬇️</td><td>Awal paragraf</td><td>Kalimat pertama</td></tr>
+        <tr><td><b>Induktif</b> ⬆️</td><td>Akhir paragraf</td><td>Kalimat terakhir</td></tr>
+        <tr><td><b>Campuran</b> ↕️</td><td>Awal + Akhir</td><td>Kalimat pertama & terakhir</td></tr>
+      </table>
+      
+      <h3>Contoh DEDUKTIF:</h3>
+      <div class="example-box">
+        <p><span class="ide-pokok">Olahraga sangat penting bagi kesehatan.</span> Dengan olahraga, tubuh menjadi kuat. Olahraga juga membuat pikiran segar. Selain itu, olahraga mencegah penyakit.</p>
+        <p>✅ Ide pokok di <b>AWAL</b>.</p>
+      </div>
+      
+      <h3>Contoh INDUKTIF:</h3>
+      <div class="example-box">
+        <p>Pagi ini aku membantu ibu menyapu. Siangnya aku membantu ayah mencuci mobil. Sore aku merapikan mainan. <span class="ide-pokok">Aku senang membantu orang tuaku.</span></p>
+        <p>✅ Ide pokok di <b>AKHIR</b>.</p>
+      </div>
+      
+      <h3>Contoh CAMPURAN:</h3>
+      <div class="example-box">
+        <p><span class="ide-pokok">Membaca buku memiliki banyak manfaat.</span> Kita bisa menambah pengetahuan. Kita juga bisa memperkaya kosakata. Bahkan, membaca dapat membuat kita lebih pintar. <span class="ide-pokok">Jadi, membaca buku sangat bermanfaat.</span></p>
+        <p>✅ Ide pokok di <b>AWAL dan AKHIR</b>.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Materi 4: Cara Menemukan Ide Pokok</h2>
+      <p>🕵️ <b>4 Langkah Rahasia Detektif:</b></p>
+      <ol>
+        <li><b>🔍 Baca Cermat</b> — Baca seluruh paragraf dari awal sampai akhir.</li>
+        <li><b>🎯 Cari Kalimat Utama</b> — Kalimat yang paling umum dan dijelaskan kalimat lain.</li>
+        <li><b>❓ Tanya Diri Sendiri</b> — "Paragraf ini membahas tentang apa?"</li>
+        <li><b>✍️ Tulis dengan Bahasa Sendiri</b> — Ubah kalimat utama jadi lebih singkat.</li>
+      </ol>
+      <h3>Contoh Penerapan:</h3>
+      <div class="example-box">
+        <p>Sampah plastik sangat berbahaya bagi lingkungan. Plastik membutuhkan waktu ratusan tahun untuk terurai. Sampah plastik juga dapat mencemari laut dan membunuh hewan laut. Oleh karena itu, kita harus mengurangi penggunaan plastik.</p>
+        <p><b>Langkah 1:</b> Dibaca ✔️</p>
+        <p><b>Langkah 2:</b> Kalimat utama = "Sampah plastik sangat berbahaya bagi lingkungan."</p>
+        <p><b>Langkah 3:</b> Paragraf membahas → bahaya sampah plastik</p>
+        <p><b>Langkah 4:</b> <b>Ide pokok = Sampah plastik berbahaya bagi lingkungan.</b></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 Materi 5: Ide Pokok vs Ide Pendukung</h2>
+      <table>
+        <tr><th>Aspek</th><th>🌟 Ide Pokok</th><th>🔹 Ide Pendukung</th></tr>
+        <tr><td>Fungsi</td><td>Inti paragraf</td><td>Menjelaskan inti</td></tr>
+        <tr><td>Sifat</td><td>Umum</td><td>Rinci/khusus</td></tr>
+        <tr><td>Jumlah</td><td>1 per paragraf</td><td>Bisa banyak</td></tr>
+        <tr><td>Letak</td><td>Kalimat utama</td><td>Kalimat penjelas</td></tr>
+        <tr><td>Contoh</td><td>"Kucingku lucu."</td><td>"Bulunya putih, matanya bulat."</td></tr>
+      </table>
+      <div class="tip-box">
+        🌳 <b>Analogi Pohon:</b> <b>Batang</b> = ide pokok, <b>daun & ranting</b> = ide pendukung.
+      </div>
+    </div>
+  </section>
+
+  <!-- LATIHAN -->
+  <section id="latihan">
+    <div class="card">
+      <h2>🎮 Game 1: Tangkap Kalimat Utama!</h2>
+      <p>Klik kalimat yang merupakan <b>kalimat utama</b> dari paragraf berikut.</p>
+      <div class="game-container" id="game1">
+        <p><b>Soal 1:</b></p>
+        <div class="game-sentence" onclick="checkGame1(this, false)">a) Setiap hari Minggu aku pergi ke pasar.</div>
+        <div class="game-sentence" onclick="checkGame1(this, true)">b) Aku senang berbelanja di pasar.</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) Di sana aku membeli sayur.</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) Aku juga membeli buah.</div>
+      </div>
+      <div class="game-container" id="game1b">
+        <p><b>Soal 2:</b></p>
+        <div class="game-sentence" onclick="checkGame1(this, false)">a) Matahari terbit dari timur.</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">b) Cahayanya menerangi bumi.</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) Suhu menjadi hangat.</div>
+        <div class="game-sentence" onclick="checkGame1(this, true)">d) Matahari memiliki banyak manfaat bagi kehidupan.</div>
+      </div>
+      <div class="game-container" id="game1c">
+        <p><b>Soal 3:</b></p>
+        <div class="game-sentence" onclick="checkGame1(this, true)">a) Lebah adalah hewan yang rajin.</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">b) Lebah mencari madu setiap hari.</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">c) Lebah bekerja sama dengan teman-temannya.</div>
+        <div class="game-sentence" onclick="checkGame1(this, false)">d) Lebah tidak pernah malas.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎮 Game 2: Pilah Ide Pokok & Ide Pendukung</h2>
+      <p>Seret setiap kalimat ke keranjang yang tepat!</p>
+      <div class="game-container">
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;" id="dragPool">
+          <div class="drag-item" draggable="true" data-type="pokok">Pisang memiliki banyak manfaat.</div>
+          <div class="drag-item" draggable="true" data-type="pendukung">Pisang mengandung vitamin C.</div>
+          <div class="drag-item" draggable="true" data-type="pendukung">Pisang melancarkan pencernaan.</div>
+          <div class="drag-item" draggable="true" data-type="pokok">Pisang adalah buah yang menyehatkan.</div>
+        </div>
+        <div class="drop-zones">
+          <div class="drop-zone" data-accept="pokok">
+            <h4>🟢 IDE POKOK</h4>
+          </div>
+          <div class="drop-zone" data-accept="pendukung">
+            <h4>🟡 IDE PENDUKUNG</h4>
+          </div>
+        </div>
+        <p id="dragResult" style="text-align:center; font-weight:bold; margin-top:15px;"></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎮 Game 3: Detektif Paragraf</h2>
+      <p>Baca paragraf berikut, lalu ketik ide pokoknya!</p>
+      
+      <div class="game-container">
+        <p><b>Paragraf 1:</b></p>
+        <p style="background:white; padding:15px; border-radius:10px; font-style:italic;">Bunga matahari memiliki ciri khas yang unik. Bunganya besar dan berwarna kuning cerah. Batangnya tinggi dan kuat. Bunga matahari juga selalu menghadap ke arah matahari.</p>
+        <input type="text" id="ans1" placeholder="Ketik ide pokok di sini..." style="width:100%; padding:12px; border-radius:10px; border:2px solid #ddd; font-size:1em; margin-top:10px;">
+        <button class="btn btn-green" onclick="checkTyping('ans1','Bunga matahari memiliki ciri khas yang unik','fb1')">Cek Jawaban</button>
+        <p id="fb1" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Paragraf 2:</b></p>
+        <p style="background:white; padding:15px; border-radius:10px; font-style:italic;">Air sangat penting bagi kehidupan manusia. Manusia membutuhkan air untuk minum. Air juga digunakan untuk memasak dan mencuci. Tanpa air, manusia tidak dapat hidup.</p>
+        <input type="text" id="ans2" placeholder="Ketik ide pokok di sini..." style="width:100%; padding:12px; border-radius:10px; border:2px solid #ddd; font-size:1em; margin-top:10px;">
+        <button class="btn btn-green" onclick="checkTyping('ans2','Air sangat penting bagi kehidupan manusia','fb2')">Cek Jawaban</button>
+        <p id="fb2" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+      
+      <div class="game-container">
+        <p><b>Paragraf 3:</b></p>
+        <p style="background:white; padding:15px; border-radius:10px; font-style:italic;">Kupu-kupu mengalami metamorfosis sempurna. Awalnya berupa telur. Telur menetas menjadi ulat. Ulat berubah menjadi kepompong. Akhirnya, kepompong berubah menjadi kupu-kupu cantik.</p>
+        <input type="text" id="ans3" placeholder="Ketik ide pokok di sini..." style="width:100%; padding:12px; border-radius:10px; border:2px solid #ddd; font-size:1em; margin-top:10px;">
+        <button class="btn btn-green" onclick="checkTyping('ans3','Kupu-kupu mengalami metamorfosis sempurna','fb3')">Cek Jawaban</button>
+        <p id="fb3" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KUIS -->
+  <section id="kuis">
+    <div class="card">
+      <h2>📝 Kuis Interaktif — 20 Soal</h2>
+      <div class="quiz-header">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="score-badge">⭐ Skor: <span id="scoreDisplay">0</span></div>
+      </div>
+      <div id="quizArea"></div>
+      <div id="resultArea"></div>
+    </div>
+  </section>
+
+  <!-- REFLEKSI -->
+  <section id="refleksi">
+    <div class="card reflection">
+      <h2>🔄 Refleksi Pembelajaran</h2>
+      <p style="margin-bottom:20px;">Bagaimana perasaanmu setelah belajar hari ini?</p>
+      <div class="emoji-check">
+        <span onclick="selectEmoji(this)">😄</span>
+        <span onclick="selectEmoji(this)">🙂</span>
+        <span onclick="selectEmoji(this)">😕</span>
+      </div>
+      
+      <h3>1. Apa hal baru yang kamu pelajari tentang ide pokok?</h3>
+      <textarea placeholder="Tulis di sini..."></textarea>
+      
+      <h3 style="margin-top:20px;">2. Bagian mana yang paling kamu sukai?</h3>
+      <textarea placeholder="Tulis di sini..."></textarea>
+      
+      <h3 style="margin-top:20px;">3. Bagian mana yang masih membuatmu bingung?</h3>
+      <textarea placeholder="Tulis di sini..."></textarea>
+      
+      <h3 style="margin-top:20px;">4. Lengkapi kalimat ini:</h3>
+      <p style="font-style:italic; background:#fff5e1; padding:15px; border-radius:10px;">"Hari ini aku belajar bahwa ide pokok adalah ..."</p>
+      <textarea placeholder="Lanjutkan kalimat di atas..."></textarea>
+      
+      <div style="text-align:center; margin-top:25px;">
+        <button class="btn" onclick="saveReflection()">💾 Simpan Refleksi</button>
+      </div>
+      <p id="reflectionMsg" style="text-align:center; font-weight:bold; color:#38b000; margin-top:15px;"></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 MPI Bahasa Indonesia Kelas 4 SD — "Detektif Ide Pokok"</p>
+    <p>Dibuat untuk pembelajaran Bahasa Indonesia yang menyenangkan 🎉</p>
+  </footer>
+</div>
+
+<script>
+/* ============ NAVIGASI ============ */
+function goTo(target) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(target).classList.add('active');
+  document.querySelector(`.nav-btn[data-target="${target}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => goTo(btn.dataset.target));
+});
+
+/* ============ GAME 1 ============ */
+function checkGame1(el, isCorrect) {
+  if (el.classList.contains('selected-correct') || el.classList.contains('selected-wrong')) return;
+  if (isCorrect) {
+    el.classList.add('selected-correct');
+    el.innerHTML = "✅ " + el.innerHTML;
+  } else {
+    el.classList.add('selected-wrong');
+    el.innerHTML = "❌ " + el.innerHTML;
+  }
+}
+
+/* ============ GAME 2 DRAG & DROP ============ */
+let draggedItem = null;
+document.querySelectorAll('.drag-item').forEach(item => {
+  item.addEventListener('dragstart', e => {
+    draggedItem = item;
+    setTimeout(() => item.style.opacity = '0.3', 0);
+  });
+  item.addEventListener('dragend', () => {
+    item.style.opacity = '1';
+  });
+});
+document.querySelectorAll('.drop-zone').forEach(zone => {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#fff5e1'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = 'white'; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.style.background = 'white';
+    if (!draggedItem) return;
+    if (draggedItem.dataset.type === zone.dataset.accept) {
+      draggedItem.classList.add('dropped');
+      draggedItem.draggable = false;
+      draggedItem.style.background = '#38b000';
+      zone.appendChild(draggedItem);
+      checkDragComplete();
+    } else {
+      draggedItem.style.background = '#e63946';
+      setTimeout(() => { draggedItem.style.background = ''; }, 500);
+    }
+  });
+});
+function checkDragComplete() {
+  const all = document.querySelectorAll('.drag-item.dropped');
+  if (all.length === 4) {
+    document.getElementById('dragResult').innerHTML = '🎉 Hebat! Semua kalimat sudah dipilah dengan benar!';
+    document.getElementById('dragResult').style.color = '#38b000';
+  }
+}
+
+/* ============ GAME 3 TYPING ============ */
+function checkTyping(inputId, correct, feedbackId) {
+  const val = document.getElementById(inputId).value.trim().toLowerCase().replace(/[.,!?]/g, '');
+  const target = correct.toLowerCase().replace(/[.,!?]/g, '');
+  const fb = document.getElementById(feedbackId);
+  if (val === target) {
+    fb.innerHTML = '✅ Benar sekali! Kamu detektif yang hebat!';
+    fb.style.color = '#38b000';
+  } else {
+    fb.innerHTML = '❌ Belum tepat. Jawaban yang benar: <b>' + correct + '</b>';
+    fb.style.color = '#e63946';
+  }
+}
+
+/* ============ KUIS 20 SOAL ============ */
+const quizData = [
+  { q: "Ide pokok adalah …", opts: ["Kalimat terpanjang dalam paragraf", "Gagasan utama yang menjadi inti paragraf", "Kalimat terakhir paragraf", "Kata-kata sulit dalam paragraf"], correct: 1 },
+  { q: "Berapa jumlah ide pokok dalam satu paragraf?", opts: ["Dua", "Tiga", "Satu", "Sebanyak kalimatnya"], correct: 2 },
+  { q: "Kalimat yang menjelaskan ide pokok disebut …", opts: ["Kalimat utama", "Kalimat penjelas", "Kalimat tanya", "Kalimat perintah"], correct: 1 },
+  { q: "Ide pokok biasanya bersifat …", opts: ["Rinci", "Khusus", "Umum", "Rahasia"], correct: 2 },
+  { q: "Ide pokok dapat ditemukan pada …", opts: ["Hanya awal paragraf", "Hanya akhir paragraf", "Awal, akhir, atau keduanya", "Tengah paragraf saja"], correct: 2 },
+  { q: "Paragraf yang ide pokoknya di awal disebut …", opts: ["Induktif", "Deduktif", "Campuran", "Naratif"], correct: 1 },
+  { q: "Paragraf yang ide pokoknya di akhir disebut …", opts: ["Deduktif", "Induktif", "Campuran", "Deskriptif"], correct: 1 },
+  { q: "Ide pokok paragraf berikut: \"Pagi ini aku membantu ibu menyapu. Siangnya aku membantu ayah mencuci mobil. Sore aku merapikan mainan. Aku senang membantu orang tuaku.\" terletak di …", opts: ["Awal", "Akhir", "Tengah", "Tidak ada"], correct: 1 },
+  { q: "Paragraf yang memiliki ide pokok di awal dan akhir disebut paragraf …", opts: ["Deduktif", "Induktif", "Campuran", "Bebas"], correct: 2 },
+  { q: "Kalimat utama disebut juga …", opts: ["Kalimat tanya", "Kalimat perintah", "Kalimat topik", "Kalimat seru"], correct: 2 },
+  { q: "Ide pokok paragraf berikut: \"Sekolahku memiliki halaman yang luas. Di halaman itu terdapat taman bunga. Anak-anak bermain di sana saat istirahat. Halaman sekolah juga digunakan untuk upacara.\" adalah …", opts: ["Anak-anak bermain di halaman", "Ada taman bunga di sekolah", "Sekolahku memiliki halaman yang luas", "Halaman digunakan untuk upacara"], correct: 2 },
+  { q: "Ide pokok paragraf berikut: \"Lebah adalah hewan yang rajin. Lebah mencari madu setiap hari. Lebah bekerja sama dengan teman-temannya. Lebah tidak pernah malas.\" adalah …", opts: ["Lebah mencari madu", "Lebah bekerja sama", "Lebah tidak pernah malas", "Lebah adalah hewan yang rajin"], correct: 3 },
+  { q: "Ide pokok paragraf berikut: \"Bunga matahari memiliki ciri khas. Bunganya besar dan berwarna kuning. Batangnya tinggi dan kuat. Bunga matahari selalu menghadap matahari.\" terletak pada kalimat …", opts: ["Pertama", "Kedua", "Ketiga", "Keempat"], correct: 0 },
+  { q: "Ide pokok paragraf berikut: \"Air sangat penting bagi kehidupan. Manusia membutuhkan air untuk minum. Air digunakan untuk memasak dan mencuci. Tanpa air, manusia tidak dapat hidup.\" adalah …", opts: ["Manusia minum air", "Air untuk memasak", "Air sangat penting bagi kehidupan", "Air untuk mencuci"], correct: 2 },
+  { q: "Ide pokok paragraf berikut: \"Kupu-kupu mengalami metamorfosis sempurna. Awalnya berupa telur. Telur menetas menjadi ulat. Ulat berubah menjadi kepompong. Akhirnya menjadi kupu-kupu cantik.\" adalah …", opts: ["Kupu-kupu cantik", "Ulat berubah menjadi kepompong", "Telur menetas", "Kupu-kupu mengalami metamorfosis sempurna"], correct: 3 },
+  { q: "Kalimat \"Sepeda tidak menghasilkan polusi udara.\" merupakan …", opts: ["Ide pendukung", "Ide pokok", "Kalimat utama", "Judul paragraf"], correct: 0 },
+  { q: "Pada paragraf \"Kucingku sangat lucu. Bulunya putih bersih. Matanya bulat besar. Ekornya panjang dan berbulu halus.\", kalimat \"Kucingku sangat lucu.\" merupakan …", opts: ["Ide pendukung", "Ide pokok", "Kalimat penjelas", "Kalimat tanya"], correct: 1 },
+  { q: "Fungsi kalimat penjelas adalah …", opts: ["Menggantikan ide pokok", "Menjelaskan ide pokok", "Menghias paragraf", "Memperpanjang tulisan"], correct: 1 },
+  { q: "Manakah yang termasuk ide pendukung?", opts: ["Buah mangga bermanfaat bagi kesehatan.", "Mangga mengandung vitamin C.", "Mangga adalah buah tropis.", "Aku suka mangga."], correct: 1 },
+  { q: "Jika ide pokok dihapus dari paragraf, maka …", opts: ["Paragraf semakin bagus", "Paragraf menjadi tidak jelas intinya", "Paragraf semakin panjang", "Paragraf semakin menarik"], correct: 1 }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+  const area = document.getElementById('quizArea');
+  const resultArea = document.getElementById('resultArea');
+  
+  if (currentQ >= quizData.length) {
+    area.innerHTML = '';
+    const badge = score >= 18 ? '🥇' : score >= 15 ? '🥈' : score >= 12 ? '🥉' : '🎯';
+    const predikat = score >= 18 ? 'Detektif Senior' : score >= 15 ? 'Detektif Madya' : score >= 12 ? 'Detektif Muda' : 'Calon Detektif';
+    const msg = score >= 18 ? 'Luar biasa! Kamu detektif hebat!' : score >= 15 ? 'Hebat! Pertahankan ya!' : score >= 12 ? 'Bagus, terus berlatih!' : 'Ayo coba lagi, kamu pasti bisa!';
+    resultArea.innerHTML = `
+      <div class="result-screen">
+        <div class="badge">${badge}</div>
+        <h2>${predikat}</h2>
+        <p style="font-size:1.2em;">Skor Akhir Kamu:</p>
+        <div class="final-score">${score * 5}</div>
+        <p style="font-size:1.1em; margin-top:15px;">${msg}</p>
+        <p style="margin-top:10px; color:#764ba2;">Benar: ${score} dari ${quizData.length} soal</p>
+        <button class="btn" style="margin-top:20px;" onclick="restartQuiz()">🔄 Ulangi Kuis</button>
+      </div>`;
+    document.getElementById('progressFill').style.width = '100%';
+    return;
+  }
+  
+  answered = false;
+  const q = quizData[currentQ];
+  document.getElementById('progressFill').style.width = ((currentQ / quizData.length) * 100) + '%';
+  
+  let html = `<div class="question">
+    <h3>Soal ${currentQ + 1} dari ${quizData.length}</h3>
+    <p>${q.q}</p>
+    <div class="options">`;
+  q.opts.forEach((opt, i) => {
+    html += `<button class="option" onclick="answerQuestion(${i})">${String.fromCharCode(65+i)}. ${opt}</button>`;
+  });
+  html += `</div><div class="feedback" id="feedback"></div></div>`;
+  area.innerHTML = html;
+  resultArea.innerHTML = '';
+}
+
+function answerQuestion(idx) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[currentQ];
+  const opts = document.querySelectorAll('.option');
+  const feedback = document.getElementById('feedback');
+  
+  opts.forEach(o => o.classList.add('disabled'));
+  
+  if (idx === q.correct) {
+    opts[idx].classList.add('correct');
+    feedback.className = 'feedback correct show';
+    feedback.innerHTML = '✅ Benar! Hebat sekali! ⭐';
+    score++;
+    document.getElementById('scoreDisplay').textContent = score * 5;
+  } else {
+    opts[idx].classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+    feedback.className = 'feedback wrong show';
+    feedback.innerHTML = '❌ Belum tepat. Jawaban benar: <b>' + q.opts[q.correct] + '</b>';
+  }
+  
+  setTimeout(() => { currentQ++; renderQuestion(); }, 1800);
+}
+
+function restartQuiz() {
+  currentQ = 0; score = 0;
+  document.getElementById('scoreDisplay').textContent = 0;
+  document.getElementById('progressFill').style.width = '0%';
+  renderQuestion();
+}
+
+/* ============ REFLEKSI ============ */
+function selectEmoji(el) {
+  document.querySelectorAll('.emoji-check span').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function saveReflection() {
+  document.getElementById('reflectionMsg').textContent = '✅ Refleksimu sudah tersimpan! Terima kasih sudah belajar hari ini. 🎉';
+}
+
+/* ============ INIT ============ */
+renderQuestion();
+</script>
+</body>
+</html>
