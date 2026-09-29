@@ -2,7 +2,7 @@
 <html lang="id" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Memuat MPI...</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 
@@ -30,25 +30,28 @@
   --bg:#1C1C28;--surface:#24242F;--surface-2:#2A2A38;--border:#35353F;
   --text:#ECEAF2;--text-soft:#B8B6C8;--muted:#8E8CA0;
   --primary:#98A8D0;--primary-hover:#A8B8DD;--primary-soft:#2E3245;--primary-ring:#3A4058;
+  --shadow:0 2px 10px rgba(0,0,0,.25);
+  --shadow-lg:0 12px 32px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-  background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
+  background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;
   display:flex;flex-direction:column;height:100vh;overflow:hidden;
   transition:background .3s,color .3s;
 }
 svg{display:block}
 .icon{width:18px;height:18px;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
+button{font-family:inherit}
 
-/* ============ HEADER ============ */
+/* ===== HEADER ===== */
 .vh{
   height:var(--header-h);flex-shrink:0;
   background:var(--surface);border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:.5rem;
   padding:0 .75rem;z-index:10;
-  transition:height .2s var(--ease),padding .2s var(--ease);
 }
 .vh-back{
   display:inline-flex;align-items:center;gap:.4rem;
@@ -60,34 +63,47 @@ svg{display:block}
 }
 .vh-back:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
 .vh-back .icon{width:15px;height:15px;stroke-width:2.2}
-.vh-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15;overflow:hidden;padding:0 .25rem}
-.vh-title .label{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
-.vh-title .judul{font-size:.9rem;font-weight:700;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.vh-title{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  line-height:1.4;
+  padding:.15rem .25rem;
+}
+.vh-title .label{
+  font-size:.6rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.6px;font-weight:600;
+  line-height:1.2;
+}
+.vh-title .judul{
+  font-size:.9rem;font-weight:700;letter-spacing:-.005em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  line-height:1.35;
+  padding-bottom:.05em;
+}
+
 .vh-actions{display:flex;gap:.3rem;flex-shrink:0}
 .vh-btn{
   width:36px;height:36px;border-radius:9px;
   display:grid;place-items:center;
   background:var(--surface-2);border:1px solid var(--border);
-  color:var(--text-soft);cursor:pointer;
-  transition:all .2s var(--ease);
-  -webkit-tap-highlight-color:transparent;
+  color:var(--text-soft);cursor:pointer;transition:all .2s var(--ease);
 }
 .vh-btn:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
-.vh-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
-.vh-btn.active:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
 
-/* ============ FRAME ============ */
+/* ===== FRAME ===== */
 .vframe{flex:1;position:relative;background:var(--surface);overflow:hidden}
 .vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;background:var(--surface)}
 
-/* ============ LOADING ============ */
+/* ===== LOADING ===== */
 .loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--bg);z-index:5;transition:opacity .3s}
 .loading.hide{opacity:0;pointer-events:none}
 .spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .85s linear infinite;margin:0 auto .85rem}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:.85rem;color:var(--muted);text-align:center}
 
-/* ============ ERROR ============ */
+/* ===== ERROR ===== */
 .error{position:absolute;inset:0;display:grid;place-items:center;padding:1.5rem;background:var(--bg);z-index:6}
 .error.hidden{display:none}
 .empty{text-align:center;padding:2.5rem 1.75rem;max-width:400px;background:var(--surface);border:1px dashed var(--border);border-radius:14px}
@@ -99,38 +115,48 @@ svg{display:block}
 .btn:hover{background:var(--primary-hover)}
 .btn .icon{width:15px;height:15px;stroke-width:2.2}
 
-/* ============ FOOTER ============ */
+/* ===== FOOTER ===== */
 .vf{
   height:var(--footer-h);flex-shrink:0;
   background:var(--surface);border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
   padding:0 1rem;font-size:.78rem;color:var(--muted);
   text-align:center;line-height:1.3;
-  transition:height .2s var(--ease),font-size .2s var(--ease);
 }
 .vf .author{color:var(--text-soft);font-weight:700}
 .vf .school{color:var(--primary);font-weight:600}
-.vf .dot{margin:0 .4rem;color:var(--border)}
+.vf .dot{color:var(--border)}
 
-/* ============================================================
-   FULLSCREEN STATE
-   Header + footer TETAP ADA, tapi lebih tipis
-   ============================================================ */
-body.fullscreen{
-  --header-h:44px;
-  --footer-h:40px;
+/* ===== FULLSCREEN EXIT ===== */
+.fs-exit{
+  position:fixed;top:1rem;right:1rem;z-index:9999;
+  display:none;align-items:center;justify-content:center;
+  width:38px;height:38px;
+  border-radius:50%;
+  border:none;cursor:pointer;
+  background:rgba(46,46,63,.5);color:#fff;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 4px 12px rgba(0,0,0,.18);
+  opacity:0;visibility:hidden;
+  transform:scale(.85);
+  transition:opacity .3s var(--ease),transform .3s var(--ease),background .2s var(--ease),visibility .3s;
+  pointer-events:none;
 }
-body.fullscreen .vh{padding:0 .6rem}
-body.fullscreen .vh-back{padding:.35rem .65rem;font-size:.78rem}
-body.fullscreen .vh-back .text{display:none}
-body.fullscreen .vh-title .label{display:none}
-body.fullscreen .vh-title .judul{font-size:.85rem}
-body.fullscreen .vh-btn{width:32px;height:32px}
-body.fullscreen .vf{font-size:.72rem}
-body.fullscreen .vf .dot{margin:0 .3rem}
+.fs-exit.show{
+  opacity:.65;visibility:visible;
+  transform:scale(1);pointer-events:auto;
+  animation:fsIn .4s var(--ease);
+}
+.fs-exit.show:hover{opacity:1;background:rgba(46,46,63,.9);transform:scale(1.08)}
+.fs-exit:active{transform:scale(.95)}
+.fs-exit .icon{width:16px;height:16px;stroke-width:2.4}
+@keyframes fsIn{from{opacity:0;transform:scale(.85)}to{opacity:.65;transform:scale(1)}}
+[data-theme="dark"] .fs-exit{background:rgba(236,234,242,.55);color:#1C1C28}
+[data-theme="dark"] .fs-exit.show:hover{background:rgba(236,234,242,.95)}
 
 /* Pseudo-fullscreen fallback (iOS) */
-body.pseudo-fs{background:#000}
+body.pseudo-fs .vh,
+body.pseudo-fs .vf{display:none}
 
 @media(max-width:560px){
   :root{--header-h:52px;--footer-h:48px}
@@ -138,16 +164,21 @@ body.pseudo-fs{background:#000}
   .vh-back{padding:.5rem .65rem}
   .vh-title .judul{font-size:.85rem}
   .vf{font-size:.72rem;padding:0 .6rem}
-  .vf .dot{margin:0 .25rem}
+  .fs-exit{top:.6rem;right:.6rem;width:34px;height:34px}
+  .fs-exit .icon{width:14px;height:14px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
 }
 </style>
 </head>
 <body>
 
 <header class="vh">
-  <a class="vh-back" href="index.html" title="Kembali ke Katalog">
+  <a class="vh-back" href="index.html" title="Kembali ke Rumah MPI">
     <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
-    <span class="text">Kembali</span>
+    <span class="text">Rumah MPI</span>
   </a>
 
   <div class="vh-title">
@@ -160,7 +191,7 @@ body.pseudo-fs{background:#000}
       <svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-9-9 9 9 0 0 1 9-9c2.5 0 4.8 1 6.5 2.6L21 8"/><path d="M21 3v5h-5"/></svg>
     </button>
     <button class="vh-btn" id="fsBtn" title="Layar penuh" aria-label="Layar penuh">
-      <svg class="icon" id="fsIcon" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+      <svg class="icon" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
     </button>
   </div>
 </header>
@@ -182,7 +213,7 @@ body.pseudo-fs{background:#000}
       <p id="errorMsg">File tidak ditemukan atau rusak.</p>
       <a class="btn" href="index.html">
         <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
-        Kembali ke Katalog
+        Kembali ke Rumah MPI
       </a>
     </div>
   </div>
@@ -191,10 +222,14 @@ body.pseudo-fs{background:#000}
 </div>
 
 <footer class="vf">
-  Dibuat oleh <span class="author" id="footerGuru">Guru</span>
+  <span>Dibuat oleh&nbsp;<span class="author" id="footerGuru">Guru</span></span>
   <span class="dot">·</span>
   <span class="school">SD Negeri 1 Godegan</span>
 </footer>
+
+<button class="fs-exit" id="fsExit" aria-label="Keluar layar penuh" title="Keluar layar penuh">
+  <svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+</button>
 
 <script>
 function esc(s) {
@@ -211,14 +246,12 @@ const loading = document.getElementById('loading');
 const errorBox = document.getElementById('errorBox');
 const errorMsg = document.getElementById('errorMsg');
 const mpiTitle = document.getElementById('mpiTitle');
-const fsBtn = document.getElementById('fsBtn');
-const fsIcon = document.getElementById('fsIcon');
+const fsExitBtn = document.getElementById('fsExit');
 
 document.title = titleIn + ' · Rumah MPI SDN 1 Godegan';
 mpiTitle.textContent = titleIn;
 document.getElementById('footerGuru').textContent = guruIn;
 
-/* ============ LOAD MPI ============ */
 function showError(msg) {
   loading.classList.add('hide');
   errorMsg.innerHTML = msg;
@@ -244,9 +277,20 @@ if (!fileUrl) {
     try {
       const t = frame.contentDocument?.title;
       if (t && t !== titleIn) {
-        document.title = t + ' · SDN 1 Godegan';
+        document.title = t + ' · Rumah MPI SDN 1 Godegan';
         mpiTitle.textContent = t;
       }
+    } catch (e) {}
+
+    try {
+      const iframeDoc = frame.contentDocument || frame.contentWindow.document;
+      ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => {
+        iframeDoc.addEventListener(ev, () => {
+          const isFs = !!(iframeDoc.fullscreenElement || iframeDoc.webkitFullscreenElement);
+          if (isFs) FS.showExit();
+          else FS.updateButton();
+        });
+      });
     } catch (e) {}
   });
 
@@ -256,13 +300,9 @@ if (!fileUrl) {
   });
 }
 
-/* ============================================================
-   FULLSCREEN — pakai tombol ⛶ sebagai toggle
-   Header & footer tetap terlihat (lebih tipis)
-   ============================================================ */
 const FS = {
-  ICON_EXPAND: '<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>',
-  ICON_COMPRESS: '<path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/>',
+  _hideTimer: null,
+  _idleMs: 3000,
 
   isActive() {
     return !!(
@@ -281,26 +321,16 @@ const FS = {
                 el.webkitRequestFullScreen ||
                 el.mozRequestFullScreen ||
                 el.msRequestFullscreen;
-
     if (req) {
       try {
         const p = req.call(el);
-        if (p && typeof p.then === 'function') {
-          p.catch(() => this.pseudoEnter());
-        }
-      } catch (e) {
-        this.pseudoEnter();
-      }
-    } else {
-      this.pseudoEnter();
-    }
+        if (p && typeof p.then === 'function') p.catch(() => this.pseudoEnter());
+      } catch (e) { this.pseudoEnter(); }
+    } else { this.pseudoEnter(); }
   },
 
   exit() {
-    if (document.body.classList.contains('pseudo-fs')) {
-      this.pseudoExit();
-      return;
-    }
+    if (document.body.classList.contains('pseudo-fs')) { this.pseudoExit(); return; }
     const ex = document.exitFullscreen ||
                document.webkitExitFullscreen ||
                document.webkitCancelFullScreen ||
@@ -315,66 +345,79 @@ const FS = {
     this.pseudoExit();
   },
 
-  toggle() {
-    if (this.isActive()) this.exit();
-    else this.enter();
-  },
+  toggle() { if (this.isActive()) this.exit(); else this.enter(); },
 
   pseudoEnter() {
-    document.body.classList.add('pseudo-fs');
-    this.update();
-  },
-  pseudoExit() {
-    document.body.classList.remove('pseudo-fs');
-    this.update();
+    document.body.classList.add('pseudo-fs', 'fullscreen');
+    this.updateButton();
   },
 
-  /** Update tombol + state CSS */
-  update() {
+  pseudoExit() {
+    document.body.classList.remove('pseudo-fs', 'fullscreen');
+    this.updateButton();
+  },
+
+  showExit() {
+    fsExitBtn.classList.add('show');
+    this.scheduleHide();
+  },
+
+  scheduleHide() {
+    clearTimeout(this._hideTimer);
+    this._hideTimer = setTimeout(() => fsExitBtn.classList.remove('show'), this._idleMs);
+  },
+
+  updateButton() {
     const active = this.isActive();
     document.body.classList.toggle('fullscreen', active);
+    if (active) {
+      fsExitBtn.classList.add('show');
+      this.scheduleHide();
+    } else {
+      fsExitBtn.classList.remove('show');
+      clearTimeout(this._hideTimer);
+    }
+    const iconEl = document.querySelector('#fsBtn svg');
+    if (iconEl) {
+      iconEl.innerHTML = active
+        ? '<path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/>'
+        : '<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>';
+    }
+  },
 
-    fsBtn.classList.toggle('active', active);
-    fsBtn.title = active ? 'Keluar layar penuh' : 'Layar penuh';
-    fsBtn.setAttribute('aria-label', fsBtn.title);
-    fsIcon.innerHTML = active ? this.ICON_COMPRESS : this.ICON_EXPAND;
+  activity() {
+    if (!this.isActive()) return;
+    fsExitBtn.classList.add('show');
+    this.scheduleHide();
   }
 };
 
-/* ============ EVENT LISTENERS ============ */
-fsBtn.addEventListener('click', () => FS.toggle());
+document.getElementById('fsBtn').addEventListener('click', () => FS.toggle());
+fsExitBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); FS.exit(); });
 
 ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(ev => {
-  document.addEventListener(ev, () => FS.update());
+  document.addEventListener(ev, () => FS.updateButton());
+});
+
+['mousemove', 'touchstart', 'touchmove', 'keydown'].forEach(ev => {
+  document.addEventListener(ev, () => FS.activity(), { passive: true });
 });
 
 document.addEventListener('keydown', e => {
-  // ESC — browser sudah handle native fullscreen,
-  // tapi kita handle pseudo-fullscreen
-  if (e.key === 'Escape') {
-    if (document.body.classList.contains('pseudo-fs')) FS.pseudoExit();
-  }
-  // Alt+Home → katalog
-  if (e.altKey && e.key === 'Home') {
-    location.href = 'index.html';
-  }
-  // F → toggle fullscreen (kalau target bukan input)
-  if ((e.key === 'f' || e.key === 'F') &&
-      !e.ctrlKey && !e.metaKey && !e.altKey &&
-      e.target === document.body) {
+  if (e.key === 'Escape' && document.body.classList.contains('pseudo-fs')) FS.pseudoExit();
+  if (e.altKey && e.key === 'Home') location.href = 'index.html';
+  if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey && e.target === document.body) {
     FS.toggle();
   }
 });
 
-/* Reload */
 document.getElementById('reloadBtn').addEventListener('click', () => {
   loading.classList.remove('hide');
   errorBox.classList.add('hidden');
   frame.src = frame.src;
 });
 
-/* Init */
-FS.update();
+FS.updateButton();
 </script>
 </body>
 </html>
