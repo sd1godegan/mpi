@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Kebun Apel Bu Ana — MPI Perkalian Kelas 3</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --sky-1: #7ec8e3;
+    --sky-2: #c8ebf7;
+    --grass: #7cb342;
+    --apple: #e53935;
+    --apple-dark: #b71c1c;
+    --wood: #d7a86e;
+    --wood-dark: #8d5524;
+    --sun: #ffd54f;
+    --btn: #ff9800;
+    --btn-dark: #e65100;
+    --correct: #4caf50;
+    --wrong: #ef5350;
+    --text: #263238;
+    --navy: #1a237e;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', 'Trebuchet MS', system-ui, sans-serif;
+    color: var(--text);
+    user-select: none; -webkit-user-select: none;
+  }
+
+  #app {
+    position: relative;
+    width: 100vw; height: 100vh;
+    background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 55%, #dcedc8 100%);
+    overflow: hidden;
+  }
+
+  /* Decorative background elements */
+  .sun {
+    position: fixed; top: 3vh; right: 3vw;
+    width: clamp(60px, 7vw, 100px); height: clamp(60px, 7vw, 100px);
+    background: radial-gradient(circle, var(--sun) 40%, #ffecb3 60%, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 60px rgba(255, 213, 79, 0.7);
+    animation: pulse 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+
+  .cloud {
+    position: fixed;
+    background: #fff;
+    border-radius: 100px;
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 40s linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: ''; position: absolute;
+    background: #fff; border-radius: 50%;
+  }
+  .cloud1 { top: 12vh; left: -20%; width: 140px; height: 45px; animation-delay: 0s; }
+  .cloud1::before { width: 60px; height: 60px; top: -25px; left: 20px; }
+  .cloud1::after { width: 45px; height: 45px; top: -18px; left: 70px; }
+  .cloud2 { top: 22vh; left: -30%; width: 120px; height: 40px; animation-delay: -15s; }
+  .cloud2::before { width: 55px; height: 55px; top: -22px; left: 15px; }
+  .cloud2::after { width: 40px; height: 40px; top: -15px; left: 60px; }
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(140vw); }
+  }
+
+  .grass-strip {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 8vh; min-height: 40px;
+    background: linear-gradient(180deg, transparent 0%, var(--grass) 40%, #558b2f 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Screens */
+  .screen {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3vh 3vw;
+    z-index: 1;
+    overflow-y: auto;
+  }
+  .screen.active { display: flex; animation: fadeIn 0.45s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Typography */
+  h1 { font-size: clamp(32px, 5vw, 68px); color: var(--navy);
+       text-shadow: 3px 3px 0 #fff, 6px 6px 0 rgba(0,0,0,0.06);
+       text-align: center; line-height: 1.1; }
+  h2 { font-size: clamp(20px, 3vw, 40px); color: var(--navy); text-align: center; line-height: 1.25; }
+  .subtitle { font-size: clamp(16px, 2vw, 26px); color: #37474f; text-align: center; margin-top: 10px; }
+
+  /* Buttons */
+  .btn {
+    font-family: inherit; font-weight: bold;
+    font-size: clamp(18px, 2vw, 32px);
+    padding: clamp(12px, 1.6vh, 22px) clamp(28px, 3.5vw, 56px);
+    border: none; border-radius: 999px;
+    background: var(--btn); color: #fff;
+    cursor: pointer;
+    box-shadow: 0 7px 0 var(--btn-dark), 0 10px 20px rgba(0,0,0,0.18);
+    transition: transform 0.08s, box-shadow 0.08s;
+    min-width: 220px;
+  }
+  .btn:active { transform: translateY(5px); box-shadow: 0 2px 0 var(--btn-dark); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn.green { background: #43a047; box-shadow: 0 7px 0 #2e7d32, 0 10px 20px rgba(0,0,0,0.18); }
+  .btn.blue { background: #1e88e5; box-shadow: 0 7px 0 #0d47a1, 0 10px 20px rgba(0,0,0,0.18); }
+
+  /* Top bar */
+  .top-bar {
+    position: absolute; top: 2vh; left: 3vw; right: 3vw;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .top-bar > * { pointer-events: auto; }
+  .btn-icon {
+    width: clamp(44px, 4.5vw, 64px); height: clamp(44px, 4.5vw, 64px);
+    border-radius: 50%; border: none;
+    background: #fff; color: var(--navy);
+    font-size: clamp(20px, 2.2vw, 30px);
+    font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.1s;
+  }
+  .btn-icon:active { transform: scale(0.92); }
+  .progress-pill {
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 20px;
+    font-size: clamp(14px, 1.6vw, 22px);
+    font-weight: bold;
+    color: var(--navy);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  }
+
+  /* ============ SCREEN 1 — WELCOME ============ */
+  #screen1 .characters {
+    display: flex; gap: 30px; align-items: flex-end;
+    margin-bottom: 20px;
+  }
+  #screen1 .char {
+    font-size: clamp(60px, 10vw, 140px);
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.2));
+    animation: bob 2.5s ease-in-out infinite;
+  }
+  #screen1 .char:nth-child(2) { animation-delay: -0.6s; }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  #screen1 .title-block { text-align: center; margin-bottom: 30px; }
+  #screen1 .welcome-card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 30px;
+    padding: clamp(20px, 3vh, 40px) clamp(30px, 4vw, 60px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    max-width: 900px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+  }
+
+  /* ============ SCREEN 2 — DRAG APPLES ============ */
+  #screen2 .instruction {
+    background: #fff; border-radius: 999px;
+    padding: 12px 30px;
+    font-size: clamp(16px, 2vw, 28px);
+    font-weight: bold; color: var(--navy);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    margin-top: 8vh; margin-bottom: 2vh;
+    text-align: center;
+  }
+  #screen2 .apple-pile {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; align-items: center;
+    min-height: 22vh; max-width: 90vw;
+    padding: 12px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 20px;
+    margin-bottom: 3vh;
+    min-width: 60vw;
+  }
+  #screen2 .baskets-row {
+    display: flex; gap: clamp(12px, 2vw, 40px);
+    justify-content: center; flex-wrap: wrap;
+  }
+
+  .apple {
+    width: clamp(46px, 5.5vw, 76px);
+    height: clamp(46px, 5.5vw, 76px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff5c5c, var(--apple) 60%, var(--apple-dark) 100%);
+    box-shadow: inset -6px -8px 12px rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .apple::before {
+    content: ''; position: absolute;
+    top: -8%; left: 45%;
+    width: 12%; height: 22%;
+    background: #5d4037; border-radius: 3px;
+    transform: rotate(-12deg);
+  }
+  .apple::after {
+    content: ''; position: absolute;
+    top: -14%; left: 55%;
+    width: 30%; height: 20%;
+    background: #43a047;
+    border-radius: 60% 10% 60% 10%;
+    transform: rotate(30deg);
+  }
+  .apple:hover { transform: translateY(-4px) scale(1.05); }
+  .apple.selected {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 6px #ffd54f, 0 0 22px 6px rgba(255, 213, 79, 0.85);
+    z-index: 3;
+  }
+  .apple.in-basket {
+    cursor: default;
+    animation: dropIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .apple.in-basket:hover { transform: none; }
+  @keyframes dropIn {
+    0% { transform: scale(1.4) translateY(-30px); opacity: 0.3; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .basket {
+    width: clamp(120px, 13vw, 190px);
+    min-height: clamp(130px, 15vh, 190px);
+    background: linear-gradient(180deg, #e0b988 0%, var(--wood) 40%, var(--wood-dark) 100%);
+    border: clamp(3px, 0.4vw, 6px) solid #6d4c2f;
+    border-radius: 12px 12px 20px 20px;
+    padding: 12px;
+    display: flex; flex-direction: column;
+    box-shadow: inset 0 6px 12px rgba(255,255,255,0.3), inset 0 -10px 20px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.2);
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+  .basket::before {
+    content: ''; position: absolute;
+    top: -10px; left: 0; right: 0; height: 16px;
+    background: linear-gradient(180deg, #a97445, #8d5524);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    border: 3px solid #6d4c2f; border-bottom: none;
+  }
+  .basket:hover { transform: translateY(-4px); }
+  .basket.highlight {
+    box-shadow: 0 0 0 6px #ffd54f, 0 10px 30px rgba(255, 213, 79, 0.6);
+  }
+  .basket.full {
+    box-shadow: inset 0 6px 12px rgba(255,255,255,0.3), inset 0 -10px 20px rgba(0,0,0,0.2), 0 0 0 5px var(--correct), 0 10px 24px rgba(76, 175, 80, 0.5);
+  }
+  .basket-label {
+    position: absolute; bottom: -32px; left: 0; right: 0;
+    text-align: center; font-weight: bold;
+    font-size: clamp(13px, 1.4vw, 18px);
+    color: var(--navy);
+  }
+  .basket-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    flex: 1;
+    align-content: center;
+    justify-items: center;
+    padding-top: 10px;
+  }
+  .basket-items .apple {
+    width: clamp(30px, 3.2vw, 46px);
+    height: clamp(30px, 3.2vw, 46px);
+  }
+  .basket-items .apple::before { top: -10%; height: 22%; }
+  .basket-items .apple::after { top: -16%; }
+
+  #screen2 .continue-wrap {
+    margin-top: 5vh;
+    min-height: 70px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ============ SCREEN 3 — EQUATION ============ */
+  #screen3 .basket-visual {
+    display: flex; gap: clamp(10px, 1.5vw, 24px);
+    margin-bottom: 2vh;
+  }
+  #screen3 .mini-basket {
+    width: clamp(70px, 8vw, 120px);
+    height: clamp(70px, 8vw, 120px);
+    background: linear-gradient(180deg, #e0b988, var(--wood-dark));
+    border: 4px solid #6d4c2f;
+    border-radius: 10px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+    padding: 8px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  }
+  #screen3 .mini-basket .apple {
+    width: 100%; height: 100%; min-width: 0; min-height: 0;
+    cursor: default;
+  }
+  #screen3 .mini-basket .apple:hover { transform: none; }
+
+  #screen3 .equation {
+    display: flex; align-items: center; justify-content: center;
+    gap: clamp(8px, 1vw, 18px);
+    background: #fff;
+    padding: clamp(16px, 2vh, 30px) clamp(20px, 3vw, 50px);
+    border-radius: 20px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+    margin: 2vh 0;
+    flex-wrap: wrap;
+  }
+  #screen3 .slot {
+    width: clamp(60px, 7vw, 100px);
+    height: clamp(60px, 7vw, 100px);
+    border: 4px dashed #90a4ae;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(28px, 3.5vw, 52px);
+    font-weight: bold;
+    color: var(--navy);
+    background: #f5f7fa;
+    transition: all 0.2s;
+  }
+  #screen3 .slot.focused {
+    border-color: var(--btn);
+    background: #fff8e1;
+    box-shadow: 0 0 0 5px rgba(255, 152, 0, 0.25);
+  }
+  #screen3 .slot.filled { border-style: solid; border-color: var(--navy); background: #e8eaf6; }
+  #screen3 .slot.correct { border-color: var(--correct); background: #e8f5e9; color: #2e7d32; }
+  #screen3 .slot.wrong { border-color: var(--wrong); background: #ffebee; color: #c62828; }
+  #screen3 .op {
+    font-size: clamp(28px, 3.5vw, 52px);
+    font-weight: bold; color: var(--navy);
+  }
+  #screen3 .fixed-result {
+    font-size: clamp(28px, 3.5vw, 52px);
+    font-weight: bold; color: var(--correct);
+    padding: 0 10px;
+  }
+
+  .numpad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: clamp(6px, 0.8vw, 12px);
+    max-width: 620px;
+    margin: 0 auto;
+  }
+  .numpad button {
+    width: clamp(48px, 5.5vw, 80px);
+    height: clamp(48px, 5.5vw, 80px);
+    font-family: inherit;
+    font-size: clamp(22px, 2.6vw, 38px);
+    font-weight: bold;
+    color: var(--navy);
+    background: #fff;
+    border: 3px solid #cfd8dc;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b0bec5;
+    transition: transform 0.08s;
+  }
+  .numpad button:active { transform: translateY(3px); box-shadow: 0 1px 0 #b0bec5; }
+  .numpad button.wide { grid-column: span 2; width: 100%; font-size: clamp(18px, 2vw, 28px); background: #eceff1; }
+
+  /* ============ SCREEN 4 — MULTIPLE CHOICE ============ */
+  #screen4 .question-card {
+    background: #fff; border-radius: 24px;
+    padding: clamp(24px, 4vh, 50px) clamp(30px, 4vw, 70px);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.14);
+    max-width: 900px; text-align: center;
+    margin-bottom: 4vh;
+  }
+  #screen4 .big-eq {
+    font-size: clamp(36px, 5vw, 72px);
+    color: var(--navy);
+    font-weight: bold;
+    margin: 20px 0;
+    letter-spacing: 2px;
+  }
+  #screen4 .choices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(12px, 1.5vw, 22px);
+    max-width: 900px; width: 100%;
+  }
+  .choice {
+    font-family: inherit;
+    font-size: clamp(20px, 2.2vw, 32px);
+    font-weight: bold;
+    padding: clamp(20px, 3vh, 34px) clamp(16px, 2vw, 28px);
+    border: 4px solid #cfd8dc;
+    border-radius: 20px;
+    background: #fff; color: var(--navy);
+    cursor: pointer;
+    box-shadow: 0 6px 0 #b0bec5;
+    transition: transform 0.08s, background 0.2s, border-color 0.2s;
+  }
+  .choice:active { transform: translateY(4px); box-shadow: 0 2px 0 #b0bec5; }
+  .choice:hover { background: #f5f7fa; }
+  .choice.correct { background: #e8f5e9; border-color: var(--correct); box-shadow: 0 6px 0 #2e7d32; }
+  .choice.wrong { background: #ffebee; border-color: var(--wrong); box-shadow: 0 6px 0 #c62828; }
+  .choice:disabled { cursor: default; }
+
+  #screen4 .feedback {
+    margin-top: 3vh;
+    font-size: clamp(20px, 2.4vw, 34px);
+    font-weight: bold;
+    min-height: 50px;
+    text-align: center;
+  }
+  #screen4 .feedback.ok { color: var(--correct); }
+  #screen4 .feedback.no { color: var(--wrong); }
+
+  /* ============ SCREEN 5 — QUIZ ============ */
+  #screen5 .timer-bar {
+    width: 80%; max-width: 900px;
+    height: 20px; background: #fff;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 3vh;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.12);
+  }
+  #screen5 .timer-fill {
+    height: 100%; width: 100%;
+    background: linear-gradient(90deg, #4caf50, #8bc34a);
+    border-radius: 999px;
+    transition: width 0.9s linear, background 0.3s;
+  }
+  #screen5 .question-card {
+    background: #fff; border-radius: 24px;
+    padding: clamp(20px, 3vh, 40px) clamp(24px, 3vw, 50px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.14);
+    max-width: 1000px; width: 90%;
+    text-align: center;
+    margin-bottom: 3vh;
+  }
+  #screen5 .q-text {
+    font-size: clamp(18px, 2.2vw, 32px);
+    color: var(--navy);
+    line-height: 1.4;
+  }
+  #screen5 .q-num {
+    font-size: clamp(14px, 1.4vw, 20px);
+    color: #78909c; font-weight: bold;
+    margin-bottom: 10px;
+  }
+  #screen5 .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; width: 90%; max-width: 1000px; }
+  #screen5 .choice { font-size: clamp(20px, 2.2vw, 32px); padding: clamp(16px, 2.4vh, 28px); }
+
+  /* ============ SCREEN 6 — REFLECTION ============ */
+  #screen6 .reflect-card {
+    background: #fff; border-radius: 28px;
+    padding: clamp(30px, 4vh, 50px) clamp(30px, 4vw, 60px);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.14);
+    max-width: 900px; text-align: center;
+  }
+  #screen6 .emotions {
+    display: flex; gap: clamp(16px, 2vw, 30px);
+    justify-content: center; margin: 3vh 0;
+    flex-wrap: wrap;
+  }
+  #screen6 .emotion {
+    width: clamp(90px, 11vw, 150px);
+    height: clamp(90px, 11vw, 150px);
+    border-radius: 50%;
+    border: 5px solid transparent;
+    background: #f5f7fa;
+    font-size: clamp(48px, 6vw, 84px);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.15s, border-color 0.2s, background 0.2s;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  }
+  #screen6 .emotion:hover { transform: scale(1.06); }
+  #screen6 .emotion.selected {
+    border-color: var(--btn);
+    background: #fff8e1;
+    transform: scale(1.12);
+  }
+  #screen6 .done-message {
+    background: linear-gradient(135deg, #ffd54f, #ffb300);
+    color: #4e342e;
+    border-radius: 22px;
+    padding: 24px 36px;
+    font-size: clamp(18px, 2vw, 28px);
+    font-weight: bold;
+    margin-top: 3vh;
+    box-shadow: 0 10px 24px rgba(255, 179, 0, 0.4);
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  #screen6 .done-message.show { display: block; }
+
+  /* Confetti */
+  .confetti {
+    position: fixed; width: 12px; height: 20px;
+    top: -30px; z-index: 999; pointer-events: none;
+    animation: fall 2.6s linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0.1; }
+  }
+
+  /* Feedback toast */
+  .toast {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.6);
+    background: var(--correct);
+    color: #fff;
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: bold;
+    padding: 24px 60px;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    z-index: 1000;
+    opacity: 0; pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .toast.error { background: var(--wrong); }
+
+  /* Responsive tweaks */
+  @media (max-width: 700px) {
+    .screen { padding: 2vh 3vw; }
+    #screen2 .instruction { margin-top: 10vh; }
+    .btn { min-width: 180px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="sun"></div>
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+  <div class="grass-strip"></div>
+
+  <!-- ================= SCREEN 1 — WELCOME ================= -->
+  <section class="screen active" id="screen1">
+    <div class="top-bar">
+      <div></div>
+      <button class="btn-icon" onclick="toggleFullscreen()" title="Layar penuh">⛶</button>
+    </div>
+    <div class="welcome-card">
+      <div class="characters">
+        <div class="char">👩‍🌾</div>
+        <div class="char">👦</div>
+      </div>
+      <div class="title-block">
+        <h1>Kebun Apel Bu Ana</h1>
+        <p class="subtitle">Ayo bantu Bu Ana menghitung apel di kebunnya!</p>
+      </div>
+      <button class="btn" onclick="startJourney()">▶ MULAI</button>
+    </div>
+  </section>
+
+  <!-- ================= SCREEN 2 — DRAG APPLES ================= -->
+  <section class="screen" id="screen2">
+    <div class="top-bar">
+      <button class="btn-icon" onclick="goTo(1)">←</button>
+      <div class="progress-pill">Keranjang: <span id="basketCount">0</span>/3</div>
+      <button class="btn-icon" onclick="toggleFullscreen()">⛶</button>
+    </div>
+    <h2 class="instruction">Masukkan <span style="color:#e53935">4 apel</span> ke setiap keranjang</h2>
+    <div class="apple-pile" id="applePile"></div>
+    <div class="baskets-row" id="basketsRow"></div>
+    <div class="continue-wrap" id="continueWrap2"></div>
+  </section>
+
+  <!-- ================= SCREEN 3 — EQUATION ================= -->
+  <section class="screen" id="screen3">
+    <div class="top-bar">
+      <button class="btn-icon" onclick="goTo(2)">←</button>
+      <div class="progress-pill">Langkah 2 dari 4</div>
+      <button class="btn-icon" onclick="toggleFullscreen()">⛶</button>
+    </div>
+    <h2>Tulis bentuk penjumlahan berulangnya</h2>
+    <p class="subtitle" style="margin-bottom:2vh">3 keranjang, masing-masing berisi 4 apel</p>
+    <div class="basket-visual" id="basketVisual"></div>
+    <div class="equation">
+      <div class="slot" data-slot="0"></div>
+      <span class="op">+</span>
+      <div class="slot" data-slot="1"></div>
+      <span class="op">+</span>
+      <div class="slot" data-slot="2"></div>
+      <span class="op">=</span>
+      <span class="fixed-result">12</span>
+    </div>
+    <div class="numpad" id="numpad"></div>
+    <div style="margin-top:3vh; display:flex; gap:14px; flex-wrap:wrap; justify-content:center">
+      <button class="btn blue" onclick="clearSlots()" style="min-width:160px; font-size:clamp(16px,1.7vw,24px)">Hapus</button>
+      <button class="btn green" onclick="checkEquation()" style="min-width:180px">Cek Jawaban</button>
+    </div>
+  </section>
+
+  <!-- ================= SCREEN 4 — MULTIPLE CHOICE ================= -->
+  <section class="screen" id="screen4">
+    <div class="top-bar">
+      <button class="btn-icon" onclick="goTo(3)">←</button>
+      <div class="progress-pill">Langkah 3 dari 4</div>
+      <button class="btn-icon" onclick="toggleFullscreen()">⛶</button>
+    </div>
+    <div class="question-card">
+      <h2>3 × 4 sama dengan...</h2>
+      <div class="big-eq">3 × 4 = ?</div>
+      <p class="subtitle">Pilih bentuk penjumlahan yang benar</p>
+    </div>
+    <div class="choices" id="choices4">
+      <button class="choice" data-correct="true">4 + 4 + 4</button>
+      <button class="choice" data-correct="false">3 + 3 + 3</button>
+      <button class="choice" data-correct="false">3 + 4</button>
+    </div>
+    <div class="feedback" id="feedback4"></div>
+  </section>
+
+  <!-- ================= SCREEN 5 — QUIZ ================= -->
+  <section class="screen" id="screen5">
+    <div class="top-bar">
+      <div class="progress-pill">Soal <span id="qNum">1</span>/5 &nbsp;•&nbsp; Skor: <span id="qScore">0</span></div>
+      <button class="btn-icon" onclick="toggleFullscreen()">⛶</button>
+    </div>
+    <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+    <div class="question-card">
+      <div class="q-num" id="qNum2">Soal 1 dari 5</div>
+      <div class="q-text" id="qText">...</div>
+    </div>
+    <div class="choices" id="choices5"></div>
+  </section>
+
+  <!-- ================= SCREEN 6 — REFLECTION ================= -->
+  <section class="screen" id="screen6">
+    <div class="top-bar">
+      <div></div>
+      <button class="btn-icon" onclick="toggleFullscreen()">⛶</button>
+    </div>
+    <div class="reflect-card">
+      <h2>Apa yang kamu rasakan hari ini?</h2>
+      <p class="subtitle">Pilih satu, ya!</p>
+      <div class="emotions" id="emotions">
+        <button class="emotion" data-feel="senang">😊</button>
+        <button class="emotion" data-feel="biasa">😐</button>
+        <button class="emotion" data-feel="sulit">😞</button>
+      </div>
+      <button class="btn green" onclick="finishSession()" id="btnFinish" disabled>Selesai</button>
+      <div class="done-message" id="doneMessage">
+        🎉 Hebat! Kamu sudah membantu Bu Ana hari ini! 🍎<br>
+        Sampai jumpa di kebun apel lagi!
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* =========================================================
+   STATE & UTILITIES
+   ========================================================= */
+const state = {
+  basketCounts: [0, 0, 0],
+  selectedApple: null,
+  equationSlots: ['', '', ''],
+  focusedSlot: 0,
+  quizIndex: 0,
+  quizScore: 0,
+  quizTimer: null,
+  quizTimeLeft: 20,
+  speechEnabled: true,
+  audioReady: false,
+};
+
+/* ---------- SOUND (Web Audio API) ---------- */
+let audioCtx = null;
+function initAudio() {
+  if (audioCtx) return;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    state.audioReady = true;
+  } catch (e) { /* no audio */ }
+}
+function playTone(freq, dur = 0.12, type = 'sine', vol = 0.15) {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + dur);
+}
+const sound = {
+  pop()      { playTone(720, 0.08, 'sine', 0.12); },
+  success()  { playTone(523, 0.14); setTimeout(()=>playTone(659, 0.14), 110); setTimeout(()=>playTone(784, 0.30), 220); },
+  error()    { playTone(240, 0.28, 'sawtooth', 0.12); },
+  click()    { playTone(600, 0.05, 'square', 0.08); },
+  ding()     { playTone(880, 0.12); playTone(1320, 0.20); },
+};
+
+/* ---------- SPEECH (Web Speech API) ---------- */
+function speak(text) {
+  if (!state.speechEnabled || !('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'id-ID';
+    u.rate = 0.9;
+    u.pitch = 1.05;
+    const voices = window.speechSynthesis.getVoices();
+    const idVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('id'));
+    if (idVoice) u.voice = idVoice;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+/* ---------- NAVIGATION ---------- */
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen' + n).classList.add('active');
+  if (n === 2) initScreen2();
+  if (n === 3) initScreen3();
+  if (n === 4) initScreen4();
+  if (n === 5) initScreen5();
+  if (n === 6) initScreen6();
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+}
+
+function showToast(text, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.classList.toggle('error', isError);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1100);
+}
+
+function confetti() {
+  const colors = ['#e53935', '#ffd54f', '#4caf50', '#1e88e5', '#ff9800', '#9c27b0'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDelay = (Math.random() * 0.6) + 's';
+    c.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4500);
+  }
+}
+
+/* =========================================================
+   SCREEN 1 — START
+   ========================================================= */
+function startJourney() {
+  initAudio();
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  sound.click();
+  setTimeout(() => {
+    speak('Halo teman-teman! Saya Bu Ana. Ayo bantu saya menghitung apel di kebun!');
+  }, 150);
+  goTo(2);
+}
+
+/* =========================================================
+   SCREEN 2 — DRAG APPLES
+   ========================================================= */
+function initScreen2() {
+  state.basketCounts = [0, 0, 0];
+  state.selectedApple = null;
+  document.getElementById('basketCount').textContent = '0';
+  document.getElementById('continueWrap2').innerHTML = '';
+
+  // Build apples
+  const pile = document.getElementById('applePile');
+  pile.innerHTML = '';
+  for (let i = 0; i < 12; i++) {
+    const a = document.createElement('div');
+    a.className = 'apple';
+    a.dataset.id = i;
+    a.addEventListener('click', () => selectApple(a));
+    pile.appendChild(a);
+  }
+
+  // Build baskets
+  const row = document.getElementById('basketsRow');
+  row.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const b = document.createElement('div');
+    b.className = 'basket';
+    b.dataset.basket = i;
+    b.innerHTML = `
+      <div class="basket-items"></div>
+      <div class="basket-label">Keranjang ${i + 1}</div>
+    `;
+    b.addEventListener('click', () => dropToBasket(i));
+    row.appendChild(b);
+  }
+
+  speak('Masukkan empat apel ke setiap keranjang. Klik apel, lalu klik keranjangnya.');
+}
+
+function selectApple(el) {
+  if (el.classList.contains('in-basket')) return;
+  sound.pop();
+  // Deselect current
+  if (state.selectedApple) state.selectedApple.classList.remove('selected');
+  // Toggle
+  if (state.selectedApple === el) {
+    state.selectedApple = null;
+    document.querySelectorAll('.basket').forEach(b => b.classList.remove('highlight'));
+    return;
+  }
+  state.selectedApple = el;
+  el.classList.add('selected');
+  document.querySelectorAll('.basket').forEach(b => b.classList.add('highlight'));
+}
+
+function dropToBasket(idx) {
+  if (!state.selectedApple) {
+    showToast('Pilih apel dulu ya!', true);
+    return;
+  }
+  const basket = document.querySelector(`.basket[data-basket="${idx}"]`);
+  const items = basket.querySelector('.basket-items');
+  if (state.basketCounts[idx] >= 4) {
+    sound.error();
+    showToast('Keranjang sudah penuh!', true);
+    speak('Keranjang ini sudah penuh. Coba keranjang lain, ya.');
+    return;
+  }
+  // Move apple
+  const apple = state.selectedApple;
+  apple.classList.remove('selected');
+  apple.classList.add('in-basket');
+  state.selectedApple = null;
+  items.appendChild(apple);
+  state.basketCounts[idx]++;
+  sound.pop();
+  document.querySelectorAll('.basket').forEach(b => b.classList.remove('highlight'));
+  document.getElementById('basketCount').textContent = state.basketCounts.filter(c => c === 4).length;
+
+  if (state.basketCounts[idx] === 4) {
+    basket.classList.add('full');
+    sound.ding();
+  }
+
+  // Check completion
+  if (state.basketCounts.every(c => c === 4)) {
+    setTimeout(() => {
+      sound.success();
+      confetti();
+      speak('Hebat! Sekarang ada tiga keranjang, masing-masing berisi empat apel.');
+      const wrap = document.getElementById('continueWrap2');
+      wrap.innerHTML = '<button class="btn green" onclick="goTo(3)">Lanjut ➡</button>';
+    }, 300);
+  }
+}
+
+/* =========================================================
+   SCREEN 3 — EQUATION WITH NUMPAD
+   ========================================================= */
+function initScreen3() {
+  state.equationSlots = ['', '', ''];
+  state.focusedSlot = 0;
+
+  // Visual baskets
+  const visual = document.getElementById('basketVisual');
+  visual.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const b = document.createElement('div');
+    b.className = 'mini-basket';
+    for (let j = 0; j < 4; j++) {
+      const a = document.createElement('div');
+      a.className = 'apple in-basket';
+      b.appendChild(a);
+    }
+    visual.appendChild(b);
+  }
+
+  // Numpad
+  const pad = document.getElementById('numpad');
+  pad.innerHTML = '';
+  for (let n = 1; n <= 9; n++) {
+    const btn = document.createElement('button');
+    btn.textContent = n;
+    btn.onclick = () => typeDigit(String(n));
+    pad.appendChild(btn);
+  }
+  const zero = document.createElement('button');
+  zero.textContent = '0';
+  zero.onclick = () => typeDigit('0');
+  pad.appendChild(zero);
+
+  updateSlots();
+  speak('Tiga keranjang, masing-masing berisi empat apel. Tulis penjumlahan berulangnya.');
+}
+
+function updateSlots() {
+  document.querySelectorAll('#screen3 .slot').forEach((el, i) => {
+    el.textContent = state.equationSlots[i] || '';
+    el.classList.toggle('focused', i === state.focusedSlot);
+    el.classList.toggle('filled', !!state.equationSlots[i]);
+    el.classList.remove('correct', 'wrong');
+    el.onclick = () => { state.focusedSlot = i; updateSlots(); };
+  });
+}
+
+function typeDigit(d) {
+  sound.click();
+  const cur = state.equationSlots[state.focusedSlot] || '';
+  if (cur.length >= 2) return;
+  state.equationSlots[state.focusedSlot] = cur + d;
+  // Auto-advance
+  if (state.focusedSlot < 2) state.focusedSlot++;
+  updateSlots();
+}
+
+function clearSlots() {
+  sound.click();
+  state.equationSlots = ['', '', ''];
+  state.focusedSlot = 0;
+  updateSlots();
+}
+
+function checkEquation() {
+  const expected = ['4', '4', '4'];
+  const user = state.equationSlots;
+  const slots = document.querySelectorAll('#screen3 .slot');
+  let allCorrect = true;
+  user.forEach((val, i) => {
+    const ok = (val === expected[i]);
+    slots[i].classList.remove('correct', 'wrong');
+    slots[i].classList.add(ok ? 'correct' : 'wrong');
+    if (!ok) allCorrect = false;
+  });
+  if (allCorrect) {
+    sound.success();
+    confetti();
+    speak('Benar sekali! Empat tambah empat tambah empat sama dengan dua belas.');
+    showToast('Benar! 🎉');
+    setTimeout(() => goTo(4), 1600);
+  } else {
+    sound.error();
+    speak('Belum tepat. Coba hitung lagi apelnya, ya.');
+    showToast('Coba lagi ya!', true);
+    // Reset wrong slots after a moment
+    setTimeout(() => {
+      slots.forEach((s, i) => {
+        if (user[i] !== expected[i]) {
+          state.equationSlots[i] = '';
+          s.classList.remove('wrong');
+          updateSlots();
+        }
+      });
+      state.focusedSlot = user.findIndex((v, i) => v !== expected[i]);
+      if (state.focusedSlot < 0) state.focusedSlot = 0;
+      updateSlots();
+    }, 1400);
+  }
+}
+
+/* =========================================================
+   SCREEN 4 — MULTIPLE CHOICE
+   ========================================================= */
+function initScreen4() {
+  document.getElementById('feedback4').textContent = '';
+  document.querySelectorAll('#choices4 .choice').forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove('correct', 'wrong');
+    btn.onclick = () => pickChoice4(btn);
+  });
+  speak('Tiga kali empat sama dengan berapa? Pilih bentuk penjumlahan yang benar.');
+}
+
+function pickChoice4(btn) {
+  const isCorrect = btn.dataset.correct === 'true';
+  const fb = document.getElementById('feedback4');
+  document.querySelectorAll('#choices4 .choice').forEach(b => b.disabled = true);
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.textContent = '🎉 Benar! 3 × 4 = 4 + 4 + 4 = 12';
+    fb.className = 'feedback ok';
+    sound.success(); confetti();
+    speak('Benar! Tiga kali empat sama dengan empat tambah empat tambah empat sama dengan dua belas.');
+    setTimeout(() => goTo(5), 1800);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = 'Belum tepat. Ingat: 3 × 4 artinya 4 + 4 + 4.';
+    fb.className = 'feedback no';
+    sound.error();
+    speak('Belum tepat. Tiga kali empat artinya empat tambah empat tambah empat.');
+    setTimeout(() => {
+      document.querySelector('#choices4 .choice[data-correct="true"]').classList.add('correct');
+    }, 800);
+    setTimeout(() => goTo(5), 2400);
+  }
+}
+
+/* =========================================================
+   SCREEN 5 — QUIZ
+   ========================================================= */
+const QUIZ = [
+  { q: 'Bu Ana punya 4 keranjang. Setiap keranjang berisi 5 apel. Berapa jumlah apel seluruhnya?',
+    options: [9, 20, 45], correct: 20 },
+  { q: 'Dodi mengambil 3 kantong. Setiap kantong berisi 4 apel. Berapa jumlah apel Dodi?',
+    options: [7, 12, 34], correct: 12 },
+  { q: '6 × 2 sama dengan...', options: [8, 12, 62], correct: 12 },
+  { q: '5 × 3 sama dengan...', options: [8, 15, 53], correct: 15 },
+  { q: 'Ada 4 pohon. Setiap pohon berbuah 6 apel. Berapa jumlah apel seluruhnya?',
+    options: [10, 24, 46], correct: 24 },
+];
+
+function initScreen5() {
+  state.quizIndex = 0;
+  state.quizScore = 0;
+  document.getElementById('qScore').textContent = '0';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearInterval(state.quizTimer);
+  const q = QUIZ[state.quizIndex];
+  document.getElementById('qNum').textContent = state.quizIndex + 1;
+  document.getElementById('qNum2').textContent = `Soal ${state.quizIndex + 1} dari 5`;
+  document.getElementById('qText').textContent = q.q;
+
+  const wrap = document.getElementById('choices5');
+  wrap.innerHTML = '';
+  q.options.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'choice';
+    b.textContent = opt;
+    b.onclick = () => answerQuiz(opt, b);
+    wrap.appendChild(b);
+  });
+
+  speak(q.q);
+
+  // Timer
+  state.quizTimeLeft = 20;
+  const fill = document.getElementById('timerFill');
+  fill.style.width = '100%';
+  fill.style.background = 'linear-gradient(90deg, #4caf50, #8bc34a)';
+  state.quizTimer = setInterval(() => {
+    state.quizTimeLeft -= 1;
+    const pct = (state.quizTimeLeft / 20) * 100;
+    fill.style.width = pct + '%';
+    if (pct <= 40) fill.style.background = 'linear-gradient(90deg, #ff9800, #ff5722)';
+    if (pct <= 15) fill.style.background = 'linear-gradient(90deg, #f44336, #c62828)';
+    if (state.quizTimeLeft <= 0) {
+      clearInterval(state.quizTimer);
+      answerQuiz(null, null);
+    }
+  }, 1000);
+}
+
+function answerQuiz(chosen, btn) {
+  clearInterval(state.quizTimer);
+  const q = QUIZ[state.quizIndex];
+  const buttons = document.querySelectorAll('#choices5 .choice');
+  buttons.forEach(b => {
+    b.disabled = true;
+    if (Number(b.textContent) === q.correct) b.classList.add('correct');
+    else if (b === btn) b.classList.add('wrong');
+  });
+  if (chosen === q.correct) {
+    state.quizScore++;
+    document.getElementById('qScore').textContent = state.quizScore;
+    sound.success();
+    showToast('Benar! 🎉');
+  } else {
+    sound.error();
+    if (chosen === null) showToast('Waktu habis!', true);
+    else showToast('Belum tepat', true);
+  }
+  setTimeout(() => {
+    state.quizIndex++;
+    if (state.quizIndex >= QUIZ.length) {
+      finishQuiz();
+    } else {
+      renderQuestion();
+    }
+  }, 1400);
+}
+
+function finishQuiz() {
+  confetti();
+  sound.success();
+  speak(`Hebat! Skor kamu ${state.quizScore} dari 5.`);
+  document.getElementById('screen5').innerHTML = `
+    <div class="top-bar"><div></div><button class="btn-icon" onclick="toggleFullscreen()">⛶</button></div>
+    <div class="question-card" style="text-align:center">
+      <h1 style="color:#1a237e">🎉 Selesai!</h1>
+      <p class="subtitle">Skor kamu:</p>
+      <div style="font-size:clamp(60px,10vw,140px); font-weight:bold; color:#ff9800; line-height:1">${state.quizScore}<span style="font-size:0.5em; color:#78909c">/5</span></div>
+      <p class="subtitle" style="margin-top:20px">${state.quizScore >= 4 ? 'Luar biasa! 🌟' : state.quizScore >= 2 ? 'Bagus! Terus berlatih ya 💪' : 'Ayo coba lagi, kamu pasti bisa! 🌱'}</p>
+      <div style="margin-top:30px">
+        <button class="btn" onclick="goTo(6)">Lanjut ➡</button>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   SCREEN 6 — REFLECTION
+   ========================================================= */
+function initScreen6() {
+  document.querySelectorAll('#emotions .emotion').forEach(btn => {
+    btn.classList.remove('selected');
+    btn.onclick = () => {
+      document.querySelectorAll('#emotions .emotion').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      sound.click();
+      document.getElementById('btnFinish').disabled = false;
+      const feel = btn.dataset.feel;
+      if (feel === 'senang') speak('Senang sekali! Terima kasih sudah belajar hari ini.');
+      else if (feel === 'biasa') speak('Baik, semoga besok lebih menyenangkan ya.');
+      else speak('Tidak apa-apa. Besok kita belajar lagi bersama-sama.');
+    };
+  });
+  document.getElementById('btnFinish').disabled = true;
+  document.getElementById('doneMessage').classList.remove('show');
+}
+
+function finishSession() {
+  sound.success();
+  confetti();
+  document.getElementById('doneMessage').classList.add('show');
+  document.getElementById('btnFinish').disabled = true;
+  speak('Hebat! Kamu sudah membantu Bu Ana hari ini. Sampai jumpa lagi!');
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+window.addEventListener('load', () => {
+  // Preload voices
+  if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
+});
+
+// Prevent double-tap zoom on iOS
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+</script>
+</body>
+</html>
