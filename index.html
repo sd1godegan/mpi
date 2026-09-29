@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Portal Rumah MPI · SD Negeri 1 Godegan</title>
 <meta name="description" content="Kumpulan Multimedia Pembelajaran Interaktif SD Negeri 1 Godegan">
 <meta name="theme-color" content="#F8E6CE" media="(prefers-color-scheme: light)">
@@ -39,13 +39,8 @@
   --primary-soft:#EDF0F8;
   --primary-ring:#DDE4F2;
 
-  --peach:#F7DEC8;
-  --mint:#D4E8DC;
-  --lavender:#E0D7EE;
-  --sky:#DAE4F2;
-  --rose:#F5DCE2;
-  --butter:#F5EBC8;
-  --sage:#D8E6DC;
+  --peach:#F7DEC8;--mint:#D4E8DC;--lavender:#E0D7EE;
+  --sky:#DAE4F2;--rose:#F5DCE2;--butter:#F5EBC8;--sage:#D8E6DC;
 
   --m-agama:#E8DCF0;--m-agama-i:#7E6BA5;
   --m-pancasila:#F5DFDC;--m-pancasila-i:#B7726A;
@@ -63,8 +58,6 @@
   --highlight:#FDF3C7;
 
   --welcome-bg:#F8E6CE;
-  --welcome-surface:#FBF6EF;
-  --welcome-border:#F0E4D2;
   --welcome-muted:#9C8E78;
 
   --radius:12px;
@@ -75,19 +68,9 @@
   --ease:cubic-bezier(.2,.8,.2,1);
 }
 [data-theme="dark"]{
-  --bg:#1C1C28;
-  --surface:#24242F;
-  --surface-2:#2A2A38;
-  --border:#35353F;
-  --text:#ECEAF2;
-  --text-soft:#B8B6C8;
-  --muted:#8E8CA0;
-
-  --primary:#98A8D0;
-  --primary-hover:#A8B8DD;
-  --primary-soft:#2E3245;
-  --primary-ring:#3A4058;
-
+  --bg:#1C1C28;--surface:#24242F;--surface-2:#2A2A38;--border:#35353F;
+  --text:#ECEAF2;--text-soft:#B8B6C8;--muted:#8E8CA0;
+  --primary:#98A8D0;--primary-hover:#A8B8DD;--primary-soft:#2E3245;--primary-ring:#3A4058;
   --m-agama:#3A3248;--m-agama-i:#B8A8D8;
   --m-pancasila:#48302E;--m-pancasila-i:#D8A8A0;
   --m-bindo:#2E3644;--m-bindo-i:#98B0D8;
@@ -99,27 +82,23 @@
   --m-tik:#2E2E44;--m-tik-i:#A8A8D8;
   --m-jawa:#3A3428;--m-jawa-i:#D8C898;
   --m-batik:#3A2E32;--m-batik-i:#D8A0B0;
-
   --err:#E0A8B0;--ok:#A8D098;
   --highlight:#4A4228;
-
   --welcome-bg:#1E1E28;
-  --welcome-surface:#26262F;
-  --welcome-border:#383844;
   --welcome-muted:#8E8CA0;
-
   --shadow-sm:0 1px 2px rgba(0,0,0,.2);
   --shadow:0 2px 10px rgba(0,0,0,.25);
   --shadow-md:0 6px 20px rgba(0,0,0,.3);
   --shadow-lg:0 12px 32px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;font-size:16px}
 body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   background:var(--bg);color:var(--text);line-height:1.55;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   min-height:100vh;transition:background .3s,color .3s;
+  display:flex;flex-direction:column;
 }
 body.welcome-open{overflow:hidden}
 svg{display:block}
@@ -131,14 +110,15 @@ button{font-family:inherit}
 input,select,textarea{font-family:inherit}
 
 /* ============================================================
-   WELCOME PAGE
+   WELCOME PAGE — Proporsional, no scroll
    ============================================================ */
 .welcome{
   position:fixed;inset:0;z-index:99999;
   display:grid;place-items:center;
-  padding:1.5rem;
+  padding:clamp(.75rem, 3vh, 1.5rem);
   background:var(--welcome-bg);
-  overflow-y:auto;
+  height:100dvh;min-height:100vh;
+  overflow:hidden;
   transition:opacity .55s var(--ease),visibility .55s var(--ease);
 }
 .welcome.hide{opacity:0;visibility:hidden;pointer-events:none}
@@ -146,15 +126,20 @@ input,select,textarea{font-family:inherit}
 .welcome-card{
   position:relative;
   width:100%;max-width:440px;
+  max-height:100%;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
   background:var(--surface);
-  border-radius:24px;
-  padding:2.5rem 2.25rem 2rem;
+  border-radius:clamp(16px, 2.5vw, 24px);
+  padding:clamp(1.25rem, 4vh, 2.5rem) clamp(1.25rem, 5vw, 2.25rem) clamp(1rem, 3vh, 2rem);
   text-align:center;
   box-shadow:
     0 20px 50px -20px rgba(120,90,50,.2),
     0 4px 12px rgba(120,90,50,.05);
-  animation:welcomeIn .65s var(--ease);
+  animation:welcomeIn .6s var(--ease);
+  scrollbar-width:none;
 }
+.welcome-card::-webkit-scrollbar{display:none}
 [data-theme="dark"] .welcome-card{
   box-shadow:
     0 20px 50px -20px rgba(0,0,0,.55),
@@ -166,32 +151,33 @@ input,select,textarea{font-family:inherit}
 }
 
 .welcome-mark{
-  width:64px;height:64px;
-  margin:0 auto 1.5rem;
-  border-radius:20px;
+  width:clamp(48px, 8vh, 64px);
+  height:clamp(48px, 8vh, 64px);
+  margin:0 auto clamp(.75rem, 2vh, 1.5rem);
+  border-radius:clamp(14px, 2vh, 20px);
   background:var(--primary);
   color:#fff;
   display:grid;place-items:center;
   box-shadow:0 10px 24px -8px rgba(136,153,196,.5);
 }
 .welcome-mark svg{
-  width:30px;height:30px;
+  width:clamp(22px, 4vh, 30px);
+  height:clamp(22px, 4vh, 30px);
   stroke:currentColor;stroke-width:1.7;
-  stroke-linecap:round;stroke-linejoin:round;
-  fill:none;
+  stroke-linecap:round;stroke-linejoin:round;fill:none;
 }
 
 .welcome-badge{
   display:inline-flex;align-items:center;gap:.5rem;
-  padding:.35rem .85rem .35rem .7rem;
+  padding:.32rem .8rem .32rem .65rem;
   border-radius:999px;
   background:var(--surface-2);
   border:1px solid var(--border);
-  font-size:.72rem;
+  font-size:clamp(.66rem, 1.5vh, .72rem);
   color:var(--text-soft);
   font-weight:600;
   letter-spacing:.02em;
-  margin-bottom:1.5rem;
+  margin-bottom:clamp(.75rem, 2vh, 1.5rem);
 }
 .welcome-badge .dot{
   width:6px;height:6px;border-radius:50%;
@@ -207,33 +193,33 @@ input,select,textarea{font-family:inherit}
 
 .welcome-eyebrow{
   display:inline-flex;align-items:center;gap:.7rem;
-  font-size:.7rem;
+  font-size:clamp(.62rem, 1.5vh, .7rem);
   font-weight:700;
   color:var(--welcome-muted);
   letter-spacing:.24em;
   text-transform:uppercase;
-  margin-bottom:.75rem;
+  margin-bottom:clamp(.4rem, 1vh, .75rem);
 }
 .welcome-eyebrow::before,
 .welcome-eyebrow::after{
-  content:'';width:20px;height:1px;
+  content:'';width:clamp(12px, 2vh, 20px);height:1px;
   background:currentColor;opacity:.5;
 }
 
 .welcome-title{
-  font-size:2.15rem;
+  font-size:clamp(1.5rem, 4.5vh, 2.15rem);
   font-weight:800;
-  letter-spacing:-.04em;
-  line-height:1.08;
+  letter-spacing:-.035em;
+  line-height:1.1;
   color:var(--text);
-  margin-bottom:1rem;
+  margin-bottom:clamp(.5rem, 1.5vh, 1rem);
 }
 .welcome-title .accent{color:var(--primary)}
 
 .welcome-sub{
-  font-size:.88rem;
+  font-size:clamp(.78rem, 1.8vh, .88rem);
   color:var(--welcome-muted);
-  line-height:1.6;
+  line-height:1.55;
   max-width:300px;
   margin:0 auto;
 }
@@ -242,14 +228,14 @@ input,select,textarea{font-family:inherit}
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:1.5rem 0 0;
-  margin-top:1.5rem;
+  padding:clamp(.75rem, 2vh, 1.5rem) 0 0;
+  margin-top:clamp(.75rem, 2vh, 1.5rem);
   border-top:1px solid var(--border);
 }
 .welcome-stat{flex:1;padding:0 .25rem;min-width:0}
 .welcome-stat .val{
   display:block;
-  font-size:1.4rem;
+  font-size:clamp(1.1rem, 2.5vh, 1.4rem);
   font-weight:800;
   letter-spacing:-.025em;
   color:var(--text);
@@ -259,16 +245,16 @@ input,select,textarea{font-family:inherit}
 }
 .welcome-stat .lbl{
   display:block;
-  font-size:.6rem;
+  font-size:clamp(.52rem, 1.2vh, .6rem);
   text-transform:uppercase;
   letter-spacing:.09em;
   color:var(--welcome-muted);
   font-weight:700;
-  margin-top:.4rem;
+  margin-top:.35rem;
 }
 .welcome-stat.loading .val{opacity:.25}
 .welcome-stats .sep{
-  width:1px;height:26px;
+  width:1px;height:clamp(20px, 3vh, 26px);
   background:var(--border);
   flex-shrink:0;
 }
@@ -277,13 +263,13 @@ input,select,textarea{font-family:inherit}
   display:flex;
   align-items:center;justify-content:center;gap:.55rem;
   width:100%;
-  padding:.95rem 1.25rem;
-  margin-top:1.75rem;
+  padding:clamp(.7rem, 1.8vh, .95rem) 1.25rem;
+  margin-top:clamp(.85rem, 2vh, 1.75rem);
   border-radius:12px;
   border:none;
   background:var(--primary);
   color:#fff;
-  font-size:.95rem;
+  font-size:clamp(.85rem, 1.8vh, .95rem);
   font-weight:700;
   letter-spacing:-.005em;
   cursor:pointer;
@@ -309,8 +295,8 @@ input,select,textarea{font-family:inherit}
 
 .welcome-check{
   display:inline-flex;align-items:center;gap:.5rem;
-  margin-top:1.25rem;
-  font-size:.78rem;
+  margin-top:clamp(.7rem, 1.5vh, 1.25rem);
+  font-size:clamp(.7rem, 1.5vh, .78rem);
   color:var(--welcome-muted);
   cursor:pointer;
   user-select:none;
@@ -344,6 +330,7 @@ input,select,textarea{font-family:inherit}
   background:var(--surface);border-bottom:1px solid var(--border);
   padding:.75rem 1rem;position:sticky;top:0;z-index:30;
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  flex-shrink:0;
 }
 .topbar-inner{
   max-width:1400px;margin:0 auto;
@@ -417,9 +404,12 @@ input,select,textarea{font-family:inherit}
 [data-theme="dark"] .dd-item.danger:hover{background:#3A2A32}
 
 /* ============================================================
-   FILTER BAR + INLINE STATS
+   CONTAINER
    ============================================================ */
-.container{max-width:1400px;margin:0 auto;padding:1rem 1rem 3rem}
+.container{
+  max-width:1400px;margin:0 auto;padding:1rem 1rem 3rem;
+  width:100%;flex:1;
+}
 
 .filter-bar{
   display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;
@@ -432,17 +422,8 @@ input,select,textarea{font-family:inherit}
 .select select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-ring);background:var(--surface)}
 .select > .icon{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);width:12px;height:12px;stroke-width:2.2;color:var(--muted);pointer-events:none}
 
-.inline-stats{
-  margin-left:auto;display:flex;align-items:center;gap:.55rem;
-  font-size:.76rem;color:var(--muted);font-weight:500;
-  flex-wrap:wrap;
-}
-.inline-stats .st{
-  display:inline-flex;align-items:center;gap:.3rem;
-  padding:.25rem .6rem;border-radius:999px;
-  background:var(--surface-2);color:var(--text-soft);
-  white-space:nowrap;
-}
+.inline-stats{margin-left:auto;display:flex;align-items:center;gap:.55rem;font-size:.76rem;color:var(--muted);font-weight:500;flex-wrap:wrap}
+.inline-stats .st{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .6rem;border-radius:999px;background:var(--surface-2);color:var(--text-soft);white-space:nowrap}
 .inline-stats .st b{color:var(--text);font-weight:800;font-variant-numeric:tabular-nums}
 
 .result-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem;font-size:.78rem;color:var(--muted)}
@@ -459,9 +440,6 @@ input,select,textarea{font-family:inherit}
 .class-head h2{font-size:.95rem;font-weight:700;letter-spacing:-.01em}
 .class-count{font-size:.68rem;color:var(--muted);font-weight:600;background:var(--surface-2);padding:.12rem .5rem;border-radius:999px}
 
-/* ============================================================
-   GRID & CARDS
-   ============================================================ */
 .grid{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
 .card{
   background:var(--surface);border:1px solid var(--border);
@@ -518,8 +496,16 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
 .empty .hints button{padding:.35rem .7rem;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-soft);font-size:.76rem;cursor:pointer;font-family:inherit;transition:all .15s}
 .empty .hints button:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-ring)}
 
-.footer{max-width:1400px;margin:0 auto;padding:1.75rem 1rem;border-top:1px solid var(--border);text-align:center;font-size:.78rem;color:var(--muted);line-height:1.6}
-.footer strong{color:var(--text-soft);font-weight:700;display:block;margin-bottom:.15rem}
+/* Footer minimalis */
+.footer{
+  padding:2rem 1rem;
+  text-align:center;
+  font-size:.75rem;
+  color:var(--muted);
+  letter-spacing:.02em;
+  flex-shrink:0;
+  width:100%;
+}
 
 .toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%) translateY(120px);background:var(--text);color:var(--bg);padding:.65rem 1.1rem;border-radius:11px;font-size:.83rem;font-weight:600;box-shadow:var(--shadow-lg);z-index:999;transition:transform .3s var(--ease);max-width:90vw}
 .toast.show{transform:translateX(-50%) translateY(0)}
@@ -564,25 +550,202 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
   .select select{font-size:.76rem;padding:.45rem 1.7rem .45rem .65rem}
   .inline-stats{font-size:.7rem}
   .inline-stats .st{padding:.2rem .5rem}
+  .footer{font-size:.68rem;padding:1.5rem .75rem}
 }
-@media(max-width:480px){
-  .welcome{padding:1rem}
-  .welcome-card{padding:2rem 1.5rem 1.75rem;border-radius:20px}
-  .welcome-title{font-size:1.75rem;letter-spacing:-.035em}
-  .welcome-eyebrow{font-size:.64rem;letter-spacing:.18em;gap:.5rem}
-  .welcome-eyebrow::before,.welcome-eyebrow::after{width:14px}
-  .welcome-sub{font-size:.82rem}
-  .welcome-mark{width:56px;height:56px;border-radius:17px;margin-bottom:1.25rem}
-  .welcome-mark svg{width:26px;height:26px}
-  .welcome-badge{font-size:.66rem;padding:.3rem .7rem .3rem .6rem;margin-bottom:1.25rem}
-  .welcome-stat .val{font-size:1.15rem}
-  .welcome-stat .lbl{font-size:.55rem}
-  .welcome-stats{padding:1.25rem 0 0;margin-top:1.25rem}
-  .welcome-cta{padding:.85rem 1rem;font-size:.9rem;margin-top:1.5rem}
-  .welcome-check{font-size:.74rem;margin-top:1rem}
+
+/* Welcome — viewport pendek */
+@media(max-height:640px){
+  .welcome-card{padding:1rem 1.25rem .9rem;border-radius:16px}
+  .welcome-mark{width:44px;height:44px;margin-bottom:.5rem;border-radius:13px}
+  .welcome-mark svg{width:20px;height:20px}
+  .welcome-badge{padding:.25rem .7rem .25rem .55rem;margin-bottom:.6rem;font-size:.62rem}
+  .welcome-eyebrow{margin-bottom:.3rem;font-size:.6rem}
+  .welcome-title{font-size:1.35rem;margin-bottom:.4rem}
+  .welcome-sub{font-size:.75rem;line-height:1.45}
+  .welcome-stats{padding:.6rem 0 0;margin-top:.6rem}
+  .welcome-stat .val{font-size:1rem}
+  .welcome-stat .lbl{font-size:.5rem;margin-top:.2rem}
+  .welcome-cta{padding:.6rem 1rem;margin-top:.7rem;font-size:.82rem}
+  .welcome-check{margin-top:.55rem;font-size:.68rem}
 }
+@media(max-height:480px){
+  .welcome-mark,.welcome-badge,.welcome-stats{display:none}
+  .welcome-title{font-size:1.2rem}
+  .welcome-sub{font-size:.72rem}
+  .welcome-cta{margin-top:.6rem}
+}
+
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+}
+
+/* ============================================================
+   PROPORSI ADAPTIF — Browser, Laptop, & IFP
+   ============================================================ */
+
+/* 1. Base font scaling */
+html{font-size:16px}
+@media(min-width:1400px){html{font-size:16.5px}}
+@media(min-width:1700px){html{font-size:17.5px}}
+@media(min-width:2100px){html{font-size:19px}}
+@media(min-width:2700px){html{font-size:21px}}
+@media(min-width:3300px){html{font-size:23px}}
+
+/* 2. Container proporsional */
+.container,
+.topbar-inner,
+.footer{
+  max-width:clamp(1200px, 92vw, 2200px);
+}
+
+/* 3. Grid adaptif */
+.grid{
+  grid-template-columns:repeat(auto-fill, minmax(clamp(180px, 12vw, 260px), 1fr));
+  gap:clamp(.7rem, 1vw, 1.1rem);
+}
+
+/* 4. Hsearch proporsional */
+.hsearch{
+  max-width:clamp(300px, 32vw, 640px);
+}
+
+/* ============================================================
+   IFP OPTIMIZATION — Layar ≥ 2100px
+   ============================================================ */
+
+/* Topbar */
+@media(min-width:2100px){
+  .topbar{padding:1rem 1.25rem}
+  .brand-mark{width:52px;height:52px;border-radius:14px}
+  .brand-mark .icon{width:26px;height:26px}
+  .brand-text h1{font-size:1.2rem}
+  .brand-text p{font-size:.85rem}
+  .hsearch input{padding:.75rem 2.6rem .75rem 2.8rem;font-size:1rem}
+  .hsearch > .icon.lead{width:18px;height:18px;left:.95rem}
+  .hsearch kbd{padding:.25rem .5rem;font-size:.72rem}
+  .hsearch-clear{width:28px;height:28px}
+  .hsearch-clear .icon{width:16px;height:16px}
+  .btn-icon{width:44px;height:44px;border-radius:11px}
+  .btn-icon .icon{width:22px;height:22px}
+  .btn-pill{padding:.65rem 1.1rem;font-size:.9rem}
+  .btn-pill .icon-sm{width:18px;height:18px}
+  .user-trigger{padding:.4rem .8rem .4rem .4rem;font-size:.9rem}
+  .user-av{width:28px;height:28px;font-size:.75rem}
+}
+
+/* Filter bar */
+@media(min-width:2100px){
+  .filter-bar{padding:.75rem .9rem;gap:.65rem}
+  .select select{padding:.6rem 2.2rem .6rem .9rem;font-size:.9rem;border-radius:10px}
+  .select > .icon{width:14px;height:14px;right:.7rem}
+  .inline-stats{font-size:.9rem;gap:.7rem}
+  .inline-stats .st{padding:.35rem .8rem;border-radius:999px}
+  .result-bar{font-size:.92rem}
+  .chip{font-size:.82rem;padding:.3rem .65rem .3rem .85rem}
+  .chip button{width:18px;height:18px}
+  .chip .icon{width:12px;height:12px}
+}
+
+/* Kartu */
+@media(min-width:2100px){
+  .body{padding:.85rem .95rem .8rem;gap:.4rem}
+  .card h3{font-size:1rem;line-height:1.3;min-height:2.6em}
+  .card:hover{transform:translateY(-3px)}
+  .thumb-ic svg{width:48px;height:48px}
+  .badge{font-size:.72rem;padding:.22rem .6rem;top:.6rem;left:.6rem;border-radius:8px}
+  .meta{font-size:.82rem;gap:.4rem;padding-top:.3rem}
+  .meta .av{width:22px;height:22px;font-size:.72rem}
+  .btn{padding:.65rem .85rem;font-size:.88rem;border-radius:9px;gap:.4rem}
+  .btn-primary .icon{width:15px;height:15px}
+  .btn-ghost{padding:.65rem .85rem}
+  .btn-ghost .icon{width:16px;height:16px}
+  .actions{gap:.4rem;margin-top:.6rem}
+}
+
+/* Class section */
+@media(min-width:2100px){
+  .class-num{width:42px;height:42px;font-size:1.05rem;border-radius:11px}
+  .class-head h2{font-size:1.15rem}
+  .class-head{gap:.75rem;margin-bottom:.9rem;padding-bottom:.65rem}
+  .class-count{font-size:.82rem;padding:.2rem .7rem}
+  .class-section{margin-bottom:2rem}
+}
+
+/* Load more */
+@media(min-width:2100px){
+  .btn-load-more{padding:.85rem 1.6rem;font-size:.95rem;gap:.55rem}
+  .btn-load-more .icon{width:17px;height:17px}
+  .load-more-info{font-size:.85rem;margin-top:.6rem}
+}
+
+/* Welcome — IFP */
+@media(min-width:2100px){
+  .welcome-card{
+    max-width:560px;
+    padding:3rem 2.75rem 2.5rem;
+    border-radius:26px;
+  }
+  .welcome-mark{
+    width:84px;height:84px;
+    border-radius:26px;
+    margin-bottom:1.85rem;
+  }
+  .welcome-mark svg{width:40px;height:40px}
+  .welcome-badge{
+    padding:.48rem 1.1rem .48rem .9rem;
+    font-size:.86rem;
+    margin-bottom:2rem;
+    gap:.65rem;
+  }
+  .welcome-badge .dot{width:8px;height:8px}
+  .welcome-eyebrow{
+    font-size:.86rem;
+    letter-spacing:.28em;
+    margin-bottom:1rem;
+    gap:.9rem;
+  }
+  .welcome-eyebrow::before,
+  .welcome-eyebrow::after{width:26px;height:1.5px}
+  .welcome-title{font-size:2.85rem;margin-bottom:1.35rem}
+  .welcome-sub{font-size:1.08rem;line-height:1.65;max-width:400px}
+  .welcome-stats{padding:1.85rem 0 0;margin-top:1.85rem}
+  .welcome-stat{padding:0 .35rem}
+  .welcome-stat .val{font-size:1.85rem}
+  .welcome-stat .lbl{font-size:.72rem;margin-top:.5rem;letter-spacing:.11em}
+  .welcome-stats .sep{width:1.5px;height:36px}
+  .welcome-cta{
+    padding:1.15rem 1.5rem;
+    font-size:1.08rem;
+    border-radius:14px;
+    margin-top:2rem;
+    gap:.7rem;
+  }
+  .welcome-cta svg{width:20px;height:20px}
+  .welcome-check{font-size:.92rem;margin-top:1.65rem;gap:.6rem}
+  .welcome-check input{width:20px;height:20px;border-radius:6px}
+  .welcome-check input:checked{background-size:14px}
+}
+
+/* Layar sangat besar */
+@media(min-width:3300px){
+  .welcome-card{max-width:640px;padding:3.5rem 3rem 3rem}
+  .welcome-mark{width:96px;height:96px}
+  .welcome-mark svg{width:44px;height:44px}
+  .welcome-title{font-size:3.15rem}
+  .welcome-sub{font-size:1.18rem;max-width:440px}
+  .welcome-cta{font-size:1.2rem;padding:1.35rem 1.75rem}
+  .welcome-stat .val{font-size:2.05rem}
+
+  .grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .card h3{font-size:1.08rem}
+  .btn-icon{width:50px;height:50px}
+}
+
+/* IFP touch — matikan hover state */
+@media(hover:none) and (pointer:coarse){
+  .card:hover{transform:none}
+  .btn-icon:hover{background:var(--surface-2);color:var(--text-soft);border-color:var(--border)}
+  .btn-pill:hover{background:var(--primary-soft);color:var(--primary)}
 }
 </style>
 </head>
@@ -727,12 +890,10 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
       <select id="filterKelas" aria-label="Filter Kelas"><option value="">Semua Kelas</option></select>
       <svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
     </div>
-
     <div class="select">
       <select id="filterMapel" aria-label="Filter Mapel"><option value="">Semua Mapel</option></select>
       <svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
     </div>
-
     <div class="select">
       <select id="sortBy" aria-label="Urutkan">
         <option value="terbaru">Urut: Terbaru</option>
@@ -742,7 +903,6 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
       </select>
       <svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
     </div>
-
     <div class="inline-stats" id="inlineStats">
       <span class="st"><b id="statTotal">–</b> MPI</span>
       <span class="st"><b id="statKelas">–</b> Kelas</span>
@@ -776,10 +936,7 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
   </div>
 </main>
 
-<footer class="footer">
-  <strong>Portal Rumah MPI</strong>
-  <div>SD Negeri 1 Godegan · Kumpulan pembelajaran interaktif</div>
-</footer>
+<footer class="footer">© 2025 Portal Rumah MPI · SD Negeri 1 Godegan</footer>
 
 <button class="to-top" id="toTop" aria-label="Ke atas">
   <svg class="icon" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
@@ -800,9 +957,6 @@ const CFG = {
   PREFETCH_DELAY: 80
 };
 
-/* ============================================================
-   SMART SEARCH — Kamus Sinonim
-   ============================================================ */
 const SYNONYMS = {
   'mtk':'matematika','mat':'matematika','math':'matematika',
   'bi':'bahasa indonesia','bindo':'bahasa indonesia','b.indo':'bahasa indonesia',
@@ -817,9 +971,6 @@ const SYNONYMS = {
   'batik':'membatik'
 };
 
-/* ============================================================
-   AUTH
-   ============================================================ */
 const Auth = {
   KEY: 'mpi_auth_v3',
   get() { try { return JSON.parse(localStorage.getItem(this.KEY) || 'null'); } catch { return null; } },
@@ -827,9 +978,6 @@ const Auth = {
   isValid() { const a = this.get(); return !!(a && a.username && a.pin); }
 };
 
-/* ============================================================
-   MEMORY CACHE
-   ============================================================ */
 const MemCache = {
   _m: new Map(),
   get(k) { return this._m.get(k); },
@@ -838,9 +986,6 @@ const MemCache = {
   clear() { this._m.clear(); }
 };
 
-/* ============================================================
-   CLIENT CACHE
-   ============================================================ */
 const LocalCache = {
   PREFIX: 'mpi_c_v5_',
   get(k, ttlSec) {
@@ -872,9 +1017,6 @@ const LocalCache = {
   }
 };
 
-/* ============================================================
-   API
-   ============================================================ */
 const API = {
   _inflight: new Map(),
   _controller: null,
@@ -898,9 +1040,6 @@ const API = {
   }
 };
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
 const $ = id => document.getElementById(id);
 
 function esc(s) {
@@ -928,9 +1067,6 @@ function toast(msg, ms = 2200) {
   _toastT = setTimeout(() => el.classList.remove('show'), ms);
 }
 
-/* ============================================================
-   SMART SEARCH ENGINE
-   ============================================================ */
 function tokenize(q) {
   if (!q) return [];
   const raw = q.toLowerCase().trim();
@@ -975,9 +1111,6 @@ function highlight(text, tokens) {
   return result;
 }
 
-/* ============================================================
-   MAPEL META
-   ============================================================ */
 const MAPEL_META = [
   { keys:['agama'],              short:'Agama',       bg:'--m-agama',     fg:'--m-agama-i',     svg:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>' },
   { keys:['pancasila'],          short:'Pancasila',   bg:'--m-pancasila', fg:'--m-pancasila-i', svg:'<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>' },
@@ -1004,9 +1137,6 @@ function getMapelMeta(m) {
   return MAPEL_DEFAULT;
 }
 
-/* ============================================================
-   THEME
-   ============================================================ */
 const Theme = {
   KEY: 'mpi_theme',
   current() { return document.documentElement.getAttribute('data-theme') || 'light'; },
@@ -1021,17 +1151,12 @@ const Theme = {
   }
 };
 
-/* ============================================================
-   URL STATE
-   ============================================================ */
 const UrlState = {
   read() {
     const p = new URLSearchParams(location.search);
     return {
-      q: p.get('q') || '',
-      k: p.get('k') || '',
-      m: p.get('m') || '',
-      s: p.get('s') || 'terbaru'
+      q: p.get('q') || '', k: p.get('k') || '',
+      m: p.get('m') || '', s: p.get('s') || 'terbaru'
     };
   },
   write(state) {
@@ -1046,58 +1171,35 @@ const UrlState = {
   }
 };
 
-/* ============================================================
-   STATE
-   ============================================================ */
 const state = {
-  all: [],
-  filtered: [],
-  rendered: 0,
-  version: 0,
-  tokens: [],
-  initialUrl: UrlState.read()
+  all: [], filtered: [], rendered: 0,
+  version: 0, tokens: [], initialUrl: UrlState.read()
 };
 
-/* ============================================================
-   DOM REFS
-   ============================================================ */
 const el = {
-  content: $('content'),
-  resultMeta: $('resultMeta'),
-  search: $('search'),
-  hsearchWrap: $('hsearchWrap'),
-  clearSearch: $('clearSearch'),
-  kbdHint: $('kbdHint'),
-  filterKelas: $('filterKelas'),
-  filterMapel: $('filterMapel'),
-  sortBy: $('sortBy'),
-  countShown: $('countShown'),
-  countTotal: $('countTotal'),
+  content: $('content'), resultMeta: $('resultMeta'),
+  search: $('search'), hsearchWrap: $('hsearchWrap'),
+  clearSearch: $('clearSearch'), kbdHint: $('kbdHint'),
+  filterKelas: $('filterKelas'), filterMapel: $('filterMapel'), sortBy: $('sortBy'),
+  countShown: $('countShown'), countTotal: $('countTotal'),
   activeChips: $('activeChips'),
-  loadMoreWrap: $('loadMoreWrap'),
-  loadMoreBtn: $('loadMoreBtn'),
-  loadMoreInfo: $('loadMoreInfo'),
-  toTop: $('toTop')
+  loadMoreWrap: $('loadMoreWrap'), loadMoreBtn: $('loadMoreBtn'),
+  loadMoreInfo: $('loadMoreInfo'), toTop: $('toTop')
 };
 
-/* ============================================================
-   WELCOME LOGIC
-   ============================================================ */
 const Welcome = {
   LS_OFF: 'mpi_welcome_off',
   SS_SEEN: 'mpi_welcome_seen',
-
   el: null,
-  card: null,
 
   init() {
     this.el = $('welcome');
     if (!this.el) return;
 
-    const permanentlyOff = localStorage.getItem(this.LS_OFF) === '1';
-    const sessionSeen = sessionStorage.getItem(this.SS_SEEN) === '1';
+    const off = localStorage.getItem(this.LS_OFF) === '1';
+    const seen = sessionStorage.getItem(this.SS_SEEN) === '1';
 
-    if (permanentlyOff || sessionSeen) {
+    if (off || seen) {
       this.el.classList.add('hide');
       document.body.classList.remove('welcome-open');
       return;
@@ -1109,7 +1211,6 @@ const Welcome = {
     const dismissCb = $('welcomeDismiss');
 
     const enter = () => this.enter(dismissCb);
-
     startBtn.addEventListener('click', enter);
 
     document.addEventListener('keydown', (e) => {
@@ -1120,27 +1221,21 @@ const Welcome = {
       }
     });
 
-    // Coba update stats kalau data sudah siap
     this.tryUpdateStats();
   },
 
   tryUpdateStats() {
-    if (state.all.length > 0) {
-      this.updateStats();
-      return;
-    }
-    let attempts = 0;
-    const timer = setInterval(() => {
-      attempts++;
-      if (state.all.length > 0 || attempts > 20) {
-        clearInterval(timer);
+    if (state.all.length > 0) { this.updateStats(); return; }
+    let n = 0;
+    const t = setInterval(() => {
+      if (state.all.length > 0 || ++n > 20) {
+        clearInterval(t);
         this.updateStats();
       }
     }, 150);
   },
 
   updateStats() {
-    const total = state.all.length;
     const ks = new Set(), ms = new Set(), gs = new Set();
     for (let i = 0; i < state.all.length; i++) {
       const r = state.all[i];
@@ -1149,7 +1244,7 @@ const Welcome = {
       if (r.g) gs.add(r.g);
     }
     const wT = $('wTotal'), wK = $('wKelas'), wM = $('wMapel'), wG = $('wGuru');
-    if (wT) wT.textContent = total;
+    if (wT) wT.textContent = state.all.length;
     if (wK) wK.textContent = ks.size;
     if (wM) wM.textContent = ms.size;
     if (wG) wG.textContent = gs.size;
@@ -1165,16 +1260,12 @@ const Welcome = {
     this.el.classList.add('hide');
     document.body.classList.remove('welcome-open');
 
-    // Fokus ke search setelah transisi (desktop)
     setTimeout(() => {
       if (window.innerWidth > 768 && el.search) el.search.focus();
     }, 550);
   }
 };
 
-/* ============================================================
-   LOAD DATA
-   ============================================================ */
 async function loadData(force = false) {
   if (!force) {
     const cached = LocalCache.get('mpi_list', CFG.CACHE_TTL);
@@ -1192,10 +1283,10 @@ async function loadData(force = false) {
     if (!force && state.version) params.version = state.version;
     const res = await API.get(params, { abortPrevious: true });
     if (res.unchanged) {
-      const fallback = LocalCache.get('mpi_list', 99999);
-      if (fallback && fallback.data) {
-        state.all = fallback.data;
-        state.version = fallback.version || 0;
+      const fb = LocalCache.get('mpi_list', 99999);
+      if (fb && fb.data) {
+        state.all = fb.data;
+        state.version = fb.version || 0;
         afterData();
         return;
       }
@@ -1239,11 +1330,8 @@ function applyUrlState() {
 }
 
 function buildFilters() {
-  const cK = el.filterKelas.value;
-  const cM = el.filterMapel.value;
-  el.filterKelas.length = 1;
-  el.filterMapel.length = 1;
-
+  const cK = el.filterKelas.value, cM = el.filterMapel.value;
+  el.filterKelas.length = 1; el.filterMapel.length = 1;
   const ks = new Set(), ms = new Set(), gs = new Set();
   for (let i = 0; i < state.all.length; i++) {
     const r = state.all[i];
@@ -1251,7 +1339,6 @@ function buildFilters() {
     if (r.m) ms.add(r.m);
     if (r.g) gs.add(r.g);
   }
-
   const fragK = document.createDocumentFragment();
   [...ks].sort((a, b) => a.localeCompare(b, 'id', { numeric: true })).forEach(k => {
     const o = document.createElement('option');
@@ -1259,7 +1346,6 @@ function buildFilters() {
     fragK.appendChild(o);
   });
   el.filterKelas.appendChild(fragK);
-
   const fragM = document.createDocumentFragment();
   [...ms].sort().forEach(m => {
     const o = document.createElement('option');
@@ -1267,10 +1353,7 @@ function buildFilters() {
     fragM.appendChild(o);
   });
   el.filterMapel.appendChild(fragM);
-
-  el.filterKelas.value = cK;
-  el.filterMapel.value = cM;
-
+  el.filterKelas.value = cK; el.filterMapel.value = cM;
   animateNum('statTotal', state.all.length);
   animateNum('statKelas', ks.size);
   animateNum('statMapel', ms.size);
@@ -1292,17 +1375,10 @@ function animateNum(id, target) {
   requestAnimationFrame(step);
 }
 
-/* ============================================================
-   FILTER + SORT
-   ============================================================ */
 function recompute() {
   const q = el.search.value.trim();
-  const kf = el.filterKelas.value;
-  const mf = el.filterMapel.value;
-  const sort = el.sortBy.value;
-
+  const kf = el.filterKelas.value, mf = el.filterMapel.value, sort = el.sortBy.value;
   state.tokens = tokenize(q);
-
   const out = [];
   for (let i = 0; i < state.all.length; i++) {
     const r = state.all[i];
@@ -1311,26 +1387,16 @@ function recompute() {
     if (!matchesTokens(r, state.tokens)) continue;
     out.push(r);
   }
-
-  if (sort === 'judul') {
-    out.sort((a, b) => a.j.localeCompare(b.j, 'id'));
-  } else if (sort === 'guru') {
-    out.sort((a, b) => a.g.localeCompare(b.g, 'id'));
-  } else if (sort === 'terbaru') {
-    out.sort((a, b) => (b.ts || '').localeCompare(a.ts || ''));
-  } else {
-    out.sort((a, b) => {
-      const c = String(a.k).localeCompare(String(b.k), 'id', { numeric: true });
-      return c !== 0 ? c : a.j.localeCompare(b.j, 'id');
-    });
-  }
-
+  if (sort === 'judul') out.sort((a, b) => a.j.localeCompare(b.j, 'id'));
+  else if (sort === 'guru') out.sort((a, b) => a.g.localeCompare(b.g, 'id'));
+  else if (sort === 'terbaru') out.sort((a, b) => (b.ts || '').localeCompare(a.ts || ''));
+  else out.sort((a, b) => {
+    const c = String(a.k).localeCompare(String(b.k), 'id', { numeric: true });
+    return c !== 0 ? c : a.j.localeCompare(b.j, 'id');
+  });
   state.filtered = out;
 }
 
-/* ============================================================
-   RENDER
-   ============================================================ */
 function render(fromIndex) {
   const total = state.filtered.length;
   el.countShown.textContent = total;
@@ -1343,12 +1409,9 @@ function render(fromIndex) {
     const hints = ['matematika', 'kelas 5', 'bu siti', 'ipa'].map(h =>
       `<button data-hint="${esc(h)}">${esc(h)}</button>`
     ).join('');
-
     el.content.innerHTML = `
       <div class="empty">
-        <div class="empty-ic">
-          <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        </div>
+        <div class="empty-ic"><svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
         <h3>${hasQuery ? 'Tidak ditemukan' : 'Belum ada MPI'}</h3>
         <p>${hasQuery ? 'Coba kata kunci lain atau cek filter aktif.' : 'Katalog masih kosong.'}</p>
         ${hasQuery ? `<div class="hints">${hints}</div>` : ''}
@@ -1358,33 +1421,22 @@ function render(fromIndex) {
   }
 
   if (fromIndex === 0) el.content.innerHTML = '';
-
   const end = Math.min(fromIndex + CFG.PAGE_SIZE, total);
   const slice = state.filtered.slice(fromIndex, end);
   const sort = el.sortBy.value;
   const useGroup = sort === 'kelas' && !el.filterKelas.value;
-
   let html = '';
 
   if (useGroup) {
-    const grouped = {};
-    const order = [];
+    const grouped = {}, order = [];
     for (let i = 0; i < slice.length; i++) {
-      const r = slice[i];
-      const k = r.k || 'Lainnya';
+      const r = slice[i], k = r.k || 'Lainnya';
       if (!grouped[k]) { grouped[k] = []; order.push(k); }
       grouped[k].push(r);
     }
     for (let i = 0; i < order.length; i++) {
-      const k = order[i];
-      const items = grouped[k];
-      html += `<section class="class-section">
-        <div class="class-head">
-          <div class="class-num">${esc(k)}</div>
-          <h2>Kelas ${esc(k)}</h2>
-          <span class="class-count">${items.length}</span>
-        </div>
-        <div class="grid">`;
+      const k = order[i], items = grouped[k];
+      html += `<section class="class-section"><div class="class-head"><div class="class-num">${esc(k)}</div><h2>Kelas ${esc(k)}</h2><span class="class-count">${items.length}</span></div><div class="grid">`;
       for (let j = 0; j < items.length; j++) html += cardHTML(items[j], j);
       html += `</div></section>`;
     }
@@ -1394,11 +1446,8 @@ function render(fromIndex) {
     html += '</div>';
   }
 
-  if (fromIndex === 0) {
-    el.content.innerHTML = html;
-  } else {
-    el.content.insertAdjacentHTML('beforeend', html);
-  }
+  if (fromIndex === 0) el.content.innerHTML = html;
+  else el.content.insertAdjacentHTML('beforeend', html);
   state.rendered = end;
 
   if (end < total) {
@@ -1417,34 +1466,19 @@ function cardHTML(r, i) {
   const initials = r.g
     ? r.g.split(' ').filter(w => /^[A-Z]/i.test(w[0])).slice(0, 2).map(w => w[0]).join('').toUpperCase()
     : '?';
-
   const thumbHTML = thumb
-    ? `<img src="${esc(thumb)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
-       <div class="thumb-ic" style="display:none"><svg viewBox="0 0 24 24">${meta.svg}</svg></div>`
+    ? `<img src="${esc(thumb)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"><div class="thumb-ic" style="display:none"><svg viewBox="0 0 24 24">${meta.svg}</svg></div>`
     : `<div class="thumb-ic"><svg viewBox="0 0 24 24">${meta.svg}</svg></div>`;
-
   const thumbStyle = thumb ? '' : `style="background:var(${meta.bg});--thumb-fg:var(${meta.fg})"`;
   const vUrl = `viewer.html?file=${encodeURIComponent(r.l)}&title=${encodeURIComponent(r.j)}&guru=${encodeURIComponent(r.g)}`;
-
   return `<article class="card" style="animation-delay:${delay}ms">
-    <div class="thumb" ${thumbStyle}>
-      ${thumbHTML}
-      ${r.m ? `<div class="badge">${esc(meta.short)}</div>` : ''}
-    </div>
+    <div class="thumb" ${thumbStyle}>${thumbHTML}${r.m ? `<div class="badge">${esc(meta.short)}</div>` : ''}</div>
     <div class="body">
       <h3>${highlight(r.j, tokens)}</h3>
-      <div class="meta">
-        <span class="av">${esc(initials)}</span>
-        <span class="name">${highlight(r.g || '-', tokens)}</span>
-      </div>
+      <div class="meta"><span class="av">${esc(initials)}</span><span class="name">${highlight(r.g || '-', tokens)}</span></div>
       <div class="actions">
-        <a class="btn btn-primary" href="${vUrl}" data-prefetch>
-          <svg class="icon" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-          Buka
-        </a>
-        <button class="btn btn-ghost" data-action="share" data-link="${esc(r.l)}" data-title="${esc(r.j)}" data-guru="${esc(r.g)}" title="Bagikan">
-          <svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
-        </button>
+        <a class="btn btn-primary" href="${vUrl}" data-prefetch><svg class="icon" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>Buka</a>
+        <button class="btn btn-ghost" data-action="share" data-link="${esc(r.l)}" data-title="${esc(r.j)}" data-guru="${esc(r.g)}" title="Bagikan"><svg class="icon" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg></button>
       </div>
     </div>
   </article>`;
@@ -1452,8 +1486,7 @@ function cardHTML(r, i) {
 
 function renderChips() {
   const q = el.search.value.trim();
-  const kf = el.filterKelas.value;
-  const mf = el.filterMapel.value;
+  const kf = el.filterKelas.value, mf = el.filterMapel.value;
   const X = '<svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
   const parts = [];
   if (kf) parts.push(`<span class="chip">Kelas ${esc(kf)} <button data-clear="k">${X}</button></span>`);
@@ -1480,9 +1513,6 @@ function showError(msg) {
   </div>`;
 }
 
-/* ============================================================
-   SHARE
-   ============================================================ */
 async function shareMPI(link, judul, guru) {
   const u = new URL('viewer.html', location.href);
   u.searchParams.set('file', link);
@@ -1496,9 +1526,6 @@ async function shareMPI(link, judul, guru) {
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
 }
 
-/* ============================================================
-   EVENT DELEGATION
-   ============================================================ */
 document.addEventListener('click', e => {
   const chipClear = e.target.closest('[data-clear]');
   if (chipClear) {
@@ -1509,7 +1536,6 @@ document.addEventListener('click', e => {
     refresh();
     return;
   }
-
   const hintBtn = e.target.closest('[data-hint]');
   if (hintBtn) {
     el.search.value = hintBtn.dataset.hint;
@@ -1517,31 +1543,20 @@ document.addEventListener('click', e => {
     refresh();
     return;
   }
-
   const shareBtn = e.target.closest('[data-action="share"]');
   if (shareBtn) {
     shareMPI(shareBtn.dataset.link, shareBtn.dataset.title, shareBtn.dataset.guru);
     return;
   }
-
-  if (e.target.closest('[data-action="retry"]')) {
-    loadData(true);
-    return;
-  }
-
+  if (e.target.closest('[data-action="retry"]')) { loadData(true); return; }
   if (e.target.closest('#userBtn')) {
     e.stopPropagation();
     $('dropdown').classList.toggle('show');
     return;
   }
-  if (!e.target.closest('.user-menu')) {
-    $('dropdown')?.classList.remove('show');
-  }
+  if (!e.target.closest('.user-menu')) $('dropdown')?.classList.remove('show');
 });
 
-/* ============================================================
-   PREFETCH
-   ============================================================ */
 let _prefetchTimers = new WeakMap();
 document.addEventListener('mouseover', e => {
   const a = e.target.closest('a[href*="viewer.html"]');
@@ -1561,9 +1576,6 @@ document.addEventListener('mouseout', e => {
   if (t) clearTimeout(t);
 });
 
-/* ============================================================
-   REFRESH
-   ============================================================ */
 const refresh = () => {
   recompute();
   render(0);
@@ -1584,25 +1596,19 @@ window.resetFilters = () => {
   refresh();
 };
 
-/* ============================================================
-   INPUT LISTENERS
-   ============================================================ */
 el.search.addEventListener('input', debounce(() => {
   el.hsearchWrap.classList.toggle('has-val', el.search.value.length > 0);
   refresh();
 }, CFG.DEBOUNCE_SEARCH));
-
 el.search.addEventListener('focus', () => {
   if (el.kbdHint) el.kbdHint.style.display = 'none';
 });
-
 el.clearSearch.addEventListener('click', () => {
   el.search.value = '';
   el.hsearchWrap.classList.remove('has-val');
   refresh();
   el.search.focus();
 });
-
 el.filterKelas.addEventListener('change', refresh);
 el.filterMapel.addEventListener('change', refresh);
 el.sortBy.addEventListener('change', refresh);
@@ -1614,21 +1620,15 @@ $('refreshBtn').addEventListener('click', () => {
   loadData(true);
   toast('Memuat ulang...');
 });
-
 $('themeToggle').addEventListener('click', () => Theme.toggle());
-
 $('logoutBtn')?.addEventListener('click', () => {
   Auth.clear();
   LocalCache.clear();
   toast('Berhasil keluar');
   setTimeout(() => location.reload(), 400);
 });
-
 el.loadMoreBtn.addEventListener('click', () => render(state.rendered));
 
-/* ============================================================
-   SCROLL & KEYBOARD
-   ============================================================ */
 let _scrollRAF;
 window.addEventListener('scroll', () => {
   if (_scrollRAF) return;
@@ -1658,9 +1658,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* ============================================================
-   AUTH UI
-   ============================================================ */
 function refreshAuthUI() {
   const a = Auth.get();
   const loginBtn = $('loginBtn'), addBtn = $('addBtn'), userMenu = $('userMenu');
@@ -1681,16 +1678,10 @@ function refreshAuthUI() {
   $('dropRole').textContent = (u.role || 'guru') + (u.kelas && u.kelas !== '-' ? ' · Kelas ' + u.kelas : '');
 }
 
-/* ============================================================
-   VISIBILITY
-   ============================================================ */
 let _lastHidden = 0;
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    _lastHidden = Date.now();
-  } else if (_lastHidden && Date.now() - _lastHidden > 60000) {
-    silentRefresh();
-  }
+  if (document.hidden) _lastHidden = Date.now();
+  else if (_lastHidden && Date.now() - _lastHidden > 60000) silentRefresh();
 });
 
 /* ============================================================
