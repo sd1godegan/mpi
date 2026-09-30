@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayo Menghitung Benda sampai 10 — Kelas 1 SD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:'Baloo 2',system-ui,sans-serif;
+    background:#eaf4ff;
+    color:#2b4a6f;
+    overflow-x:hidden;
+    touch-action:manipulation;
+  }
+  .screen{display:none;min-height:100vh;width:100%;}
+  .screen.active{display:flex;}
+
+  /* ============ SAMPUL DEPAN ============ */
+  #cover{
+    position:relative;
+    overflow:hidden;
+    align-items:center;justify-content:center;
+    padding:26px 16px 40px;
+    background:linear-gradient(180deg,#4fb0f0 0%,#8fd3f4 32%,#c9ebff 58%,#ffe9a8 100%);
+  }
+  /* dekorasi langit */
+  .deco{position:absolute;pointer-events:none;user-select:none;z-index:1;}
+  .cloud{font-size:70px;opacity:.85;filter:drop-shadow(0 6px 10px rgba(255,255,255,.6));}
+  .c1{top:8%;left:-10%;animation:drift 26s linear infinite;}
+  .c2{top:18%;right:-14%;font-size:95px;animation:drift 34s linear infinite reverse;}
+  .c3{top:44%;left:-18%;font-size:60px;animation:drift 44s linear infinite;}
+  @keyframes drift{
+    0%{transform:translateX(0);}
+    50%{transform:translateX(60vw);}
+    100%{transform:translateX(0);}
+  }
+  .sun{
+    position:absolute;top:-70px;right:-70px;width:230px;height:230px;border-radius:50%;
+    background:radial-gradient(circle,#fff3b0 0%,#ffd43b 45%,rgba(255,212,59,0) 72%);
+    animation:sunPulse 4s ease-in-out infinite;z-index:0;
+  }
+  @keyframes sunPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+
+  .floaty{position:absolute;font-size:38px;opacity:.55;animation:floatY 5s ease-in-out infinite;z-index:1;}
+  @keyframes floatY{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-22px) rotate(6deg);}}
+  .f1{top:12%;left:8%;animation-delay:.2s;}
+  .f2{top:62%;left:5%;font-size:44px;animation-delay:1.1s;}
+  .f3{top:70%;right:8%;font-size:42px;animation-delay:.6s;}
+  .f4{top:30%;right:6%;animation-delay:1.6s;}
+  .f5{top:86%;left:38%;font-size:34px;animation-delay:.9s;}
+
+  .fnum{
+    position:absolute;font-family:'Fredoka',sans-serif;font-weight:700;
+    color:#fff;opacity:.35;animation:floatY 6s ease-in-out infinite;z-index:1;
+    text-shadow:0 3px 0 rgba(0,0,0,.06);
+  }
+  .n1{font-size:60px;top:22%;left:16%;animation-delay:.3s;}
+  .n2{font-size:48px;top:55%;right:16%;animation-delay:1.4s;}
+  .n3{font-size:70px;bottom:8%;right:26%;animation-delay:.7s;}
+  .n4{font-size:44px;bottom:16%;left:22%;animation-delay:1.9s;}
+
+  /* kartu sampul */
+  .cover-card{
+    position:relative;z-index:5;
+    background:rgba(255,255,255,.96);
+    border-radius:34px;
+    padding:38px 26px 38px;
+    max-width:580px;width:100%;
+    text-align:center;
+    box-shadow:0 24px 60px rgba(20,70,130,.28), 0 0 0 9px rgba(255,255,255,.45);
+    animation:popIn .7s cubic-bezier(.18,1.25,.42,1) both;
+  }
+  @keyframes popIn{from{opacity:0;transform:scale(.82) translateY(24px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+  .cover-card::before{
+    content:'';position:absolute;top:0;left:26px;right:26px;height:9px;
+    border-radius:0 0 14px 14px;
+    background:linear-gradient(90deg,#ff6b6b,#ffa94d,#ffd43b,#51cf66,#4dabf7,#845ef7);
+  }
+
+  .badge-kelas{
+    display:inline-block;
+    background:linear-gradient(135deg,#845ef7,#4dabf7);
+    color:#fff;padding:7px 20px;border-radius:999px;
+    font-weight:700;font-size:14px;letter-spacing:.8px;
+    box-shadow:0 6px 16px rgba(92,124,250,.45);
+  }
+
+  .cover-card h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(30px,7.6vw,48px);
+    line-height:1.08;
+    margin:16px 0 6px;
+    color:#26456b;
+    letter-spacing:-.5px;
+  }
+  .cover-card h1 .hl{
+    color:#ff6b9d;
+    text-shadow:3px 3px 0 #ffe3ee;
+    display:inline-block;
+    animation:wobble 3s ease-in-out infinite;
+  }
+  @keyframes wobble{0%,100%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}}
+
+  .sub-pill{
+    display:inline-block;margin-top:8px;
+    background:#fff3bf;color:#b8860b;
+    font-weight:800;font-size:clamp(17px,4vw,21px);
+    padding:8px 24px;border-radius:999px;
+    border:2px dashed #ffd43b;
+  }
+
+  .illus{
+    display:flex;justify-content:center;flex-wrap:wrap;gap:6px;
+    margin:20px 0 6px;font-size:clamp(30px,7vw,42px);
+  }
+  .illus span{display:inline-block;animation:bounceIn .6s cubic-bezier(.2,1.5,.4,1) both;}
+  .illus span:nth-child(1){animation-delay:.35s;}
+  .illus span:nth-child(2){animation-delay:.45s;}
+  .illus span:nth-child(3){animation-delay:.55s;}
+  .illus span:nth-child(4){animation-delay:.65s;}
+  .illus span:nth-child(5){animation-delay:.75s;}
+  .illus span:nth-child(6){animation-delay:.85s;}
+  .illus span:nth-child(7){animation-delay:.95s;}
+  @keyframes bounceIn{from{opacity:0;transform:translateY(-30px) scale(.4);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+  .materi{
+    margin-top:14px;font-size:15px;color:#5b7591;font-weight:600;line-height:1.5;
+  }
+  .materi b{color:#4dabf7;}
+
+  .btn-mulai{
+    margin-top:26px;
+    font-family:'Fredoka',sans-serif;
+    font-size:clamp(19px,4.6vw,23px);font-weight:700;
+    color:#fff;border:none;border-radius:999px;
+    padding:16px 48px;cursor:pointer;
+    background:linear-gradient(135deg,#ffa94d,#ff6b6b);
+    box-shadow:0 9px 0 #d9480f, 0 16px 30px rgba(217,72,15,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
+    animation:pulseBtn 2s ease-in-out infinite;
+  }
+  @keyframes pulseBtn{0%,100%{transform:scale(1);}50%{transform:scale(1.045);}}
+  .btn-mulai:hover{transform:translateY(-3px) scale(1.04);}
+  .btn-mulai:active{transform:translateY(7px);box-shadow:0 2px 0 #d9480f;}
+
+  .credit{margin-top:16px;font-size:12.5px;color:#8aa2b8;font-weight:600;}
+
+  /* ============ LAYAR PERMAINAN ============ */
+  #game{
+    flex-direction:column;align-items:center;
+    padding:16px 14px 40px;
+    background:linear-gradient(180deg,#e8f6ff 0%,#f4f9ff 55%,#fff6e6 100%);
+  }
+  .game-wrap{width:100%;max-width:760px;}
+
+  .topbar{
+    display:flex;align-items:center;gap:10px;
+    background:#fff;border-radius:22px;padding:12px 16px;
+    box-shadow:0 6px 20px rgba(40,90,150,.12);
+    margin-bottom:14px;
+  }
+  .btn-back{
+    border:none;background:#eef5ff;color:#4dabf7;
+    width:40px;height:40px;border-radius:14px;font-size:19px;
+    cursor:pointer;font-weight:800;flex:0 0 auto;
+    transition:.15s;
+  }
+  .btn-back:hover{background:#dceaff;}
+  .q-label{font-weight:700;font-size:15px;color:#3d5f85;flex:1;}
+  .score-chip{
+    background:#fff8e1;color:#e8980c;font-weight:800;font-size:16px;
+    padding:7px 15px;border-radius:999px;border:2px solid #ffe8a3;
+    flex:0 0 auto;
+  }
+
+  .progress{height:11px;background:#dbe9f7;border-radius:999px;overflow:hidden;margin-bottom:16px;}
+  .progress .bar{
+    height:100%;width:0%;border-radius:999px;
+    background:linear-gradient(90deg,#51cf66,#4dabf7,#845ef7);
+    transition:width .45s cubic-bezier(.3,1.3,.5,1);
+  }
+
+  .card{
+    background:#fff;border-radius:26px;padding:18px 16px 22px;
+    box-shadow:0 10px 30px rgba(40,90,150,.12);
+    margin-bottom:14px;
+  }
+
+  .instruction{
+    text-align:center;font-weight:700;font-size:16px;color:#3d5f85;
+    margin-bottom:14px;
+  }
+  .instruction .em{color:#ff6b9d;}
+
+  /* area benda */
+  #objectArea{
+    display:flex;flex-wrap:wrap;justify-content:center;
+    gap:11px;min-height:90px;padding:6px 2px;
+  }
+  .obj{
+    width:74px;height:74px;border-radius:22px;
+    background:#f7fbff;border:3px solid #e3effb;
+    display:flex;align-items:center;justify-content:center;
+    font-size:40px;cursor:pointer;position:relative;
+    box-shadow:0 5px 0 #e3effb, 0 8px 16px rgba(60,110,170,.08);
+    transition:transform .13s ease, background .2s, border-color .2s, box-shadow .2s;
+    animation:objIn .4s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes objIn{from{opacity:0;transform:scale(.4) rotate(-12deg);}to{opacity:1;transform:scale(1) rotate(0);}}
+  .obj:hover{transform:translateY(-3px);}
+  .obj:active{transform:scale(.9);}
+  .obj.counted{
+    background:#e9fce9;border-color:#8ce99a;
+    box-shadow:0 5px 0 #b2f2bb, 0 8px 18px rgba(60,180,90,.16);
+  }
+  .obj .num{
+    position:absolute;top:-9px;right:-9px;
+    width:27px;height:27px;border-radius:50%;
+    background:linear-gradient(135deg,#ff6b9d,#ff8787);
+    color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:14px;
+    display:none;align-items:center;justify-content:center;
+    box-shadow:0 3px 8px rgba(255,107,157,.5);
+  }
+  .obj.counted .num{display:flex;animation:popNum .32s cubic-bezier(.2,1.6,.4,1);}
+  @keyframes popNum{from{transform:scale(0);}to{transform:scale(1);}}
+
+  .counter{
+    text-align:center;margin-top:16px;
+    font-weight:800;font-size:17px;color:#4dabf7;
+    background:#f0f8ff;border-radius:16px;padding:9px;
+    border:2px dashed #bcdcff;
+  }
+  .counter b{font-size:23px;color:#ff6b9d;font-family:'Fredoka',sans-serif;}
+
+  /* pilihan jawaban */
+  .answer-title{
+    text-align:center;font-weight:700;font-size:15px;color:#7b93ab;
+    margin-bottom:12px;letter-spacing:.3px;
+  }
+  #answerArea{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:12px;
+  }
+  .answer{
+    width:76px;height:76px;border-radius:22px;
+    font-family:'Fredoka',sans-serif;font-size:31px;font-weight:700;
+    color:#fff;cursor:pointer;border:none;
+    transition:transform .13s ease, filter .2s;
+    position:relative;
+  }
+  .answer:nth-child(1){background:linear-gradient(160deg,#74c0fc,#4dabf7);box-shadow:0 6px 0 #1c7ed6;}
+  .answer:nth-child(2){background:linear-gradient(160deg,#ffd43b,#fcc419);box-shadow:0 6px 0 #e8a80c;}
+  .answer:nth-child(3){background:linear-gradient(160deg,#8ce99a,#51cf66);box-shadow:0 6px 0 #2f9e44;}
+  .answer:nth-child(4){background:linear-gradient(160deg,#da77f2,#b197fc);box-shadow:0 6px 0 #7048e8;}
+  .answer:hover:not(:disabled){transform:translateY(-4px);}
+  .answer:active:not(:disabled){transform:translateY(3px);}
+  .answer:disabled{cursor:default;opacity:.55;}
+  .answer.correct{
+    opacity:1 !important;
+    background:linear-gradient(160deg,#69db7c,#37b24d) !important;
+    box-shadow:0 6px 0 #2b8a3e, 0 0 0 5px #d3f9d8 !important;
+    animation:popNum .35s cubic-bezier(.2,1.6,.4,1);
+  }
+  .answer.wrong{
+    opacity:1 !important;
+    background:linear-gradient(160deg,#ff8787,#f03e3e) !important;
+    box-shadow:0 6px 0 #c92a2a !important;
+    animation:shake .4s;
+  }
+  @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-9px);}40%{transform:translateX(9px);}60%{transform:translateX(-6px);}80%{transform:translateX(6px);}}
+
+  .feedback{
+    text-align:center;font-weight:800;font-size:17px;
+    min-height:30px;margin-top:16px;transition:.2s;
+  }
+  .feedback.ok{color:#2f9e44;}
+  .feedback.no{color:#e8590c;}
+
+  #nextBtn{
+    display:none;margin:6px auto 0;
+    font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;
+    color:#fff;border:none;border-radius:999px;
+    padding:14px 40px;cursor:pointer;
+    background:linear-gradient(135deg,#845ef7,#4dabf7);
+    box-shadow:0 7px 0 #4c3bd1, 0 12px 24px rgba(90,70,220,.3);
+    transition:.13s;
+  }
+  #nextBtn:hover{transform:translateY(-2px);}
+  #nextBtn:active{transform:translateY(5px);box-shadow:0 2px 0 #4c3bd1;}
+
+  /* ============ LAYAR HASIL ============ */
+  #result{
+    align-items:center;justify-content:center;
+    padding:24px 16px;
+    background:linear-gradient(160deg,#5bb8f5 0%,#8fd3f4 40%,#ffe9a8 100%);
+  }
+  .result-card{
+    background:#fff;border-radius:32px;padding:38px 28px;
+    max-width:480px;width:100%;text-align:center;
+    box-shadow:0 24px 60px rgba(20,70,130,.3);
+    animation:popIn .6s cubic-bezier(.18,1.25,.42,1) both;
+  }
+  .result-card h2{
+    font-family:'Fredoka',sans-serif;font-size:30px;color:#26456b;margin-bottom:6px;
+  }
+  #stars{font-size:46px;letter-spacing:6px;margin:14px 0 8px;animation:popNum .6s;}
+  .final{
+    font-family:'Fredoka',sans-serif;font-size:44px;font-weight:700;
+    color:#ff6b9d;margin:6px 0 4px;
+  }
+  #resultMsg{font-size:17px;font-weight:700;color:#5b7591;margin-bottom:24px;}
+  .btn-ulang, .btn-home{
+    font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;
+    border:none;border-radius:999px;padding:14px 34px;cursor:pointer;
+    margin:6px;transition:.13s;
+  }
+  .btn-ulang{
+    color:#fff;background:linear-gradient(135deg,#ffa94d,#ff6b6b);
+    box-shadow:0 7px 0 #d9480f;
+  }
+  .btn-home{
+    color:#4dabf7;background:#eef6ff;box-shadow:0 7px 0 #cfe3f7;
+  }
+  .btn-ulang:active,.btn-home:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.15);}
+
+  /* ============ RESPONSIF ============ */
+  @media (max-width:520px){
+    .obj{width:60px;height:60px;font-size:32px;border-radius:18px;gap:9px;}
+    #objectArea{gap:9px;}
+    .answer{width:62px;height:62px;font-size:25px;border-radius:18px;}
+    .cover-card{padding:32px 18px 30px;border-radius:28px;}
+    .cloud{font-size:52px;}
+    .game-wrap{max-width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= SAMPUL DEPAN ================= -->
+<section id="cover" class="screen active">
+  <div class="sun"></div>
+
+  <div class="deco cloud c1">☁️</div>
+  <div class="deco cloud c2">☁️</div>
+  <div class="deco cloud c3">☁️</div>
+
+  <div class="deco floaty f1">🎈</div>
+  <div class="deco floaty f2">⭐</div>
+  <div class="deco floaty f3">🦋</div>
+  <div class="deco floaty f4">🌈</div>
+  <div class="deco floaty f5">🍭</div>
+
+  <div class="deco fnum n1">3</div>
+  <div class="deco fnum n2">7</div>
+  <div class="deco fnum n3">10</div>
+  <div class="deco fnum n4">5</div>
+
+  <div class="cover-card">
+    <span class="badge-kelas">📚 KELAS 1 SD</span>
+
+    <h1>Ayo <span class="hl">Menghitung</span><br>Banyak Benda!</h1>
+
+    <div class="sub-pill">sampai angka 10 ✨</div>
+
+    <div class="illus">
+      <span>🍎</span><span>🐰</span><span>⭐</span><span>🎈</span><span>🍓</span><span>🐱</span><span>🧸</span>
+    </div>
+
+    <p class="materi">
+      <b>Materi:</b> Menghitung banyak benda sampai 10 dengan benar<br>
+      Ketuk setiap benda, lalu pilih jawaban yang tepat!
+    </p>
+
+    <button class="btn-mulai" onclick="startGame()">Mulai Belajar 🚀</button>
+
+    <p class="credit">Media Pembelajaran Interaktif • Matematika Kelas 1 SD</p>
+  </div>
+</section>
+
+<!-- ================= LAYAR PERMAINAN ================= -->
+<section id="game" class="screen">
+  <div class="game-wrap">
+
+    <div class="topbar">
+      <button class="btn-back" onclick="showScreen('cover')" title="Kembali">←</button>
+      <div class="q-label" id="qLabel">Soal 1 dari 5</div>
+      <div class="score-chip" id="scoreLabel">⭐ 0</div>
+    </div>
+
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+
+    <!-- Kartu soal -->
+    <div class="card">
+      <div class="instruction" id="instruction">
+        👆 Ketuk setiap benda untuk <span class="em">menghitung</span>!
+      </div>
+
+      <div id="objectArea"></div>
+
+      <div class="counter">
+        Kamu sudah menghitung: <b id="counter">0</b> benda
+      </div>
+    </div>
+
+    <!-- Kartu jawaban -->
+    <div class="card">
+      <div class="answer-title">Ada berapa banyak benda di atas?</div>
+      <div id="answerArea"></div>
+      <div class="feedback" id="feedback"></div>
+      <div style="text-align:center;">
+        <button id="nextBtn" onclick="goNext()">Soal Berikutnya ➡️</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= LAYAR HASIL ================= -->
+<section id="result" class="screen">
+  <div class="result-card">
+    <h2>Hasil Belajarmu 🏆</h2>
+    <div id="stars">⭐⭐⭐</div>
+    <div class="final" id="finalScore">5 / 5</div>
+    <p id="resultMsg">Luar biasa! Kamu hebat sekali! 🌟</p>
+    <div>
+      <button class="btn-ulang" onclick="startGame()">🔄 Main Lagi</button>
+      <button class="btn-home" onclick="showScreen('cover')">🏠 Sampul</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ================== DATA & STATE ================== */
+const EMOJIS = ['🍎','🍌','🍓','🍇','🍉','🍊','🐱','🐶','🐰','🐼','🐸','⭐','🎈','🍭','🐟','🦋','🌸','🚗','⚽','🍩','🧸','🌟'];
+
+const TOTAL_Q = 5;
+let qIndex = 0;
+let score = 0;
+let currentNum = 0;
+let counted = 0;
+let answered = false;
+
+/* ================== SUARA ================== */
+let actx = null;
+function beep(freq, dur, type = 'sine', vol = 0.14, delay = 0) {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    const t0 = actx.currentTime + delay;
+    const osc = actx.createOscillator();
+    const gain = actx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    osc.connect(gain);
+    gain.connect(actx.destination);
+    gain.gain.setValueAtTime(vol, t0);
+    gain.gain.exponentialRampToValueAtTime(0.0008, t0 + dur);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.02);
+  } catch (e) { /* abaikan */ }
+}
+const popSound     = () => beep(720, 0.09, 'triangle', 0.13);
+const correctSound = () => { beep(523,0.13,'sine',0.14,0); beep(659,0.13,'sine',0.14,0.11); beep(784,0.22,'sine',0.14,0.22); };
+const wrongSound   = () => { beep(220,0.18,'sawtooth',0.09,0); beep(165,0.25,'sawtooth',0.09,0.15); };
+const finishSound  = () => { [523,659,784,1047].forEach((f,i)=>beep(f,0.22,'sine',0.14,i*0.14)); };
+
+/* ================== UTILITAS ================== */
+function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ================== ALUR PERMAINAN ================== */
+function startGame() {
+  if (actx && actx.state === 'suspended') actx.resume();
+  qIndex = 0;
+  score = 0;
+  updateScore();
+  showScreen('game');
+  nextQuestion();
+}
+
+function nextQuestion() {
+  answered = false;
+  counted = 0;
+
+  /* --- progress & label --- */
+  document.getElementById('qLabel').textContent = `Soal ${qIndex + 1} dari ${TOTAL_Q}`;
+  document.getElementById('progressBar').style.width = (qIndex / TOTAL_Q * 100) + '%';
+  document.getElementById('instruction').innerHTML =
+    '👆 Ketuk setiap benda untuk <span class="em">menghitung</span>!';
+
+  /* --- tentukan jumlah & jenis benda --- */
+  currentNum = randInt(1, 10);
+  const emoji = EMOJIS[randInt(0, EMOJIS.length - 1)];
+
+  /* --- render benda --- */
+  const area = document.getElementById('objectArea');
+  area.innerHTML = '';
+  for (let i = 0; i < currentNum; i++) {
+    const d = document.createElement('div');
+    d.className = 'obj';
+    d.style.animationDelay = (i * 0.05) + 's';
+    d.innerHTML = `<span>${emoji}</span><span class="num"></span>`;
+    d.addEventListener('click', () => countObject(d));
+    area.appendChild(d);
+  }
+
+  updateCounter();
+
+  /* --- render pilihan jawaban --- */
+  const choices = new Set([currentNum]);
+  while (choices.size < 4) choices.add(randInt(1, 10));
+  const arr = shuffle([...choices]);
+
+  const ansArea = document.getElementById('answerArea');
+  ansArea.innerHTML = '';
+  arr.forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'answer';
+    b.textContent = v;
+    b.dataset.value = v;
+    b.addEventListener('click', () => checkAnswer(b, v));
+    ansArea.appendChild(b);
+  });
+
+  /* --- reset feedback --- */
+  const fb = document.getElementById('feedback');
+  fb.textContent = '';
+  fb.className = 'feedback';
+  const nb = document.getElementById('nextBtn');
+  nb.style.display = 'none';
+}
+
+/* --- menghitung benda dengan cara diketuk --- */
+function countObject(el) {
+  if (el.classList.contains('counted')) return;
+  counted++;
+  el.classList.add('counted');
+  el.querySelector('.num').textContent = counted;
+  popSound();
+  updateCounter();
+}
+
+function updateCounter() {
+  const c = document.getElementById('counter');
+  c.textContent = counted;
+}
+
+/* --- memeriksa jawaban --- */
+function checkAnswer(btn, val) {
+  if (answered) return;
+  answered = true;
+
+  const fb = document.getElementById('feedback');
+  document.querySelectorAll('.answer').forEach(b => {
+    b.disabled = true;
+    if (Number(b.dataset.value) === currentNum) b.classList.add('correct');
+  });
+
+  if (val === currentNum) {
+    btn.classList.add('correct');
+    score++;
+    updateScore();
+    fb.textContent = '🎉 Hebat! Jawabanmu benar!';
+    fb.className = 'feedback ok';
+    correctSound();
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = `😊 Belum tepat. Jumlah bendanya ada ${currentNum}.`;
+    fb.className = 'feedback no';
+    wrongSound();
+  }
+
+  const nb = document.getElementById('nextBtn');
+  nb.style.display = 'inline-block';
+  nb.textContent = (qIndex === TOTAL_Q - 1) ? 'Lihat Hasil 🏆' : 'Soal Berikutnya ➡️';
+}
+
+function updateScore() {
+  document.getElementById('scoreLabel').textContent = `⭐ ${score}`;
+}
+
+/* --- lanjut soal / hasil --- */
+function goNext() {
+  qIndex++;
+  if (qIndex >= TOTAL_Q) {
+    showResult();
+  } else {
+    nextQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('finalScore').textContent = `${score} / ${TOTAL_Q}`;
+
+  let stars = 1;
+  let msg = 'Semangat! Ayo coba lagi ya! 🚀';
+  if (score >= 5)      { stars = 3; msg = 'Luar biasa! Kamu hebat sekali! 🌟'; }
+  else if (score >= 3) { stars = 2; msg = 'Bagus! Terus berlatih ya! 💪'; }
+
+  document.getElementById('stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  document.getElementById('resultMsg').textContent = msg;
+
+  showScreen('result');
+  finishSound();
+}
+
+/* ================== PINTASAN PAPAN TIK (opsional) ================== */
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('game').classList.contains('active')) return;
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 4) {
+    const btns = document.querySelectorAll('.answer');
+    if (btns[n - 1] && !btns[n - 1].disabled) btns[n - 1].click();
+  }
+  if (e.key === 'Enter' && document.getElementById('nextBtn').style.display === 'inline-block') {
+    goNext();
+  }
+});
+</script>
+</body>
+</html>
