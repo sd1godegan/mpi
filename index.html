@@ -153,9 +153,7 @@ button{cursor:pointer;border:none;background:none}
 }
 .welcome-title{
   font-size:clamp(1.9rem, 5.5vh, 3.1rem);font-weight:800;
-  letter-spacing:-.045em;
-  line-height:1.12;
-  padding-bottom:.08em;
+  letter-spacing:-.045em;line-height:1.12;padding-bottom:.08em;
   color:var(--welcome-text);
 }
 .welcome-title .accent{display:block;color:var(--primary);margin-top:.15em;padding-bottom:.08em}
@@ -512,7 +510,7 @@ button{cursor:pointer;border:none;background:none}
 mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px;font-weight:800}
 
 /* ============================================================
-   8. PAGINATION
+   8. PAGINATION — Smart with ellipsis
    ============================================================ */
 .pagination-wrap{
   display:flex;flex-direction:column;align-items:center;gap:.75rem;
@@ -534,6 +532,21 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
 .pg-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);cursor:default}
 .pg-btn.nav{padding:0}
 .pg-btn.nav .icon{width:15px;height:15px;stroke-width:2.2}
+
+/* Smart ellipsis — clickable to jump to midpoint */
+.pg-ellipsis{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:36px;height:36px;padding:0 .45rem;
+  border-radius:9px;border:1.5px solid transparent;
+  background:transparent;color:var(--muted);
+  font-size:.83rem;font-weight:700;
+  font-family:inherit;user-select:none;cursor:pointer;
+  transition:all .15s var(--ease);
+}
+.pg-ellipsis:hover{
+  background:var(--surface-2);color:var(--text-soft);
+  border-color:var(--border);
+}
 .pg-info{font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .pg-info strong{color:var(--text-soft);font-weight:700}
 
@@ -756,6 +769,7 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
   .stat-mini{padding:.5rem .55rem}
   .stat-mini .val{font-size:1rem}
   .pg-btn{min-width:38px;height:38px;font-size:.78rem;padding:0 .45rem}
+  .pg-ellipsis{min-width:38px;height:38px;font-size:.78rem;padding:0 .3rem}
   .pg-info{font-size:.72rem}
 
   .welcome{padding:1rem .85rem}
@@ -821,6 +835,7 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
   .meta .av{width:24px;height:24px;font-size:.75rem}
   .pg-btn{min-width:46px;height:46px;font-size:.95rem;padding:0 .75rem;border-radius:11px}
   .pg-btn.nav .icon{width:18px;height:18px}
+  .pg-ellipsis{min-width:46px;height:46px;font-size:.95rem}
   .pg-info{font-size:.88rem}
   .result-bar{font-size:.9rem}
   .chip{font-size:.82rem;padding:.3rem .65rem .3rem .85rem}
@@ -1011,8 +1026,6 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
         <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
         <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
         <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
-        <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
-        <div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>
       </div>
     </div>
 
@@ -1072,11 +1085,12 @@ mark{background:var(--highlight);color:inherit;padding:0 .05em;border-radius:2px
 const API_URL = "https://script.google.com/macros/s/AKfycbxQ7Ve-VLGJIYqJqxHJEfJnnpeq_rw3cGs-LlmRqD81md_GMtPx4H44r6QptEkfF2QGRg/exec";
 
 const CFG = Object.freeze({
-  PER_PAGE: 8,
+  PER_PAGE: 4,
   CACHE_TTL: 60,
   DEBOUNCE_SEARCH: 150,
   SCROLL_OFFSET: 100,
-  TOAST_DURATION: 2200
+  TOAST_DURATION: 2200,
+  PAGINATION_SIBLINGS: 1
 });
 
 const SYNONYMS = Object.freeze({
@@ -1185,7 +1199,7 @@ const Auth = {
 };
 
 /* ============================================================
-   CACHE — 2 layer
+   CACHE — 2 layers
    ============================================================ */
 const Cache = {
   _mem: new Map(),
@@ -1448,10 +1462,11 @@ const Welcome = {
       if (r.m) ms.add(r.m);
       if (r.g) gs.add(r.g);
     }
-    $('wTotal').textContent = state.all.length;
-    $('wKelas').textContent = ks.size;
-    $('wMapel').textContent = ms.size;
-    $('wGuru').textContent = gs.size;
+    const wT = $('wTotal'), wK = $('wKelas'), wM = $('wMapel'), wG = $('wGuru');
+    if (wT) wT.textContent = state.all.length;
+    if (wK) wK.textContent = ks.size;
+    if (wM) wM.textContent = ms.size;
+    if (wG) wG.textContent = gs.size;
     document.querySelectorAll('.welcome-stat').forEach(s => s.classList.remove('loading'));
   },
 
@@ -1505,7 +1520,6 @@ const Modal = {
     if (!this.el) return;
     this.current = data;
 
-    // Thumbnail
     const thumbEl = $('modalThumb');
     const hasThumb = !!data.thumb;
 
@@ -1566,11 +1580,9 @@ const Modal = {
     const bodyEl = this.el.querySelector('.modal-body');
     if (bodyEl) bodyEl.scrollTop = 0;
 
-    // Show
     document.body.style.overflow = 'hidden';
     this.el.classList.add('show');
 
-    // Focus trap
     if (this._trapHandler) document.removeEventListener('keydown', this._trapHandler);
     this._trapHandler = (e) => {
       if (e.key !== 'Tab') return;
@@ -1672,7 +1684,6 @@ async function silentRefresh() {
 function afterData() {
   buildSidebar();
 
-  // ✅ Hanya apply URL state pada load pertama
   if (!_firstLoadDone) {
     applyUrlState();
     state.currentPage = Math.min(state.initialUrl.page || 1, state.totalPages);
@@ -1695,7 +1706,7 @@ function applyUrlState() {
 }
 
 /* ============================================================
-   SIDEBAR (DOM only — no listeners)
+   SIDEBAR (DOM only)
    ============================================================ */
 function buildSidebar() {
   const kelasSet = new Set();
@@ -1711,7 +1722,6 @@ function buildSidebar() {
 
   const currentKelas = getActiveKelas();
 
-  // Nav kelas
   el.navKelas.innerHTML = '';
 
   const btnAll = document.createElement('button');
@@ -1738,7 +1748,6 @@ function buildSidebar() {
       el.navKelas.appendChild(b);
     });
 
-  // Dropdown mapel
   const currentMapel = el.filterMapel.value;
   el.filterMapel.innerHTML = '<option value="">Semua Mapel</option>';
   [...mapelSet].sort().forEach(m => {
@@ -1749,7 +1758,6 @@ function buildSidebar() {
   });
   if (currentMapel) el.filterMapel.value = currentMapel;
 
-  // Stats
   animateNum('statTotal', state.all.length);
   animateNum('statKelas', kelasSet.size);
   animateNum('statMapel', mapelSet.size);
@@ -1944,6 +1952,43 @@ function renderChips() {
   el.activeChips.innerHTML = parts.join('');
 }
 
+/* ============================================================
+   SMART PAGINATION
+   ============================================================ */
+function getPaginationItems(current, total, siblings) {
+  if (total <= 1) return [];
+
+  // Jika total kecil, tampilkan semua
+  if (total <= 7) {
+    const all = [];
+    for (let i = 1; i <= total; i++) all.push({ type: 'page', value: i });
+    return all;
+  }
+
+  const included = new Set([1, total]);
+  const from = Math.max(1, current - siblings);
+  const to = Math.min(total, current + siblings);
+  for (let i = from; i <= to; i++) included.add(i);
+
+  const sorted = [...included].sort((a, b) => a - b);
+  const items = [];
+
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) {
+      const gapFrom = sorted[i - 1] + 1;
+      const gapTo = sorted[i] - 1;
+      items.push({
+        type: 'ellipsis',
+        from: gapFrom,
+        to: gapTo,
+        midpoint: Math.floor((gapFrom + gapTo) / 2)
+      });
+    }
+    items.push({ type: 'page', value: sorted[i] });
+  }
+  return items;
+}
+
 function renderPagination() {
   const totalPages = state.totalPages;
   const cur = state.currentPage;
@@ -1955,13 +2000,19 @@ function renderPagination() {
     return;
   }
 
+  const items = getPaginationItems(cur, totalPages, CFG.PAGINATION_SIBLINGS);
   const prevIcon = '<svg class="icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>';
   const nextIcon = '<svg class="icon" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>';
 
   let html = `<button class="pg-btn nav" data-page="${cur - 1}" ${cur === 1 ? 'disabled' : ''} aria-label="Sebelumnya">${prevIcon}</button>`;
 
-  for (let i = 1; i <= totalPages; i++) {
-    html += `<button class="pg-btn ${i === cur ? 'active' : ''}" data-page="${i}" aria-label="Halaman ${i}" ${i === cur ? 'aria-current="page"' : ''}>${i}</button>`;
+  for (const item of items) {
+    if (item.type === 'ellipsis') {
+      html += `<button class="pg-ellipsis" type="button" data-jump="${item.midpoint}" title="Lompat ke halaman ${item.midpoint} (${item.from}–${item.to})" aria-label="Lompat ke halaman ${item.midpoint}">…</button>`;
+    } else {
+      const active = item.value === cur;
+      html += `<button class="pg-btn ${active ? 'active' : ''}" data-page="${item.value}" aria-label="Halaman ${item.value}" ${active ? 'aria-current="page"' : ''}>${item.value}</button>`;
+    }
   }
 
   html += `<button class="pg-btn nav" data-page="${cur + 1}" ${cur === totalPages ? 'disabled' : ''} aria-label="Berikutnya">${nextIcon}</button>`;
@@ -1994,7 +2045,7 @@ function renderEmpty() {
 function showSkeleton() {
   el.content.innerHTML = `
     <div class="grid">
-      ${Array(6).fill('<div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>').join('')}
+      ${Array(4).fill('<div class="sk"><div class="sk-th"></div><div class="sk-bd"><div class="sk-l a"></div><div class="sk-l b"></div><div class="sk-l c"></div></div></div>').join('')}
     </div>
   `;
   el.resultInfo.innerHTML = '';
@@ -2107,7 +2158,6 @@ function refreshAuthUI() {
 function bindEvents() {
   /* ---------- Global click delegation ---------- */
   document.addEventListener('click', (e) => {
-    // Card detail
     const card = e.target.closest('[data-action="detail"]');
     if (card) {
       Modal.open({
@@ -2126,7 +2176,6 @@ function bindEvents() {
       return;
     }
 
-    // Chip clear
     const chipClear = e.target.closest('[data-clear]');
     if (chipClear) {
       const t = chipClear.dataset.clear;
@@ -2141,7 +2190,6 @@ function bindEvents() {
       return;
     }
 
-    // Hint button
     const hintBtn = e.target.closest('[data-hint]');
     if (hintBtn) {
       el.search.value = hintBtn.dataset.hint;
@@ -2151,13 +2199,11 @@ function bindEvents() {
       return;
     }
 
-    // Retry
     if (e.target.closest('[data-action="retry"]')) {
       loadData(true);
       return;
     }
 
-    // User dropdown
     if (e.target.closest('#userBtn')) {
       e.stopPropagation();
       $('dropdown').classList.toggle('show');
@@ -2187,8 +2233,17 @@ function bindEvents() {
     refresh();
   });
 
-  /* ---------- Pagination ---------- */
+  /* ---------- Pagination (delegated, handles ellipsis) ---------- */
   el.pagination.addEventListener('click', (e) => {
+    // Smart ellipsis — jump to midpoint
+    const ell = e.target.closest('.pg-ellipsis');
+    if (ell) {
+      const p = parseInt(ell.dataset.jump, 10);
+      if (!isNaN(p)) goToPage(p);
+      return;
+    }
+
+    // Normal page button
     const btn = e.target.closest('.pg-btn');
     if (!btn || btn.disabled || btn.classList.contains('active')) return;
     const p = parseInt(btn.dataset.page, 10);
