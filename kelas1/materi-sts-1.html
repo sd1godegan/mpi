@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI PAI SD Terpadu (Kelas 1-6)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+  .arabic { font-family: 'Amiri', serif; direction: rtl; }
+  .fade-in { animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .tab-elemen {
+    padding: .75rem 1rem; white-space: nowrap; font-size: .85rem; font-weight: 600;
+    color: rgba(255,255,255,.75); border-bottom: 3px solid transparent;
+    transition: all .2s; display: flex; align-items: center; gap: .35rem;
+  }
+  .tab-elemen.active { color: #fff; border-bottom-color: #fbbf24; background: rgba(255,255,255,.08); }
+  .materi p { margin-bottom: .6rem; }
+  .materi ul, .materi ol { padding-left: 1.25rem; margin-bottom: .6rem; }
+  .materi li { margin-bottom: .35rem; }
+  .materi b { color: #0f766e; }
+  .kotak-tips { background: #fef9c3; border-left: 4px solid #eab308; padding: .75rem 1rem; border-radius: 0 .5rem .5rem 0; margin: .75rem 0; font-size: .9rem; }
+  .kotak-info { background: #dbeafe; border-left: 4px solid #3b82f6; padding: .75rem 1rem; border-radius: 0 .5rem .5rem 0; margin: .75rem 0; font-size: .9rem; }
+  .kotak-hikmah { background: #dcfce7; border-left: 4px solid #22c55e; padding: .75rem 1rem; border-radius: 0 .5rem .5rem 0; margin: .75rem 0; font-size: .9rem; }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<!-- ================= LAYER 1: HOME ================= -->
+<div id="home" class="min-h-screen flex flex-col">
+  <header class="bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 text-white px-5 pt-10 pb-16 rounded-b-[2rem] shadow-lg">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-4 backdrop-blur">
+        <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">MPI PAI SD Terpadu</h1>
+      <p class="text-emerald-100 mt-2 text-sm md:text-base">Ringkasan Materi Pendidikan Agama Islam<br>Kelas 1 sampai Kelas 6</p>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 -mt-10 pb-10">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-5 text-center">
+      <p class="text-sm text-slate-600">📚 Silakan pilih kelas untuk mulai belajar</p>
+    </div>
+    <div id="grid-kelas" class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4"></div>
+    <p class="text-center text-xs text-slate-400 mt-8">Pembelajaran Interaktif &copy; 2026</p>
+  </main>
+</div>
+
+<!-- ================= LAYER 2: MATERI ================= -->
+<div id="materi" class="hidden min-h-screen flex flex-col bg-slate-100">
+  <header class="sticky top-0 z-20 shadow-md">
+    <div class="bg-emerald-600 text-white">
+      <div class="px-3 py-3 flex items-center gap-2 max-w-4xl mx-auto">
+        <button onclick="kembali()" class="p-2 rounded-full hover:bg-white/10 active:bg-white/20 transition" aria-label="Kembali">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        <div class="flex-1 min-w-0">
+          <h2 id="judul-kelas" class="font-bold text-lg leading-tight">Kelas 1</h2>
+          <p id="subjudul" class="text-[11px] text-emerald-100 truncate">Pilih materi di bawah</p>
+        </div>
+      </div>
+    </div>
+    <nav class="bg-emerald-700">
+      <div class="max-w-4xl mx-auto flex overflow-x-auto no-scrollbar">
+        <button class="tab-elemen" data-tab="quran"  onclick="pilihElemen('quran')">📖 Al-Qur'an &amp; Hadis</button>
+        <button class="tab-elemen" data-tab="akidah" onclick="pilihElemen('akidah')">☪️ Akidah</button>
+        <button class="tab-elemen" data-tab="akhlak" onclick="pilihElemen('akhlak')">💚 Akhlak</button>
+        <button class="tab-elemen" data-tab="kuis"   onclick="pilihElemen('kuis')">📝 Kuis</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6">
+    <div id="konten" class="fade-in materi"></div>
+    <div class="h-10"></div>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   DATA KELAS (Layer 1)
+========================================================= */
+const KELAS = [
+  { id: 1, warna: 'from-rose-400 to-rose-600',     topik: 'Huruf Hijaiah, Al-Fatihah, Ar-Rahman & Ar-Rahim, Basmalah & Hamdalah' },
+  { id: 2, warna: 'from-sky-400 to-sky-600',       topik: 'Huruf Sambung, An-Nas, 4 Asmaulhusna, Subhanallah & Masya Allah' },
+  { id: 3, warna: 'from-violet-400 to-violet-600', topik: 'Al-Fil, 20 Sifat Allah, Husnuzan' },
+  { id: 4, warna: 'from-amber-400 to-amber-600',   topik: "Al-'Alaq 1-5, 4 Asmaulhusna, Akhlak Keluarga" },
+  { id: 5, warna: 'from-teal-400 to-teal-600',     topik: 'Al-Qadr, 4 Asmaulhusna, Doa-Ikhtiar-Tawakal' },
+  { id: 6, warna: 'from-indigo-400 to-indigo-600', topik: 'Al-Kafirun & Tajwid Mad, 4 Asmaulhusna, Toleransi' }
+];
+
+/* =========================================================
+   KOMPONEN UMUM
+========================================================= */
+function kartu(judul, isi, warnaHeader){
+  return `
+  <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-4">
+    <div class="px-4 py-3 ${warnaHeader} border-b">
+      <h3 class="font-bold text-base flex items-center gap-2">${judul}</h3>
+    </div>
+    <div class="p-4 text-slate-700 text-[15px] leading-relaxed">${isi}</div>
+  </section>`;
+}
+
+function subjudul(teks){
+  return `<h4 class="font-bold text-slate-800 text-[15px] mt-4 mb-2 flex items-center gap-2">
+    <span class="w-1.5 h-5 bg-emerald-500 rounded-full inline-block"></span>${teks}
+  </h4>`;
+}
+
+function tabelAyat(rows){
+  return `
+  <div class="overflow-x-auto rounded-xl border border-slate-200 my-3">
+    <table class="w-full text-left border-collapse text-sm">
+      <thead>
+        <tr class="bg-slate-100 text-slate-700">
+          <th class="p-2 text-center w-10 border-b border-slate-200">#</th>
+          <th class="p-2 text-right border-b border-slate-200">Lafaz Arab</th>
+          <th class="p-2 border-b border-slate-200">Transliterasi &amp; Arti</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        ${rows.map(r => `
+          <tr class="hover:bg-slate-50 align-top">
+            <td class="p-2 text-center font-bold text-slate-500">${r[0]}</td>
+            <td class="p-3 text-right arabic text-xl text-slate-800 leading-loose">${r[1]}</td>
+            <td class="p-2">
+              <div class="font-semibold text-emerald-700 text-xs md:text-sm">${r[2]}</div>
+              <div class="text-xs text-slate-600 mt-1">${r[3]}</div>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function tips(isi){ return `<div class="kotak-tips">💡 <b>Ingat:</b> ${isi}</div>`; }
+function info(isi){ return `<div class="kotak-info">📌 <b>Info:</b> ${isi}</div>`; }
+function hikmah(isi){ return `<div class="kotak-hikmah">🌿 <b>Hikmah:</b> ${isi}</div>`; }
+
+/* =========================================================
+   KOMPONEN KHUSUS
+========================================================= */
+const HIJAIah = [
+  ['ا','Alif'],['ب','Ba'],['ت','Ta'],['ث','Tsa'],['ج','Jim'],['ح','Ha'],['خ','Kha'],
+  ['د','Dal'],['ذ','Dzal'],['ر','Ra'],['ز','Zai'],['س','Sin'],['ش','Syin'],['ص','Sad'],
+  ['ض','Dad'],['ط','Ta'],['ظ','Za'],['ع',"'Ain"],['غ','Ghain'],['ف','Fa'],['ق','Qaf'],
+  ['ك','Kaf'],['ل','Lam'],['م','Mim'],['ن','Nun'],['و','Wawu'],['هـ','Ha'],['ء','Hamzah'],['ي','Ya']
+];
+function gridHijaiah(){
+  return `<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 my-3">
+    ${HIJAIah.map(([h,n])=>`
+      <div class="bg-blue-50 border border-blue-100 rounded-xl py-2 text-center">
+        <div class="arabic text-2xl text-blue-800">${h}</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">${n}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+const SIFAT = [
+  ['Wujud','Ada',"‘Adam",'Tidak ada'],
+  ['Qidam','Terdahulu','Hudus','Baru'],
+  ["Baqa'",'Kekal',"Fana'",'Binasa/Rusak'],
+  ['Mukhalafatu lil hawadisi','Berbeda dengan makhluk','Mumasalatu lil hawadisi','Sama dengan makhluk'],
+  ['Qiyamuhu binafsihi','Berdiri sendiri','Ihtiyaju lighairihi','Butuh yang lain'],
+  ['Wahdaniyah','Esa / Tunggal',"Ta'addud",'Berbilang'],
+  ['Qudrah','Kuasa',"'Ajzun",'Lemah'],
+  ['Iradah','Berkehendak','Karahah','Terpaksa'],
+  ["'Ilmu",'Mengetahui','Jahlun','Bodoh'],
+  ['Hayat','Hidup','Mautun','Mati'],
+  ["Sama'",'Mendengar','Summun','Tuli'],
+  ['Basar','Melihat',"'Umyun",'Buta'],
+  ['Kalam','Berfirman','Bukmun','Bisu'],
+  ['Qadiran','Dzat Yang Maha Kuasa',"'Ajizan",'Dzat Yang Lemah'],
+  ['Muridan','Dzat Yang Berkehendak','Karihan','Dzat Yang Terpaksa'],
+  ["'Aliman",'Dzat Yang Mengetahui','Jahilan','Dzat Yang Bodoh'],
+  ['Hayyan','Dzat Yang Hidup','Mayyitan','Dzat Yang Mati'],
+  ["Sami'an",'Dzat Yang Mendengar','Asamma','Dzat Yang Tuli'],
+  ['Basiran','Dzat Yang Melihat',"A'ma",'Dzat Yang Buta'],
+  ['Mutakalliman','Dzat Yang Berfirman','Abkam','Dzat Yang Bisu']
+];
+function tabelSifat(){
+  return `
+  <div class="overflow-x-auto rounded-xl border border-slate-200 max-h-[420px] overflow-y-auto my-3">
+    <table class="w-full text-left border-collapse text-xs md:text-sm">
+      <thead class="sticky top-0 bg-emerald-100 text-emerald-800 z-10">
+        <tr>
+          <th class="p-2 border-b">No</th>
+          <th class="p-2 border-b">Sifat Wajib</th>
+          <th class="p-2 border-b">Arti</th>
+          <th class="p-2 border-b text-red-700">Sifat Mustahil</th>
+          <th class="p-2 border-b text-red-700">Arti</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200 bg-white">
+        ${SIFAT.map((s,i)=>`
+          <tr class="hover:bg-slate-50">
+            <td class="p-2 font-bold text-slate-500">${i+1}</td>
+            <td class="p-2 font-semibold">${s[0]}</td>
+            <td class="p-2">${s[1]}</td>
+            <td class="p-2 font-semibold text-red-600">${s[2]}</td>
+            <td class="p-2">${s[3]}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function tabelSambung(){
+  const rows = [
+    ['ا','-','-','ـا', true],
+    ['ب','بـ','ـبـ','ـب', false],
+    ['ت','تـ','ـتـ','ـت', false],
+    ['ث','ثـ','ـثـ','ـث', false],
+    ['ج','جـ','ـجـ','ـج', false],
+    ['ح','حـ','ـحـ','ـح', false],
+    ['خ','خـ','ـخـ','ـخ', false],
+    ['د','-','-','ـد', true],
+    ['ذ','-','-','ـذ', true],
+    ['ر','-','-','ـر', true],
+    ['ز','-','-','ـز', true],
+    ['س','سـ','ـسـ','ـس', false],
+    ['ش','شـ','ـشـ','ـش', false],
+    ['ص','صـ','ـصـ','ـص', false],
+    ['ض','ضـ','ـضـ','ـض', false],
+    ['ط','طـ','ـطـ','ـط', false],
+    ['ظ','ظـ','ـظـ','ـظ', false],
+    ['ع','عـ','ـعـ','ـع', false],
+    ['غ','غـ','ـغـ','ـغ', false],
+    ['ف','فـ','ـفـ','ـف', false],
+    ['ق','قـ','ـقـ','ـق', false],
+    ['ك','كـ','ـكـ','ـك', false],
+    ['ل','لـ','ـلـ','ـل', false],
+    ['م','مـ','ـمـ','ـم', false],
+    ['ن','نـ','ـنـ','ـن', false],
+    ['و','-','-','ـو', true],
+    ['ه','هـ','ـهـ','ـه', false],
+    ['ي','يـ','ـيـ','ـي', false]
+  ];
+  return `
+  <div class="overflow-hidden rounded-xl border border-blue-200 my-3">
+    <div class="overflow-y-auto max-h-[400px]">
+      <table class="w-full text-center border-collapse" dir="rtl">
+        <thead class="sticky top-0 bg-blue-100 text-blue-900 z-10 text-xs md:text-sm">
+          <tr>
+            <th class="p-2 border-b border-blue-200">Tunggal</th>
+            <th class="p-2 border-b border-blue-200">Awal</th>
+            <th class="p-2 border-b border-blue-200">Tengah</th>
+            <th class="p-2 border-b border-blue-200">Akhir</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-blue-100 bg-white arabic text-2xl text-slate-800">
+          ${rows.map(r=>`
+            <tr class="${r[4] ? 'bg-red-50/60 text-red-700' : 'hover:bg-blue-50'}">
+              <td class="p-2">${r[0]}</td>
+              <td class="p-2 ${r[1]==='-'?'text-slate-400 text-lg':''}">${r[1]}</td>
+              <td class="p-2 ${r[2]==='-'?'text-slate-400 text-lg':''}">${r[2]}</td>
+              <td class="p-2">${r[3]}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="bg-blue-50 text-[11px] text-blue-800 p-2 text-center border-t border-blue-200">
+      *Baris merah = 6 huruf spesial yang tidak bisa disambung ke huruf setelahnya (kiri).
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   MATERI PER KELAS — DIKEMBANGKAN
+========================================================= */
+const MATERI = {
+  /* =====================================================
+     KELAS 1
+  ===================================================== */
+  1: {
+    quran: `
+      ${kartu("📖 Mengenal Al-Qur'an", `
+        <p><b>Al-Qur'an</b> adalah firman Allah Swt. yang diturunkan kepada Nabi Muhammad saw. melalui perantara Malaikat Jibril. Al-Qur'an menjadi <b>pedoman hidup</b> seluruh manusia — seperti peta yang menunjukkan jalan yang benar agar kita selamat di dunia dan akhirat.</p>
+        <p>Al-Qur'an ditulis menggunakan huruf Arab yang disebut <b>huruf Hijaiah</b>. Jumlah huruf Hijaiah ada <b>29</b>. Cara membacanya dimulai dari <b>kanan ke kiri</b>, kebalikan dari tulisan Latin yang kita gunakan sehari-hari.</p>
+        ${tips("Setiap huruf Hijaiah punya nama dan bunyi sendiri. Kalau salah menyebut, artinya bisa berubah. Karena itu, belajarlah huruf Hijaiah dengan tekun sejak kelas 1.")}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('🔤 29 Huruf Hijaiah', `
+        <p>Berikut 29 huruf Hijaiah beserta namanya. Hafalkan satu per satu, mulai dari <b>Alif</b> sampai <b>Ya</b>.</p>
+        ${gridHijaiah()}
+        ${hikmah("Dengan mengenal huruf Hijaiah, kita bisa membaca Al-Qur'an. Setiap huruf yang kita baca bernilai pahala.")}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('✏️ Harakat (Tanda Baca)', `
+        <p>Supaya huruf Hijaiah bisa berbunyi, huruf perlu diberi <b>harakat</b>. Harakat adalah tanda baca kecil di atas atau di bawah huruf. Ada tiga harakat dasar di kelas 1:</p>
+
+        ${subjudul('1. Fathah ( َ ) — Berbunyi "a"')}
+        <p>Ditulis <b>di atas</b> huruf. Contoh: <span class="arabic text-xl mx-1">بَ</span> dibaca <i>ba</i>, <span class="arabic text-xl mx-1">تَ</span> dibaca <i>ta</i>, <span class="arabic text-xl mx-1">كَ</span> dibaca <i>ka</i>.</p>
+        <p><b>Cara mudah mengingat:</b> fathah di atas membuat mulut kita <i>membuka</i> (seperti mengucapkan "a").</p>
+
+        ${subjudul('2. Kasrah ( ِ ) — Berbunyi "i"')}
+        <p>Ditulis <b>di bawah</b> huruf. Contoh: <span class="arabic text-xl mx-1">خِ</span> dibaca <i>khi</i>, <span class="arabic text-xl mx-1">بِ</span> dibaca <i>bi</i>, <span class="arabic text-xl mx-1">تِ</span> dibaca <i>ti</i>.</p>
+        <p><b>Cara mudah mengingat:</b> kasrah di bawah membuat mulut kita <i>melebar</i> seperti tersenyum (bunyi "i").</p>
+
+        ${subjudul('3. Dammah ( ُ ) — Berbunyi "u"')}
+        <p>Ditulis <b>di atas</b> huruf, bentuknya seperti koma kecil. Contoh: <span class="arabic text-xl mx-1">قُ</span> dibaca <i>qu</i>, <span class="arabic text-xl mx-1">بُ</span> dibaca <i>bu</i>, <span class="arabic text-xl mx-1">تُ</span> dibaca <i>tu</i>.</p>
+        <p><b>Cara mudah mengingat:</b> dammah di atas membuat mulut kita <i>monyong</i> ke depan (bunyi "u").</p>
+
+        ${tips("Latihan rutin: baca 5 huruf dengan fathah, lalu 5 huruf dengan kasrah, lalu 5 huruf dengan dammah. Ulangi setiap hari, sedikit tapi rutin lebih baik daripada banyak tapi jarang.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu("📗 Surah Al-Fatihah", `
+        <p><b>Al-Fatihah</b> artinya <b>"Pembukaan"</b>, karena surah ini berada di awal Al-Qur'an. Surah ini diturunkan di kota <b>Mekah</b> dan terdiri dari <b>7 ayat</b>. Al-Fatihah wajib dibaca pada <b>setiap rakaat salat</b> — kalau tidak dibaca, salatnya tidak sah.</p>
+        <p>Karena kedudukannya yang sangat penting, Al-Fatihah juga disebut <b>Ummul Kitab</b> (induknya Al-Qur'an) dan <b>Ummul Qur'an</b>. Isinya mencakup tiga hal besar: <i>pujian kepada Allah</i>, <i>pengakuan tauhid</i>, dan <i>doa meminta petunjuk</i>.</p>
+
+        ${subjudul('Lafaz, Transliterasi, dan Arti')}
+        ${tabelAyat([
+          ['1','بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ','Bismillahir-rahmanir-rahim','Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.'],
+          ['2','اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ',"Alhamdu lillahi rabbil-'alamin",'Segala puji bagi Allah, Tuhan seluruh alam.'],
+          ['3','الرَّحْمٰنِ الرَّحِيْمِ','Ar-rahmanir-rahim','Yang Maha Pengasih, Maha Penyayang.'],
+          ['4','مٰلِكِ يَوْمِ الدِّيْنِۗ','Maliki yaumid-din','Pemilik hari pembalasan.'],
+          ['5','اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُۗ',"Iyyaka na'budu wa iyyaka nasta'in",'Hanya kepada Engkaulah kami menyembah dan hanya kepada Engkaulah kami mohon pertolongan.'],
+          ['6','اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَۙ','Ihdinas-siratal-mustaqim','Tunjukilah kami jalan yang lurus.'],
+          ['7','صِرَاطَ الَّذِيْنَ اَنْعَمْتَ عَلَيْهِمْ ەۙ غَيْرِ الْمَغْضُوْبِ عَلَيْهِمْ وَلَا الضَّاۤلِّيْنَ ࣖ',"Siratallazina an'amta 'alaihim ghairil-maghdubi 'alaihim wa lad-dallin",'(Yaitu) jalan orang-orang yang telah Engkau beri nikmat; bukan (jalan) mereka yang dimurkai, dan bukan (pula) mereka yang sesat.']
+        ])}
+
+        ${subjudul('Memahami Isi Al-Fatihah')}
+        <ul>
+          <li><b>Ayat 1:</b> Kita memulai semua pekerjaan dengan menyebut nama Allah, agar pekerjaan itu diberkahi.</li>
+          <li><b>Ayat 2:</b> Kita memuji Allah karena Dialah yang menciptakan dan mengatur seluruh alam.</li>
+          <li><b>Ayat 3:</b> Kita mengulang pujian: Allah Maha Pengasih dan Maha Penyayang.</li>
+          <li><b>Ayat 4:</b> Kita mengakui bahwa hanya Allah yang berkuasa pada hari pembalasan (hari kiamat).</li>
+          <li><b>Ayat 5:</b> Kita berjanji hanya menyembah Allah dan hanya meminta pertolongan kepada-Nya.</li>
+          <li><b>Ayat 6:</b> Kita memohon agar Allah menunjukkan jalan yang lurus (jalan yang benar).</li>
+          <li><b>Ayat 7:</b> Kita memohon agar termasuk golongan orang yang diberi nikmat, bukan yang dimurkai atau tersesat.</li>
+        </ul>
+
+        ${hikmah("Al-Fatihah mengajarkan kita untuk selalu memuji Allah, mengakui keesaan-Nya, dan memohon petunjuk setiap hari.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akidah: `
+      ${kartu('☪️ Mengenal Asmaulhusna', `
+        <p>Allah Swt. memiliki nama-nama yang sangat baik, indah, dan sempurna. Nama-nama itu disebut <b>Asmaulhusna</b>. Jumlahnya ada <b>99</b>. Dengan mengenal Asmaulhusna, kita semakin tahu betapa hebat dan sayangnya Allah kepada kita.</p>
+        <p>Di kelas 1, kita fokus mengenal <b>dua</b> Asmaulhusna: <b>Ar-Rahman</b> dan <b>Ar-Rahim</b>. Keduanya berhubungan dengan kasih sayang Allah. Meskipun mirip, keduanya memiliki arti dan cakupan yang berbeda.</p>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('💛 Ar-Rahman — Maha Pengasih', `
+        <p><span class="arabic text-2xl">الرَّحْمٰنُ</span> <b>Ar-Rahman</b> artinya <b>Maha Pengasih</b>.</p>
+        <p>Kasih sayang Allah pada Ar-Rahman bersifat <b>umum</b> — berlaku untuk <i>semua</i> makhluk, tanpa terkecuali. Baik manusia maupun hewan, yang beriman maupun yang belum beriman, semuanya merasakan kasih sayang Allah.</p>
+
+        ${subjudul('Contoh Kasih Sayang Allah (Ar-Rahman):')}
+        <ul>
+          <li>Allah menciptakan <b>matahari</b> yang menghangatkan bumi setiap hari.</li>
+          <li>Allah menurunkan <b>hujan</b> agar tanaman tumbuh dan hewan bisa minum.</li>
+          <li>Allah memberi kita <b>udara</b> untuk bernapas, tanpa perlu membeli.</li>
+          <li>Allah memberi kita <b>tubuh yang sehat</b>, bisa berjalan, melihat, dan mendengar.</li>
+          <li>Allah memberi <b>makanan</b> dari tumbuhan dan hewan untuk kita nikmati.</li>
+        </ul>
+
+        ${tips("Jika kita semua — manusia dan hewan — merasakan kasih sayang Allah, itu tandanya Allah itu Ar-Rahman (Maha Pengasih untuk semua).")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('💚 Ar-Rahim — Maha Penyayang', `
+        <p><span class="arabic text-2xl">الرَّحِيمُ</span> <b>Ar-Rahim</b> artinya <b>Maha Penyayang</b>.</p>
+        <p>Kasih sayang Allah pada Ar-Rahim bersifat <b>khusus</b> — hanya diberikan kepada hamba-Nya yang <b>taat beribadah</b> dan <b>berbuat baik</b>. Kasih sayang ini menjadi <i>bonus istimewa</i> bagi orang-orang yang rajin salat, jujur, dan berbakti kepada orang tua.</p>
+
+        ${subjudul('Contoh Kasih Sayang Allah (Ar-Rahim):')}
+        <ul>
+          <li>Allah memberikan <b>ketenangan hati</b> kepada orang yang rajin berdoa.</li>
+          <li>Allah mengampuni dosa orang yang bertobat dengan sungguh-sungguh.</li>
+          <li>Allah memasukkan orang yang taat ke dalam <b>surga</b> di akhirat nanti.</li>
+          <li>Allah memberi <b>petunjuk dan perlindungan</b> kepada hamba-Nya yang saleh.</li>
+        </ul>
+
+        ${hikmah("Allah Maha Pengasih kepada semua makhluk, tetapi kasih sayang istimewa-Nya hanya untuk hamba yang taat. Mari kita menjadi anak yang rajin beribadah agar mendapat kasih sayang istimewa dari Allah.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akhlak: `
+      ${kartu('💚 Membiasakan Kalimat Tayibah', `
+        <p><b>Kalimat tayibah</b> artinya kalimat yang baik. Mengucapkan kalimat tayibah mendatangkan pahala, membuat hati tenang, dan disukai Allah. Di kelas 1, kita fokus membiasakan dua kalimat tayibah: <b>Basmalah</b> dan <b>Hamdalah</b>.</p>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🌟 Basmalah — Sebelum Beraktivitas', `
+        <p>Lafaz Basmalah:</p>
+        <p class="arabic text-2xl text-center text-slate-800 my-3">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+        <p class="text-center text-sm text-emerald-700 font-semibold mb-3">Bismillahir-rahmanir-rahim</p>
+        <p>Artinya: <i>"Dengan nama Allah Yang Maha Pengasih, Maha Penyayang."</i></p>
+        <p>Basmalah diucapkan <b>sebelum memulai aktivitas</b> yang baik. Tujuannya agar aktivitas tersebut diberkahi dan dilindungi Allah.</p>
+
+        ${subjudul('Contoh Situasi Membaca Basmalah:')}
+        <ul>
+          <li>Sebelum <b>makan</b> dan <b>minum</b>.</li>
+          <li>Sebelum <b>belajar</b> dan <b>berangkat sekolah</b>.</li>
+          <li>Sebelum <b>berpakaian</b> atau memakai sepatu.</li>
+          <li>Sebelum <b>tidur</b> di malam hari.</li>
+          <li>Sebelum <b>masuk kamar mandi</b>.</li>
+          <li>Sebelum <b>naik kendaraan</b>.</li>
+        </ul>
+        ${tips("Kalau lupa membaca Basmalah saat makan, ucapkan: \"Bismillahi awwalahu wa akhirahu\" (Dengan nama Allah di awal dan di akhir).")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🌟 Hamdalah — Setelah Selesai / Mendapat Nikmat', `
+        <p>Lafaz Hamdalah:</p>
+        <p class="arabic text-2xl text-center text-slate-800 my-3">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ</p>
+        <p class="text-center text-sm text-emerald-700 font-semibold mb-3">Alhamdu lillahi rabbil-'alamin</p>
+        <p>Artinya: <i>"Segala puji bagi Allah, Tuhan seluruh alam."</i></p>
+        <p>Hamdalah diucapkan <b>setelah selesai</b> melakukan kegiatan, atau saat <b>mendapat nikmat</b>, sebagai wujud rasa syukur kepada Allah.</p>
+
+        ${subjudul('Contoh Situasi Membaca Hamdalah:')}
+        <ul>
+          <li>Setelah <b>selesai makan</b>.</li>
+          <li>Setelah <b>selesai belajar</b> atau ujian.</li>
+          <li>Saat <b>sembuh dari sakit</b>.</li>
+          <li>Saat <b>mendapat hadiah</b> atau nilai bagus.</li>
+          <li>Saat <b>selamat sampai tujuan</b>.</li>
+          <li>Mendengar kabar <b>baik</b> (misalnya: mendapat saudara baru).</li>
+        </ul>
+
+        ${hikmah("Membiasakan Basmalah dan Hamdalah membuat hidup kita selalu ingat kepada Allah, hati menjadi tenang, dan rezeki menjadi berkah.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+
+    kuis: [
+      { soal:'Berapa jumlah huruf Hijaiah?', pilihan:['29 huruf','28 huruf','30 huruf'], jawaban:0, pembahasan:'Huruf Hijaiah jumlahnya ada 29, mulai dari Alif sampai Ya.' },
+      { soal:'Cara membaca huruf Hijaiah dimulai dari arah ...', pilihan:['Kiri ke kanan','Kanan ke kiri','Atas ke bawah'], jawaban:1, pembahasan:'Huruf Hijaiah dibaca dari kanan ke kiri.' },
+      { soal:'Harakat yang berbunyi "u" dan terletak di atas huruf adalah ...', pilihan:['Fathah','Kasrah','Dammah'], jawaban:2, pembahasan:'Dammah ( ُ ) berbunyi "u" dan terletak di atas huruf.' },
+      { soal:'Surah Al-Fatihah terdiri dari berapa ayat?', pilihan:['5 ayat','6 ayat','7 ayat'], jawaban:2, pembahasan:'Al-Fatihah terdiri dari 7 ayat dan wajib dibaca dalam salat.' },
+      { soal:'Al-Fatihah artinya ...', pilihan:['Pembukaan','Manusia','Gajah'], jawaban:0, pembahasan:'Al-Fatihah artinya "Pembukaan" karena berada di awal Al-Qur\'an.' },
+      { soal:'Arti dari "Ar-Rahman" adalah ...', pilihan:['Maha Penyayang','Maha Pengasih','Maha Suci'], jawaban:1, pembahasan:'Ar-Rahman artinya Maha Pengasih untuk semua makhluk, tanpa terkecuali.' },
+      { soal:'Kalimat yang diucapkan sebelum makan adalah ...', pilihan:['Alhamdulillah','Bismillah','Subhanallah'], jawaban:1, pembahasan:'Sebelum memulai aktivitas kita ucapkan Basmalah.' },
+      { soal:'Setelah selesai makan, kita mengucapkan ...', pilihan:['Basmalah','Hamdalah','Tahlil'], jawaban:1, pembahasan:'Setelah selesai makan atau mendapat nikmat, kita ucapkan Hamdalah (Alhamdulillah).' },
+      { soal:'Al-Fatihah disebut juga Ummul Kitab yang artinya ...', pilihan:['Induknya Al-Qur\'an','Penutup Al-Qur\'an','Tengahnya Al-Qur\'an'], jawaban:0, pembahasan:'Ummul Kitab artinya induknya Al-Qur\'an karena kedudukannya sangat penting.' },
+      { soal:'Kasih sayang Allah yang khusus untuk hamba-Nya yang taat disebut ...', pilihan:['Ar-Rahman','Ar-Rahim','Ar-Razzaq'], jawaban:1, pembahasan:'Ar-Rahim adalah kasih sayang khusus untuk hamba-Nya yang taat beribadah.' }
+    ]
+  },
+
+  /* =====================================================
+     KELAS 2
+  ===================================================== */
+  2: {
+    quran: `
+      ${kartu('📖 Huruf Hijaiah Bersambung', `
+        <p>Di kelas 1 kita belajar huruf Hijaiah tunggal. Di kelas 2 kita belajar menulis huruf Hijaiah secara <b>bersambung</b>. Dalam Al-Qur'an, huruf Arab ditulis menyambung dari <b>kanan ke kiri</b>, seperti tangan yang saling bergandengan.</p>
+        <p>Setiap huruf bisa memiliki <b>empat bentuk</b> berbeda, tergantung posisinya:</p>
+        <ul>
+          <li><b>Bentuk tunggal (mufrad):</b> saat berdiri sendiri.</li>
+          <li><b>Bentuk awal:</b> saat berada di awal kata (disambung ke huruf setelahnya).</li>
+          <li><b>Bentuk tengah:</b> saat berada di tengah kata (disambung ke huruf sebelum dan sesudahnya).</li>
+          <li><b>Bentuk akhir:</b> saat berada di akhir kata (disambung ke huruf sebelumnya).</li>
+        </ul>
+
+        ${subjudul('6 Huruf Spesial yang Tidak Bisa Disambung ke Kiri')}
+        <p>Ada <b>6 huruf</b> yang istimewa: setelah huruf ini, kita <b>tidak boleh menyambung</b> ke huruf berikutnya (huruf di sebelah kirinya). Huruf-huruf itu adalah:</p>
+        <p class="arabic text-3xl text-center text-red-700 my-3">ا د ذ ر ز و</p>
+        <p>Contoh: kata <span class="arabic text-xl">بَابَ</span> (baaba) — ada dua Alif, dan keduanya tidak menyambung ke huruf setelahnya.</p>
+
+        ${tips("Cara menghafal 6 huruf spesial: 'A-Da-Dza-Ra-Za-Wa' — dibaca mengalir seperti menyebut nama teman.")}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('🔤 Tabel Bentuk Huruf Hijaiah', `
+        <p>Perhatikan perubahan bentuk setiap huruf pada tabel berikut. Baris berwarna <span class="text-red-600 font-bold">merah</span> adalah 6 huruf spesial.</p>
+        ${tabelSambung()}
+        ${info("Latihan terbaik: coba tulis kata <span class='arabic text-lg'>بِسْمِ اللّٰهِ</span> dan perhatikan mana huruf yang menyambung dan mana yang tidak.")}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('📗 Surah An-Nas', `
+        <p><b>An-Nas</b> artinya <b>"Manusia"</b>. Surah ini terdiri dari <b>6 ayat</b> dan diturunkan di kota <b>Mekah</b>. An-Nas adalah surah terakhir dalam Al-Qur'an (surah ke-114).</p>
+        <p>Isi utama surah ini adalah <b>doa perlindungan</b> kepada Allah dari segala kejahatan — terutama kejahatan <i>bisikan setan</i> yang membisikkan hal buruk ke dalam hati manusia. Setan bisa berasal dari golongan <b>jin</b> maupun <b>manusia</b>.</p>
+        <p>Membaca An-Nas dianjurkan setiap selesai salat, sebelum tidur, dan saat merasa takut.</p>
+
+        ${subjudul('Lafaz, Transliterasi, dan Arti')}
+        ${tabelAyat([
+          ['1','قُلْ اَعُوْذُ بِرَبِّ النَّاسِۙ',"Qul a'udzu birabbin-nas",'Katakanlah, "Aku berlindung kepada Tuhannya manusia,"'],
+          ['2','مَلِكِ النَّاسِۙ','Malikin-nas','Raja manusia,'],
+          ['3','اِلٰهِ النَّاسِۙ','Ilahin-nas','Sembahan manusia,'],
+          ['4','مِنْ شَرِّ الْوَسْوَاسِ ەۙ الْخَنَّاسِۖ','Min syarril-waswasil-khannas','dari kejahatan (bisikan) setan yang bersembunyi,'],
+          ['5','الَّذِيْ يُوَسْوِسُ فِيْ صُدُوْرِ النَّاسِۙ','Alladzi yuwaswisu fi sudurin-nas','yang membisikkan (kejahatan) ke dalam dada manusia,'],
+          ['6','مِنَ الْجِنَّةِ وَالنَّاسِ ࣖ','Minal-jinnati wan-nas','dari (golongan) jin dan manusia."']
+        ])}
+
+        ${subjudul('Memahami Isi An-Nas')}
+        <ul>
+          <li><b>Ayat 1-3:</b> Kita menyebut tiga sifat Allah sebagai pelindung — <i>Rabb</i> (Tuhan), <i>Malik</i> (Raja), dan <i>Ilah</i> (Sembahan) manusia.</li>
+          <li><b>Ayat 4-5:</b> Kita berlindung dari setan yang suka membisikkan kejahatan, lalu bersembunyi saat nama Allah disebut.</li>
+          <li><b>Ayat 6:</b> Setan bisa berasal dari jin maupun manusia (misalnya teman yang mengajak berbuat buruk).</li>
+        </ul>
+
+        ${hikmah("An-Nas mengajarkan kita untuk selalu berlindung kepada Allah dari segala kejahatan, baik yang datang dari dalam diri kita maupun dari orang lain.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Keteladanannya', `
+        <p>Di kelas 2, kita belajar <b>empat</b> Asmaulhusna: <b>Al-Quddus</b>, <b>As-Salam</b>, <b>Al-Mu'min</b>, dan <b>Al-Malik</b>. Setiap nama Allah memiliki arti dan <b>keteladanan</b> yang bisa kita contoh dalam kehidupan sehari-hari.</p>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('✨ Al-Quddus — Maha Suci', `
+        <p><span class="arabic text-2xl">الْقُدُّوْسُ</span> <b>Al-Quddus</b> artinya <b>Maha Suci</b>. Allah Maha Suci dari segala kekurangan dan kesalahan.</p>
+        <p>Keteladanan yang bisa kita contoh: <b>menjaga kesucian diri dan lingkungan</b>.</p>
+        <ul>
+          <li>Mandi secara teratur, menyikat gigi pagi dan malam.</li>
+          <li>Mencuci tangan sebelum makan.</li>
+          <li>Menyapu halaman, membuang sampah pada tempatnya.</li>
+          <li>Menjaga kebersihan kamar dan kelas.</li>
+          <li>Menghindari perbuatan yang kotor — baik kotor pakaian maupun kotor hati (seperti berbohong).</li>
+        </ul>
+        ${tips("Islam mengajarkan: 'An-Nazafatu minal iman' — Kebersihan adalah sebagian dari iman.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('✨ As-Salam — Maha Pemberi Keselamatan', `
+        <p><span class="arabic text-2xl">السَّلَامُ</span> <b>As-Salam</b> artinya <b>Maha Pemberi Keselamatan</b>. Allah-lah yang memberi rasa aman dan damai kepada makhluk-Nya.</p>
+        <p>Keteladanan yang bisa kita contoh: <b>menciptakan kedamaian di sekitar kita</b>.</p>
+        <ul>
+          <li>Menyapa teman dengan salam "Assalamu'alaikum".</li>
+          <li>Menciptakan kerukunan di kelas dan di rumah.</li>
+          <li>Mendamaikan teman yang bertengkar.</li>
+          <li>Tidak memicu pertengkaran atau memanas-manasi suasana.</li>
+          <li>Memberi rasa aman — misalnya menolong teman yang kesusahan.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu("✨ Al-Mu'min — Maha Pemberi Keamanan", `
+        <p><span class="arabic text-2xl">الْمُؤْمِنُ</span> <b>Al-Mu'min</b> artinya <b>Maha Pemberi Keamanan</b>. Allah memberi rasa aman dan melindungi hamba-Nya dari bahaya.</p>
+        <p>Keteladanan yang bisa kita contoh: <b>menjadi pribadi yang bisa dipercaya dan memberi rasa aman kepada orang lain</b>.</p>
+        <ul>
+          <li>Menjaga rahasia teman yang dititipkan kepada kita.</li>
+          <li>Tidak mengganggu teman, baik secara fisik maupun perkataan.</li>
+          <li>Tidak menakut-nakuti teman dengan hal-hal yang tidak benar.</li>
+          <li>Menyimpan barang titipan dengan aman, tidak mengambil milik orang lain.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('✨ Al-Malik — Maha Merajai', `
+        <p><span class="arabic text-2xl">الْمَلِكُ</span> <b>Al-Malik</b> artinya <b>Maha Merajai</b>. Allah adalah Raja dari semua raja, pemilik dan pengatur seluruh alam semesta.</p>
+        <p>Keteladanan yang bisa kita contoh: <b>menjadi pemimpin yang baik dan bertanggung jawab</b>.</p>
+        <ul>
+          <li>Disiplin menaati peraturan sekolah.</li>
+          <li>Jika menjadi ketua kelas, memimpin dengan adil, tidak pilih kasih.</li>
+          <li>Bertanggung jawab atas tugas yang diberikan guru.</li>
+          <li>Mengatur waktu dengan baik — belajar, bermain, dan beribadah.</li>
+        </ul>
+
+        ${hikmah("Empat Asmaulhusna ini mengajarkan kita untuk menjadi anak yang bersih, suka kedamaian, bisa dipercaya, dan bertanggung jawab.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akhlak: `
+      ${kartu('💚 Kalimat Tayibah Kekaguman', `
+        <p>Selain Basmalah dan Hamdalah yang sudah dipelajari di kelas 1, di kelas 2 kita belajar dua kalimat tayibah khusus untuk <b>mengungkapkan kekaguman</b>: <b>Subhanallah</b> dan <b>Masya Allah</b>. Keduanya sering tertukar, padahal penggunaannya berbeda.</p>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🌟 Subhanallah — Maha Suci Allah', `
+        <p class="arabic text-2xl text-center text-slate-800 my-2">سُبْحَانَ اللّٰهِ</p>
+        <p class="text-center text-sm text-emerald-700 font-semibold mb-3">Subhanallah</p>
+        <p>Artinya: <i>"Maha Suci Allah."</i></p>
+        <p>Diucapkan saat melihat <b>ciptaan alam yang murni kuasa Allah</b> — bukan hasil karya manusia. Semua keindahan alam itu terjadi atas kuasa Allah, tanpa campur tangan manusia.</p>
+
+        ${subjudul('Contoh Situasi Mengucapkan Subhanallah:')}
+        <ul>
+          <li>Melihat <b>pemandangan gunung</b> yang tinggi dan megah.</li>
+          <li>Menyaksikan <b>matahari terbit</b> atau <b>terbenam</b>.</li>
+          <li>Melihat <b>laut yang luas</b> dengan ombaknya.</li>
+          <li>Mengamati <b>bintang dan bulan</b> di langit malam.</li>
+          <li>Melihat <b>pelangi</b> setelah hujan.</li>
+          <li>Mendengar <b>petir dan gemuruh</b> yang dahsyat.</li>
+          <li>Melihat <b>air terjun</b> yang mengalir deras.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🌟 Masya Allah — Atas Kehendak Allah', `
+        <p class="arabic text-2xl text-center text-slate-800 my-2">مَا شَاءَ اللّٰهُ</p>
+        <p class="text-center text-sm text-emerald-700 font-semibold mb-3">Masya Allah</p>
+        <p>Artinya: <i>"Atas kehendak Allah."</i></p>
+        <p>Diucapkan saat melihat sesuatu yang indah atau hebat yang <b>ada peran campur tangan manusia</b>. Kita mengakui bahwa meskipun manusia berusaha, semua terjadi atas kehendak Allah.</p>
+
+        ${subjudul('Contoh Situasi Mengucapkan Masya Allah:')}
+        <ul>
+          <li>Melihat <b>lukisan bagus</b> karya teman.</li>
+          <li>Mendengar teman <b>meraih juara</b> atau nilai tinggi.</li>
+          <li>Melihat <b>gedung pencakar langit</b> yang megah.</li>
+          <li>Menyaksikan <b>pertunjukan hebat</b> atau konser.</li>
+          <li>Melihat <b>bayi lucu</b> di keluarga.</li>
+          <li>Mendengar teman <b>hafal banyak surah</b>.</li>
+        </ul>
+
+        ${subjudul('Perbedaan Subhanallah vs Masya Allah')}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <p class="font-bold text-amber-700 text-sm mb-1">🌟 Subhanallah</p>
+            <p class="text-xs">Untuk <b>ciptaan alam</b> — murni kuasa Allah.<br>Contoh: gunung, matahari, laut, bintang.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <p class="font-bold text-amber-700 text-sm mb-1">🌟 Masya Allah</p>
+            <p class="text-xs">Untuk <b>hasil karya manusia</b> — ada usaha manusia, tapi atas kehendak Allah.<br>Contoh: lukisan, juara, gedung, prestasi.</p>
+          </div>
+        </div>
+
+        ${hikmah("Membiasakan Subhanallah dan Masya Allah membuat kita selalu mengingat kebesaran Allah dalam setiap kejadian.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+
+    kuis: [
+      { soal:'Huruf yang tidak bisa disambung ke kiri berjumlah ...', pilihan:['5 huruf','6 huruf','7 huruf'], jawaban:1, pembahasan:'Ada 6 huruf: ا د ذ ر ز و' },
+      { soal:'Huruf Hijaiah ditulis dari arah ...', pilihan:['Kiri ke kanan','Kanan ke kiri','Atas ke bawah'], jawaban:1, pembahasan:'Huruf Hijaiah ditulis dari kanan ke kiri.' },
+      { soal:'An-Nas artinya ...', pilihan:['Manusia','Gajah','Pembukaan'], jawaban:0, pembahasan:'An-Nas artinya "Manusia".' },
+      { soal:'Surah An-Nas terdiri dari berapa ayat?', pilihan:['5 ayat','6 ayat','7 ayat'], jawaban:1, pembahasan:'An-Nas terdiri dari 6 ayat.' },
+      { soal:'Surah An-Nas adalah surah ke- ... dalam Al-Qur\'an', pilihan:['112','113','114'], jawaban:2, pembahasan:'An-Nas adalah surah ke-114, surah terakhir dalam Al-Qur\'an.' },
+      { soal:'Al-Quddus artinya ...', pilihan:['Maha Suci','Maha Esa','Maha Melihat'], jawaban:0, pembahasan:'Al-Quddus artinya Maha Suci.' },
+      { soal:'Keteladanan dari Al-Malik adalah ...', pilihan:['Menjaga kebersihan','Menjadi pemimpin yang adil','Memberi rasa aman'], jawaban:1, pembahasan:'Al-Malik (Maha Merajai) diteladani dengan menjadi pemimpin yang adil dan bertanggung jawab.' },
+      { soal:'Saat melihat lukisan bagus karya teman, kita ucapkan ...', pilihan:['Subhanallah','Masya Allah','Astaghfirullah'], jawaban:1, pembahasan:'Masya Allah diucapkan saat melihat karya hebat manusia.' },
+      { soal:'Saat melihat gunung yang tinggi, kita ucapkan ...', pilihan:['Subhanallah','Masya Allah','Alhamdulillah'], jawaban:0, pembahasan:'Subhanallah diucapkan saat melihat ciptaan alam murni kuasa Allah.' },
+      { soal:"Al-Mu'min artinya ...", pilihan:['Maha Pemberi Keamanan','Maha Suci','Maha Merajai'], jawaban:0, pembahasan:"Al-Mu'min artinya Maha Pemberi Keamanan." }
+    ]
+  },
+
+  /* =====================================================
+     KELAS 3
+  ===================================================== */
+  3: {
+    quran: `
+      ${kartu('📗 Surah Al-Fil (Pasukan Bergajah)', `
+        <p><b>Al-Fil</b> artinya <b>"Gajah"</b>. Surah ini adalah surah ke-<b>105</b> dalam Al-Qur'an, terdiri dari <b>5 ayat</b>, dan diturunkan di kota <b>Mekah</b>.</p>
+        <p>Surah Al-Fil menceritakan kisah nyata tentang <b>Raja Abrahah</b> dari negeri Yaman yang ingin <b>menghancurkan Ka'bah</b> di Mekah. Abrahah membawa pasukan besar dengan <b>gajah-gajah</b> yang gagah. Namun Allah menghancurkan mereka dengan cara yang sangat menakjubkan: melalui <b>burung ababil</b> yang membawa batu panas dari tanah liat yang dibakar (<i>sijjil</i>).</p>
+        <p>Pesan utama surah ini: <b>jangan sombong</b>. Sebesar apapun kekuatan manusia, tetap tidak akan mampu melawan kekuasaan Allah.</p>
+
+        ${subjudul('Lafaz, Transliterasi, dan Arti')}
+        ${tabelAyat([
+          ['1','اَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِاَصْحٰبِ الْفِيْلِۗ',"Alam tara kaifa fa'ala rabbuka bi-ash-habil-fiil",'Tidakkah engkau perhatikan bagaimana Tuhanmu telah bertindak terhadap pasukan bergajah?'],
+          ['2','اَلَمْ يَجْعَلْ كَيْدَهُمْ فِيْ تَضْلِيْلٍۙ',"Alam yaj'al kaidahum fii tadhliil",'Bukankah Dia telah menjadikan tipu daya mereka itu sia-sia?'],
+          ['3','وَّاَرْسَلَ عَلَيْهِمْ طَيْرًا اَبَابِيْلَۙ',"Wa arsala 'alaihim thairan abaabiil",'dan Dia mengirimkan kepada mereka burung yang berbondong-bondong,'],
+          ['4','تَرْمِيْهِمْ بِحِجَارَةٍ مِّنْ سِجِّيْلٍۙ','Tarmiihim bi-hijaaratim min sijjiil','yang melempari mereka dengan batu dari tanah liat yang dibakar,'],
+          ['5','فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُوْلٍ ࣖ',"Faja'alahum ka'ashfim ma'kuul",'sehingga mereka dijadikan-Nya seperti daun-daun yang dimakan (ulat).']
+        ])}
+
+        ${subjudul('Memahami Isi Al-Fil')}
+        <ul>
+          <li><b>Ayat 1:</b> Allah bertanya kepada Nabi Muhammad: "Tidakkah engkau perhatikan bagaimana Aku menghancurkan pasukan bergajah?"</li>
+          <li><b>Ayat 2:</b> Tipu daya Abrahah untuk merusak Ka'bah dibuat sia-sia oleh Allah.</li>
+          <li><b>Ayat 3:</b> Allah mengirim burung ababil yang datang berbondong-bondong.</li>
+          <li><b>Ayat 4:</b> Burung itu membawa batu dari tanah liat yang dibakar (sijjil) dan melemparkannya ke pasukan Abrahah.</li>
+          <li><b>Ayat 5:</b> Pasukan Abrahah hancur seperti daun-daun yang dimakan ulat — habis tak bersisa.</li>
+        </ul>
+
+        ${hikmah("Kesombongan Abrahah membawa kehancuran. Sebaliknya, kerendahan hati dan tawakal kepada Allah akan membawa keselamatan.")}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+    `,
+
+    akidah: `
+      ${kartu('☪️ Sifat Wajib, Mustahil, dan Jaiz Allah', `
+        <p>Allah memiliki sifat-sifat yang sempurna. Dalam ilmu tauhid, sifat-sifat Allah dibagi menjadi tiga kelompok:</p>
+        <ul>
+          <li><b>Sifat Wajib (20):</b> sifat yang <b>pasti</b> dimiliki Allah. Misalnya: Wujud (Ada), Qudrah (Kuasa), 'Ilmu (Mengetahui).</li>
+          <li><b>Sifat Mustahil (20):</b> sifat yang <b>tidak mungkin</b> dimiliki Allah. Sifat ini adalah kebalikan dari sifat wajib. Misalnya: 'Adam (Tidak Ada), 'Ajzun (Lemah), Jahlun (Bodoh).</li>
+          <li><b>Sifat Jaiz (1):</b> sifat <b>bebas</b> bagi Allah untuk berkehendak. Allah bebas menciptakan atau tidak menciptakan sesuatu. Allah tidak dipaksa oleh siapapun.</li>
+        </ul>
+
+        ${tips("Cara mengingat: Sifat Wajib = pasti ada. Sifat Mustahil = pasti tidak ada. Sifat Jaiz = bebas (terserah Allah).")}
+
+        ${subjudul('Tabel 20 Sifat Wajib & Mustahil Allah')}
+        ${tabelSifat()}
+
+        ${subjudul('Memahami Sifat Jaiz')}
+        <p>Sifat Jaiz Allah hanya satu, yaitu <b>fi'lu kulli mumkinin au tarkuhu</b> — artinya Allah bebas <i>melakukan</i> atau <i>meninggalkan</i> sesuatu yang mungkin. Contoh: Allah bebas menciptakan manusia, dan bebas pula tidak menciptakannya. Semua terserah kehendak Allah.</p>
+
+        ${hikmah("Mengenal sifat-sifat Allah membuat kita semakin yakin bahwa hanya Allah yang Maha Sempurna. Kita sebagai manusia harus rendah hati.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akhlak: `
+      ${kartu('💚 Husnuzan (Berbaik Sangka)', `
+        <p><b>Husnuzan</b> artinya <b>berbaik sangka</b> — berpikir positif terhadap ketentuan Allah dan terhadap sesama manusia. Kebalikan dari husnuzan adalah <b>suuzan</b> (berburuk sangka), yang merupakan perbuatan tercela.</p>
+
+        ${subjudul('Husnuzan kepada Allah')}
+        <p>Ketika kita menghadapi ujian atau cobaan, kita tetap berpikir positif kepada Allah:</p>
+        <ul>
+          <li><b>Saat sakit:</b> Sabar, tidak mengeluh, dan yakin sakit ini menghapus dosa serta menaikkan derajat kita di sisi Allah.</li>
+          <li><b>Saat gagal ujian:</b> Tidak putus asa, mencari hikmah, dan bangkit belajar lebih giat.</li>
+          <li><b>Saat doa belum terkabul:</b> Yakin bahwa Allah menunda untuk memberikan yang lebih baik pada waktu yang tepat.</li>
+          <li><b>Saat kehilangan sesuatu:</b> Yakin bahwa Allah akan menggantinya dengan yang lebih baik.</li>
+          <li><b>Saat bahagia:</b> Bersyukur, tidak sombong, dan semakin dekat kepada Allah.</li>
+        </ul>
+
+        ${subjudul('Husnuzan kepada Sesama Manusia')}
+        <ul>
+          <li>Ketika teman berbuat salah, kita maafkan dan beri kesempatan memperbaiki diri.</li>
+          <li>Ketika melihat teman sukses, kita turut senang, bukan iri hati.</li>
+          <li>Ketika ada kabar buruk tentang teman, kita <b>cek dulu kebenarannya</b>, tidak langsung percaya.</li>
+          <li>Ketika teman berbuat baik, kita apresiasi dan puji kebaikannya.</li>
+          <li>Ketika ada perbedaan pendapat, kita hargai dan cari titik tengahnya.</li>
+        </ul>
+
+        ${subjudul('Bahaya Suuzan')}
+        <ul>
+          <li>Membuat hati tidak tenang dan gelisah.</li>
+          <li>Memicu pertengkaran dan permusuhan.</li>
+          <li>Menghilangkan rasa percaya kepada orang lain.</li>
+          <li>Menimbulkan dosa karena menuduh tanpa bukti.</li>
+        </ul>
+
+        ${hikmah("Husnuzan membuat hati tenang, hidup damai, dan disukai banyak orang. Mari biasakan berbaik sangka sejak dini.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+
+    kuis: [
+      { soal:'Al-Fil artinya ...', pilihan:['Gajah','Manusia','Pembukaan'], jawaban:0, pembahasan:'Al-Fil artinya "Gajah".' },
+      { soal:'Surah Al-Fil terdiri dari berapa ayat?', pilihan:['4 ayat','5 ayat','6 ayat'], jawaban:1, pembahasan:'Al-Fil terdiri dari 5 ayat.' },
+      { soal:'Raja yang hendak merusak Ka\'bah adalah ...', pilihan:['Abrahah','Namrud','Firaun'], jawaban:0, pembahasan:'Raja Abrahah dari Yaman beserta pasukan bergajahnya.' },
+      { soal:'Allah menghancurkan pasukan Abrahah dengan perantara ...', pilihan:['angin topan','burung ababil','gempa bumi'], jawaban:1, pembahasan:'Allah mengirim burung ababil yang membawa batu dari tanah liat (sijjil).' },
+      { soal:'Sifat wajib Allah jumlahnya ada ...', pilihan:['19','20','21'], jawaban:1, pembahasan:'Sifat wajib Allah ada 20.' },
+      { soal:'Kebalikan dari sifat "Wujud" adalah ...', pilihan:["'Adam",'Hudus',"Fana'"], jawaban:0, pembahasan:"Wujud (Ada) kebalikannya 'Adam (Tidak Ada)." },
+      { soal:'Sifat Jaiz Allah artinya ...', pilihan:['Sifat yang pasti dimiliki','Sifat yang mustahil','Kebebasan Allah berkehendak'], jawaban:2, pembahasan:'Sifat Jaiz adalah kebebasan Allah untuk berkehendak.' },
+      { soal:'Husnuzan artinya ...', pilihan:['Berburuk sangka','Berbaik sangka','Berserah diri'], jawaban:1, pembahasan:'Husnuzan = berbaik sangka kepada Allah dan sesama.' },
+      { soal:'Saat gagal ujian, sikap husnuzan adalah ...', pilihan:['Putus asa','Menyalahkan guru','Bangkit belajar lebih giat'], jawaban:2, pembahasan:'Husnuzan saat gagal = bangkit dan belajar lebih giat.' },
+      { soal:'Kebalikan dari husnuzan adalah ...', pilihan:['Tawakal','Suuzan','Takabur'], jawaban:1, pembahasan:'Kebalikan husnuzan adalah suuzan (berburuk sangka).' }
+    ]
+  },
+
+  /* =====================================================
+     KELAS 4
+  ===================================================== */
+  4: {
+    quran: `
+      ${kartu("📗 Surah Al-'Alaq 1-5 (Semangat Ilmu)", `
+        <p><b>Al-'Alaq</b> artinya <b>"Segumpal Darah"</b>. Ayat 1-5 dari surah ini adalah <b>wahyu pertama</b> yang diturunkan Allah kepada Nabi Muhammad saw. di <b>Gua Hira</b>, melalui Malaikat Jibril.</p>
+        <p>Kata pertama yang diterima Nabi adalah <b><i>Iqra'</i></b> yang artinya <b>"Bacalah!"</b>. Ini menunjukkan bahwa Islam sangat mementingkan <b>ilmu pengetahuan</b>. Wahyu pertama bukan perintah salat, puasa, atau zakat, tapi perintah membaca.</p>
+
+        ${subjudul('Lafaz, Transliterasi, dan Arti')}
+        ${tabelAyat([
+          ['1','اِقْرَأْ بِاسْمِ رَبِّكَ الَّذِيْ خَلَقَۚ','Iqra\' bismi rabbikalladzii khalaq','Bacalah dengan (menyebut) nama Tuhanmu yang menciptakan,'],
+          ['2','خَلَقَ الْاِنْسَانَ مِنْ عَلَقٍۚ',"Khalaqal insaana min 'alaq",'Dia telah menciptakan manusia dari segumpal darah.'],
+          ['3','اِقْرَأْ وَرَبُّكَ الْاَكْرَمُۙ',"Iqra' wa rabbukal akram",'Bacalah, dan Tuhanmulah Yang Mahamulia,'],
+          ['4','الَّذِيْ عَلَّمَ بِالْقَلَمِۙ',"Alladzii 'allama bil qalam",'Yang mengajar (manusia) dengan perantaraan pena.'],
+          ['5','عَلَّمَ الْاِنْسَانَ مَا لَمْ يَعْلَمْۗ',"'Allamal insaana maa lam ya'lam",'Dia mengajarkan manusia apa yang tidak diketahuinya.']
+        ])}
+
+        ${subjudul('Pesan Pokok Al-\'Alaq 1-5')}
+        <ul>
+          <li><b>Perintah membaca dan belajar:</b> Membaca adalah kunci ilmu. Semua ilmu dimulai dari membaca.</li>
+          <li><b>Niatkan belajar karena Allah:</b> Kalimat "bismi rabbika" mengingatkan bahwa belajar harus diawali dengan niat ibadah.</li>
+          <li><b>Ilmu adalah pemberian Allah:</b> Allah yang menciptakan manusia, Allah juga yang mengajarkan ilmu. Karena itu, jangan sombong dengan ilmu yang kita miliki.</li>
+          <li><b>Catat ilmu dengan pena:</b> Allah mengajar manusia dengan perantaraan pena. Ini mengajarkan pentingnya mencatat dan menulis ilmu.</li>
+          <li><b>Belajar sepanjang hayat:</b> "Apa yang tidak diketahuinya" menunjukkan bahwa manusia terus belajar dari tidak tahu menjadi tahu.</li>
+        </ul>
+
+        ${subjudul('Penerapan dalam Kehidupan Sehari-hari')}
+        <ul>
+          <li>Rajin membaca buku, bukan hanya bermain HP.</li>
+          <li>Mencatat pelajaran dengan rapi di buku tulis.</li>
+          <li>Bertanya kepada guru jika belum paham.</li>
+          <li>Tidak menyontek saat ujian, karena ilmu sejati hanya dari usaha sendiri.</li>
+          <li>Menyaring informasi: tidak langsung percaya berita yang belum jelas kebenarannya.</li>
+        </ul>
+
+        ${hikmah("Al-'Alaq 1-5 mengajarkan kita bahwa membaca dan belajar adalah perintah Allah. Anak saleh adalah anak yang rajin belajar dan mencintai ilmu.")}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+    `,
+
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Penerapannya', `
+        <p>Di kelas 4, kita belajar <b>empat</b> Asmaulhusna yang berkaitan dengan pengawasan dan perlindungan Allah: <b>Al-Basir</b>, <b>As-Sami'</b>, <b>Al-Hafiz</b>, dan <b>Al-Wali</b>.</p>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('👁️ Al-Basir — Maha Melihat', `
+        <p><span class="arabic text-2xl">الْبَصِيْرُ</span> <b>Al-Basir</b> artinya <b>Maha Melihat</b>. Allah melihat segala sesuatu, bahkan yang tersembunyi sekalipun. Tidak ada satu pun yang luput dari penglihatan Allah.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Jujur</b> dalam setiap perkataan dan perbuatan.</li>
+          <li><b>Tidak menyontek</b> saat ujian, karena Allah selalu melihat.</li>
+          <li>Tidak mengambil barang temuan atau milik orang lain, meski tidak ada yang melihat.</li>
+          <li>Tidak berbuat curang saat bermain dengan teman.</li>
+          <li>Berbuat baik meski tidak dipuji orang, karena Allah melihat kebaikan kita.</li>
+        </ul>
+        ${tips("Ingat: Allah melihat kita di mana pun kita berada. Karena itu, jadilah anak yang jujur dan amanah.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu("👂 As-Sami' — Maha Mendengar", `
+        <p><span class="arabic text-2xl">السَّمِيْعُ</span> <b>As-Sami'</b> artinya <b>Maha Mendengar</b>. Allah mendengar segala suara, termasuk bisikan hati dan doa yang kita ucapkan dalam hati.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Menjaga lisan</b> dari perkataan kotor, gibah, dan dusta — karena Allah mendengar.</li>
+          <li><b>Yakin doa didengar</b> Allah. Karena itu rajin berdoa, tidak hanya saat susah.</li>
+          <li>Berbicara dengan sopan kepada orang tua, guru, dan teman.</li>
+          <li>Tidak berteriak-teriak atau mengganggu ketenangan orang lain.</li>
+          <li>Mendengarkan nasihat guru dan orang tua dengan sungguh-sungguh.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('🛡️ Al-Hafiz — Maha Memelihara', `
+        <p><span class="arabic text-2xl">الْحَفِيْظُ</span> <b>Al-Hafiz</b> artinya <b>Maha Memelihara</b>. Allah memelihara seluruh ciptaan-Nya — mengatur, menjaga, dan melindungi dari kehancuran.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Melestarikan alam</b>: tidak menebang pohon sembarangan, tidak membuang sampah ke sungai.</li>
+          <li><b>Menjaga diri</b> dari perbuatan buruk dan pergaulan yang salah.</li>
+          <li>Memelihara tanaman dan hewan peliharaan dengan baik.</li>
+          <li>Menjaga barang-barang pribadi dan fasilitas umum agar tetap terawat.</li>
+          <li>Menjaga hafalan Al-Qur'an dengan murajaah (mengulang) setiap hari.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('🤲 Al-Wali — Maha Pelindung', `
+        <p><span class="arabic text-2xl">الْوَلِيُّ</span> <b>Al-Wali</b> artinya <b>Maha Pelindung</b>. Allah menjadi pelindung bagi hamba-Nya yang beriman dan bertakwa.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li>Menjadikan Allah <b>tempat bergantung</b> saat ada masalah, bukan mengeluh kepada manusia saja.</li>
+          <li>Berdoa memohon perlindungan Allah saat merasa takut.</li>
+          <li>Yakin bahwa Allah akan menolong hamba-Nya yang berusaha dan berdoa.</li>
+          <li>Tidak takut menghadapi kesulitan, karena Allah selalu bersama orang sabar.</li>
+          <li>Menjadi pelindung bagi adik, teman, atau siapa pun yang membutuhkan.</li>
+        </ul>
+
+        ${hikmah("Empat Asmaulhusna ini mengajarkan kita untuk hidup jujur, menjaga lisan, memelihara alam, dan selalu berlindung kepada Allah.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akhlak: `
+      ${kartu('💚 Akhlak di Lingkungan Keluarga', `
+        <p>Keluarga adalah tempat pertama kita belajar akhlak. Islam mengajarkan kita untuk berbuat baik kepada orang tua (<i>birrul walidain</i>) dan kepada seluruh anggota keluarga.</p>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🤝 Tolong-Menolong', `
+        <p>Saling tolong-menolong membuat pekerjaan menjadi ringan dan keluarga menjadi rukun.</p>
+        <ul>
+          <li>Membantu ibu mencuci piring, menyapu, atau melipat pakaian.</li>
+          <li>Membantu ayah membawa barang belanjaan.</li>
+          <li>Membantu adik mengerjakan PR atau belajar membaca.</li>
+          <li>Merapikan tempat tidur sendiri tanpa harus disuruh.</li>
+          <li>Membantu anggota keluarga yang sedang sakit.</li>
+        </ul>
+        ${tips("Rasulullah saw. bersabda: 'Sebaik-baik manusia adalah yang paling bermanfaat bagi orang lain.'")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('❤️ Empati & Menghargai', `
+        <p>Empati adalah kemampuan merasakan apa yang dirasakan orang lain. Dengan empati, kita bisa menghargai perasaan anggota keluarga.</p>
+        <ul>
+          <li>Berbagi tugas saat orang tua sakit — tidak menuntut ini dan itu.</li>
+          <li>Tidak berisik saat saudara sedang belajar.</li>
+          <li>Menghargai makanan yang disiapkan ibu — makan yang dihabiskan.</li>
+          <li>Meminta izin sebelum meminjam barang milik saudara.</li>
+          <li>Menghibur anggota keluarga yang sedang sedih.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🗣️ Musyawarah', `
+        <p><b>Musyawarah</b> adalah menyelesaikan suatu masalah dengan berdiskusi bersama untuk mencapai kesepakatan. Islam mengajarkan musyawarah untuk menyelesaikan perbedaan pendapat dalam keluarga.</p>
+
+        ${subjudul('Contoh Musyawarah di Keluarga:')}
+        <ul>
+          <li>Menentukan tempat liburan bersama — semua anggota keluarga memberikan pendapat.</li>
+          <li>Membagi tugas rumah — siapa menyapu, siapa mencuci piring.</li>
+          <li>Menentukan jadwal menonton TV agar tidak berebut.</li>
+          <li>Memutuskan menu makan bersama akhir pekan.</li>
+          <li>Menyelesaikan perselisihan antara kakak dan adik dengan kepala dingin.</li>
+        </ul>
+
+        ${subjudul('Adab Bermusyawarah:')}
+        <ul>
+          <li>Bicara dengan sopan dan tidak memotong pembicaraan orang lain.</li>
+          <li>Mendengarkan pendapat orang lain dengan sabar.</li>
+          <li>Menerima hasil keputusan bersama dengan lapang dada.</li>
+          <li>Jangan memaksakan ego atau keinginan pribadi.</li>
+        </ul>
+
+        ${hikmah("Akhlak baik di keluarga membuat rumah menjadi surga kecil yang penuh kasih sayang. Mulailah dari hal-hal kecil setiap hari.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+
+    kuis: [
+      { soal:'Wahyu pertama Nabi Muhammad saw. turun di ...', pilihan:['Gua Tsur','Gua Hira','Madinah'], jawaban:1, pembahasan:'Wahyu pertama turun di Gua Hira.' },
+      { soal:'Kata "Iqra\'" artinya ...', pilihan:['Bacalah','Tulislah','Dengarkanlah'], jawaban:0, pembahasan:'Iqra\' artinya "Bacalah".' },
+      { soal:'Surah Al-\'Alaq 1-5 berisi tentang ...', pilihan:['Perintah salat','Perintah membaca/belajar','Perintah zakat'], jawaban:1, pembahasan:'Berisi perintah membaca dan semangat mencari ilmu.' },
+      { soal:'Dalam Al-\'Alaq ayat 1, kita diperintahkan membaca dengan menyebut nama ...', pilihan:['guru','Tuhanmu','malaikat'], jawaban:1, pembahasan:'"Bismi rabbika" — dengan menyebut nama Tuhanmu.' },
+      { soal:'Al-Basir artinya ...', pilihan:['Maha Mendengar','Maha Melihat','Maha Memelihara'], jawaban:1, pembahasan:'Al-Basir artinya Maha Melihat.' },
+      { soal:"Penerapan As-Sami' dalam kehidupan adalah ...", pilihan:['Jujur saat ujian','Menjaga lisan dari gibah','Merawat tanaman'], jawaban:1, pembahasan:"As-Sami' (Maha Mendengar) diterapkan dengan menjaga lisan." },
+      { soal:'Al-Hafiz artinya ...', pilihan:['Maha Memelihara','Maha Melindungi','Maha Melihat'], jawaban:0, pembahasan:'Al-Hafiz artinya Maha Memelihara.' },
+      { soal:'Saat ada perbedaan pendapat dalam keluarga, sebaiknya ...', pilihan:['Memaksakan kehendak','Diam saja','Bermusyawarah'], jawaban:2, pembahasan:'Musyawarah adalah cara terbaik menyelesaikan perbedaan.' },
+      { soal:'Al-Wali artinya ...', pilihan:['Maha Pelindung','Maha Pemaaf','Maha Esa'], jawaban:0, pembahasan:'Al-Wali artinya Maha Pelindung.' },
+      { soal:'Contoh akhlak empati kepada saudara adalah ...', pilihan:['Berisik saat saudara belajar','Tidak berisik saat saudara belajar','Mengambil barang tanpa izin'], jawaban:1, pembahasan:'Empati = menghargai saudara yang sedang belajar dengan tidak berisik.' }
+    ]
+  },
+
+  /* =====================================================
+     KELAS 5
+  ===================================================== */
+  5: {
+    quran: `
+      ${kartu('📗 Surah Al-Qadr (Lailatulqadar)', `
+        <p><b>Al-Qadr</b> artinya <b>"Kemuliaan"</b>. Surah ini terdiri dari <b>5 ayat</b> dan menceritakan tentang malam yang paling mulia dalam setahun, yaitu <b>Lailatulqadar</b>.</p>
+        <p>Pada malam Lailatulqadar, Al-Qur'an pertama kali diturunkan dari Lauhul Mahfuz ke langit dunia. Malam ini terjadi di bulan <b>Ramadan</b>, dan nilainya <b>lebih baik dari 1.000 bulan</b> (setara lebih dari 83 tahun!). Siapa pun yang beribadah pada malam ini dengan sungguh-sungguh akan mendapat pahala yang sangat besar.</p>
+
+        ${subjudul('Lafaz, Transliterasi, dan Arti')}
+        ${tabelAyat([
+          ['1','اِنَّآ اَنْزَلْنٰهُ فِيْ لَيْلَةِ الْقَدْرِ','Innaa anzalnaahu fii lailatil-qadr',"Sesungguhnya Kami telah menurunkannya (Al-Qur'an) pada Lailatulqadar."],
+          ['2','وَمَآ اَدْرٰىكَ مَا لَيْلَةُ الْقَدْرِۗ','Wa maa adraaka maa lailatul-qadr','Tahukah kamu apakah Lailatulqadar itu?'],
+          ['3','لَيْلَةُ الْقَدْرِ ەۙ خَيْرٌ مِّنْ اَلْفِ شَهْرٍۗ','Lailatul-qadri khairum min alfi syahr','Lailatulqadar itu lebih baik daripada seribu bulan.'],
+          ['4','تَنَزَّلُ الْمَلٰۤىِٕكَةُ وَالرُّوْحُ فِيْهَا بِاِذْنِ رَبِّهِمْۚ مِنْ كُلِّ اَمْرٍۛ',"Tanazzalul malaa'ikatu war-ruuhu fiihaa bi-idzni rabbihim min kulli amr",'Pada malam itu turun para malaikat dan Rūḥ (Jibril) dengan izin Tuhannya untuk mengatur segala urusan.'],
+          ['5','سَلٰمٌ ۛهِيَ حَتّٰى مَطْلَعِ الْفَجْرِ ࣖ',"Salaamun hiya hattaa mathla'il-fajr",'Sejahteralah (malam) itu sampai terbit fajar.']
+        ])}
+
+        ${subjudul('Memahami Isi Al-Qadr')}
+        <ul>
+          <li><b>Ayat 1:</b> Al-Qur'an diturunkan pada malam Lailatulqadar yang penuh kemuliaan.</li>
+          <li><b>Ayat 2:</b> Allah bertanya, "Tahukah kamu apa Lailatulqadar itu?" — mengesankan bahwa malam ini sangat luar biasa.</li>
+          <li><b>Ayat 3:</b> Lailatulqadar lebih baik dari 1.000 bulan.</li>
+          <li><b>Ayat 4:</b> Pada malam itu, para malaikat dan Malaikat Jibril turun ke bumi dengan izin Allah untuk mengatur segala urusan.</li>
+          <li><b>Ayat 5:</b> Malam itu penuh kedamaian dan keselamatan sampai terbit fajar.</li>
+        </ul>
+
+        ${subjudul('Amalan di Malam Lailatulqadar')}
+        <ul>
+          <li>Memperbanyak <b>salat malam</b> (tarawih, tahajud, witir).</li>
+          <li><b>Tadarus Al-Qur'an</b> — membaca Al-Qur'an sebanyak mungkin.</li>
+          <li><b>Berdoa</b> memohon ampunan dan kebaikan dunia-akhirat.</li>
+          <li><b>Bersedekah</b> kepada yang membutuhkan.</li>
+          <li><b>I'tikaf</b> di masjid (berdiam diri untuk beribadah).</li>
+        </ul>
+
+        ${hikmah("Lailatulqadar mengajarkan kita untuk tidak menyia-nyiakan waktu, terutama di bulan Ramadan. Sedikit ibadah di malam itu nilainya melebihi ibadah 1.000 bulan.")}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+    `,
+
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Keteladanannya', `
+        <p>Di kelas 5, kita belajar empat Asmaulhusna yang berkaitan dengan kehidupan dan kematian: <b>Al-Mumit</b>, <b>Al-Muhyi</b>, <b>Al-Ba'its</b>, dan <b>Al-Qayyum</b>.</p>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('💀 Al-Mumit — Maha Mematikan', `
+        <p><span class="arabic text-2xl">الْمُمِيْتُ</span> <b>Al-Mumit</b> artinya <b>Maha Mematikan</b>. Allah-lah yang menentukan kapan setiap makhluk mati.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Mengingat kematian</b> agar tidak menyia-nyiakan waktu.</li>
+          <li>Manfaatkan sisa hidup untuk <b>menabung amal baik</b> — salat, sedekah, membantu orang tua.</li>
+          <li>Tidak menunda-nunda berbuat kebaikan, karena ajal bisa datang kapan saja.</li>
+          <li>Tidak takut mati, karena mati adalah pintu menuju kehidupan yang kekal.</li>
+          <li>Menyadari bahwa semua makhluk akan mati, sehingga tidak sombong dengan kekuatan atau harta.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('🌱 Al-Muhyi — Maha Menghidupkan', `
+        <p><span class="arabic text-2xl">الْمُحْيِيْ</span> <b>Al-Muhyi</b> artinya <b>Maha Menghidupkan</b>. Allah yang memberi kehidupan kepada seluruh makhluk, dan yang akan menghidupkan kembali manusia di hari kiamat.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Merawat tanaman</b> yang layu agar segar kembali — tanda mensyukuri nikmat kehidupan.</li>
+          <li>Memelihara hewan peliharaan dengan baik, memberi makan dan minum.</li>
+          <li>Menghargai kehidupan: tidak menyakiti hewan atau tumbuhan tanpa alasan.</li>
+          <li>Menjaga kesehatan tubuh sebagai bentuk syukur atas kehidupan dari Allah.</li>
+          <li>Yakin bahwa Allah akan menghidupkan manusia kembali pada hari kiamat.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu("🔔 Al-Ba'its — Maha Membangkitkan", `
+        <p><span class="arabic text-2xl">الْبَاعِثُ</span> <b>Al-Ba'its</b> artinya <b>Maha Membangkitkan</b>. Allah akan membangkitkan seluruh manusia dari kubur pada hari kiamat untuk dihisab (dihitung amalnya).</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li>Menjadi <b>penyemangat</b> bagi kawan yang sedang putus asa.</li>
+          <li><b>Pantang putus asa</b> — jika gagal, bangkit lagi dan coba lagi.</li>
+          <li>Yakin bahwa hari kiamat pasti terjadi, sehingga berhati-hati dalam berbuat.</li>
+          <li>Membangkitkan semangat belajar setelah merasa malas.</li>
+          <li>Membantu teman bangkit dari kesedihan.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('🌟 Al-Qayyum — Maha Berdiri Sendiri', `
+        <p><span class="arabic text-2xl">الْقَيُّوْمُ</span> <b>Al-Qayyum</b> artinya <b>Maha Berdiri Sendiri</b>. Allah berdiri sendiri, tidak butuh bantuan siapa pun, tetapi semua makhluk butuh kepada Allah.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Melatih kemandirian</b> — mengerjakan tugas sendiri tanpa selalu dibantu orang tua.</li>
+          <li>Tidak selalu <b>manja</b> atau bergantung pada orang lain.</li>
+          <li>Mengerjakan PR sendiri, bukan menyontek teman.</li>
+          <li>Berusaha menyelesaikan masalah sendiri sebelum meminta bantuan.</li>
+          <li>Meski mandiri, tetap berdoa dan bergantung kepada Allah.</li>
+        </ul>
+
+        ${hikmah("Al-Mumit dan Al-Muhyi mengajarkan kita untuk tidak menyia-nyiakan hidup. Al-Ba'its mengajarkan pantang menyerah. Al-Qayyum mengajarkan kemandirian.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akhlak: `
+      ${kartu('💚 Sinergi Doa, Ikhtiar, dan Tawakal', `
+        <p>Dalam Islam, mencapai cita-cita tidak cukup hanya dengan berdoa. Kita harus <b>berdoa</b>, lalu <b>berusaha (ikhtiar)</b>, kemudian <b>berserah diri (tawakal)</b>. Ketiganya harus berjalan seimbang.</p>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🤲 1. Doa — Memohon kepada Allah', `
+        <p>Doa adalah <b>permohonan</b> kita kepada Allah. Sebelum memulai usaha, kita memohon pertolongan dan keberkahan dari Allah.</p>
+
+        ${subjudul('Adab Berdoa:')}
+        <ul>
+          <li>Diawali dengan membaca Basmalah dan memuji Allah.</li>
+          <li>Diakhiri dengan selawat kepada Nabi Muhammad saw.</li>
+          <li>Dilakukan dengan <b>khusyuk</b> (hati fokus) dan suara lembut.</li>
+          <li>Menggunakan bahasa yang sopan, memohon dengan rendah hati.</li>
+          <li>Yakin bahwa doa pasti dikabulkan Allah, meskipun waktunya belum tentu sekarang.</li>
+        </ul>
+
+        ${subjudul('Waktu-Waktu Mustajab untuk Berdoa:')}
+        <ul>
+          <li>Setelah salat wajib.</li>
+          <li>Antara azan dan ikamah.</li>
+          <li>Sepertiga malam terakhir (waktu tahajud).</li>
+          <li>Saat berbuka puasa.</li>
+          <li>Saat sujud dalam salat.</li>
+          <li>Saat turun hujan.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('💪 2. Ikhtiar — Berusaha Maksimal', `
+        <p><b>Ikhtiar</b> artinya <b>berusaha</b> atau <b>bekerja keras</b>. Doa tanpa ikhtiar adalah salah kaprah. Kita tidak bisa hanya berdoa minta nilai bagus tanpa belajar.</p>
+
+        ${subjudul('Contoh Ikhtiar:')}
+        <ul>
+          <li>Ingin nilai bagus → <b>belajar rajin</b>, kerjakan PR, bertanya kepada guru.</li>
+          <li>Ingin sehat → <b>makan makanan bergizi</b>, olahraga, istirahat cukup.</li>
+          <li>Ingin juara lomba → <b>latihan setiap hari</b>, tidak mudah menyerah.</li>
+          <li>Ingin hafal Al-Qur'an → <b>murajaah rutin</b>, setor hafalan ke guru.</li>
+          <li>Ingin membantu orang tua → <b>mulai dari hal kecil</b>, seperti merapikan tempat tidur.</li>
+        </ul>
+
+        ${tips("Ikhtiar adalah bentuk tanggung jawab kita sebagai manusia. Allah mencintai hamba yang berusaha, bukan yang hanya berpangku tangan.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🤍 3. Tawakal — Berserah Diri', `
+        <p><b>Tawakal</b> artinya <b>berserah diri</b> kepada Allah setelah berusaha maksimal. Kita pasrahkan hasilnya kepada Allah, karena Dialah yang menentukan segala sesuatu.</p>
+
+        ${subjudul('Contoh Tawakal:')}
+        <ul>
+          <li>Setelah belajar keras dan berdoa, kita <b>tenang</b> menghadapi ujian.</li>
+          <li>Jika hasilnya bagus → <b>bersyukur</b> kepada Allah, tidak sombong.</li>
+          <li>Jika hasilnya kurang → <b>bersabar</b>, tidak mengeluh, bangkit dan coba lagi.</li>
+          <li>Tidak menyesali yang sudah terjadi, karena semua sudah diatur Allah.</li>
+          <li>Tidak iri kepada keberhasilan orang lain, karena rezeki sudah diatur Allah.</li>
+        </ul>
+
+        ${subjudul('Urutan yang Benar:')}
+        <div class="flex flex-col sm:flex-row gap-2 my-3 items-stretch">
+          <div class="bg-amber-100 text-amber-900 font-bold p-3 rounded-xl text-center flex-1 text-sm">1. Berdoa</div>
+          <div class="bg-amber-100 text-amber-900 font-bold p-3 rounded-xl text-center flex-1 text-sm">2. Berikhtiar</div>
+          <div class="bg-amber-100 text-amber-900 font-bold p-3 rounded-xl text-center flex-1 text-sm">3. Bertawakal</div>
+        </div>
+
+        ${hikmah("Doa, ikhtiar, dan tawakal adalah tiga serangkai yang tidak bisa dipisahkan. Ketiganya membuat kita menjadi pribadi yang optimis, pekerja keras, dan tenang hatinya.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+
+    kuis: [
+      { soal:'Al-Qadr artinya ...', pilihan:['Kemuliaan','Pembukaan','Gajah'], jawaban:0, pembahasan:'Al-Qadr artinya "Kemuliaan".' },
+      { soal:'Lailatulqadar lebih baik dari ...', pilihan:['100 bulan','1.000 bulan','10.000 bulan'], jawaban:1, pembahasan:'Lailatulqadar lebih baik dari seribu bulan.' },
+      { soal:'Surah Al-Qadr terdiri dari berapa ayat?', pilihan:['5 ayat','6 ayat','7 ayat'], jawaban:0, pembahasan:'Al-Qadr terdiri dari 5 ayat.' },
+      { soal:'Lailatulqadar terjadi pada bulan ...', pilihan:['Syawal','Ramadan','Rajab'], jawaban:1, pembahasan:'Lailatulqadar terjadi pada bulan Ramadan.' },
+      { soal:'Al-Mumit artinya ...', pilihan:['Maha Menghidupkan','Maha Mematikan','Maha Berdiri Sendiri'], jawaban:1, pembahasan:'Al-Mumit artinya Maha Mematikan.' },
+      { soal:"Al-Ba'its artinya ...", pilihan:['Maha Membangkitkan','Maha Mematikan','Maha Menghidupkan'], jawaban:0, pembahasan:"Al-Ba'its artinya Maha Membangkitkan." },
+      { soal:'Al-Qayyum diteladani dengan ...', pilihan:['Bermalas-malasan','Melatih kemandirian','Manja'], jawaban:1, pembahasan:'Al-Qayyum (Maha Berdiri Sendiri) diteladani dengan melatih kemandirian.' },
+      { soal:'Urutan yang benar adalah ...', pilihan:['Tawakal - Doa - Ikhtiar','Doa - Ikhtiar - Tawakal','Ikhtiar - Tawakal - Doa'], jawaban:1, pembahasan:'Urutannya: berdoa, berikhtiar, lalu bertawakal.' },
+      { soal:'Waktu mustajab untuk berdoa adalah ...', pilihan:['Saat bermain','Setelah salat wajib','Saat tidur'], jawaban:1, pembahasan:'Setelah salat wajib adalah salah satu waktu mustajab berdoa.' },
+      { soal:'Doa tanpa ikhtiar adalah ...', pilihan:['Salah kaprah','Boleh saja','Wajib'], jawaban:0, pembahasan:'Doa tanpa ikhtiar adalah salah kaprah — kita harus berusaha juga.' }
+    ]
+  },
+
+  /* =====================================================
+     KELAS 6
+  ===================================================== */
+  6: {
+    quran: `
+      ${kartu('📗 Surah Al-Kafirun & Tajwid', `
+        <p><b>Al-Kafirun</b> artinya <b>"Orang-orang Kafir"</b>. Surah ini adalah surah <b>Makkiyah</b> (diturunkan di Mekah), berjumlah <b>6 ayat</b>, dan merupakan surah ke-109 dalam Al-Qur'an.</p>
+        <p>Surah ini turun ketika kaum kafir Quraisy mengajak Nabi Muhammad saw. untuk <b>bergantian menyembah Tuhan</b> — setahun menyembah Allah, setahun menyembah berhala. Nabi menolak tegas dengan turunnya surah ini.</p>
+        <p>Pesan utama: <b>toleransi</b> terhadap agama lain, tetapi <b>tidak mencampuradukkan akidah</b>. Kita boleh hidup damai dengan pemeluk agama lain, tetapi tidak boleh mencampur ritual ibadah.</p>
+
+        ${subjudul('Lafaz, Transliterasi, dan Arti')}
+        ${tabelAyat([
+          ['1','قُلْ يٰٓاَيُّهَا الْكٰفِرُوْنَۙ','Qul yaa ayyuhal-kaafiruun','Katakanlah, "Wahai orang-orang kafir!'],
+          ['2','لَآ اَعْبُدُ مَا تَعْبُدُوْنَۙ',"Laa a'budu maa ta'buduun",'Aku tidak akan menyembah apa yang kamu sembah,'],
+          ['3','وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُۚ',"Wa laa antum 'aabiduuna maa a'bud",'Dan kamu bukan penyembah apa yang aku sembah,'],
+          ['4','وَلَآ اَنَا۠ عَابِدٌ مَّا عَبَدْتُّمْۙ',"Wa laa anaa 'aabidum maa 'abattum",'Dan aku tidak pernah menjadi penyembah apa yang kamu sembah,'],
+          ['5','وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُۗ',"Wa laa antum 'aabiduuna maa a'bud",'Dan kamu tidak pernah (pula) menjadi penyembah apa yang aku sembah.'],
+          ['6','لَكُمْ دِيْنُكُمْ وَلِيَ دِيْنِ ࣖ','Lakum diinukum wa liya diin','Untukmu agamamu, dan untukku agamaku."']
+        ])}
+
+        ${subjudul('Memahami Isi Al-Kafirun')}
+        <ul>
+          <li><b>Ayat 1:</b> Allah memerintahkan Nabi untuk menegaskan sikap kepada orang kafir.</li>
+          <li><b>Ayat 2-5:</b> Penegasan bahwa tidak akan ada pencampuran ibadah — Nabi tidak menyembah apa yang mereka sembah, dan mereka bukan penyembah apa yang Nabi sembah.</li>
+          <li><b>Ayat 6:</b> Prinsip toleransi: "Untukmu agamamu, dan untukku agamaku." Kita menghargai agama lain, tetapi tetap teguh pada akidah Islam.</li>
+        </ul>
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('🔤 Hukum Tajwid (Mad)', `
+        <p><b>Mad</b> artinya <b>panjang</b>. Dalam ilmu tajwid, mad adalah cara membaca huruf dengan panjang tertentu. Di kelas 6, kita fokus pada dua jenis mad:</p>
+
+        ${subjudul('1. Mad Wajib Muttasil')}
+        <p><b>Muttasil</b> artinya <b>bersambung</b>. Mad Wajib Muttasil terjadi ketika <b>huruf mad</b> (ا، و، ي) bertemu dengan <b>hamzah (ء)</b> dalam <b>satu kata</b>. Wajib dibaca panjang <b>4-5 harakat</b>.</p>
+        <p><b>Contoh:</b> <span class="arabic text-xl">جَاۤءَ</span> (jaa-a) — huruf mad alif bertemu hamzah dalam satu kata.</p>
+        <p><b>Ciri:</b> biasanya ditandai dengan tanda baca panjang (ٓ) di atas huruf mad.</p>
+
+        ${subjudul('2. Mad Jaiz Munfasil')}
+        <p><b>Munfasil</b> artinya <b>terpisah</b>. Mad Jaiz Munfasil terjadi ketika <b>huruf mad</b> berada di <b>akhir kata</b>, lalu bertemu <b>hamzah</b> di <b>awal kata berikutnya</b>. Boleh dibaca panjang <b>2, 4, atau 5 harakat</b>.</p>
+        <p><b>Contoh:</b> <span class="arabic text-xl">اِنَّاۤ اَعْطَيْنٰكَ</span> (innaa a'thainaaka) — mad di akhir kata "innaa" bertemu hamzah di awal kata "a'thainaaka".</p>
+
+        ${subjudul('Perbedaan Ringkas:')}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-3">
+            <p class="font-bold text-blue-700 text-sm mb-1">Mad Wajib Muttasil</p>
+            <p class="text-xs">Satu kata • 4-5 harakat • <b>Wajib</b></p>
+          </div>
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-3">
+            <p class="font-bold text-blue-700 text-sm mb-1">Mad Jaiz Munfasil</p>
+            <p class="text-xs">Dua kata terpisah • 2, 4, atau 5 harakat • <b>Boleh</b></p>
+          </div>
+        </div>
+
+        ${tips("Cara mengingat: Muttasil = menyatu (satu kata). Munfasil = memisah (dua kata).")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Keteladanannya', `
+        <p>Di kelas 6, kita belajar empat Asmaulhusna: <b>Al-Ahad</b>, <b>As-Samad</b>, <b>Al-Ghaffar</b>, dan <b>Al-'Afuw</b>. Keempatnya mengajarkan kita tentang keesaan Allah dan luasnya ampunan-Nya.</p>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('1️⃣ Al-Ahad — Maha Esa', `
+        <p><span class="arabic text-2xl">الْاَحَدُ</span> <b>Al-Ahad</b> artinya <b>Maha Esa</b>. Allah itu <b>Satu</b>, tidak ada sekutu bagi-Nya, tidak ada yang menyerupai-Nya.</p>
+
+        ${subjudul('Bukti Allah Maha Esa:')}
+        <ul>
+          <li>Keteraturan alam semesta — matahari terbit dan tenggelam pada waktunya, tidak pernah kacau.</li>
+          <li>Tidak ada dua pencipta yang bersaing mengatur alam ini.</li>
+          <li>Semua doa dari berbagai bahasa dan tempat dijawab oleh satu Tuhan yang sama.</li>
+        </ul>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Larangan keras berbuat syirik</b> (menyekutukan Allah) — misalnya percaya jimat, ramalan, atau menyembah selain Allah.</li>
+          <li>Berdoa hanya kepada Allah, tidak melalui perantara yang salah.</li>
+          <li>Yakin bahwa hanya Allah yang memberi rezeki, bukan benda atau orang lain.</li>
+          <li>Mengesakan Allah dalam ibadah, tidak pamer atau riya'.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('🤲 As-Samad — Maha Dibutuhkan', `
+        <p><span class="arabic text-2xl">الصَّمَدُ</span> <b>As-Samad</b> artinya <b>Maha Dibutuhkan</b>. Semua makhluk <b>membutuhkan</b> Allah, tetapi Allah <b>tidak membutuhkan</b> siapa pun.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li>Berdoa dan memohon solusi <b>murni hanya kepada Allah</b>, bukan kepada dukun atau benda keramat.</li>
+          <li>Merasa tenang karena tahu Allah selalu ada untuk dimintai pertolongan.</li>
+          <li>Tidak sombong meskipun pintar atau kaya, karena semua berasal dari Allah.</li>
+          <li>Menyadari bahwa tanpa Allah, kita tidak bisa apa-apa.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu('🌟 Al-Ghaffar — Maha Pengampun', `
+        <p><span class="arabic text-2xl">الْغَفَّارُ</span> <b>Al-Ghaffar</b> artinya <b>Maha Pengampun</b>. Allah menutupi kesalahan dan dosa hamba-Nya di dunia, agar aibnya tidak terbuka kepada manusia lain.</p>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li><b>Bertaubat</b> dengan sungguh-sungguh ketika berbuat salah, tidak mengulangi.</li>
+          <li>Tidak membuka aib orang lain, karena Allah saja menutupi aib kita.</li>
+          <li>Memohon ampun dengan tulus, tidak main-main.</li>
+          <li>Yakin bahwa ampunan Allah sangat luas, tidak berputus asa dari rahmat-Nya.</li>
+        </ul>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+
+      ${kartu("✨ Al-'Afuw — Maha Pemaaf", `
+        <p><span class="arabic text-2xl">الْعَفُوُّ</span> <b>Al-'Afuw</b> artinya <b>Maha Pemaaf</b>. Al-'Afuw lebih tinggi dari Al-Ghaffar: bukan hanya menutupi, tetapi <b>menghapus dan mencabut total</b> catatan dosa dari buku amal.</p>
+
+        ${subjudul('Syarat Mendapat Ampunan Al-\'Afuw:')}
+        <ul>
+          <li><b>Taubat</b> yang sungguh-sungguh — menyesal, berhenti, dan berniat tidak mengulangi.</li>
+          <li>Jika dosa berkaitan dengan orang lain, harus <b>minta maaf</b> kepada yang bersangkutan.</li>
+          <li>Memohon ampun hanya kepada Allah, tidak melalui perantara yang salah.</li>
+        </ul>
+
+        ${subjudul('Penerapan dalam Kehidupan:')}
+        <ul>
+          <li>Saling memaafkan sesama teman jika ada kesalahan.</li>
+          <li>Tidak menyimpan dendam — maafkan dengan tulus.</li>
+          <li>Memaafkan bukan berarti lemah, tetapi tanda hati yang mulia.</li>
+        </ul>
+
+        ${subjudul('Perbedaan Al-Ghaffar dan Al-\'Afuw:')}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <p class="font-bold text-emerald-700 text-sm mb-1">Al-Ghaffar</p>
+            <p class="text-xs">Menutupi dosa agar aib tidak terbuka di dunia.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <p class="font-bold text-emerald-700 text-sm mb-1">Al-'Afuw</p>
+            <p class="text-xs">Menghapus total catatan dosa dari buku amal.</p>
+          </div>
+        </div>
+
+        ${hikmah("Al-Ahad & As-Samad mengajarkan tauhid. Al-Ghaffar & Al-'Afuw mengajarkan kita untuk bertaubat dan mudah memaafkan.")}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+
+    akhlak: `
+      ${kartu('💚 Toleransi & Pergaulan Teman Sebaya', `
+        <p>Di kelas 6, kita belajar bagaimana bersikap terhadap teman yang berbeda agama dan bagaimana bergaul dengan teman sebaya sesuai ajaran Islam.</p>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🤝 Toleransi Beragama', `
+        <p><b>Toleransi</b> artinya menghargai perbedaan, termasuk perbedaan agama. Islam mengajarkan kita untuk <b>hidup damai</b> dengan pemeluk agama lain, tanpa mencampuradukkan akidah.</p>
+
+        ${subjudul('Contoh Toleransi yang Benar:')}
+        <ul>
+          <li><b>Membiarkan teman beribadah</b> dengan tenang — tidak berisik saat mereka beribadah.</li>
+          <li>Tetap <b>membantu secara kemanusiaan</b> — menjenguk teman beda agama yang sakit, membantu korban bencana tanpa memandang agama.</li>
+          <li>Bermain bersama teman beda agama tanpa membedakan.</li>
+          <li>Bekerja sama dalam tugas kelompok, meski berbeda agama.</li>
+          <li>Berbicara sopan, tidak mengejek keyakinan orang lain.</li>
+        </ul>
+
+        ${subjudul('Batas Toleransi (Yang Tidak Boleh Dilakukan):')}
+        <ul>
+          <li>Mengikuti ritual ibadah agama lain.</li>
+          <li>Mencampuradukkan akidah — misalnya mengakui semua agama sama benar.</li>
+          <li>Meninggalkan ibadah Islam karena alasan "toleransi".</li>
+          <li>Mengucapkan doa atau mantra agama lain.</li>
+        </ul>
+
+        ${subjudul('Hikmah Toleransi:')}
+        <ul>
+          <li>Menciptakan <b>kerukunan</b> di masyarakat.</li>
+          <li>Melahirkan <b>kedamaian bangsa</b> Indonesia yang beragam.</li>
+          <li>Menghindari konflik dan permusuhan antarumat beragama.</li>
+          <li>Menjadi teladan Islam sebagai agama rahmatan lil 'alamin (rahmat bagi seluruh alam).</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('👫 Akhlak Berteman', `
+        <p>Pergaulan dengan teman sebaya harus dijaga dengan akhlak yang baik. Rasulullah saw. mengajarkan kita untuk menjadi teman yang menyenangkan, bukan menyusahkan.</p>
+
+        ${subjudul('Akhlak Baik Berteman:')}
+        <ul>
+          <li><b>Sopan</b> — berbicara dengan kata-kata yang baik, tidak kasar.</li>
+          <li><b>Mendengarkan</b> — saat teman bicara, dengarkan dengan sungguh-sungguh, jangan memotong.</li>
+          <li><b>Memberi selamat</b> — saat teman sukses, ucapkan selamat dengan tulus, bukan iri.</li>
+          <li><b>Menghibur</b> — saat teman sedih, hibur dan bantu semampunya.</li>
+          <li><b>Menjaga rahasia</b> — jangan membocorkan rahasia teman.</li>
+          <li><b>Meminta izin</b> — sebelum meminjam barang milik teman.</li>
+        </ul>
+
+        ${subjudul('Perbuatan yang Harus Dihindari:')}
+        <ul>
+          <li><b>Gibah</b> — membicarakan keburukan teman di belakangnya.</li>
+          <li><b>Bullying</b> — mengejek, mengucilkan, atau menyakiti teman secara fisik/verbal.</li>
+          <li><b>Menyebar hoaks</b> — menyebarkan berita bohong tentang teman.</li>
+          <li><b>Mengucilkan</b> — tidak mengajak teman tertentu karena alasan fisik atau ekonomi.</li>
+          <li><b>Bertengkar tanpa alasan jelas</b> — memicu permusuhan.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu('🕊️ Resolusi Konflik', `
+        <p>Dalam bergaul, pasti ada saat berbeda pendapat atau berselisih. Islam mengajarkan kita untuk menyelesaikannya dengan cara yang baik.</p>
+
+        ${subjudul('Cara Menyelesaikan Konflik:')}
+        <ul>
+          <li><b>Musyawarah</b> — bicarakan dengan kepala dingin, cari solusi bersama.</li>
+          <li><b>Segera minta maaf</b> jika kita yang salah, jangan menunda.</li>
+          <li><b>Segera memaafkan</b> jika teman yang salah — jangan menyimpan dendam.</li>
+          <li><b>Jangan mengungkit</b> kesalahan lama saat sudah berdamai.</li>
+          <li>Jika sulit diselesaikan sendiri, minta bantuan guru atau orang tua sebagai penengah.</li>
+        </ul>
+
+        ${hikmah("Toleransi dan akhlak berteman yang baik membuat kita disukai banyak orang, hidup rukun, dan menjadi Muslim yang bermanfaat bagi sesama.")}
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+
+    kuis: [
+      { soal:'Al-Kafirun artinya ...', pilihan:['Orang-orang kafir','Manusia','Kemuliaan'], jawaban:0, pembahasan:'Al-Kafirun artinya "Orang-orang kafir".' },
+      { soal:'Surah Al-Kafirun terdiri dari berapa ayat?', pilihan:['5 ayat','6 ayat','7 ayat'], jawaban:1, pembahasan:'Al-Kafirun terdiri dari 6 ayat.' },
+      { soal:'Al-Kafirun tergolong surah ...', pilihan:['Madaniyah','Makkiyah','Campuran'], jawaban:1, pembahasan:'Al-Kafirun adalah surah Makkiyah (turun di Mekah).' },
+      { soal:'Mad Wajib Muttasil dibaca panjang ...', pilihan:['2 harakat','4-5 harakat','6 harakat'], jawaban:1, pembahasan:'Mad Wajib Muttasil dibaca 4-5 harakat.' },
+      { soal:'Mad Jaiz Munfasil terjadi ketika huruf mad bertemu hamzah di ...', pilihan:['satu kata','dua kata terpisah','tiga kata'], jawaban:1, pembahasan:'Mad Jaiz Munfasil terjadi di dua kata terpisah.' },
+      { soal:'Al-Ahad artinya ...', pilihan:['Maha Esa','Maha Pemaaf','Maha Dibutuhkan'], jawaban:0, pembahasan:'Al-Ahad artinya Maha Esa.' },
+      { soal:'Perbedaan Al-Ghaffar dan Al-\'Afuw adalah ...', pilihan:['Al-Ghaffar menutupi, Al-\'Afuw menghapus','Keduanya sama','Al-Ghaffar menghapus, Al-\'Afuw menutupi'], jawaban:0, pembahasan:'Al-Ghaffar menutupi dosa, Al-\'Afuw menghapus total catatan dosa.' },
+      { soal:'Sikap kita terhadap teman beda agama adalah ...', pilihan:['Menjauhi','Mengucilkan','Menghargai dengan toleransi'], jawaban:2, pembahasan:'Kita tetap bertoleransi dan menghargai tanpa mencampuradukkan akidah.' },
+      { soal:'Batas toleransi yang TIDAK boleh dilakukan adalah ...', pilihan:['Membantu korban bencana','Mengikuti ritual ibadah agama lain','Bermain bersama'], jawaban:1, pembahasan:'Mengikuti ritual ibadah agama lain melampaui batas toleransi.' },
+      { soal:'Saat teman bersalah kepada kita, sebaiknya ...', pilihan:['Menyimpan dendam','Segera memaafkan','Mengucilkan'], jawaban:1, pembahasan:'Islam mengajarkan untuk segera memaafkan.' }
+    ]
+  }
+};
+
+/* =========================================================
+   RENDER LAYER 1 (Home - Kartu Kelas)
+========================================================= */
+function renderHome(){
+  const grid = document.getElementById('grid-kelas');
+  grid.innerHTML = KELAS.map(k => `
+    <button onclick="bukaKelas(${k.id})"
+      class="group bg-white rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-md active:scale-95 transition border border-slate-200 text-left">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${k.warna} text-white flex items-center justify-center text-xl font-extrabold mb-3 shadow">
+        ${k.id}
+      </div>
+      <h3 class="font-bold text-slate-800 text-base">Kelas ${k.id}</h3>
+      <p class="text-[11px] text-slate-500 mt-1 leading-snug">${k.topik}</p>
+    </button>
+  `).join('');
+}
+
+/* =========================================================
+   LAYER 2: Buka Kelas, Pilih Elemen, Render Konten
+========================================================= */
+let currentKelas = null;
+let currentElemen = 'quran';
+
+function bukaKelas(id){
+  currentKelas = id;
+  currentElemen = 'quran';
+  skorKuis = {};
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('materi').classList.remove('hidden');
+  document.getElementById('judul-kelas').textContent = 'Kelas ' + id;
+  document.getElementById('subjudul').textContent = KELAS.find(k => k.id === id).topik;
+  updateTabAktif();
+  renderKonten();
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+function kembali(){
+  document.getElementById('materi').classList.add('hidden');
+  document.getElementById('home').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+function pilihElemen(el){
+  currentElemen = el;
+  updateTabAktif();
+  renderKonten();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateTabAktif(){
+  document.querySelectorAll('.tab-elemen').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === currentElemen);
+  });
+}
+
+function renderKonten(){
+  const konten = document.getElementById('konten');
+  if (currentElemen === 'kuis'){
+    skorKuis = {};
+    konten.innerHTML = renderKuis(currentKelas);
+  } else {
+    konten.innerHTML = MATERI[currentKelas][currentElemen];
+  }
+  konten.classList.remove('fade-in');
+  void konten.offsetWidth;
+  konten.classList.add('fade-in');
+}
+
+/* =========================================================
+   KUIS
+========================================================= */
+function renderKuis(kelasId){
+  const daftar = MATERI[kelasId].kuis;
+  return `
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-4">
+      <div class="px-4 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white">
+        <h3 class="font-bold text-base">📝 Kuis Kelas ${kelasId}</h3>
+        <p class="text-[11px] text-emerald-100 mt-0.5">Pilih jawaban yang paling tepat. Jawaban langsung dinilai.</p>
+      </div>
+      <div class="p-4">
+        <div id="skor-box" class="hidden mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-center">
+          <p class="text-sm text-emerald-800">Skor kamu: <b><span id="skor">0</span> / ${daftar.length}</b></p>
+          <button onclick="renderKonten()" class="mt-2 text-xs bg-emerald-600 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-emerald-700">🔄 Ulangi Kuis</button>
+        </div>
+        ${daftar.map((q, i) => `
+          <div class="mb-4 p-3 rounded-xl border border-slate-200 bg-slate-50/50" data-q="${i}">
+            <p class="font-semibold text-sm mb-2 text-slate-800">${i+1}. ${q.soal}</p>
+            <div class="space-y-2">
+              ${q.pilihan.map((p, j) => `
+                <button onclick="jawab(this, ${j === q.jawaban}, ${i})"
+                  class="opsi w-full text-left px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-emerald-50 hover:border-emerald-300 transition text-sm">
+                  <span class="font-bold text-slate-500 mr-1">${String.fromCharCode(65+j)}.</span> ${p}
+                </button>
+              `).join('')}
+            </div>
+            <p id="bahas-${i}" class="hidden mt-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-2">💡 ${q.pembahasan}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+let skorKuis = {};
+function jawab(btn, benar, idx){
+  const parent = btn.closest('[data-q]');
+  if (parent.dataset.done === '1') return;
+  parent.dataset.done = '1';
+
+  parent.querySelectorAll('.opsi').forEach(b => {
+    b.disabled = true;
+    b.classList.add('opacity-50', 'cursor-not-allowed');
+  });
+
+  if (benar){
+    btn.classList.remove('opacity-50');
+    btn.classList.add('!bg-emerald-500', '!text-white', '!border-emerald-500');
+  } else {
+    btn.classList.remove('opacity-50');
+    btn.classList.add('!bg-red-500', '!text-white', '!border-red-500');
+  }
+  document.getElementById('bahas-' + idx).classList.remove('hidden');
+
+  skorKuis[idx] = benar ? 1 : 0;
+  const total = Object.values(skorKuis).reduce((a,b)=>a+b, 0);
+  document.getElementById('skor').textContent = total;
+  document.getElementById('skor-box').classList.remove('hidden');
+
+  const totalSoal = MATERI[currentKelas].kuis.length;
+  if (Object.keys(skorKuis).length === totalSoal){
+    document.getElementById('skor-box').classList.add('!bg-emerald-100');
+  }
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+renderHome();
+</script>
+</body>
+</html>
