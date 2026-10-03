@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI PAI SD Terpadu (Kelas 1-6)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+  .arabic { font-family: 'Amiri', serif; direction: rtl; }
+  .fade-in { animation: fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .tab-elemen {
+    padding: .75rem 1rem; white-space: nowrap; font-size: .85rem; font-weight: 600;
+    color: rgba(255,255,255,.75); border-bottom: 3px solid transparent;
+    transition: all .2s; display: flex; align-items: center; gap: .35rem;
+  }
+  .tab-elemen.active { color: #fff; border-bottom-color: #fbbf24; background: rgba(255,255,255,.08); }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<!-- ================= LAYER 1: HOME ================= -->
+<div id="home" class="min-h-screen flex flex-col">
+  <header class="bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 text-white px-5 pt-10 pb-16 rounded-b-[2rem] shadow-lg">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-4 backdrop-blur">
+        <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">MPI PAI SD Terpadu</h1>
+      <p class="text-emerald-100 mt-2 text-sm md:text-base">Ringkasan Materi Pendidikan Agama Islam<br>Kelas 1 sampai Kelas 6</p>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 -mt-10 pb-10">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-5 text-center">
+      <p class="text-sm text-slate-600">📚 Silakan pilih kelas untuk mulai belajar</p>
+    </div>
+    <div id="grid-kelas" class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4"></div>
+    <p class="text-center text-xs text-slate-400 mt-8">Pembelajaran Interaktif &copy; 2026</p>
+  </main>
+</div>
+
+<!-- ================= LAYER 2: MATERI ================= -->
+<div id="materi" class="hidden min-h-screen flex flex-col bg-slate-100">
+  <!-- Header -->
+  <header class="sticky top-0 z-20 shadow-md">
+    <div class="bg-emerald-600 text-white">
+      <div class="px-3 py-3 flex items-center gap-2 max-w-4xl mx-auto">
+        <button onclick="kembali()" class="p-2 rounded-full hover:bg-white/10 active:bg-white/20 transition" aria-label="Kembali">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        <div class="flex-1 min-w-0">
+          <h2 id="judul-kelas" class="font-bold text-lg leading-tight">Kelas 1</h2>
+          <p id="subjudul" class="text-[11px] text-emerald-100 truncate">Pilih materi di bawah</p>
+        </div>
+      </div>
+    </div>
+    <!-- Tabs -->
+    <nav class="bg-emerald-700">
+      <div class="max-w-4xl mx-auto flex overflow-x-auto no-scrollbar">
+        <button class="tab-elemen" data-tab="quran"  onclick="pilihElemen('quran')">📖 Al-Qur'an &amp; Hadis</button>
+        <button class="tab-elemen" data-tab="akidah" onclick="pilihElemen('akidah')">☪️ Akidah</button>
+        <button class="tab-elemen" data-tab="akhlak" onclick="pilihElemen('akhlak')">💚 Akhlak</button>
+        <button class="tab-elemen" data-tab="kuis"   onclick="pilihElemen('kuis')">📝 Kuis</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Konten -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6">
+    <div id="konten" class="fade-in"></div>
+    <div class="h-10"></div>
+  </main>
+</div>
+
+<script>
+/* =========================================================
+   DATA KELAS (Layer 1)
+========================================================= */
+const KELAS = [
+  { id: 1, warna: 'from-rose-400 to-rose-600',     topik: 'Huruf Hijaiah, Al-Fatihah, Asmaulhusna, Kalimat Tayibah' },
+  { id: 2, warna: 'from-sky-400 to-sky-600',       topik: 'Huruf Sambung, An-Nas, 4 Asmaulhusna, Subhanallah & Masya Allah' },
+  { id: 3, warna: 'from-violet-400 to-violet-600', topik: 'Al-Fil, 20 Sifat Allah, Husnuzan' },
+  { id: 4, warna: 'from-amber-400 to-amber-600',   topik: "Al-'Alaq 1-5, Al-Basir & As-Sami', Akhlak Keluarga" },
+  { id: 5, warna: 'from-teal-400 to-teal-600',     topik: 'Al-Qadr, Al-Mumit & Al-Muhyi, Doa-Ikhtiar-Tawakal' },
+  { id: 6, warna: 'from-indigo-400 to-indigo-600', topik: 'Al-Kafirun & Tajwid Mad, Al-Ahad & As-Samad, Toleransi' }
+];
+
+/* =========================================================
+   KOMPONEN UMUM
+========================================================= */
+function kartu(judul, isi, warnaHeader){
+  return `
+  <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-4">
+    <div class="px-4 py-3 ${warnaHeader} border-b">
+      <h3 class="font-bold text-base flex items-center gap-2">${judul}</h3>
+    </div>
+    <div class="p-4 text-slate-700 text-[15px] leading-relaxed space-y-3">${isi}</div>
+  </section>`;
+}
+
+function tabelAyat(rows){
+  return `
+  <div class="overflow-x-auto rounded-xl border border-slate-200">
+    <table class="w-full text-left border-collapse text-sm">
+      <thead>
+        <tr class="bg-slate-100 text-slate-700">
+          <th class="p-2 text-center w-10 border-b border-slate-200">#</th>
+          <th class="p-2 text-right border-b border-slate-200">Lafaz Arab</th>
+          <th class="p-2 border-b border-slate-200">Transliterasi &amp; Arti</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        ${rows.map(r => `
+          <tr class="hover:bg-slate-50 align-top">
+            <td class="p-2 text-center font-bold text-slate-500">${r[0]}</td>
+            <td class="p-3 text-right arabic text-xl text-slate-800 leading-loose">${r[1]}</td>
+            <td class="p-2">
+              <div class="font-semibold text-emerald-700 text-xs md:text-sm">${r[2]}</div>
+              <div class="text-xs text-slate-600 mt-1">${r[3]}</div>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function infoBox(warna, judul, isi){
+  return `
+  <div class="border-l-4 ${warna} p-3 rounded-r-lg bg-slate-50">
+    <p class="font-bold text-sm mb-1">${judul}</p>
+    <div class="text-sm text-slate-700 leading-relaxed">${isi}</div>
+  </div>`;
+}
+
+/* =========================================================
+   KOMPONEN KHUSUS
+========================================================= */
+const HIJAIah = [
+  ['ا','Alif'],['ب','Ba'],['ت','Ta'],['ث','Tsa'],['ج','Jim'],['ح','Ha'],['خ','Kha'],
+  ['د','Dal'],['ذ','Dzal'],['ر','Ra'],['ز','Zai'],['س','Sin'],['ش','Syin'],['ص','Sad'],
+  ['ض','Dad'],['ط','Ta'],['ظ','Za'],['ع',"'Ain"],['غ','Ghain'],['ف','Fa'],['ق','Qaf'],
+  ['ك','Kaf'],['ل','Lam'],['م','Mim'],['ن','Nun'],['و','Wawu'],['هـ','Ha'],['ء','Hamzah'],['ي','Ya']
+];
+function gridHijaiah(){
+  return `<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+    ${HIJAIah.map(([h,n])=>`
+      <div class="bg-blue-50 border border-blue-100 rounded-xl py-2 text-center">
+        <div class="arabic text-2xl text-blue-800">${h}</div>
+        <div class="text-[10px] text-slate-500 mt-0.5">${n}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+const SIFAT = [
+  ['Wujud','Ada',"‘Adam",'Tidak ada'],
+  ['Qidam','Terdahulu','Hudus','Baru'],
+  ["Baqa'",'Kekal',"Fana'",'Binasa/Rusak'],
+  ['Mukhalafatu lil hawadisi','Berbeda dengan makhluk','Mumasalatu lil hawadisi','Sama dengan makhluk'],
+  ['Qiyamuhu binafsihi','Berdiri sendiri','Ihtiyaju lighairihi','Butuh yang lain'],
+  ['Wahdaniyah','Esa / Tunggal',"Ta'addud",'Berbilang'],
+  ['Qudrah','Kuasa',"'Ajzun",'Lemah'],
+  ['Iradah','Berkehendak','Karahah','Terpaksa'],
+  ["'Ilmu",'Mengetahui','Jahlun','Bodoh'],
+  ['Hayat','Hidup','Mautun','Mati'],
+  ["Sama'",'Mendengar','Summun','Tuli'],
+  ['Basar','Melihat',"'Umyun",'Buta'],
+  ['Kalam','Berfirman','Bukmun','Bisu'],
+  ['Qadiran','Dzat Yang Maha Kuasa',"'Ajizan",'Dzat Yang Lemah'],
+  ['Muridan','Dzat Yang Berkehendak','Karihan','Dzat Yang Terpaksa'],
+  ["'Aliman",'Dzat Yang Mengetahui','Jahilan','Dzat Yang Bodoh'],
+  ['Hayyan','Dzat Yang Hidup','Mayyitan','Dzat Yang Mati'],
+  ["Sami'an",'Dzat Yang Mendengar','Asamma','Dzat Yang Tuli'],
+  ['Basiran','Dzat Yang Melihat',"A'ma",'Dzat Yang Buta'],
+  ['Mutakalliman','Dzat Yang Berfirman','Abkam','Dzat Yang Bisu']
+];
+function tabelSifat(){
+  return `
+  <div class="overflow-x-auto rounded-xl border border-slate-200 max-h-[420px] overflow-y-auto">
+    <table class="w-full text-left border-collapse text-xs md:text-sm">
+      <thead class="sticky top-0 bg-emerald-100 text-emerald-800 z-10">
+        <tr>
+          <th class="p-2 border-b">No</th>
+          <th class="p-2 border-b">Sifat Wajib</th>
+          <th class="p-2 border-b">Arti</th>
+          <th class="p-2 border-b text-red-700">Sifat Mustahil</th>
+          <th class="p-2 border-b text-red-700">Arti</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200 bg-white">
+        ${SIFAT.map((s,i)=>`
+          <tr class="hover:bg-slate-50">
+            <td class="p-2 font-bold text-slate-500">${i+1}</td>
+            <td class="p-2 font-semibold">${s[0]}</td>
+            <td class="p-2">${s[1]}</td>
+            <td class="p-2 font-semibold text-red-600">${s[2]}</td>
+            <td class="p-2">${s[3]}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function tabelSambung(){
+  const rows = [
+    ['ا','-','-','ـا', true],
+    ['ب','بـ','ـبـ','ـب', false],
+    ['ت','تـ','ـتـ','ـت', false],
+    ['ث','ثـ','ـثـ','ـث', false],
+    ['ج','جـ','ـجـ','ـج', false],
+    ['ح','حـ','ـحـ','ـح', false],
+    ['خ','خـ','ـخـ','ـخ', false],
+    ['د','-','-','ـد', true],
+    ['ذ','-','-','ـذ', true],
+    ['ر','-','-','ـر', true],
+    ['ز','-','-','ـز', true],
+    ['س','سـ','ـسـ','ـس', false],
+    ['ش','شـ','ـشـ','ـش', false],
+    ['ص','صـ','ـصـ','ـص', false],
+    ['ض','ضـ','ـضـ','ـض', false],
+    ['ط','طـ','ـطـ','ـط', false],
+    ['ظ','ظـ','ـظـ','ـظ', false],
+    ['ع','عـ','ـعـ','ـع', false],
+    ['غ','غـ','ـغـ','ـغ', false],
+    ['ف','فـ','ـفـ','ـف', false],
+    ['ق','قـ','ـقـ','ـق', false],
+    ['ك','كـ','ـكـ','ـك', false],
+    ['ل','لـ','ـلـ','ـل', false],
+    ['م','مـ','ـمـ','ـم', false],
+    ['ن','نـ','ـنـ','ـن', false],
+    ['و','-','-','ـو', true],
+    ['ه','هـ','ـهـ','ـه', false],
+    ['ي','يـ','ـيـ','ـي', false]
+  ];
+  return `
+  <div class="overflow-hidden rounded-xl border border-blue-200">
+    <div class="overflow-y-auto max-h-[400px]">
+      <table class="w-full text-center border-collapse" dir="rtl">
+        <thead class="sticky top-0 bg-blue-100 text-blue-900 z-10 text-xs md:text-sm">
+          <tr>
+            <th class="p-2 border-b border-blue-200">Tunggal</th>
+            <th class="p-2 border-b border-blue-200">Awal</th>
+            <th class="p-2 border-b border-blue-200">Tengah</th>
+            <th class="p-2 border-b border-blue-200">Akhir</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-blue-100 bg-white arabic text-2xl text-slate-800">
+          ${rows.map(r=>`
+            <tr class="${r[4] ? 'bg-red-50/60 text-red-700' : 'hover:bg-blue-50'}">
+              <td class="p-2">${r[0]}</td>
+              <td class="p-2 ${r[1]==='-'?'text-slate-400 text-lg':''}">${r[1]}</td>
+              <td class="p-2 ${r[2]==='-'?'text-slate-400 text-lg':''}">${r[2]}</td>
+              <td class="p-2">${r[3]}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="bg-blue-50 text-[11px] text-blue-800 p-2 text-center border-t border-blue-200">
+      *Baris merah = 6 huruf spesial yang tidak bisa disambung ke huruf setelahnya (kiri).
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   MATERI PER KELAS
+========================================================= */
+const MATERI = {
+  /* ---------------- KELAS 1 ---------------- */
+  1: {
+    quran: `
+      ${kartu('📖 Mengenal Al-Qur\'an dan Huruf Hijaiah', `
+        <p>Al-Qur'an adalah firman Allah Swt. yang diturunkan kepada Nabi Muhammad saw. melalui perantara Malaikat Jibril. Al-Qur'an ditulis menggunakan huruf Arab yang disebut <b>huruf Hijaiah</b>. Jumlah huruf Hijaiah ada <b>29</b>.</p>
+        ${gridHijaiah()}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('✏️ Harakat (Tanda Baca)', `
+        <ul class="space-y-2">
+          <li><b>Fathah ( َ )</b> — di atas huruf, berbunyi "a". Contoh: <span class="arabic text-xl">بَ</span> dibaca <i>ba</i>.</li>
+          <li><b>Kasrah ( ِ )</b> — di bawah huruf, berbunyi "i". Contoh: <span class="arabic text-xl">خِ</span> dibaca <i>khi</i>.</li>
+          <li><b>Dammah ( ُ )</b> — di atas huruf, berbunyi "u". Contoh: <span class="arabic text-xl">قُ</span> dibaca <i>qu</i>.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+
+      ${kartu("📗 Surah Al-Fatihah", `
+        <p>Al-Fatihah artinya <b>"Pembukaan"</b>. Diturunkan di Mekah, terdiri dari <b>7 ayat</b>, dan wajib dibaca pada setiap rakaat salat.</p>
+        ${tabelAyat([
+          ['1','بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ','Bismillahir-rahmanir-rahim','Dengan nama Allah Yang Maha Pengasih, Maha Penyayang.'],
+          ['2','اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ',"Alhamdu lillahi rabbil-'alamin",'Segala puji bagi Allah, Tuhan seluruh alam.'],
+          ['3','الرَّحْمٰنِ الرَّحِيْمِ','Ar-rahmanir-rahim','Yang Maha Pengasih, Maha Penyayang.'],
+          ['4','مٰلِكِ يَوْمِ الدِّيْنِۗ','Maliki yaumid-din','Pemilik hari pembalasan.'],
+          ['5','اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُۗ',"Iyyaka na'budu wa iyyaka nasta'in",'Hanya kepada Engkaulah kami menyembah dan hanya kepada Engkaulah kami mohon pertolongan.'],
+          ['6','اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَۙ','Ihdinas-siratal-mustaqim','Tunjukilah kami jalan yang lurus.'],
+          ['7','صِرَاطَ الَّذِيْنَ اَنْعَمْتَ عَلَيْهِمْ ەۙ غَيْرِ الْمَغْضُوْبِ عَلَيْهِمْ وَلَا الضَّاۤلِّيْنَ ࣖ',"Siratallazina an'amta 'alaihim ghairil-maghdubi 'alaihim wa lad-dallin",'(Yaitu) jalan orang-orang yang telah Engkau beri nikmat; bukan (jalan) mereka yang dimurkai, dan bukan (pula) mereka yang sesat.']
+        ])}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akidah: `
+      ${kartu('☪️ Mengenal Asmaulhusna', `
+        <p>Allah Swt. memiliki nama-nama yang sangat baik, indah, dan sempurna yang disebut <b>Asmaulhusna</b>. Jumlahnya ada <b>99</b>.</p>
+        <div class="grid md:grid-cols-2 gap-3 mt-2">
+          <div class="border border-emerald-200 rounded-xl p-4 bg-emerald-50/50">
+            <h5 class="font-bold text-emerald-700 text-base flex items-center gap-2"><span class="arabic text-2xl">الرَّحْمٰنُ</span> Ar-Rahman</h5>
+            <p class="text-sm mt-2"><b>Maha Pengasih.</b> Allah mengasihi semua makhluk-Nya tanpa membeda-bedakan. Buktinya: Allah menciptakan matahari, hujan, dan memberi kita tubuh yang sehat.</p>
+          </div>
+          <div class="border border-emerald-200 rounded-xl p-4 bg-emerald-50/50">
+            <h5 class="font-bold text-emerald-700 text-base flex items-center gap-2"><span class="arabic text-2xl">الرَّحِيمُ</span> Ar-Rahim</h5>
+            <p class="text-sm mt-2"><b>Maha Penyayang.</b> Kasih sayang Allah yang khusus diberikan kepada hamba-Nya yang taat beribadah dan berbuat baik.</p>
+          </div>
+        </div>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akhlak: `
+      ${kartu('💚 Membiasakan Kalimat Tayibah', `
+        <p>Kalimat tayibah adalah kata-kata atau ucapan yang baik. Mengucapkannya mendatangkan pahala.</p>
+        <div class="space-y-3">
+          <div class="flex flex-col sm:flex-row gap-3 items-start bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="bg-amber-100 text-amber-700 font-bold px-3 py-1 rounded-lg shrink-0 text-sm">Basmalah</div>
+            <div>
+              <p class="arabic text-xl text-slate-800 mb-1">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+              <p class="text-sm">Diucapkan <b>sebelum</b> memulai aktivitas (belajar, makan, berpakaian) agar mendapat keberkahan.</p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 items-start bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="bg-amber-100 text-amber-700 font-bold px-3 py-1 rounded-lg shrink-0 text-sm">Hamdalah</div>
+            <div>
+              <p class="arabic text-xl text-slate-800 mb-1">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ</p>
+              <p class="text-sm">Diucapkan <b>setelah</b> selesai melakukan kegiatan atau saat mendapat nikmat, sebagai wujud syukur.</p>
+            </div>
+          </div>
+        </div>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+    kuis: [
+      { soal:'Berapa jumlah huruf Hijaiah?', pilihan:['29 huruf','28 huruf','30 huruf'], jawaban:0, pembahasan:'Huruf Hijaiah jumlahnya ada 29.' },
+      { soal:'Surah Al-Fatihah terdiri dari berapa ayat?', pilihan:['5 ayat','7 ayat','6 ayat'], jawaban:1, pembahasan:'Al-Fatihah terdiri dari 7 ayat dan wajib dibaca dalam salat.' },
+      { soal:'Arti dari "Ar-Rahman" adalah ...', pilihan:['Maha Penyayang','Maha Suci','Maha Pengasih'], jawaban:2, pembahasan:'Ar-Rahman artinya Maha Pengasih untuk semua makhluk.' },
+      { soal:'Kalimat yang diucapkan sebelum makan adalah ...', pilihan:['Alhamdulillah','Bismillah','Subhanallah'], jawaban:1, pembahasan:'Sebelum memulai aktivitas kita ucapkan Bismillah.' },
+      { soal:'Al-Fatihah artinya ...', pilihan:['Pembukaan','Manusia','Gajah'], jawaban:0, pembahasan:'Al-Fatihah artinya "Pembukaan".' }
+    ]
+  },
+
+  /* ---------------- KELAS 2 ---------------- */
+  2: {
+    quran: `
+      ${kartu('📖 Huruf Hijaiah Bersambung', `
+        <p>Dalam Al-Qur'an, huruf ditulis bersambung dari <b>kanan ke kiri</b>. Bentuk huruf bisa berubah (awal, tengah, akhir). Ada <b>6 huruf spesial</b> yang tidak bisa disambung ke kiri: <span class="arabic text-xl font-bold text-blue-700">ا د ذ ر ز و</span></p>
+        ${tabelSambung()}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('📗 Surah An-Nas', `
+        <p>An-Nas artinya <b>"Manusia"</b>. Terdiri dari <b>6 ayat</b>, diturunkan di Mekah. Berisi pesan agar manusia memohon perlindungan hanya kepada Allah dari segala kejahatan.</p>
+        ${tabelAyat([
+          ['1','قُلْ اَعُوْذُ بِرَبِّ النَّاسِۙ',"Qul a'udzu birabbin-nas",'Katakanlah, "Aku berlindung kepada Tuhannya manusia,"'],
+          ['2','مَلِكِ النَّاسِۙ','Malikin-nas','Raja manusia,'],
+          ['3','اِلٰهِ النَّاسِۙ','Ilahin-nas','Sembahan manusia,'],
+          ['4','مِنْ شَرِّ الْوَسْوَاسِ ەۙ الْخَنَّاسِۖ','Min syarril-waswasil-khannas','dari kejahatan (bisikan) setan yang bersembunyi,'],
+          ['5','الَّذِيْ يُوَسْوِسُ فِيْ صُدُوْرِ النَّاسِۙ','Alladzi yuwaswisu fi sudurin-nas','yang membisikkan (kejahatan) ke dalam dada manusia,'],
+          ['6','مِنَ الْجِنَّةِ وَالنَّاسِ ࣖ','Minal-jinnati wan-nas','dari (golongan) jin dan manusia."']
+        ])}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Keteladanannya', `
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Quddus (Maha Suci)</h5>
+            <p class="text-sm mt-1">Keteladanan: menjaga kebersihan diri (mandi, sikat gigi), menyapu halaman, membuang sampah pada tempatnya.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">As-Salam (Maha Pemberi Keselamatan)</h5>
+            <p class="text-sm mt-1">Keteladanan: menyapa teman, menciptakan kerukunan, mendamaikan teman yang bertengkar.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Mu'min (Maha Pemberi Keamanan)</h5>
+            <p class="text-sm mt-1">Keteladanan: menjaga rahasia teman, tidak mengganggu teman, memberi rasa aman.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Malik (Maha Merajai)</h5>
+            <p class="text-sm mt-1">Keteladanan: menjadi pemimpin yang baik, disiplin menaati aturan sekolah.</p>
+          </div>
+        </div>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akhlak: `
+      ${kartu('💚 Kalimat Tayibah Kekaguman', `
+        <p>Membiasakan kalimat tayibah (kalimat kekaguman) membuat hati tenang dan menambah keimanan.</p>
+        <div class="space-y-3">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h5 class="font-bold text-amber-700">Subhanallah (Maha Suci Allah)</h5>
+            <p class="text-sm mt-1">Diucapkan saat melihat ciptaan alam yang murni kuasa Allah. Contoh: melihat pemandangan indah, matahari terbit, gunung tinggi.</p>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h5 class="font-bold text-amber-700">Masya Allah (Atas kehendak Allah)</h5>
+            <p class="text-sm mt-1">Diucapkan saat melihat sesuatu yang indah/hebat yang ada <b>peran campur tangan manusia</b>. Contoh: lukisan bagus, teman yang cerdas, gedung megah.</p>
+          </div>
+        </div>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+    kuis: [
+      { soal:'Huruf yang tidak bisa disambung ke kiri berjumlah ...', pilihan:['5 huruf','6 huruf','7 huruf'], jawaban:1, pembahasan:'Ada 6 huruf: ا د ذ ر ز و' },
+      { soal:'An-Nas artinya ...', pilihan:['Manusia','Gajah','Pembukaan'], jawaban:0, pembahasan:'An-Nas artinya "Manusia".' },
+      { soal:'Surah An-Nas terdiri dari berapa ayat?', pilihan:['5 ayat','6 ayat','7 ayat'], jawaban:1, pembahasan:'An-Nas terdiri dari 6 ayat.' },
+      { soal:'Al-Quddus artinya ...', pilihan:['Maha Suci','Maha Esa','Maha Melihat'], jawaban:0, pembahasan:'Al-Quddus artinya Maha Suci.' },
+      { soal:'Saat melihat lukisan bagus, kita ucapkan ...', pilihan:['Subhanallah','Masya Allah','Astaghfirullah'], jawaban:1, pembahasan:'Masya Allah diucapkan saat melihat karya hebat manusia.' }
+    ]
+  },
+
+  /* ---------------- KELAS 3 ---------------- */
+  3: {
+    quran: `
+      ${kartu('📗 Surah Al-Fil (Pasukan Bergajah)', `
+        <p>Al-Fil artinya <b>"Gajah"</b>. Surah ke-105, terdiri dari <b>5 ayat</b>, diturunkan di Mekah. Mengisahkan hancurnya pasukan Raja Abrahah oleh burung ababil (membawa batu panas/sijjil) yang hendak merusak Ka'bah.</p>
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r-lg text-sm">
+          <b>Pesan:</b> Jangan sombong, kekuatan manusia tak sebanding kekuasaan Allah.
+        </div>
+        ${tabelAyat([
+          ['1','اَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِاَصْحٰبِ الْفِيْلِۗ',"Alam tara kaifa fa'ala rabbuka bi-ash-habil-fiil",'Tidakkah engkau perhatikan bagaimana Tuhanmu telah bertindak terhadap pasukan bergajah?'],
+          ['2','اَلَمْ يَجْعَلْ كَيْدَهُمْ فِيْ تَضْلِيْلٍۙ',"Alam yaj'al kaidahum fii tadhliil",'Bukankah Dia telah menjadikan tipu daya mereka itu sia-sia?'],
+          ['3','وَّاَرْسَلَ عَلَيْهِمْ طَيْرًا اَبَابِيْلَۙ',"Wa arsala 'alaihim thairan abaabiil",'dan Dia mengirimkan kepada mereka burung yang berbondong-bondong,'],
+          ['4','تَرْمِيْهِمْ بِحِجَارَةٍ مِّنْ سِجِّيْلٍۙ','Tarmiihim bi-hijaaratim min sijjiil','yang melempari mereka dengan batu dari tanah liat yang dibakar,'],
+          ['5','فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُوْلٍ ࣖ',"Faja'alahum ka'ashfim ma'kuul",'sehingga mereka dijadikan-Nya seperti daun-daun yang dimakan (ulat).']
+        ])}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+    `,
+    akidah: `
+      ${kartu('☪️ Sifat Wajib, Mustahil, dan Jaiz Allah', `
+        <p><b>Wajib (20):</b> pasti dimiliki Allah. <b>Mustahil (20):</b> kebalikan wajib (tidak mungkin). <b>Jaiz (1):</b> kebebasan Allah berkehendak.</p>
+        ${tabelSifat()}
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akhlak: `
+      ${kartu('💚 Husnuzan (Berbaik Sangka)', `
+        <p>Berpikir positif kepada ketentuan Allah. Kebalikannya adalah <i>Suuzan</i> (tercela).</p>
+        <ul class="list-disc ml-5 space-y-2">
+          <li><b>Saat diuji</b> (sakit/gagal): sabar, tidak mudah mengeluh/putus asa, mencari hikmah, dan bangkit.</li>
+          <li><b>Saat doa belum terkabul:</b> yakin Allah menunda untuk memberikan yang lebih baik.</li>
+          <li><b>Saat bahagia:</b> bersyukur, tidak sombong.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+    kuis: [
+      { soal:'Al-Fil artinya ...', pilihan:['Gajah','Manusia','Pembukaan'], jawaban:0, pembahasan:'Al-Fil artinya "Gajah".' },
+      { soal:'Surah Al-Fil terdiri dari berapa ayat?', pilihan:['4 ayat','5 ayat','6 ayat'], jawaban:1, pembahasan:'Al-Fil terdiri dari 5 ayat.' },
+      { soal:'Raja yang hendak merusak Ka\'bah adalah ...', pilihan:['Abrahah','Namrud','Firaun'], jawaban:0, pembahasan:'Raja Abrahah beserta pasukan bergajahnya.' },
+      { soal:'Sifat wajib Allah jumlahnya ada ...', pilihan:['20','21','19'], jawaban:0, pembahasan:'Sifat wajib Allah ada 20.' },
+      { soal:'Husnuzan artinya ...', pilihan:['Berburuk sangka','Berbaik sangka','Berserah diri'], jawaban:1, pembahasan:'Husnuzan = berbaik sangka kepada Allah dan sesama.' }
+    ]
+  },
+
+  /* ---------------- KELAS 4 ---------------- */
+  4: {
+    quran: `
+      ${kartu("📗 Surah Al-'Alaq 1-5 (Semangat Ilmu)", `
+        <p>Wahyu pertama Nabi di Gua Hira. <i>Iqra'</i> = Bacalah. Pesan: niatkan belajar karena Allah, ilmu adalah pemberian Allah (jangan sombong), catat ilmu dengan pena, dan kritis menyaring informasi.</p>
+        ${tabelAyat([
+          ['1','اِقْرَأْ بِاسْمِ رَبِّكَ الَّذِيْ خَلَقَۚ','Iqra\' bismi rabbikalladzii khalaq','Bacalah dengan (menyebut) nama Tuhanmu yang menciptakan,'],
+          ['2','خَلَقَ الْاِنْسَانَ مِنْ عَلَقٍۚ',"Khalaqal insaana min 'alaq",'Dia telah menciptakan manusia dari segumpal darah.'],
+          ['3','اِقْرَأْ وَرَبُّكَ الْاَكْرَمُۙ',"Iqra' wa rabbukal akram",'Bacalah, dan Tuhanmulah Yang Mahamulia,'],
+          ['4','الَّذِيْ عَلَّمَ بِالْقَلَمِۙ',"Alladzii 'allama bil qalam",'Yang mengajar (manusia) dengan perantaraan pena.'],
+          ['5','عَلَّمَ الْاِنْسَانَ مَا لَمْ يَعْلَمْۗ',"'Allamal insaana maa lam ya'lam",'Dia mengajarkan manusia apa yang tidak diketahuinya.']
+        ])}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+    `,
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Penerapannya', `
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Basir (Maha Melihat)</h5>
+            <p class="text-sm mt-1">Penerapan: jujur, ujian mandiri tanpa nyontek, tidak mengambil barang temuan.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">As-Sami' (Maha Mendengar)</h5>
+            <p class="text-sm mt-1">Penerapan: menjaga lisan dari gibah, yakin doa didengar Allah.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Hafiz (Maha Memelihara)</h5>
+            <p class="text-sm mt-1">Penerapan: melestarikan alam, menjaga diri dari perbuatan buruk.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Wali (Maha Pelindung)</h5>
+            <p class="text-sm mt-1">Penerapan: tempat bergantung/berdoa saat ada masalah.</p>
+          </div>
+        </div>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akhlak: `
+      ${kartu('💚 Akhlak di Lingkungan Keluarga', `
+        <ul class="list-disc ml-5 space-y-2">
+          <li><b>Tolong-Menolong:</b> membantu pekerjaan rumah agar ringan &amp; rukun.</li>
+          <li><b>Empati &amp; Menghargai:</b> berbagi tugas saat orang tua sakit, tidak berisik saat saudara belajar.</li>
+          <li><b>Musyawarah:</b> selesaikan beda pendapat dengan diskusi, jangan memaksakan ego.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+    kuis: [
+      { soal:'Wahyu pertama Nabi Muhammad saw. turun di ...', pilihan:['Gua Tsur','Gua Hira','Madinah'], jawaban:1, pembahasan:'Wahyu pertama turun di Gua Hira.' },
+      { soal:'Kata "Iqra\'" artinya ...', pilihan:['Bacalah','Tulislah','Dengarkanlah'], jawaban:0, pembahasan:'Iqra\' artinya "Bacalah".' },
+      { soal:"Surah Al-'Alaq 1-5 berisi tentang ...", pilihan:['Perintah salat','Perintah membaca/belajar','Perintah zakat'], jawaban:1, pembahasan:'Berisi perintah membaca dan semangat mencari ilmu.' },
+      { soal:'Al-Basir artinya ...', pilihan:['Maha Mendengar','Maha Melihat','Maha Memelihara'], jawaban:1, pembahasan:'Al-Basir artinya Maha Melihat.' },
+      { soal:'Saat ada perbedaan pendapat dalam keluarga, sebaiknya ...', pilihan:['Memaksakan kehendak','Diam saja','Bermusyawarah'], jawaban:2, pembahasan:'Musyawarah adalah cara terbaik menyelesaikan perbedaan.' }
+    ]
+  },
+
+  /* ---------------- KELAS 5 ---------------- */
+  5: {
+    quran: `
+      ${kartu('📗 Surah Al-Qadr (Lailatulqadar)', `
+        <p>Terdiri dari <b>5 ayat</b>. Menjelaskan turunnya Al-Qur'an pada malam kemuliaan di bulan Ramadan yang nilainya <b>lebih baik dari 1.000 bulan</b>. Kita dianjurkan memperbanyak ibadah (tadarus, salat malam).</p>
+        ${tabelAyat([
+          ['1','اِنَّآ اَنْزَلْنٰهُ فِيْ لَيْلَةِ الْقَدْرِ','Innaa anzalnaahu fii lailatil-qadr',"Sesungguhnya Kami telah menurunkannya (Al-Qur'an) pada Lailatulqadar."],
+          ['2','وَمَآ اَدْرٰىكَ مَا لَيْلَةُ الْقَدْرِۗ','Waa maa adraaka maa lailatul-qadr','Tahukah kamu apakah Lailatulqadar itu?'],
+          ['3','لَيْلَةُ الْقَدْرِ ەۙ خَيْرٌ مِّنْ اَلْفِ شَهْرٍۗ','Lailatul-qadri khairum min alfi syahr','Lailatulqadar itu lebih baik daripada seribu bulan.'],
+          ['4','تَنَزَّلُ الْمَلٰۤىِٕكَةُ وَالرُّوْحُ فِيْهَا بِاِذْنِ رَبِّهِمْۚ مِنْ كُلِّ اَمْرٍۛ',"Tanazzalul malaa'ikatu war-ruuhu fiihaa bi-idzni rabbihim min kulli amr",'Pada malam itu turun para malaikat dan Rūḥ (Jibril) dengan izin Tuhannya untuk mengatur segala urusan.'],
+          ['5','سَلٰمٌ ۛهِيَ حَتّٰى مَطْلَعِ الْفَجْرِ ࣖ',"Salaamun hiya hattaa mathla'il-fajr",'Sejahteralah (malam) itu sampai terbit fajar.']
+        ])}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+    `,
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Keteladanannya', `
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Mumit (Maha Mematikan)</h5>
+            <p class="text-sm mt-1">Mengingatkan sisa hidup terbatas, manfaatkan untuk menabung amal baik.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Muhyi (Maha Menghidupkan)</h5>
+            <p class="text-sm mt-1">Keteladanan: peduli merawat tanaman layu agar segar kembali.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Ba'its (Maha Membangkitkan)</h5>
+            <p class="text-sm mt-1">Menjadi penyemangat bagi kawan, pantang putus asa, dan yakin hari kiamat.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Qayyum (Maha Berdiri Sendiri)</h5>
+            <p class="text-sm mt-1">Keteladanan: melatih kemandirian, tidak selalu bergantung pada orang tua.</p>
+          </div>
+        </div>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akhlak: `
+      ${kartu('💚 Sinergi Doa, Ikhtiar, dan Tawakal', `
+        <div class="space-y-3">
+          <div class="flex flex-col sm:flex-row gap-3 items-center bg-amber-50 p-3 rounded-xl">
+            <div class="bg-amber-200 text-amber-900 font-bold px-3 py-1 rounded-lg w-full sm:w-32 text-center text-sm">1. Berdoa</div>
+            <div class="text-sm flex-1">Memohon harapan kepada Allah dengan sopan dan khusyuk. Waktu mustajab: sesudah salat, antara azan dan ikamah.</div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 items-center bg-amber-50 p-3 rounded-xl">
+            <div class="bg-amber-200 text-amber-900 font-bold px-3 py-1 rounded-lg w-full sm:w-32 text-center text-sm">2. Ikhtiar</div>
+            <div class="text-sm flex-1">Usaha/kerja keras. Doa tanpa ikhtiar adalah salah kaprah.</div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 items-center bg-amber-50 p-3 rounded-xl">
+            <div class="bg-amber-200 text-amber-900 font-bold px-3 py-1 rounded-lg w-full sm:w-32 text-center text-sm">3. Tawakal</div>
+            <div class="text-sm flex-1">Sikap berserah diri setelah berusaha maksimal. Jika berhasil bersyukur, jika gagal bersabar.</div>
+          </div>
+        </div>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+    kuis: [
+      { soal:'Al-Qadr artinya ...', pilihan:['Kemuliaan','Pembukaan','Gajah'], jawaban:0, pembahasan:'Al-Qadr artinya "Kemuliaan".' },
+      { soal:'Lailatulqadar lebih baik dari ...', pilihan:['100 bulan','1.000 bulan','10.000 bulan'], jawaban:1, pembahasan:'Lailatulqadar lebih baik dari seribu bulan.' },
+      { soal:'Surah Al-Qadr terdiri dari berapa ayat?', pilihan:['5 ayat','6 ayat','7 ayat'], jawaban:0, pembahasan:'Al-Qadr terdiri dari 5 ayat.' },
+      { soal:'Al-Mumit artinya ...', pilihan:['Maha Menghidupkan','Maha Mematikan','Maha Berdiri Sendiri'], jawaban:1, pembahasan:'Al-Mumit artinya Maha Mematikan.' },
+      { soal:'Urutan yang benar adalah ...', pilihan:['Tawakal - Doa - Ikhtiar','Doa - Ikhtiar - Tawakal','Ikhtiar - Tawakal - Doa'], jawaban:1, pembahasan:'Urutannya: berdoa, berikhtiar, lalu bertawakal.' }
+    ]
+  },
+
+  /* ---------------- KELAS 6 ---------------- */
+  6: {
+    quran: `
+      ${kartu('📗 Surah Al-Kafirun & Tajwid', `
+        <p>Artinya <b>"Orang-orang Kafir"</b>. Surah Makkiyah, berjumlah <b>6 ayat</b>. Pesan: menghargai agama lain (toleransi), tapi larangan tegas mencampuradukkan ritual akidah.</p>
+        ${tabelAyat([
+          ['1','قُلْ يٰٓاَيُّهَا الْكٰفِرُوْنَۙ','Qul yaa ayyuhal-kaafiruun','Katakanlah, "Wahai orang-orang kafir!'],
+          ['2','لَآ اَعْبُدُ مَا تَعْبُدُوْنَۙ',"Laa a'budu maa ta'buduun",'Aku tidak akan menyembah apa yang kamu sembah,'],
+          ['3','وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُۚ',"Wa laa antum 'aabiduuna maa a'bud",'Dan kamu bukan penyembah apa yang aku sembah,'],
+          ['4','وَلَآ اَنَا۠ عَابِدٌ مَّا عَبَدْتُّمْۙ',"Wa laa anaa 'aabidum maa 'abattum",'Dan aku tidak pernah menjadi penyembah apa yang kamu sembah,'],
+          ['5','وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُۗ',"Wa laa antum 'aabiduuna maa a'bud",'Dan kamu tidak pernah (pula) menjadi penyembah apa yang aku sembah.'],
+          ['6','لَكُمْ دِيْنُكُمْ وَلِيَ دِيْنِ ࣖ','Lakum diinukum wa liya diin','Untukmu agamamu, dan untukku agamaku."']
+        ])}
+      `, 'bg-blue-50 text-blue-900 border-blue-100')}
+
+      ${kartu('🔤 Hukum Tajwid (Mad)', `
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-lg">
+          <ul class="list-disc ml-5 space-y-2 text-sm">
+            <li><b>Mad Wajib Muttasil:</b> huruf mad bertemu Hamzah di dalam <i>satu kata</i>. Dibaca panjang <b>4-5 harakat</b>.</li>
+            <li><b>Mad Jaiz Munfasil:</b> huruf mad bertemu Hamzah/Alif di <i>dua kata terpisah</i>. Boleh dibaca <b>2, 4, atau 5 harakat</b>.</li>
+          </ul>
+        </div>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+    akidah: `
+      ${kartu('☪️ Asmaulhusna & Keteladanannya', `
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Ahad (Maha Esa)</h5>
+            <p class="text-sm mt-1">Satu, tiada sekutu. Terbukti dari keteraturan alam. Larangan keras berbuat syirik.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">As-Samad (Maha Dibutuhkan)</h5>
+            <p class="text-sm mt-1">Makhluk butuh Allah. Berdoa dan memohon solusi murni hanya kepada-Nya.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-Ghaffar (Maha Pengampun)</h5>
+            <p class="text-sm mt-1">Menutupi kesalahan/dosa hamba di dunia agar aibnya terjaga dari manusia lain.</p>
+          </div>
+          <div class="p-3 border border-emerald-200 rounded-xl bg-emerald-50/40">
+            <h5 class="font-bold text-emerald-700">Al-'Afuw (Maha Pemaaf)</h5>
+            <p class="text-sm mt-1">Menghapus dan mencabut total catatan dosa dari buku amal, syaratnya harus <i>Taubat</i>.</p>
+          </div>
+        </div>
+      `, 'bg-emerald-50 text-emerald-900 border-emerald-100')}
+    `,
+    akhlak: `
+      ${kartu('💚 Toleransi & Pergaulan Teman Sebaya', `
+        <ul class="list-disc ml-5 space-y-2">
+          <li><b>Toleransi Beragama:</b> membiarkan dan menghargai teman beribadah (tidak bising). Secara kemanusiaan, tetap bantu/jenguk teman beda agama yang sakit. Hikmahnya melahirkan kerukunan bangsa.</li>
+          <li><b>Akhlak Berteman:</b> sopan, dengarkan teman bicara, beri selamat jika ia sukses. Hindari gibah/bullying.</li>
+          <li><b>Resolusi Konflik:</b> musyawarah dan segerakan saling memaafkan jika telanjur berselisih.</li>
+        </ul>
+      `, 'bg-amber-50 text-amber-900 border-amber-100')}
+    `,
+    kuis: [
+      { soal:'Al-Kafirun artinya ...', pilihan:['Orang-orang kafir','Manusia','Kemuliaan'], jawaban:0, pembahasan:'Al-Kafirun artinya "Orang-orang kafir".' },
+      { soal:'Surah Al-Kafirun terdiri dari berapa ayat?', pilihan:['5 ayat','6 ayat','7 ayat'], jawaban:1, pembahasan:'Al-Kafirun terdiri dari 6 ayat.' },
+      { soal:'Mad Wajib Muttasil dibaca panjang ...', pilihan:['2 harakat','4-5 harakat','6 harakat'], jawaban:1, pembahasan:'Mad Wajib Muttasil dibaca 4-5 harakat.' },
+      { soal:'Al-Ahad artinya ...', pilihan:['Maha Esa','Maha Pemaaf','Maha Dibutuhkan'], jawaban:0, pembahasan:'Al-Ahad artinya Maha Esa.' },
+      { soal:'Sikap kita terhadap teman beda agama adalah ...', pilihan:['Menjauhi','Mengucilkan','Menghargai dengan toleransi'], jawaban:2, pembahasan:'Kita tetap bertoleransi dan menghargai tanpa mencampuradukkan akidah.' }
+    ]
+  }
+};
+
+/* =========================================================
+   RENDER LAYER 1 (Home - Kartu Kelas)
+========================================================= */
+function renderHome(){
+  const grid = document.getElementById('grid-kelas');
+  grid.innerHTML = KELAS.map(k => `
+    <button onclick="bukaKelas(${k.id})"
+      class="group bg-white rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-md active:scale-95 transition border border-slate-200 text-left">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${k.warna} text-white flex items-center justify-center text-xl font-extrabold mb-3 shadow">
+        ${k.id}
+      </div>
+      <h3 class="font-bold text-slate-800 text-base">Kelas ${k.id}</h3>
+      <p class="text-[11px] text-slate-500 mt-1 leading-snug">${k.topik}</p>
+    </button>
+  `).join('');
+}
+
+/* =========================================================
+   LAYER 2: Buka Kelas, Pilih Elemen, Render Konten
+========================================================= */
+let currentKelas = null;
+let currentElemen = 'quran';
+
+function bukaKelas(id){
+  currentKelas = id;
+  currentElemen = 'quran';
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('materi').classList.remove('hidden');
+  document.getElementById('judul-kelas').textContent = 'Kelas ' + id;
+  document.getElementById('subjudul').textContent = KELAS.find(k => k.id === id).topik;
+  updateTabAktif();
+  renderKonten();
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+function kembali(){
+  document.getElementById('materi').classList.add('hidden');
+  document.getElementById('home').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+function pilihElemen(el){
+  currentElemen = el;
+  updateTabAktif();
+  renderKonten();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateTabAktif(){
+  document.querySelectorAll('.tab-elemen').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === currentElemen);
+  });
+}
+
+function renderKonten(){
+  const konten = document.getElementById('konten');
+  if (currentElemen === 'kuis'){
+    konten.innerHTML = renderKuis(currentKelas);
+  } else {
+    konten.innerHTML = MATERI[currentKelas][currentElemen];
+  }
+  konten.classList.remove('fade-in');
+  void konten.offsetWidth;
+  konten.classList.add('fade-in');
+}
+
+/* =========================================================
+   KUIS
+========================================================= */
+function renderKuis(kelasId){
+  const daftar = MATERI[kelasId].kuis;
+  return `
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-4">
+      <div class="px-4 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white">
+        <h3 class="font-bold text-base">📝 Kuis Kelas ${kelasId}</h3>
+        <p class="text-[11px] text-emerald-100 mt-0.5">Pilih jawaban yang paling tepat. Jawaban langsung dinilai.</p>
+      </div>
+      <div class="p-4">
+        <div id="skor-box" class="hidden mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-center">
+          <p class="text-sm text-emerald-800">Skor kamu: <b><span id="skor">0</span> / ${daftar.length}</b></p>
+          <button onclick="renderKonten()" class="mt-2 text-xs bg-emerald-600 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-emerald-700">🔄 Ulangi Kuis</button>
+        </div>
+        ${daftar.map((q, i) => `
+          <div class="mb-4 p-3 rounded-xl border border-slate-200 bg-slate-50/50" data-q="${i}">
+            <p class="font-semibold text-sm mb-2 text-slate-800">${i+1}. ${q.soal}</p>
+            <div class="space-y-2">
+              ${q.pilihan.map((p, j) => `
+                <button onclick="jawab(this, ${j === q.jawaban}, ${i})"
+                  class="opsi w-full text-left px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-emerald-50 hover:border-emerald-300 transition text-sm">
+                  <span class="font-bold text-slate-500 mr-1">${String.fromCharCode(65+j)}.</span> ${p}
+                </button>
+              `).join('')}
+            </div>
+            <p id="bahas-${i}" class="hidden mt-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-2">💡 ${q.pembahasan}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+let skorKuis = {};
+function jawab(btn, benar, idx){
+  const parent = btn.closest('[data-q]');
+  if (parent.dataset.done === '1') return;
+  parent.dataset.done = '1';
+
+  // disable semua opsi
+  parent.querySelectorAll('.opsi').forEach(b => {
+    b.disabled = true;
+    b.classList.add('opacity-50', 'cursor-not-allowed');
+  });
+
+  if (benar){
+    btn.classList.remove('opacity-50');
+    btn.classList.add('!bg-emerald-500', '!text-white', '!border-emerald-500');
+  } else {
+    btn.classList.remove('opacity-50');
+    btn.classList.add('!bg-red-500', '!text-white', '!border-red-500');
+  }
+  document.getElementById('bahas-' + idx).classList.remove('hidden');
+
+  // hitung skor
+  skorKuis[idx] = benar ? 1 : 0;
+  const total = Object.values(skorKuis).reduce((a,b)=>a+b, 0);
+  document.getElementById('skor').textContent = total;
+  document.getElementById('skor-box').classList.remove('hidden');
+
+  // jika semua sudah dijawab
+  const totalSoal = MATERI[currentKelas].kuis.length;
+  if (Object.keys(skorKuis).length === totalSoal){
+    document.getElementById('skor-box').classList.add('!bg-emerald-100');
+  }
+}
+
+/* Reset skor saat pindah kelas / ulangi */
+function bukaKelasReset(id){ skorKuis = {}; bukaKelas(id); }
+const _bukaKelas = bukaKelas;
+bukaKelas = function(id){ skorKuis = {}; _bukaKelas(id); };
+const _renderKonten = renderKonten;
+renderKonten = function(){
+  if (currentElemen === 'kuis') skorKuis = {};
+  _renderKonten();
+};
+
+/* =========================================================
+   INIT
+========================================================= */
+renderHome();
+</script>
+</body>
+</html>
