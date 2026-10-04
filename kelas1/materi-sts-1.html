@@ -4,28 +4,261 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MPI PAI SD Terpadu (Kelas 1-6)</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-  .arabic { font-family: 'Amiri', serif; direction: rtl; }
-  .fade-in { animation: fadeIn .3s ease; }
-  @keyframes fadeIn { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  .tab-elemen {
-    padding: .75rem 1rem; white-space: nowrap; font-size: .85rem; font-weight: 600;
-    color: rgba(255,255,255,.75); border-bottom: 3px solid transparent;
-    transition: all .2s; display: flex; align-items: center; gap: .35rem;
-  }
-  .tab-elemen.active { color: #fff; border-bottom-color: #fbbf24; background: rgba(255,255,255,.08); }
-  .materi p { margin-bottom: .6rem; }
-  .materi ul, .materi ol { padding-left: 1.25rem; margin-bottom: .6rem; }
-  .materi li { margin-bottom: .35rem; }
-  .materi b { color: #0f766e; }
-  .kotak-tips { background: #fef9c3; border-left: 4px solid #eab308; padding: .75rem 1rem; border-radius: 0 .5rem .5rem 0; margin: .75rem 0; font-size: .9rem; }
-  .kotak-info { background: #dbeafe; border-left: 4px solid #3b82f6; padding: .75rem 1rem; border-radius: 0 .5rem .5rem 0; margin: .75rem 0; font-size: .9rem; }
-  .kotak-hikmah { background: #dcfce7; border-left: 4px solid #22c55e; padding: .75rem 1rem; border-radius: 0 .5rem .5rem 0; margin: .75rem 0; font-size: .9rem; }
+/* ==========================================================
+   CSS MANDIRI — pengganti Tailwind CDN + Google Fonts
+   ========================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;line-height:1.5}
+body{
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f1f5f9;color:#1e293b;line-height:1.55;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit;font-size:inherit;line-height:inherit;padding:0;text-align:inherit;font-weight:inherit}
+table{border-collapse:collapse}
+svg{display:block}
+
+/* ---- Arabic font (system fallback) ---- */
+.arabic{
+  font-family:'Noto Naskh Arabic','Traditional Arabic','Scheherazade New','Amiri',serif;
+  direction:rtl;
+}
+
+/* ---- Animasi ---- */
+.fade-in{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---- No scrollbar ---- */
+.no-scrollbar::-webkit-scrollbar{display:none}
+.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+
+/* ---- Custom boxes ---- */
+.kotak-tips,.kotak-info,.kotak-hikmah{padding:.75rem 1rem;border-radius:0 .5rem .5rem 0;margin:.75rem 0;font-size:.9rem}
+.kotak-tips{background:#fef9c3;border-left:4px solid #eab308}
+.kotak-info{background:#dbeafe;border-left:4px solid #3b82f6}
+.kotak-hikmah{background:#dcfce7;border-left:4px solid #22c55e}
+.materi p{margin-bottom:.6rem}
+.materi ul,.materi ol{padding-left:1.25rem;margin-bottom:.6rem}
+.materi li{margin-bottom:.35rem}
+.materi b{color:#0f766e}
+
+/* ---- Tab elemen ---- */
+.tab-elemen{
+  padding:.75rem 1rem;white-space:nowrap;font-size:.85rem;font-weight:600;
+  color:rgba(255,255,255,.75);border-bottom:3px solid transparent;
+  transition:all .2s;display:flex;align-items:center;gap:.35rem;
+}
+.tab-elemen.active{color:#fff;border-bottom-color:#fbbf24;background:rgba(255,255,255,.08)}
+
+/* ==========================================================
+   UTILITY CLASSES (repackaged Tailwind)
+   ========================================================== */
+.flex{display:flex}
+.inline-flex{display:inline-flex}
+.inline-block{display:inline-block}
+.grid{display:grid}
+.hidden{display:none !important}
+.flex-1{flex:1 1 0%}
+.flex-col{flex-direction:column}
+.items-center{align-items:center}
+.justify-center{justify-content:center}
+.justify-between{justify-content:space-between}
+.relative{position:relative}
+.sticky{position:sticky}
+.top-0{top:0}
+.z-10{z-index:10}
+.z-20{z-index:20}
+.overflow-hidden{overflow:hidden}
+.overflow-x-auto{overflow-x:auto}
+.overflow-y-auto{overflow-y:auto}
+.w-full{width:100%}
+.w-10{width:2.5rem}
+.w-1\.5{width:.375rem}
+.h-5{height:1.25rem}
+.w-6{width:1.5rem}.h-6{height:1.5rem}
+.w-9{width:2.25rem}.h-9{height:2.25rem}
+.w-12{width:3rem}.h-12{height:3rem}
+.w-16{width:4rem}.h-16{height:4rem}
+.h-10{height:2.5rem}
+.min-h-screen{min-height:100vh}
+.min-w-0{min-width:0}
+.max-w-3xl{max-width:48rem}
+.max-w-4xl{max-width:56rem}
+.max-h-\[420px\]{max-height:420px}
+.max-h-\[400px\]{max-height:400px}
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.gap-2{gap:.5rem}
+.gap-3{gap:.75rem}
+.gap-4{gap:1rem}
+.p-2{padding:.5rem}
+.p-3{padding:.75rem}
+.p-4{padding:1rem}
+.p-5{padding:1.25rem}
+.p-6{padding:1.5rem}
+.px-3{padding-left:.75rem;padding-right:.75rem}
+.px-4{padding-left:1rem;padding-right:1rem}
+.px-5{padding-left:1.25rem;padding-right:1.25rem}
+.py-2{padding-top:.5rem;padding-bottom:.5rem}
+.py-3{padding-top:.75rem;padding-bottom:.75rem}
+.pt-10{padding-top:2.5rem}
+.pb-10{padding-bottom:2.5rem}
+.pb-16{padding-bottom:4rem}
+.mx-auto{margin-left:auto;margin-right:auto}
+.mt-0\.5{margin-top:.125rem}
+.mt-1{margin-top:.25rem}
+.mt-1\.5{margin-top:.375rem}
+.mt-2{margin-top:.5rem}
+.mt-3{margin-top:.75rem}
+.mt-4{margin-top:1rem}
+.mt-8{margin-top:2rem}
+.mb-2{margin-bottom:.5rem}
+.mb-3{margin-bottom:.75rem}
+.mb-4{margin-bottom:1rem}
+.mb-5{margin-bottom:1.25rem}
+.my-3{margin-top:.75rem;margin-bottom:.75rem}
+.-mt-10{margin-top:-2.5rem}
+.mr-1{margin-right:.25rem}
+.space-y-2 > * + *{margin-top:.5rem}
+.text-xs{font-size:.75rem;line-height:1rem}
+.text-sm{font-size:.875rem;line-height:1.25rem}
+.text-base{font-size:1rem;line-height:1.5rem}
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+.text-2xl{font-size:1.5rem;line-height:2rem}
+.text-3xl{font-size:1.875rem;line-height:2.25rem}
+.text-\[10px\]{font-size:10px}
+.text-\[11px\]{font-size:11px}
+.text-\[15px\]{font-size:15px}
+.font-medium{font-weight:500}
+.font-semibold{font-weight:600}
+.font-bold{font-weight:700}
+.font-extrabold{font-weight:800}
+.text-center{text-align:center}
+.text-left{text-align:left}
+.text-right{text-align:right}
+.align-top{vertical-align:top}
+.leading-tight{line-height:1.25}
+.leading-snug{line-height:1.375}
+.leading-relaxed{line-height:1.625}
+.leading-loose{line-height:2}
+.tracking-tight{letter-spacing:-.025em}
+.whitespace-nowrap{white-space:nowrap}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bg-white{background:#fff}
+.bg-slate-50{background:#f8fafc}
+.bg-slate-50\/50{background:rgba(248,250,252,.5)}
+.bg-slate-50\/60{background:rgba(248,250,252,.6)}
+.bg-slate-100{background:#f1f5f9}
+.bg-slate-200{background:#e2e8f0}
+.bg-blue-50{background:#eff6ff}
+.bg-blue-100{background:#dbeafe}
+.bg-emerald-50{background:#ecfdf5}
+.bg-emerald-100{background:#d1fae5}
+.bg-emerald-500{background:#10b981}
+.bg-emerald-600{background:#059669}
+.bg-emerald-700{background:#047857}
+.bg-amber-50{background:#fffbeb}
+.bg-amber-100{background:#fef3c7}
+.bg-red-50\/60{background:rgba(254,242,242,.6)}
+.bg-red-500{background:#ef4444}
+.bg-red-600{background:#dc2626}
+.bg-white\/10{background:rgba(255,255,255,.1)}
+.bg-white\/20{background:rgba(255,255,255,.2)}
+.text-white{color:#fff}
+.text-slate-400{color:#94a3b8}
+.text-slate-500{color:#64748b}
+.text-slate-600{color:#475569}
+.text-slate-700{color:#334155}
+.text-slate-800{color:#1e293b}
+.text-emerald-100{color:#d1fae5}
+.text-emerald-700{color:#047857}
+.text-emerald-800{color:#065f46}
+.text-emerald-900{color:#064e3b}
+.text-blue-700{color:#1d4ed8}
+.text-blue-800{color:#1e40af}
+.text-blue-900{color:#1e3a8a}
+.text-amber-700{color:#b45309}
+.text-amber-900{color:#78350f}
+.text-red-600{color:#dc2626}
+.text-red-700{color:#b91c1c}
+.border{border:1px solid #e2e8f0}
+.border-b{border-bottom:1px solid #e2e8f0}
+.border-t{border-top:1px solid #e2e8f0}
+.border-slate-200{border-color:#e2e8f0}
+.border-blue-100{border-color:#dbeafe}
+.border-blue-200{border-color:#bfdbfe}
+.border-emerald-100{border-color:#d1fae5}
+.border-emerald-200{border-color:#a7f3d0}
+.border-amber-100{border-color:#fef3c7}
+.divide-y > * + *{border-top:1px solid #e2e8f0}
+.divide-slate-200 > * + *{border-color:#e2e8f0}
+.divide-blue-100 > * + *{border-color:#dbeafe}
+.rounded{border-radius:.25rem}
+.rounded-lg{border-radius:.5rem}
+.rounded-xl{border-radius:.75rem}
+.rounded-2xl{border-radius:1rem}
+.rounded-full{border-radius:9999px}
+.rounded-b-\[2rem\]{border-bottom-left-radius:2rem;border-bottom-right-radius:2rem}
+.shadow{box-shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06)}
+.shadow-sm{box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.06)}
+.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.05)}
+.backdrop-blur{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.opacity-50{opacity:.5}
+.cursor-not-allowed{cursor:not-allowed}
+.transition{transition:all .2s ease}
+.hover\:bg-white\/10:hover{background:rgba(255,255,255,.1)}
+.hover\:bg-white\/20:hover{background:rgba(255,255,255,.2)}
+.active\:bg-white\/20:active{background:rgba(255,255,255,.2)}
+.hover\:bg-slate-50:hover{background:#f8fafc}
+.hover\:bg-blue-50:hover{background:#eff6ff}
+.hover\:bg-emerald-50:hover{background:#ecfdf5}
+.hover\:bg-emerald-700:hover{background:#047857}
+.hover\:shadow-md:hover{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.06)}
+.hover\:border-emerald-300:hover{border-color:#6ee7b7}
+.active\:scale-95:active{transform:scale(.95)}
+.\!bg-emerald-500{background:#10b981 !important}
+.\!bg-red-500{background:#ef4444 !important}
+.\!bg-emerald-100{background:#d1fae5 !important}
+.\!text-white{color:#fff !important}
+.\!border-emerald-500{border-color:#10b981 !important}
+.\!border-red-500{border-color:#ef4444 !important}
+
+/* ---- Gradients (via CSS variable) ---- */
+.bg-gradient-to-br{background:linear-gradient(to bottom right,var(--gf,#10b981),var(--gt,#059669))}
+.bg-gradient-to-r{background:linear-gradient(to right,var(--gf,#10b981),var(--gt,#059669))}
+.from-emerald-500{--gf:#10b981}
+.to-emerald-700{--gt:#047857}
+.from-emerald-500.via-emerald-600.to-emerald-700{
+  background:linear-gradient(to bottom right,#10b981,#059669,#047857)
+}
+.from-rose-400{--gf:#fb7185}.to-rose-600{--gt:#e11d48}
+.from-sky-400{--gf:#38bdf8}.to-sky-600{--gt:#0284c7}
+.from-violet-400{--gf:#a78bfa}.to-violet-600{--gt:#7c3aed}
+.from-amber-400{--gf:#fbbf24}.to-amber-600{--gt:#d97706}
+.from-teal-400{--gf:#2dd4bf}.to-teal-600{--gt:#0d9488}
+.from-indigo-400{--gf:#818cf8}.to-indigo-600{--gt:#4f46e5}
+.from-emerald-500{--gf:#10b981}.to-emerald-600{--gt:#059669}
+
+/* ---- Responsive ---- */
+@media (min-width:640px){
+  .sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sm\:grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .sm\:flex-row{flex-direction:row}
+}
+@media (min-width:768px){
+  .md\:text-3xl{font-size:1.875rem;line-height:2.25rem}
+  .md\:text-base{font-size:1rem;line-height:1.5rem}
+  .md\:text-sm{font-size:.875rem;line-height:1.25rem}
+  .md\:p-5{padding:1.25rem}
+  .md\:p-6{padding:1.5rem}
+  .md\:gap-4{gap:1rem}
+  .md\:grid-cols-8{grid-template-columns:repeat(8,minmax(0,1fr))}
+}
 </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -272,12 +505,9 @@ function tabelSambung(){
 }
 
 /* =========================================================
-   MATERI PER KELAS — DIKEMBANGKAN
+   MATERI PER KELAS
 ========================================================= */
 const MATERI = {
-  /* =====================================================
-     KELAS 1
-  ===================================================== */
   1: {
     quran: `
       ${kartu("📖 Mengenal Al-Qur'an", `
@@ -437,9 +667,6 @@ const MATERI = {
     ]
   },
 
-  /* =====================================================
-     KELAS 2
-  ===================================================== */
   2: {
     quran: `
       ${kartu('📖 Huruf Hijaiah Bersambung', `
@@ -616,9 +843,6 @@ const MATERI = {
     ]
   },
 
-  /* =====================================================
-     KELAS 3
-  ===================================================== */
   3: {
     quran: `
       ${kartu('📗 Surah Al-Fil (Pasukan Bergajah)', `
@@ -718,9 +942,6 @@ const MATERI = {
     ]
   },
 
-  /* =====================================================
-     KELAS 4
-  ===================================================== */
   4: {
     quran: `
       ${kartu("📗 Surah Al-'Alaq 1-5 (Semangat Ilmu)", `
@@ -885,9 +1106,6 @@ const MATERI = {
     ]
   },
 
-  /* =====================================================
-     KELAS 5
-  ===================================================== */
   5: {
     quran: `
       ${kartu('📗 Surah Al-Qadr (Lailatulqadar)', `
@@ -1065,9 +1283,6 @@ const MATERI = {
     ]
   },
 
-  /* =====================================================
-     KELAS 6
-  ===================================================== */
   6: {
     quran: `
       ${kartu('📗 Surah Al-Kafirun & Tajwid', `
@@ -1291,7 +1506,7 @@ const MATERI = {
 };
 
 /* =========================================================
-   RENDER LAYER 1 (Home - Kartu Kelas)
+   RENDER LAYER 1
 ========================================================= */
 function renderHome(){
   const grid = document.getElementById('grid-kelas');
@@ -1308,7 +1523,7 @@ function renderHome(){
 }
 
 /* =========================================================
-   LAYER 2: Buka Kelas, Pilih Elemen, Render Konten
+   LAYER 2: BUKA KELAS
 ========================================================= */
 let currentKelas = null;
 let currentElemen = 'quran';
