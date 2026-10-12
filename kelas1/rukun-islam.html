@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#2E7D32">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Ayo Kenali Rukun Islam!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* Green scale */
+  --g-50:#E8F5E9; --g-100:#C8E6C9; --g-200:#A5D6A7;
+  --g-400:#66BB6A; --g-500:#43A047; --g-600:#2E7D32; --g-700:#1B5E20;
+  /* Orange scale */
+  --o-100:#FFE0B2; --o-300:#FFB74D; --o-500:#FB8C00; --o-700:#E65100;
+  /* Yellow */
+  --y-50:#FFFDE7; --y-100:#FFF9C4; --y-200:#FFE082; --y-400:#FFC107;
+  /* Feedback */
+  --red:#EF5350; --red-d:#C62828;
+  --blue:#5C6BC0; --blue-l:#E8EAF6;
+  /* Neutrals */
+  --white:#FFFFFF; --cream:#FFFDE7; --gray:#90A4AE;
+  --ink:#1B5E20; --ink-2:#558B2F;
+  /* Radius */
+  --r-s:10px; --r-m:16px; --r-l:22px; --r-xl:28px; --r-full:999px;
+  /* Shadow (elevation) */
+  --sh-1:0 3px 0 rgba(0,0,0,.08);
+  --sh-2:0 5px 0 rgba(0,0,0,.10);
+  --sh-3:0 10px 30px rgba(0,0,0,.14);
+  /* Spacing */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  /* Motion */
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --dur-fast:120ms; --dur:220ms; --dur-slow:380ms;
+  /* Type */
+  --font:'Baloo 2','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-ar:'Amiri','Traditional Arabic','Noto Naskh Arabic',serif;
+  /* Touch */
+  --tap:44px;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+body{
+  font-family:var(--font);color:var(--ink);
+  background:linear-gradient(160deg,#E8F5E9 0%,#C8E6C9 50%,#A5D6A7 100%);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  user-select:none;-webkit-user-select:none;touch-action:manipulation;
+}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:3px solid var(--o-500);outline-offset:2px}
+svg{display:block;max-width:100%}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+.app{
+  width:100%;height:100vh;height:100dvh;
+  background:var(--cream);
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+}
+@media (min-width:700px) and (min-height:500px){
+  body{display:flex;align-items:center;justify-content:center;padding:20px}
+  .app{
+    max-width:1100px;
+    height:min(92vh,900px);height:min(92dvh,900px);
+    border-radius:var(--r-xl);
+    box-shadow:var(--sh-3),0 0 0 6px rgba(255,255,255,.55);
+  }
+}
+@media (min-width:1600px){ .app{max-width:1400px;height:min(90vh,1000px)} }
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar{
+  position:absolute;top:0;left:0;right:0;height:60px;
+  display:flex;align-items:center;gap:8px;padding:8px 12px;
+  z-index:20;pointer-events:none;
+}
+.topbar > *{pointer-events:auto}
+
+.btn-back{
+  width:44px;height:44px;border-radius:var(--r-full);
+  background:rgba(255,255,255,.9);color:var(--g-600);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--sh-1);transition:transform var(--dur-fast),box-shadow var(--dur-fast);
+}
+.btn-back:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.btn-back[hidden]{display:none}
+.btn-back svg{width:22px;height:22px}
+
+.stars{
+  margin-left:auto;display:flex;align-items:center;gap:6px;
+  padding:6px 14px 6px 10px;background:var(--y-100);
+  border-radius:var(--r-full);box-shadow:var(--sh-1);
+  font-weight:800;font-size:18px;color:var(--o-700);
+  min-height:44px;
+}
+.stars svg{width:24px;height:24px}
+.stars.is-pop{animation:pop 500ms var(--ease)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.15)}100%{transform:scale(1)}}
+
+/* ============================================================
+   MAIN / SCREENS
+   ============================================================ */
+.main{flex:1;position:relative;overflow:hidden}
+.screen{
+  position:absolute;inset:0;
+  display:none;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:64px 16px 16px;
+}
+.screen.is-active{display:flex;animation:enter var(--dur-slow) var(--ease)}
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.screen::-webkit-scrollbar{width:0;height:0}
+
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
+.btn{
+  width:100%;min-height:60px;padding:16px 22px;
+  border-radius:var(--r-l);
+  font-size:21px;font-weight:800;color:var(--white);
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast);
+  text-shadow:0 1px 0 rgba(0,0,0,.15);letter-spacing:.3px;
+}
+.btn svg{width:26px;height:26px;flex-shrink:0}
+.btn:active{transform:translateY(3px)}
+.btn--primary{background:linear-gradient(180deg,var(--g-400),var(--g-500));box-shadow:0 5px 0 var(--g-600)}
+.btn--primary:active{box-shadow:0 2px 0 var(--g-600)}
+.btn--accent{background:linear-gradient(180deg,var(--o-300),var(--o-500));box-shadow:0 5px 0 var(--o-700)}
+.btn--accent:active{box-shadow:0 2px 0 var(--o-700)}
+.btn:disabled{opacity:.4;pointer-events:none}
+
+.pill{
+  padding:6px 14px;border-radius:var(--r-full);
+  font-size:14px;font-weight:800;min-height:32px;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.pill--progress{background:var(--g-100);color:var(--g-600)}
+.pill--score{background:var(--y-100);color:var(--o-700)}
+.pill svg{width:16px;height:16px}
+
+/* ============================================================
+   HOME
+   ============================================================ */
+.screen--home{padding-top:32px;justify-content:space-between}
+.home__top{text-align:center;padding-top:8px}
+.home__eyebrow{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--g-500);text-transform:uppercase}
+.home__title{
+  font-size:clamp(30px,8vw,44px);font-weight:800;color:var(--g-600);
+  line-height:1.05;margin:6px 0 4px;
+  text-shadow:2px 2px 0 var(--y-200);
+}
+.home__sub{font-size:clamp(14px,3.6vw,17px);color:var(--ink-2);font-weight:600}
+.home__stage{display:flex;justify-content:center;align-items:center;flex:1;padding:12px 0;min-height:160px}
+.home__mascot{
+  width:clamp(160px,44vw,230px);height:clamp(160px,44vw,230px);
+  animation:bob 2.4s ease-in-out infinite;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,.14));
+}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
+.home__actions{display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
+
+/* ============================================================
+   LEARN
+   ============================================================ */
+.screen--learn{padding:68px 16px 12px;gap:0}
+.learn__body{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;width:100%;max-width:560px;margin:0 auto;min-height:0;padding:8px 0;
+}
+.learn__dots{display:flex;justify-content:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.learn__dot{width:10px;height:10px;border-radius:var(--r-full);background:var(--g-100);transition:all var(--dur)}
+.learn__dot.is-active{background:var(--g-500);width:22px}
+.learn__dot.is-done{background:var(--y-400)}
+.learn__icon{
+  width:clamp(130px,34vw,180px);height:clamp(130px,34vw,180px);
+  margin:4px auto 8px;animation:popIn var(--dur-slow) var(--ease);
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.10));
+}
+.learn__icon svg{width:100%;height:100%}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.learn__name{
+  font-size:clamp(24px,6.5vw,34px);font-weight:800;color:var(--g-600);
+  text-align:center;line-height:1.1;margin-bottom:4px;
+}
+.learn__desc{
+  font-size:clamp(14px,3.7vw,17px);color:var(--ink-2);
+  text-align:center;font-weight:700;margin-bottom:4px;padding:0 8px;
+}
+.learn__detail{
+  background:rgba(255,255,255,.75);border:2px dashed var(--g-200);
+  border-radius:var(--r-m);padding:14px 16px;
+  font-size:clamp(14px,3.7vw,17px);line-height:1.5;
+  color:var(--ink);font-weight:600;white-space:pre-line;
+  text-align:left;width:100%;max-width:480px;
+}
+.learn__detail .ar{
+  font-family:var(--font-ar);font-size:1.35em;color:var(--o-700);
+  display:block;text-align:center;margin:4px 0;line-height:1.8;
+}
+.learn__detail .ar + .ar{margin-top:-10px}
+.learn__detail ul{padding-left:20px;margin:4px 0}
+.learn__detail li{margin:2px 0}
+.learn__detail strong{color:var(--g-600)}
+
+/* Info button */
+.btn-info{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;margin:4px 0 10px;
+  background:linear-gradient(180deg,var(--y-100),var(--y-200));
+  border:2px solid var(--o-300);border-radius:var(--r-full);
+  font-size:13px;font-weight:800;color:var(--o-700);
+  box-shadow:0 3px 0 var(--o-300);
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast);
+}
+.btn-info:active{transform:translateY(2px);box-shadow:0 1px 0 var(--o-300)}
+.btn-info[hidden]{display:none}
+
+/* Floating nav */
+.learn__nav{
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:8px;margin:8px auto 4px;
+  background:var(--white);border-radius:var(--r-full);
+  box-shadow:var(--sh-3),0 3px 0 rgba(0,0,0,.06),0 0 0 4px rgba(255,255,255,.4);
+  width:fit-content;
+}
+.nav-btn{
+  width:54px;height:54px;border-radius:var(--r-full);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--white);flex-shrink:0;
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast),opacity var(--dur);
+}
+.nav-btn svg{width:26px;height:26px}
+.nav-btn--prev{background:linear-gradient(180deg,var(--gray),#607D8B);box-shadow:0 4px 0 #37474F}
+.nav-btn--prev:active{transform:translateY(3px);box-shadow:0 1px 0 #37474F}
+.nav-btn--prev:disabled{opacity:.35;pointer-events:none}
+.nav-btn--speak{
+  background:linear-gradient(180deg,var(--o-300),var(--o-500));
+  box-shadow:0 4px 0 var(--o-700);width:62px;height:62px;
+}
+.nav-btn--speak svg{width:28px;height:28px}
+.nav-btn--speak:active{transform:translateY(3px);box-shadow:0 1px 0 var(--o-700)}
+.nav-btn--speak.is-speaking{animation:pulseSpeak .8s ease-in-out infinite}
+@keyframes pulseSpeak{
+  0%,100%{box-shadow:0 4px 0 var(--o-700),0 0 0 0 rgba(251,140,0,.5)}
+  50%{box-shadow:0 4px 0 var(--o-700),0 0 0 12px rgba(251,140,0,0)}
+}
+.nav-btn--next{background:linear-gradient(180deg,var(--g-400),var(--g-500));box-shadow:0 4px 0 var(--g-600)}
+.nav-btn--next:active{transform:translateY(3px);box-shadow:0 1px 0 var(--g-600)}
+.nav-btn--next.is-final{
+  background:linear-gradient(180deg,var(--y-200),var(--o-300));
+  box-shadow:0 4px 0 var(--o-500);width:62px;height:62px;
+}
+.nav-btn--next.is-final:active{box-shadow:0 1px 0 var(--o-500)}
+
+/* ============================================================
+   GAMES MENU
+   ============================================================ */
+.screen--games{padding-top:68px}
+.games__title{
+  font-size:clamp(24px,6vw,32px);font-weight:800;color:var(--g-600);
+  text-align:center;margin-bottom:4px;text-shadow:2px 2px 0 var(--y-200);
+}
+.games__sub{text-align:center;font-size:14px;color:var(--ink-2);font-weight:600;margin-bottom:16px}
+.games__grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:500px){.games__grid{grid-template-columns:1fr 1fr}}
+@media (min-width:900px){.games__grid{grid-template-columns:repeat(4,1fr)}}
+.tile{
+  background:var(--white);border:3px solid var(--g-100);border-radius:var(--r-l);
+  padding:14px;display:flex;align-items:center;gap:12px;text-align:left;
+  box-shadow:0 4px 0 rgba(0,0,0,.08);min-height:84px;
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast);
+}
+.tile:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.tile__icon{
+  width:56px;height:56px;flex-shrink:0;border-radius:var(--r-m);
+  background:var(--y-100);display:flex;align-items:center;justify-content:center;padding:6px;
+}
+.tile__icon svg{width:100%;height:100%}
+.tile__text h3{font-size:17px;font-weight:800;color:var(--g-600);line-height:1.15;margin-bottom:2px}
+.tile__text p{font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.25}
+
+/* ============================================================
+   GAME HEADER (shared)
+   ============================================================ */
+.game-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+
+/* ============================================================
+   GAME: ORDER
+   ============================================================ */
+.screen--order{padding-top:64px}
+.order__instruction{
+  font-size:clamp(14px,3.8vw,17px);color:var(--ink-2);
+  text-align:center;font-weight:700;margin-bottom:14px;
+}
+.order__slots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}
+.slot{
+  aspect-ratio:5/6;background:var(--g-50);border:3px dashed var(--g-200);
+  border-radius:var(--r-m);position:relative;padding:4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:70px;transition:all var(--dur);
+}
+.slot__num{
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  width:22px;height:22px;background:var(--g-500);color:var(--white);
+  border-radius:var(--r-full);font-weight:800;font-size:12px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 0 var(--g-600);
+}
+.slot.is-filled{border-style:solid;border-color:var(--g-500);background:var(--white);box-shadow:var(--sh-1)}
+.slot.is-filled .slot__num{background:var(--y-400);color:var(--g-600);box-shadow:0 2px 0 var(--o-500)}
+.slot__icon{width:80%;aspect-ratio:1}
+.slot__icon svg{width:100%;height:100%}
+.slot__label{font-size:clamp(8px,2.2vw,11px);font-weight:800;color:var(--g-600);margin-top:2px;text-align:center;line-height:1}
+.slot.is-wrong{animation:shake .4s;border-color:var(--red);background:#FFEBEE}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.order__pool{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+  padding:12px 10px;background:var(--y-100);border:2px solid var(--y-200);
+  border-radius:var(--r-l);margin-top:auto;margin-bottom:8px;
+}
+.pool-card{
+  aspect-ratio:5/6;background:var(--white);border:3px solid var(--y-200);
+  border-radius:var(--r-m);padding:4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 3px 0 var(--y-200);
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast),opacity var(--dur-slow);
+  min-height:70px;
+}
+.pool-card:active:not(.is-used){transform:translateY(2px);box-shadow:0 1px 0 var(--y-200)}
+.pool-card__icon{width:72%;aspect-ratio:1}
+.pool-card__icon svg{width:100%;height:100%}
+.pool-card__label{font-size:clamp(8px,2.1vw,11px);font-weight:800;color:var(--g-600);margin-top:2px;text-align:center;line-height:1}
+.pool-card.is-used{opacity:.22;pointer-events:none;transform:scale(.9)}
+.pool-card.is-wrong{animation:shake .4s}
+
+/* ============================================================
+   GAME: MATCH
+   ============================================================ */
+.screen--match{padding-top:64px;padding-bottom:12px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0}
+.match__col{display:flex;flex-direction:column;gap:6px;min-height:0}
+.match__head{
+  flex-shrink:0;font-size:11px;font-weight:800;color:var(--ink-2);
+  text-align:center;letter-spacing:1.5px;text-transform:uppercase;line-height:1;
+}
+.match__grid{display:grid;grid-template-rows:repeat(5,1fr);gap:8px;flex:1;min-height:0}
+.match-card{
+  background:var(--white);border:3px solid var(--g-100);border-radius:var(--r-m);
+  padding:4px;display:flex;align-items:center;justify-content:center;
+  min-height:0;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.06);
+  transition:all var(--dur-fast);position:relative;
+}
+.match-card:active:not(.is-matched){transform:translateY(2px)}
+.match-card--img svg{width:90%;height:90%;max-width:90%;max-height:90%}
+.match-card--name{
+  font-size:clamp(14px,4.2vw,20px);font-weight:800;color:var(--g-600);
+  padding:6px 8px;text-align:center;line-height:1.05;letter-spacing:.2px;
+}
+.match-card.is-selected{border-color:var(--o-500);background:var(--y-100);box-shadow:0 3px 0 var(--o-500);transform:scale(1.03)}
+.match-card.is-matched{border-color:var(--g-500);background:var(--g-50);opacity:.35;pointer-events:none}
+.match-card.is-wrong{animation:shake .4s;border-color:var(--red);background:#FFEBEE}
+.match-card.is-correct{border-color:var(--g-500);background:var(--g-50);animation:correctPulse .5s}
+@keyframes correctPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+@media (min-width:700px){
+  .match{max-width:780px;margin:0 auto;width:100%}
+  .match__grid{gap:10px}
+  .match-card--name{font-size:22px}
+}
+
+/* ============================================================
+   GAME: QUIZ
+   ============================================================ */
+.screen--quiz{padding-top:64px}
+.quiz__question{
+  background:var(--white);border:3px solid var(--g-100);border-radius:var(--r-l);
+  padding:20px 16px;font-size:clamp(17px,4.6vw,22px);font-weight:800;
+  color:var(--g-600);text-align:center;line-height:1.35;
+  margin-bottom:16px;box-shadow:0 4px 0 rgba(0,0,0,.06);
+  min-height:100px;display:flex;align-items:center;justify-content:center;
+}
+.quiz__choices{display:flex;flex-direction:column;gap:10px}
+.quiz-choice{
+  background:var(--white);border:3px solid var(--g-100);border-radius:var(--r-l);
+  padding:16px 18px;font-size:clamp(16px,4.4vw,20px);font-weight:800;
+  color:var(--g-600);text-align:left;
+  box-shadow:0 4px 0 var(--g-100);
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast);
+  display:flex;align-items:center;gap:10px;min-height:60px;
+}
+.quiz-choice:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 var(--g-100)}
+.quiz-choice__letter{
+  width:34px;height:34px;border-radius:var(--r-full);background:var(--g-50);
+  color:var(--g-600);font-weight:800;font-size:16px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.quiz-choice.is-correct{background:var(--g-500);color:var(--white);border-color:var(--g-600);box-shadow:0 4px 0 var(--g-700)}
+.quiz-choice.is-correct .quiz-choice__letter{background:var(--y-400);color:var(--g-700)}
+.quiz-choice.is-wrong{background:var(--red);color:var(--white);border-color:var(--red-d);box-shadow:0 4px 0 var(--red-d);animation:shake .4s}
+.quiz-choice.is-wrong .quiz-choice__letter{background:var(--white);color:var(--red-d)}
+
+/* ============================================================
+   GAME: UMAR
+   ============================================================ */
+.screen--umar{padding-top:64px}
+.umar__scene{
+  background:linear-gradient(160deg,var(--y-100) 0%,var(--o-100) 100%);
+  border:3px solid var(--y-200);border-radius:var(--r-l);
+  padding:16px;margin-bottom:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;min-height:190px;
+}
+.umar__scene-icon{width:clamp(110px,30vw,150px);height:clamp(110px,30vw,150px);animation:popIn var(--dur-slow) var(--ease)}
+.umar__scene-icon svg{width:100%;height:100%}
+.umar__scene-text{
+  font-size:clamp(14px,3.9vw,18px);font-weight:800;color:var(--g-700);
+  text-align:center;line-height:1.3;max-width:90%;
+}
+.umar__choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.umar-choice{
+  background:var(--white);border:3px solid var(--g-100);border-radius:var(--r-l);
+  padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  box-shadow:0 4px 0 var(--g-100);min-height:110px;
+  transition:transform var(--dur-fast),box-shadow var(--dur-fast);
+}
+.umar-choice:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 var(--g-100)}
+.umar-choice__icon{width:clamp(48px,14vw,64px);height:clamp(48px,14vw,64px)}
+.umar-choice__icon svg{width:100%;height:100%}
+.umar-choice__text{font-size:clamp(12px,3.4vw,15px);font-weight:800;color:var(--g-600);text-align:center;line-height:1.15}
+.umar-choice.is-correct{background:var(--g-500);border-color:var(--g-600);box-shadow:0 4px 0 var(--g-700);animation:correctPulse .5s}
+.umar-choice.is-correct .umar-choice__text{color:var(--white)}
+.umar-choice.is-wrong{background:var(--red);border-color:var(--red-d);box-shadow:0 4px 0 var(--red-d);animation:shake .4s}
+.umar-choice.is-wrong .umar-choice__text{color:var(--white)}
+
+/* ============================================================
+   RESULT
+   ============================================================ */
+.screen--result{padding-top:64px;text-align:center;justify-content:center}
+.result__title{
+  font-size:clamp(28px,8vw,40px);font-weight:800;color:var(--g-600);
+  line-height:1.1;margin-bottom:8px;text-shadow:3px 3px 0 var(--y-200);
+}
+.result__sub{font-size:clamp(14px,3.8vw,17px);font-weight:700;color:var(--ink-2);margin-bottom:20px}
+.result__stars{display:flex;justify-content:center;gap:6px;margin-bottom:20px}
+.result__star{width:clamp(38px,11vw,56px);height:clamp(38px,11vw,56px);animation:starPop .5s backwards}
+@keyframes starPop{0%{transform:scale(0) rotate(-180deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.result__badge{
+  display:inline-block;background:linear-gradient(180deg,var(--y-200),var(--o-300));
+  color:var(--white);padding:12px 24px;border-radius:var(--r-full);
+  font-size:clamp(16px,4.4vw,20px);font-weight:800;margin-bottom:20px;
+  box-shadow:0 5px 0 var(--o-500);text-shadow:0 1px 0 rgba(0,0,0,.2);
+}
+.result__actions{display:flex;flex-direction:column;gap:10px;max-width:380px;width:100%;margin:0 auto}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0}
+.modal[hidden]{display:none}
+.modal.is-open{animation:fadeIn var(--dur)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.modal__card{
+  position:relative;background:var(--cream);width:100%;max-width:480px;
+  max-height:88vh;max-height:88dvh;border-radius:var(--r-xl) var(--r-xl) 0 0;
+  padding:26px 20px 20px;overflow-y:auto;
+  box-shadow:0 -10px 40px rgba(0,0,0,.25);
+  animation:modalUp .3s var(--ease);
+  padding-bottom:calc(20px + env(safe-area-inset-bottom));
+}
+@keyframes modalUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media (min-width:700px){
+  .modal{align-items:center;padding:20px}
+  .modal__card{border-radius:var(--r-xl);max-width:520px;animation:popIn var(--dur-slow) var(--ease)}
+}
+.modal__close{
+  position:absolute;top:12px;right:12px;width:40px;height:40px;
+  border-radius:var(--r-full);background:rgba(0,0,0,.06);color:var(--g-600);
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--dur-fast),transform var(--dur-fast);
+}
+.modal__close:active{transform:scale(.92);background:rgba(0,0,0,.12)}
+.modal__close svg{width:20px;height:20px}
+.modal__head{text-align:center;padding-bottom:16px;border-bottom:2px dashed var(--g-200);margin-bottom:16px}
+.modal__arabic{
+  font-family:var(--font-ar);font-size:clamp(38px,11vw,52px);
+  font-weight:700;color:var(--o-700);line-height:1.2;margin-bottom:4px;
+}
+.modal__latin{font-size:16px;font-weight:700;color:var(--ink-2);font-style:italic;letter-spacing:.5px}
+.modal__section{margin-bottom:14px}
+.modal__label{
+  font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--g-500);margin-bottom:4px;
+}
+.modal__root{
+  font-family:var(--font-ar);font-size:24px;font-weight:700;color:var(--o-700);
+  direction:rtl;text-align:center;background:var(--y-100);
+  padding:8px 14px;border-radius:var(--r-m);border:2px solid var(--y-200);
+  letter-spacing:8px;
+}
+.modal__meaning{
+  font-size:16px;font-weight:700;color:var(--g-600);line-height:1.5;
+  padding:8px 12px;background:var(--g-50);border-radius:var(--r-m);
+  border-left:4px solid var(--g-500);
+}
+.modal__why{font-size:15px;font-weight:600;color:var(--ink);line-height:1.55;padding:0 4px}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+.confetti{
+  position:fixed;width:12px;height:12px;top:-20px;z-index:99;
+  pointer-events:none;animation:fall linear forwards;
+}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ============================================================
+   LANDSCAPE / SMALL HEIGHT
+   ============================================================ */
+@media (orientation:landscape) and (max-height:500px){
+  .screen{padding-top:56px}
+  .home__mascot{width:120px;height:120px}
+  .home__title{font-size:24px}
+  .learn__icon{width:90px;height:90px;margin:0 auto 4px}
+  .learn__name{font-size:22px}
+  .learn__detail{font-size:13px;padding:8px 12px}
+  .nav-btn{width:46px;height:46px}
+  .nav-btn--speak,.nav-btn--next.is-final{width:52px;height:52px}
+  .umar__scene{min-height:120px;padding:10px}
+  .umar__scene-icon{width:80px;height:80px}
+}
+
+/* ============================================================
+   TABLET / IFP
+   ============================================================ */
+@media (min-width:1100px) and (orientation:landscape){
+  .learn__icon{width:220px;height:220px}
+  .learn__name{font-size:42px}
+  .learn__desc{font-size:20px}
+  .learn__detail{font-size:18px;padding:18px 22px}
+  .btn{min-height:68px;font-size:24px}
+  .games__grid{grid-template-columns:1fr 1fr;gap:16px}
+  .tile{min-height:100px;padding:18px}
+  .tile__icon{width:68px;height:68px}
+  .tile__text h3{font-size:20px}
+  .nav-btn{width:60px;height:60px}
+  .nav-btn--speak,.nav-btn--next.is-final{width:68px;height:68px}
+  .nav-btn svg{width:30px;height:30px}
+  .nav-btn--speak svg{width:32px;height:32px}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ========== TOPBAR ========== -->
+  <header class="topbar">
+    <button class="btn-back" id="btnBack" hidden aria-label="Kembali">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="stars" id="starsBox" aria-label="Bintang terkumpul">
+      <svg viewBox="0 0 24 24" fill="#FFC107" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span id="starCount">0</span>
+    </div>
+  </header>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+
+    <!-- HOME -->
+    <section class="screen screen--home is-active" id="sc-home" aria-label="Beranda">
+      <div class="home__top">
+        <div class="home__eyebrow">Media Pembelajaran</div>
+        <h1 class="home__title">Ayo Kenali<br>Rukun Islam!</h1>
+        <p class="home__sub">Belajar sambil bermain bersama Umar 🌟</p>
+      </div>
+      <div class="home__stage">
+        <div class="home__mascot" id="mascotHome" aria-hidden="true"></div>
+      </div>
+      <div class="home__actions">
+        <button class="btn btn--primary" onclick="startLearn()">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h12a2 2 0 012 2v14l-8-4-8 4V6a2 2 0 012-2z"/></svg>
+          Mulai Belajar
+        </button>
+        <button class="btn btn--accent" onclick="goTo('games')">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 6a5 5 0 100 10 5 5 0 000-10zm10 0a5 5 0 100 10 5 5 0 000-10z"/></svg>
+          Main Game
+        </button>
+      </div>
+    </section>
+
+    <!-- LEARN -->
+    <section class="screen screen--learn" id="sc-learn" aria-label="Materi Belajar">
+      <div class="learn__body">
+        <div class="learn__dots" id="learnDots" aria-hidden="true"></div>
+        <div class="learn__icon" id="learnIcon" aria-hidden="true"></div>
+        <h2 class="learn__name" id="learnName"></h2>
+        <p class="learn__desc" id="learnDesc"></p>
+        <button class="btn-info" id="btnInfo" onclick="openInfo()">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:15px;height:15px"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          <span>Arti Asli Bahasa Arab</span>
+        </button>
+        <div class="learn__detail" id="learnDetail"></div>
+      </div>
+      <nav class="learn__nav" aria-label="Navigasi materi">
+        <button class="nav-btn nav-btn--prev" id="btnPrev" onclick="prevSlide()" aria-label="Sebelumnya">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="nav-btn nav-btn--speak" id="btnSpeak" onclick="speakCurrent()" aria-label="Dengarkan">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2A4.5 4.5 0 0014 7.97v8.05A4.5 4.5 0 0016.5 12zm0-5.5v1.53a6.5 6.5 0 010 11.94V21.5a8 8 0 000-15z"/></svg>
+        </button>
+        <button class="nav-btn nav-btn--next" id="btnNext" onclick="nextSlide()" aria-label="Lanjut">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </nav>
+    </section>
+
+    <!-- GAMES MENU -->
+    <section class="screen screen--games" id="sc-games" aria-label="Pilih Permainan">
+      <h2 class="games__title">🎮 Pilih Permainan</h2>
+      <p class="games__sub">Empat permainan seru untuk kamu!</p>
+      <div class="games__grid">
+        <button class="tile" onclick="startOrder()">
+          <div class="tile__icon" id="tileOrder" aria-hidden="true"></div>
+          <div class="tile__text"><h3>Urutkan Yuk!</h3><p>Susun rukun 1 → 5</p></div>
+        </button>
+        <button class="tile" onclick="startMatch()">
+          <div class="tile__icon" id="tileMatch" aria-hidden="true"></div>
+          <div class="tile__text"><h3>Pasangkan!</h3><p>Gambar ↔ nama rukun</p></div>
+        </button>
+        <button class="tile" onclick="startQuiz()">
+          <div class="tile__icon" id="tileQuiz" aria-hidden="true"></div>
+          <div class="tile__text"><h3>Apa Itu?</h3><p>Paham penjelasan</p></div>
+        </button>
+        <button class="tile" onclick="startUmar()">
+          <div class="tile__icon" id="tileUmar" aria-hidden="true"></div>
+          <div class="tile__text"><h3>Umar Melakukan Apa?</h3><p>Penerapan sehari-hari</p></div>
+        </button>
+      </div>
+    </section>
+
+    <!-- GAME: ORDER -->
+    <section class="screen screen--order" id="sc-order" aria-label="Permainan Urutkan">
+      <div class="game-header">
+        <div class="pill pill--progress" id="orderProgress">Slot 0/5</div>
+        <div class="pill pill--score">
+          <svg viewBox="0 0 24 24" fill="#F57C00" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span id="orderScore">0</span>
+        </div>
+      </div>
+      <p class="order__instruction" id="orderInstruction">Klik ikon berurutan dari 1 sampai 5!</p>
+      <div class="order__slots" id="orderSlots"></div>
+      <div class="order__pool" id="orderPool"></div>
+    </section>
+
+    <!-- GAME: MATCH -->
+    <section class="screen screen--match" id="sc-match" aria-label="Permainan Pasangkan">
+      <div class="game-header">
+        <div class="pill pill--progress" id="matchProgress">0/5 cocok</div>
+        <div class="pill pill--score">
+          <svg viewBox="0 0 24 24" fill="#F57C00" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span id="matchScore">0</span>
+        </div>
+      </div>
+      <div class="match">
+        <div class="match__col">
+          <div class="match__head">Gambar</div>
+          <div class="match__grid" id="matchLeft"></div>
+        </div>
+        <div class="match__col">
+          <div class="match__head">Nama</div>
+          <div class="match__grid" id="matchRight"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME: QUIZ -->
+    <section class="screen screen--quiz" id="sc-quiz" aria-label="Permainan Kuis">
+      <div class="game-header">
+        <div class="pill pill--progress" id="quizProgress">Soal 1/5</div>
+        <div class="pill pill--score">
+          <svg viewBox="0 0 24 24" fill="#F57C00" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span id="quizScore">0</span>
+        </div>
+      </div>
+      <div class="quiz__question" id="quizQuestion"></div>
+      <div class="quiz__choices" id="quizChoices"></div>
+    </section>
+
+    <!-- GAME: UMAR -->
+    <section class="screen screen--umar" id="sc-umar" aria-label="Permainan Umar">
+      <div class="game-header">
+        <div class="pill pill--progress" id="umarProgress">Soal 1/5</div>
+        <div class="pill pill--score">
+          <svg viewBox="0 0 24 24" fill="#F57C00" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span id="umarScore">0</span>
+        </div>
+      </div>
+      <div class="umar__scene">
+        <div class="umar__scene-icon" id="umarSceneIcon" aria-hidden="true"></div>
+        <div class="umar__scene-text" id="umarSceneText"></div>
+      </div>
+      <div class="umar__choices" id="umarChoices"></div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="screen screen--result" id="sc-result" aria-label="Hasil">
+      <h2 class="result__title" id="resultTitle">Alhamdulillah!</h2>
+      <p class="result__sub" id="resultSub">Kamu sudah menyelesaikan permainan</p>
+      <div class="result__stars" id="resultStars" aria-hidden="true"></div>
+      <div class="result__badge" id="resultBadge">🌟 Anak Sholeh</div>
+      <div class="result__actions">
+        <button class="btn btn--primary" onclick="goTo('games')">Main Lagi</button>
+        <button class="btn btn--accent" onclick="goTo('home')">Menu Utama</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ========== MODAL INFO ========== -->
+<div class="modal" id="modalInfo" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal__backdrop" onclick="closeInfo()"></div>
+  <div class="modal__card">
+    <button class="modal__close" onclick="closeInfo()" aria-label="Tutup">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal__head">
+      <div class="modal__arabic" id="modalArabic"></div>
+      <div class="modal__latin" id="modalLatin"></div>
+    </div>
+    <div class="modal__section">
+      <div class="modal__label">Akar Kata</div>
+      <div class="modal__root" id="modalRoot"></div>
+    </div>
+    <div class="modal__section">
+      <div class="modal__label">Arti Asli</div>
+      <div class="modal__meaning" id="modalMeaning"></div>
+    </div>
+    <div class="modal__section">
+      <div class="modal__label">Kenapa Dipakai?</div>
+      <div class="modal__why" id="modalWhy"></div>
+    </div>
+    <button class="btn btn--primary" onclick="closeInfo()" style="margin-top:8px">Mengerti</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   SVG LIBRARY (all 100×100 for consistency)
+   ============================================================ */
+const svg = (body, vb = '0 0 100 100') =>
+  `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
+
+const SVG = {
+  umar: svg(`
+    <ellipse cx="50" cy="95" rx="26" ry="3" fill="rgba(0,0,0,.08)"/>
+    <rect x="36" y="76" width="8" height="18" rx="3.5" fill="#F5C99B" stroke="#B8845A" stroke-width="1.2"/>
+    <rect x="56" y="76" width="8" height="18" rx="3.5" fill="#F5C99B" stroke="#B8845A" stroke-width="1.2"/>
+    <ellipse cx="40" cy="94" rx="8" ry="3" fill="#5D4037"/>
+    <ellipse cx="60" cy="94" rx="8" ry="3" fill="#5D4037"/>
+    <path d="M32 56 Q50 52 68 56 L72 82 Q50 88 28 82 Z" fill="#43A047" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M44 56 L50 64 L56 56" fill="none" stroke="#2E7D32" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="50" cy="72" r="1.6" fill="#FFF"/>
+    <circle cx="50" cy="80" r="1.6" fill="#FFF"/>
+    <path d="M32 60 Q25 68 24 78" fill="none" stroke="#43A047" stroke-width="7" stroke-linecap="round"/>
+    <path d="M68 60 Q75 68 76 78" fill="none" stroke="#43A047" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="24" cy="80" r="5" fill="#F5C99B" stroke="#B8845A" stroke-width="1.2"/>
+    <circle cx="76" cy="80" r="5" fill="#F5C99B" stroke="#B8845A" stroke-width="1.2"/>
+    <circle cx="50" cy="36" r="20" fill="#F5C99B" stroke="#B8845A" stroke-width="1.5"/>
+    <path d="M30 32 Q50 12 70 32 L70 26 Q50 6 30 26 Z" fill="#2E7D32"/>
+    <rect x="31" y="24" width="38" height="7" rx="2" fill="#1B5E20"/>
+    <circle cx="43" cy="38" r="2.5" fill="#1B5E20"/>
+    <circle cx="57" cy="38" r="2.5" fill="#1B5E20"/>
+    <circle cx="44" cy="37" r=".8" fill="#FFF"/>
+    <circle cx="58" cy="37" r=".8" fill="#FFF"/>
+    <path d="M44 45 Q50 50 56 45" fill="none" stroke="#1B5E20" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="36" cy="44" r="2.5" fill="#FFAB91" opacity=".6"/>
+    <circle cx="64" cy="44" r="2.5" fill="#FFAB91" opacity=".6"/>
+  `, '0 0 100 100'),
+
+  rukun: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF3E0" stroke="#FF9800" stroke-width="2.5"/>
+    <path d="M50 14 L86 42 L78 42 L78 84 L22 84 L22 42 L14 42 Z" fill="#FFE0B2" stroke="#E65100" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M50 14 L86 42 L78 42 L50 22 L22 42 L14 42 Z" fill="#EF6C00"/>
+    <rect x="28" y="46" width="6" height="34" rx="1" fill="#8D6E63"/>
+    <rect x="40" y="46" width="6" height="34" rx="1" fill="#8D6E63"/>
+    <rect x="52" y="46" width="6" height="34" rx="1" fill="#8D6E63"/>
+    <rect x="64" y="46" width="6" height="34" rx="1" fill="#8D6E63"/>
+    <rect x="46" y="62" width="8" height="18" rx="1" fill="#FFB74D" stroke="#E65100" stroke-width="1"/>
+    <text x="50" y="38" text-anchor="middle" font-size="14" font-weight="bold" fill="#FFF">5</text>
+  `),
+  islam: svg(`
+    <circle cx="50" cy="50" r="46" fill="#E8F5E9" stroke="#43A047" stroke-width="2.5"/>
+    <circle cx="50" cy="52" r="28" fill="#43A047"/>
+    <circle cx="60" cy="48" r="24" fill="#E8F5E9"/>
+    <path d="M30 24 L33 32 L41 32 L35 37 L37 45 L30 40 L23 45 L25 37 L19 32 L27 32 Z" fill="#FFC107" stroke="#F57C00" stroke-width="1" stroke-linejoin="round"/>
+  `),
+  syahadat: svg(`
+    <defs><radialGradient id="syBg" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#FFF8E1"/><stop offset="100%" stop-color="#FFE0B2"/>
+    </radialGradient></defs>
+    <circle cx="50" cy="50" r="46" fill="url(#syBg)" stroke="#FF9800" stroke-width="2.5"/>
+    <circle cx="50" cy="50" r="41" fill="none" stroke="#FFB74D" stroke-width=".8" stroke-dasharray="3,3"/>
+    <circle cx="50" cy="27" r="19" fill="#FFF" stroke="#FF9800" stroke-width="2"/>
+    <text x="50" y="35" text-anchor="middle" font-size="19" font-weight="bold" fill="#E65100" font-family="'Amiri',serif">الله</text>
+    <circle cx="50" cy="50" r="3.5" fill="#FFC107" stroke="#F57C00" stroke-width="1"/>
+    <circle cx="50" cy="73" r="19" fill="#FFF" stroke="#FF9800" stroke-width="2"/>
+    <text x="50" y="81" text-anchor="middle" font-size="19" font-weight="bold" fill="#E65100" font-family="'Amiri',serif">محمد</text>
+  `),
+  salat: svg(`
+    <circle cx="50" cy="50" r="46" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5"/>
+    <path d="M18 90 Q50 82 82 90 L82 86 Q50 78 18 86 Z" fill="#A5D6A7" stroke="#66BB6A" stroke-width=".8"/>
+    <ellipse cx="45" cy="86" rx="5.5" ry="3" fill="#FFD4A8" stroke="#B8845A" stroke-width="1.2"/>
+    <ellipse cx="55" cy="86" rx="5.5" ry="3" fill="#FFD4A8" stroke="#B8845A" stroke-width="1.2"/>
+    <path d="M36 58 L64 58 L68 85 Q50 88 32 85 Z" fill="#FFF" stroke="#90A4AE" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M38 42 L62 42 L64 60 L36 60 Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.5"/>
+    <path d="M40 50 Q50 54 60 50 Q60 56 50 58 Q40 56 40 50 Z" fill="#FFD4A8" stroke="#B8845A" stroke-width="1.2"/>
+    <circle cx="50" cy="28" r="11" fill="#FFD4A8" stroke="#B8845A" stroke-width="1.5"/>
+    <path d="M39 24 Q50 10 61 24 L61 21 Q50 8 39 21 Z" fill="#2E7D32"/>
+    <rect x="39" y="21" width="22" height="5" rx="2" fill="#2E7D32" stroke="#1B5E20" stroke-width=".8"/>
+    <path d="M44.5 28 Q47 30 49 28" stroke="#333" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M51 28 Q53 30 55.5 28" stroke="#333" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M48 33 Q50 34 52 33" stroke="#333" stroke-width=".8" fill="none" stroke-linecap="round"/>
+  `),
+  zakat: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF8E1" stroke="#FFA000" stroke-width="2.5"/>
+    <path d="M10 55 Q26 47 42 55 L42 72 Q26 79 10 72 Z" fill="#FFCC9C" stroke="#E8A87C" stroke-width="1.8"/>
+    <path d="M90 55 Q74 47 58 55 L58 72 Q74 79 90 72 Z" fill="#FFCC9C" stroke="#E8A87C" stroke-width="1.8"/>
+    <circle cx="50" cy="52" r="14" fill="#FFD54F" stroke="#F57C00" stroke-width="2.2"/>
+    <text x="50" y="58" text-anchor="middle" font-size="13" font-weight="bold" fill="#E65100">Rp</text>
+    <circle cx="32" cy="42" r="5" fill="#FFD54F" stroke="#F57C00" stroke-width="1.3"/>
+    <circle cx="68" cy="42" r="5" fill="#FFD54F" stroke="#F57C00" stroke-width="1.3"/>
+  `),
+  puasa: svg(`
+    <circle cx="50" cy="50" r="46" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="2.5"/>
+    <circle cx="22" cy="22" r="9" fill="#FFD54F"/>
+    <circle cx="26" cy="19" r="7.5" fill="#E8EAF6"/>
+    <path d="M72 17 L74 22 L79 22 L75 25 L76.5 30 L72 27 L67.5 30 L69 25 L65 22 L70 22 Z" fill="#FFD54F"/>
+    <ellipse cx="50" cy="68" rx="33" ry="12" fill="#FFF" stroke="#90A4AE" stroke-width="1.8"/>
+    <ellipse cx="50" cy="68" rx="25" ry="8.5" fill="#ECEFF1" stroke="#B0BEC5" stroke-width=".8"/>
+    <ellipse cx="50" cy="65" rx="20" ry="5.5" fill="#FFF9C4" stroke="#E6DD88" stroke-width=".7"/>
+    <ellipse cx="43" cy="63" rx="4.5" ry="3" fill="#FFCC80" stroke="#E8A87C" stroke-width=".7"/>
+    <circle cx="43" cy="63" r="1.8" fill="#FFB74D"/>
+    <ellipse cx="57" cy="63" rx="4.5" ry="2.5" fill="#81C784" stroke="#4CAF50" stroke-width=".7"/>
+    <circle cx="50" cy="60" r="1.5" fill="#E57373"/>
+    <g transform="translate(72,42) rotate(30)">
+      <rect x="-1.8" y="4" width="3.6" height="28" rx="1.8" fill="#B0BEC5" stroke="#546E7A" stroke-width=".9"/>
+      <ellipse cx="0" cy="2" rx="5.5" ry="7" fill="#CFD8DC" stroke="#546E7A" stroke-width=".9"/>
+      <line x1="-8" y1="-8" x2="8" y2="12" stroke="#E53935" stroke-width="3" stroke-linecap="round"/>
+      <line x1="8" y1="-8" x2="-8" y2="12" stroke="#E53935" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(28,42) rotate(-30)">
+      <rect x="-1.5" y="6" width="3" height="24" rx="1.5" fill="#B0BEC5" stroke="#546E7A" stroke-width=".8"/>
+      <rect x="-3.5" y="1" width="1.5" height="7" fill="#B0BEC5" stroke="#546E7A" stroke-width=".4"/>
+      <rect x="-.75" y="1" width="1.5" height="7" fill="#B0BEC5" stroke="#546E7A" stroke-width=".4"/>
+      <rect x="2" y="1" width="1.5" height="7" fill="#B0BEC5" stroke="#546E7A" stroke-width=".4"/>
+      <rect x="-4" y="6" width="8" height="2" rx=".5" fill="#B0BEC5" stroke="#546E7A" stroke-width=".5"/>
+      <line x1="-6.5" y1="-5.5" x2="6.5" y2="7.5" stroke="#E53935" stroke-width="2.4" stroke-linecap="round"/>
+      <line x1="6.5" y1="-5.5" x2="-6.5" y2="7.5" stroke="#E53935" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+  `),
+  haji: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF9C4" stroke="#F57C00" stroke-width="2.5"/>
+    <rect x="25" y="28" width="50" height="60" rx="3" fill="#212121"/>
+    <rect x="23" y="24" width="54" height="8" rx="2" fill="#424242"/>
+    <rect x="25" y="46" width="50" height="6" fill="#FFD54F"/>
+    <rect x="42" y="62" width="16" height="26" rx="2" fill="#FFD54F" stroke="#F57C00" stroke-width="1.4"/>
+    <line x1="50" y1="62" x2="50" y2="88" stroke="#F57C00" stroke-width=".8"/>
+    <circle cx="35" cy="38" r="1.5" fill="#FFD54F"/>
+    <circle cx="65" cy="38" r="1.5" fill="#FFD54F"/>
+  `),
+  urutan: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF3E0" stroke="#FB8C00" stroke-width="2.5"/>
+    <text x="50" y="60" text-anchor="middle" font-size="34" font-weight="800" fill="#E65100">1-5</text>
+  `),
+
+  tileOrder: svg(`
+    <rect x="12" y="22" width="18" height="56" rx="4" fill="#66BB6A"/>
+    <rect x="41" y="22" width="18" height="56" rx="4" fill="#FFB74D"/>
+    <rect x="70" y="22" width="18" height="56" rx="4" fill="#66BB6A"/>
+    <text x="21" y="58" text-anchor="middle" font-size="20" font-weight="bold" fill="#FFF">1</text>
+    <text x="50" y="58" text-anchor="middle" font-size="20" font-weight="bold" fill="#FFF">2</text>
+    <text x="79" y="58" text-anchor="middle" font-size="20" font-weight="bold" fill="#FFF">3</text>
+  `),
+  tileMatch: svg(`
+    <rect x="10" y="14" width="34" height="34" rx="6" fill="#FFE082" stroke="#F57C00" stroke-width="2"/>
+    <circle cx="27" cy="31" r="8" fill="#F57C00"/>
+    <rect x="56" y="52" width="34" height="34" rx="6" fill="#A5D6A7" stroke="#2E7D32" stroke-width="2"/>
+    <path d="M46 35 Q54 40 62 60" stroke="#43A047" stroke-width="2.5" fill="none" stroke-dasharray="4,3"/>
+    <circle cx="46" cy="35" r="3.5" fill="#43A047"/>
+    <circle cx="62" cy="60" r="3.5" fill="#43A047"/>
+  `),
+  tileQuiz: svg(`
+    <circle cx="50" cy="48" r="30" fill="#FFE082" opacity=".7"/>
+    <text x="50" y="66" text-anchor="middle" font-size="46" font-weight="800" fill="#E65100">?</text>
+  `),
+  tileUmar: svg(`
+    <circle cx="50" cy="42" r="18" fill="#FFD4A8" stroke="#E8A87C" stroke-width="1.5"/>
+    <path d="M33 39 Q50 22 67 39 L67 35 Q50 18 33 35 Z" fill="#2E7D32"/>
+    <rect x="34" y="32" width="32" height="6" rx="2" fill="#1B5E20"/>
+    <circle cx="44" cy="43" r="2.5" fill="#1B5E20"/>
+    <circle cx="56" cy="43" r="2.5" fill="#1B5E20"/>
+    <path d="M44 50 Q50 55 56 50" fill="none" stroke="#1B5E20" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M38 62 L62 62 L64 88 Q50 92 36 88 Z" fill="#43A047" stroke="#2E7D32" stroke-width="1.3"/>
+  `),
+
+  /* Situational icons */
+  pengemis: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF3E0" stroke="#FB8C00" stroke-width="2"/>
+    <circle cx="50" cy="32" r="11" fill="#FFCC9C" stroke="#B8845A" stroke-width="1.5"/>
+    <path d="M34 68 L66 68 L70 92 L30 92 Z" fill="#8D6E63" stroke="#5D4037" stroke-width="1.3"/>
+    <path d="M40 30 Q50 20 60 30" fill="#5D4037"/>
+  `),
+  adzan: svg(`
+    <circle cx="50" cy="50" r="46" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+    <path d="M28 72 L28 52 L50 32 L72 52 L72 72 Z" fill="#FFF" stroke="#2E7D32" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M28 52 L50 32 L72 52" fill="#43A047" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+    <rect x="45" y="60" width="10" height="12" fill="#8D6E63"/>
+    <path d="M24 46 L20 38 M76 46 L80 38" stroke="#FB8C00" stroke-width="2.5" stroke-linecap="round"/>
+  `),
+  sahur: svg(`
+    <circle cx="50" cy="50" r="46" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="2"/>
+    <circle cx="32" cy="32" r="12" fill="#FFD54F"/>
+    <circle cx="37" cy="29" r="10" fill="#E8EAF6"/>
+    <ellipse cx="55" cy="68" rx="26" ry="9" fill="#FFF" stroke="#90A4AE" stroke-width="1.5"/>
+    <ellipse cx="55" cy="66" rx="18" ry="5" fill="#FFF9C4"/>
+    <text x="72" y="32" font-size="12" font-weight="bold" fill="#F57C00">03:30</text>
+  `),
+  kotakAmal: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF8E1" stroke="#FFA000" stroke-width="2"/>
+    <rect x="24" y="40" width="52" height="44" rx="5" fill="#8D6E63" stroke="#5D4037" stroke-width="1.8"/>
+    <rect x="24" y="40" width="52" height="10" fill="#5D4037"/>
+    <rect x="42" y="55" width="16" height="3" rx="1.5" fill="#3E2723"/>
+    <circle cx="50" cy="72" r="9" fill="#FFD54F" stroke="#F57C00" stroke-width="1.5"/>
+    <text x="50" y="77" text-anchor="middle" font-size="11" font-weight="bold" fill="#E65100">Rp</text>
+  `),
+  tabungan: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF8E1" stroke="#FFA000" stroke-width="2"/>
+    <ellipse cx="50" cy="60" rx="30" ry="22" fill="#FFAB91" stroke="#E64A19" stroke-width="2"/>
+    <circle cx="74" cy="58" r="6" fill="#FFAB91" stroke="#E64A19" stroke-width="1.5"/>
+    <rect x="42" y="36" width="16" height="4" rx="2" fill="#E64A19"/>
+    <ellipse cx="40" cy="60" rx="3" ry="4" fill="#5D4037"/>
+    <ellipse cx="60" cy="58" rx="3" ry="4" fill="#5D4037"/>
+  `),
+  bangun: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF3E0" stroke="#FB8C00" stroke-width="2"/>
+    <circle cx="50" cy="55" r="24" fill="#FFF" stroke="#F57C00" stroke-width="2.2"/>
+    <circle cx="50" cy="55" r="21" fill="#FFE082"/>
+    <path d="M50 40 L50 55 L62 60" stroke="#E65100" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="50" cy="55" r="3" fill="#E65100"/>
+    <path d="M42 24 L42 30 M58 24 L58 30 M30 32 L34 36 M70 32 L66 36" stroke="#F57C00" stroke-width="3" stroke-linecap="round"/>
+  `),
+  mall: svg(`
+    <circle cx="50" cy="50" r="46" fill="#E1F5FE" stroke="#0288D1" stroke-width="2"/>
+    <path d="M32 40 L68 40 L74 82 L26 82 Z" fill="#FFB74D" stroke="#E65100" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M42 40 Q42 26 50 26 Q58 26 58 40" fill="none" stroke="#E65100" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="50" cy="60" r="8" fill="#FFF" opacity=".7"/>
+  `),
+  mekah: svg(`
+    <circle cx="50" cy="50" r="46" fill="#FFF9C4" stroke="#F57C00" stroke-width="2"/>
+    <rect x="28" y="32" width="44" height="52" rx="2" fill="#212121"/>
+    <rect x="26" y="28" width="48" height="7" rx="2" fill="#424242"/>
+    <rect x="28" y="46" width="44" height="5" fill="#FFD54F"/>
+    <rect x="42" y="58" width="16" height="26" rx="2" fill="#FFD54F" stroke="#F57C00" stroke-width="1.2"/>
+  `),
+  sedekah: svg(`
+    <circle cx="50" cy="50" r="46" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+    <circle cx="50" cy="52" r="22" fill="#FFD54F" stroke="#F57C00" stroke-width="2"/>
+    <text x="50" y="60" text-anchor="middle" font-size="20" font-weight="bold" fill="#E65100">Rp</text>
+    <path d="M50 18 L50 32 M42 26 L50 18 L58 26" stroke="#43A047" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  `),
+};
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const MATERI = [
+  {
+    id: 'pengantar-rukun',
+    name: 'Apa itu Rukun?',
+    icon: SVG.rukun,
+    desc: 'Rukun itu tiang',
+    detail:
+      '<strong>Rukun</strong> artinya <strong>tiang</strong>.\n' +
+      'Rumah butuh tiang supaya kokoh.\n' +
+      'Islam juga punya <strong>5 tiang</strong>.\n' +
+      'Namanya <strong>Rukun Islam</strong>.',
+    say: 'Rukun artinya tiang. Rumah butuh tiang supaya kokoh. Islam juga punya lima tiang. Namanya Rukun Islam.',
+    info: {
+      word: 'رُكْن', latin: 'rukun', root: 'ر-ك-ن',
+      meaning: 'Tiang · penopang · sisi yang kokoh',
+      why: 'Rukun Islam disebut "tiang" karena menjadi penopang berdirinya agama Islam. Tanpa tiang, bangunan akan roboh.'
+    }
+  },
+  {
+    id: 'pengantar-islam',
+    name: 'Apa itu Islam?',
+    icon: SVG.islam,
+    desc: 'Damai & selamat',
+    detail:
+      '<strong>Islam</strong> berasal dari kata <strong>salam</strong>.\n' +
+      'Artinya: <strong>damai</strong> dan <strong>selamat</strong>.\n' +
+      'Kita <strong>berserah diri</strong> kepada Allah.\n' +
+      'Supaya hati kita <strong>damai</strong> dan <strong>selamat</strong>.',
+    say: 'Islam berasal dari kata salam. Artinya damai dan selamat. Kita berserah diri kepada Allah. Supaya hati kita damai dan selamat.',
+    info: {
+      word: 'إِسْلَام', latin: 'islām', root: 'س-ل-م',
+      meaning: 'Damai · selamat · berserah diri',
+      why: 'Islam seakar dengan "salam" (damai) dan "salima" (selamat). Maknanya: kita berserah diri kepada Allah, dan hasilnya hati menjadi damai serta selamat dunia akhirat.'
+    }
+  },
+  {
+    id: 'syahadat',
+    name: 'Syahadat',
+    icon: SVG.syahadat,
+    desc: 'Mengakui Allah & Nabi',
+    detail:
+      '<strong>Syahadat</strong> artinya <strong>mengakui</strong>.\n' +
+      'Kita mengakui dua hal:\n' +
+      '<span class="ar">أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا الله</span>' +
+      '<span class="ar">وَأَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ الله</span>' +
+      'Artinya:\n' +
+      '"Aku mengakui tidak ada Tuhan selain Allah,\n' +
+      'dan Muhammad adalah utusan Allah."',
+    say: 'Syahadat artinya mengakui. Kita mengakui tidak ada Tuhan selain Allah, dan Muhammad adalah utusan Allah.',
+    info: {
+      word: 'شَهَادَة', latin: 'syahādah', root: 'ش-ه-د',
+      meaning: 'Menyaksikan · mengakui dengan yakin',
+      why: 'Syahadat bukan sekadar hafalan. Ia adalah pengakuan yang lahir dari pengetahuan: seolah-olah kita melihat dan menyaksikan sendiri bahwa Allah itu Tuhan kita, dan Muhammad itu Nabi kita.'
+    }
+  },
+  {
+    id: 'salat',
+    name: 'Salat',
+    icon: SVG.salat,
+    desc: 'Doa & ibadah',
+    detail:
+      '<strong>Salat</strong> artinya <strong>doa dan ibadah</strong>.\n' +
+      'Salat wajib <strong>5 waktu</strong> sehari:\n' +
+      '<ul>' +
+      '<li>Subuh — 2 rakaat</li>' +
+      '<li>Dzuhur — 4 rakaat</li>' +
+      '<li>Ashar — 4 rakaat</li>' +
+      '<li>Maghrib — 3 rakaat</li>' +
+      '<li>Isya — 4 rakaat</li>' +
+      '</ul>',
+    say: 'Salat artinya doa dan ibadah. Salat wajib lima waktu. Subuh dua rakaat. Dzuhur empat. Ashar empat. Maghrib tiga. Isya empat.',
+    info: {
+      word: 'صَلَاة', latin: 'shalāh', root: 'ص-ل-و',
+      meaning: 'Doa · memanggil · hubungan',
+      why: 'Salat artinya "doa" dan "hubungan". Salat adalah cara kita menyambung hubungan dengan Allah. Kata ini juga dipakai untuk rahmat Allah kepada hamba-Nya — menunjukkan salat itu dua arah: kita berdoa, Allah memberi rahmat.'
+    }
+  },
+  {
+    id: 'zakat',
+    name: 'Zakat',
+    icon: SVG.zakat,
+    desc: 'Menyucikan harta',
+    detail:
+      '<strong>Zakat</strong> artinya <strong>menyucikan harta</strong>.\n' +
+      'Caranya: memberi sebagian harta ke yang butuh.\n' +
+      '<strong>Zakat Fitrah</strong> dilakukan di bulan <strong>Ramadhan</strong>, sebelum salat Idul Fitri.',
+    say: 'Zakat artinya menyucikan harta. Caranya memberi sebagian harta kepada yang membutuhkan. Zakat Fitrah dilakukan di bulan Ramadhan.',
+    info: {
+      word: 'زَكَاة', latin: 'zakāh', root: 'ز-ك-و',
+      meaning: 'Tumbuh · suci · berkah',
+      why: 'Kata "zakat" berasal dari akar yang berarti "tumbuh" dan "suci". Jadi zakat bukan hanya "memberi", tapi "menyucikan harta" supaya harta kita tumbuh berkah. Seperti tanaman yang disiangi lalu tumbuh lebat.'
+    }
+  },
+  {
+    id: 'puasa',
+    name: 'Puasa',
+    icon: SVG.puasa,
+    desc: 'Menahan diri',
+    detail:
+      '<strong>Puasa</strong> artinya <strong>menahan diri</strong>.\n' +
+      'Kita menahan makan dan minum.\n' +
+      'Waktunya: <strong>subuh sampai maghrib</strong>.\n' +
+      'Puasa batal jika: makan, minum, atau sengaja muntah.',
+    say: 'Puasa artinya menahan diri. Kita menahan makan dan minum dari subuh sampai maghrib. Puasa batal kalau makan, minum, atau sengaja muntah.',
+    info: {
+      word: 'صَوْم', latin: 'shaum', root: 'ص-و-م',
+      meaning: 'Menahan diri · berhenti · diam',
+      why: 'Arti aslinya "menahan diri" — bukan hanya dari makan dan minum, tapi juga dari perkataan buruk. Di Al-Qur\'an, kata ini pernah dipakai untuk "menahan diri dari bicara" (Nabi Maryam). Maknanya luas: menahan diri dari hal yang tidak baik.'
+    }
+  },
+  {
+    id: 'haji',
+    name: 'Haji',
+    icon: SVG.haji,
+    desc: 'Berkunjung ke Ka\'bah',
+    detail:
+      '<strong>Haji</strong> artinya <strong>berkunjung ke Ka\'bah</strong> di kota <strong>Mekkah</strong>.\n' +
+      'Haji wajib bagi yang <strong>mampu</strong>.',
+    say: 'Haji artinya berkunjung ke Kabah di kota Mekkah. Haji wajib bagi yang mampu.',
+    info: {
+      word: 'حَجّ', latin: 'ḥajj', root: 'ح-ج-ج',
+      meaning: 'Menyengaja · menuju · berkunjung',
+      why: 'Haji artinya "menyengaja berkunjung". Jadi bukan sekadar pergi jalan-jalan — kita sengaja menuju Ka\'bah di Mekkah dengan niat ibadah, mengikuti aturan tertentu, dan hanya bagi yang mampu.'
+    }
+  },
+  {
+    id: 'rangkuman',
+    name: 'Ingat Urutannya!',
+    icon: SVG.urutan,
+    desc: '1 · 2 · 3 · 4 · 5',
+    detail:
+      '<strong>1.</strong> Syahadat\n' +
+      '<strong>2.</strong> Salat\n' +
+      '<strong>3.</strong> Zakat\n' +
+      '<strong>4.</strong> Puasa\n' +
+      '<strong>5.</strong> Haji\n' +
+      'Jangan sampai kebalik ya!',
+    say: 'Satu Syahadat, dua Salat, tiga Zakat, empat Puasa, lima Haji. Jangan sampai kebalik ya!',
+    info: null
+  }
+];
+
+const RUKUN = [
+  { id: 'syahadat', name: 'Syahadat', svg: SVG.syahadat },
+  { id: 'salat',    name: 'Salat',    svg: SVG.salat },
+  { id: 'zakat',    name: 'Zakat',    svg: SVG.zakat },
+  { id: 'puasa',    name: 'Puasa',    svg: SVG.puasa },
+  { id: 'haji',     name: 'Haji',     svg: SVG.haji }
+];
+
+const BANK_QUIZ = [
+  { q: 'Rukun artinya…',                  a: 'Tiang',             w: ['Atap', 'Pintu'] },
+  { q: 'Rukun Islam ada berapa?',         a: '5',                 w: ['3', '7'] },
+  { q: 'Rukun Islam pertama adalah…',     a: 'Syahadat',          w: ['Salat', 'Haji'] },
+  { q: 'Syahadat artinya…',               a: 'Mengakui',          w: ['Memberi', 'Menahan'] },
+  { q: 'Salat sehari ada berapa waktu?',  a: '5 waktu',           w: ['3 waktu', '7 waktu'] },
+  { q: 'Salat Subuh berapa rakaat?',      a: '2 rakaat',          w: ['3 rakaat', '4 rakaat'] },
+  { q: 'Salat Maghrib berapa rakaat?',    a: '3 rakaat',          w: ['2 rakaat', '4 rakaat'] },
+  { q: 'Zakat artinya…',                  a: 'Menyucikan harta',  w: ['Menahan diri', 'Mengakui'] },
+  { q: 'Zakat Fitrah dilakukan bulan…',   a: 'Ramadhan',          w: ['Syawal', 'Muharram'] },
+  { q: 'Puasa artinya…',                  a: 'Menahan diri',      w: ['Memberi', 'Mengakui'] },
+  { q: 'Puasa dari subuh sampai…',        a: 'Maghrib',           w: ['Dzuhur', 'Isya'] },
+  { q: 'Yang membatalkan puasa adalah…',  a: 'Makan',             w: ['Tidur', 'Baca'] },
+  { q: 'Haji artinya berkunjung ke…',     a: 'Ka\'bah',           w: ['Masjid', 'Sekolah'] },
+  { q: 'Ka\'bah ada di kota…',            a: 'Mekkah',            w: ['Madinah', 'Jakarta'] },
+  { q: 'Haji wajib bagi yang…',           a: 'Mampu',             w: ['Kaya', 'Tua'] }
+];
+
+const BANK_UMAR = [
+  { sit: 'Umar melihat pengemis di jalan.',        scene: SVG.pengemis,  a: { text: 'Beri sedekah',  icon: SVG.sedekah },    b: { text: 'Diam saja',     icon: SVG.mall } },
+  { sit: 'Adzan maghrib berkumandang.',            scene: SVG.adzan,     a: { text: 'Salat Maghrib', icon: SVG.salat },      b: { text: 'Main game',     icon: SVG.mall } },
+  { sit: 'Waktu sahur di bulan Ramadhan.',         scene: SVG.sahur,     a: { text: 'Sahur dulu',    icon: SVG.sahur },      b: { text: 'Tidur lagi',    icon: SVG.bangun } },
+  { sit: 'Umar lihat kotak amal di masjid.',       scene: SVG.kotakAmal, a: { text: 'Isi kotak amal',icon: SVG.sedekah },    b: { text: 'Lewati saja',   icon: SVG.mall } },
+  { sit: 'Umar punya tabungan cukup.',             scene: SVG.tabungan,  a: { text: 'Naik haji',     icon: SVG.mekah },      b: { text: 'Beli mainan',   icon: SVG.mall } },
+  { sit: 'Adzan subuh berkumandang.',              scene: SVG.bangun,    a: { text: 'Salat Subuh',   icon: SVG.salat },      b: { text: 'Tidur lagi',    icon: SVG.bangun } },
+  { sit: 'Siang hari di bulan Ramadhan.',          scene: SVG.puasa,     a: { text: 'Terus puasa',   icon: SVG.puasa },      b: { text: 'Jajan saja',    icon: SVG.sedekah } },
+  { sit: 'Umar ingin jadi Muslim.',                scene: SVG.islam,     a: { text: 'Ucap syahadat', icon: SVG.syahadat },   b: { text: 'Diam saja',     icon: SVG.mall } },
+  { sit: 'Umar lihat masjid di kota.',             scene: SVG.adzan,     a: { text: 'Salat di masjid',icon: SVG.salat },     b: { text: 'Jalan terus',   icon: SVG.mall } },
+  { sit: 'Umar dapat uang dari ibu.',              scene: SVG.sedekah,   a: { text: 'Sisihkan zakat',icon: SVG.zakat },      b: { text: 'Habiskan',      icon: SVG.mall } }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  stars: 0,
+  screen: 'home',
+  learnIndex: 0,
+  learned: new Set(),
+  order: { placed: [] },
+  match: { selected: null, matched: 0 },
+  quiz: { questions: [], index: 0, score: 0 },
+  umar: { questions: [], index: 0, score: 0 }
+};
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+const $  = (s, root = document) => root.querySelector(s);
+const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
+
+const shuffle = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+const addStars = (n) => {
+  state.stars += n;
+  $('#starCount').textContent = state.stars;
+  const box = $('#starsBox');
+  box.classList.remove('is-pop');
+  void box.offsetWidth;
+  box.classList.add('is-pop');
+  ['#orderScore', '#matchScore', '#quizScore', '#umarScore'].forEach(sel => {
+    const el = $(sel);
+    if (el) el.textContent = state.stars;
+  });
+};
+
+/* ---- Text to Speech ---- */
+let voiceID = null;
+const pickVoice = () => {
+  if (!('speechSynthesis' in window)) return;
+  const voices = window.speechSynthesis.getVoices();
+  voiceID = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('id')) || null;
+};
+if ('speechSynthesis' in window) {
+  pickVoice();
+  window.speechSynthesis.onvoiceschanged = pickVoice;
+}
+const speak = (text, rate = 0.92) => {
+  if (!('speechSynthesis' in window) || !text) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'id-ID';
+  u.rate = rate;
+  u.pitch = 1.08;
+  if (voiceID) u.voice = voiceID;
+  window.speechSynthesis.speak(u);
+};
+
+/* ---- Confetti ---- */
+const confetti = (count = 36) => {
+  const colors = ['#FFC107', '#43A047', '#F44336', '#2196F3', '#FB8C00', '#E91E63'];
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.style.left = Math.random() * 100 + '%';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+    el.style.animationDelay = Math.random() * 0.6 + 's';
+    el.style.animationDuration = (2.2 + Math.random() * 1.4) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4200);
+  }
+};
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+const SCREENS = ['home', 'learn', 'games', 'order', 'match', 'quiz', 'umar', 'result'];
+
+const BACK_TARGET = {
+  learn: 'home', games: 'home',
+  order: 'games', match: 'games', quiz: 'games', umar: 'games',
+  result: 'games'
+};
+
+const goTo = (name) => {
+  state.screen = name;
+  SCREENS.forEach(s => {
+    const el = $('#sc-' + s);
+    if (el) el.classList.toggle('is-active', s === name);
+  });
+  const back = $('#btnBack');
+  back.hidden = (name === 'home');
+  back.onclick = () => goTo(BACK_TARGET[name] || 'home');
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+};
+
+/* ============================================================
+   LEARN MODULE
+   ============================================================ */
+const startLearn = () => {
+  state.learnIndex = 0;
+  state.learned = new Set();
+  renderLearn();
+  goTo('learn');
+};
+
+const renderLearn = () => {
+  const i = state.learnIndex;
+  const m = MATERI[i];
+
+  $('#learnIcon').innerHTML = m.icon;
+  $('#learnName').textContent = m.name;
+  $('#learnDesc').textContent = m.desc;
+  $('#learnDetail').innerHTML = m.detail;
+
+  const btnInfo = $('#btnInfo');
+  btnInfo.hidden = !m.info;
+
+  const dots = $('#learnDots');
+  dots.innerHTML = '';
+  MATERI.forEach((_, idx) => {
+    const d = document.createElement('div');
+    d.className = 'learn__dot';
+    if (idx === i) d.classList.add('is-active');
+    else if (state.learned.has(idx)) d.classList.add('is-done');
+    dots.appendChild(d);
+  });
+
+  $('#btnPrev').disabled = (i === 0);
+
+  const btnNext = $('#btnNext');
+  if (i === MATERI.length - 1) {
+    btnNext.classList.add('is-final');
+    btnNext.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`;
+  } else {
+    btnNext.classList.remove('is-final');
+    btnNext.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>`;
+  }
+
+  state.learned.add(i);
+  setTimeout(() => speak(m.say), 320);
+};
+
+const nextSlide = () => {
+  if (state.learnIndex === MATERI.length - 1) {
+    speak('Hebat! Sekarang kita main game ya!');
+    setTimeout(() => goTo('games'), 1300);
+    return;
+  }
+  state.learnIndex++;
+  renderLearn();
+};
+
+const prevSlide = () => {
+  if (state.learnIndex > 0) {
+    state.learnIndex--;
+    renderLearn();
+  }
+};
+
+const speakCurrent = () => {
+  const m = MATERI[state.learnIndex];
+  const btn = $('#btnSpeak');
+  speak(m.say);
+
+  if (!btn) return;
+  btn.classList.add('is-speaking');
+
+  const stop = () => btn.classList.remove('is-speaking');
+  if ('speechSynthesis' in window) {
+    const check = setInterval(() => {
+      if (!window.speechSynthesis.speaking) {
+        clearInterval(check);
+        stop();
+      }
+    }, 250);
+    setTimeout(() => { clearInterval(check); stop(); }, 15000);
+  } else {
+    setTimeout(stop, 3000);
+  }
+};
+
+/* ============================================================
+   GAME 1: ORDER
+   ============================================================ */
+const startOrder = () => {
+  state.order.placed = [];
+  $('#orderProgress').textContent = 'Slot 0/5';
+  $('#orderScore').textContent = state.stars;
+
+  const slots = $('#orderSlots');
+  slots.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement('div');
+    s.className = 'slot';
+    s.dataset.i = i;
+    s.innerHTML = `<div class="slot__num">${i + 1}</div><div class="slot__content"></div>`;
+    slots.appendChild(s);
+  }
+
+  const pool = $('#orderPool');
+  pool.innerHTML = '';
+  shuffle(RUKUN).forEach(r => {
+    const el = document.createElement('button');
+    el.className = 'pool-card';
+    el.dataset.id = r.id;
+    el.innerHTML = `<div class="pool-card__icon">${r.svg}</div><div class="pool-card__label">${r.name}</div>`;
+    el.onclick = () => placeOrder(r, el);
+    pool.appendChild(el);
+  });
+
+  $('#orderInstruction').textContent = 'Klik ikon berurutan dari 1 sampai 5!';
+  goTo('order');
+  setTimeout(() => speak('Klik mulai dari Syahadat ya!'), 380);
+};
+
+const placeOrder = (r, el) => {
+  if (el.classList.contains('is-used')) return;
+  const idx = state.order.placed.length;
+  if (idx >= 5) return;
+
+  const expected = RUKUN[idx].id;
+  const slot = document.querySelector(`.slot[data-i="${idx}"]`);
+  if (!slot) return;
+
+  if (r.id === expected) {
+    el.classList.add('is-used');
+    state.order.placed.push(r.id);
+    slot.classList.add('is-filled');
+    slot.querySelector('.slot__content').innerHTML =
+      `<div class="slot__icon">${r.svg}</div><div class="slot__label">${r.name}</div>`;
+    addStars(1);
+    $('#orderProgress').textContent = `Slot ${state.order.placed.length}/5`;
+    speak('Benar! ' + r.name);
+
+    if (state.order.placed.length === 5) {
+      $('#orderInstruction').textContent = '🎉 Hebat! Urutan benar semua!';
+      speak('Alhamdulillah, semua benar!');
+      confetti();
+      setTimeout(() => showResult(5, 5), 1900);
+    }
+  } else {
+    slot.classList.add('is-wrong');
+    el.classList.add('is-wrong');
+    speak('Belum tepat. Coba yang lain ya');
+    setTimeout(() => {
+      slot.classList.remove('is-wrong');
+      el.classList.remove('is-wrong');
+    }, 700);
+  }
+};
+
+/* ============================================================
+   GAME 2: MATCH
+   ============================================================ */
+const startMatch = () => {
+  state.match = { selected: null, matched: 0 };
+  $('#matchProgress').textContent = '0/5 cocok';
+  $('#matchScore').textContent = state.stars;
+
+  const left = $('#matchLeft');
+  const right = $('#matchRight');
+  left.innerHTML = '';
+  right.innerHTML = '';
+
+  shuffle(RUKUN).forEach(r => {
+    const b = document.createElement('button');
+    b.className = 'match-card match-card--img';
+    b.dataset.id = r.id;
+    b.dataset.side = 'img';
+    b.innerHTML = r.svg;
+    b.onclick = () => selectCard(b, 'img');
+    left.appendChild(b);
+  });
+
+  shuffle(RUKUN).forEach(r => {
+    const b = document.createElement('button');
+    b.className = 'match-card match-card--name';
+    b.dataset.id = r.id;
+    b.dataset.side = 'name';
+    b.textContent = r.name;
+    b.onclick = () => selectCard(b, 'name');
+    right.appendChild(b);
+  });
+
+  goTo('match');
+  setTimeout(() => speak('Klik gambar, lalu klik nama yang cocok!'), 350);
+};
+
+const selectCard = (el, side) => {
+  if (el.classList.contains('is-matched')) return;
+
+  if (!state.match.selected) {
+    el.classList.add('is-selected');
+    state.match.selected = el;
+    return;
+  }
+  if (state.match.selected === el) {
+    el.classList.remove('is-selected');
+    state.match.selected = null;
+    return;
+  }
+
+  const first = state.match.selected;
+  if (first.dataset.side === side) {
+    first.classList.remove('is-selected');
+    el.classList.add('is-selected');
+    state.match.selected = el;
+    return;
+  }
+
+  if (first.dataset.id === el.dataset.id) {
+    first.classList.remove('is-selected');
+    first.classList.add('is-correct');
+    el.classList.add('is-correct');
+    state.match.selected = null;
+
+    setTimeout(() => {
+      first.classList.remove('is-correct');
+      el.classList.remove('is-correct');
+      first.classList.add('is-matched');
+      el.classList.add('is-matched');
+    }, 500);
+
+    state.match.matched++;
+    addStars(1);
+    $('#matchProgress').textContent = `${state.match.matched}/5 cocok`;
+    const r = RUKUN.find(x => x.id === first.dataset.id);
+    speak('Cocok! ' + r.name);
+
+    if (state.match.matched === 5) {
+      confetti();
+      speak('Alhamdulillah, semua cocok!');
+      setTimeout(() => showResult(5, 5), 1600);
+    }
+  } else {
+    first.classList.add('is-wrong');
+    el.classList.add('is-wrong');
+    speak('Belum cocok. Coba lagi ya');
+    setTimeout(() => {
+      first.classList.remove('is-selected', 'is-wrong');
+      el.classList.remove('is-wrong');
+    }, 600);
+    state.match.selected = null;
+  }
+};
+
+/* ============================================================
+   GAME 3: QUIZ
+   ============================================================ */
+const startQuiz = () => {
+  state.quiz.questions = shuffle(BANK_QUIZ).slice(0, 5);
+  state.quiz.index = 0;
+  state.quiz.score = 0;
+  renderQuiz();
+  goTo('quiz');
+};
+
+const renderQuiz = () => {
+  const i = state.quiz.index;
+  const q = state.quiz.questions[i];
+  $('#quizProgress').textContent = `Soal ${i + 1}/${state.quiz.questions.length}`;
+  $('#quizScore').textContent = state.stars;
+  $('#quizQuestion').textContent = q.q;
+
+  const opts = shuffle([q.a, ...q.w]);
+  const letters = ['A', 'B', 'C', 'D'];
+  const box = $('#quizChoices');
+  box.innerHTML = '';
+  opts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-choice';
+    btn.innerHTML = `<span class="quiz-choice__letter">${letters[idx]}</span><span>${opt}</span>`;
+    btn.onclick = () => answerQuiz(btn, opt === q.a, q.a);
+    box.appendChild(btn);
+  });
+
+  setTimeout(() => speak(q.q), 300);
+};
+
+const answerQuiz = (btn, correct, rightAnswer) => {
+  $$('#quizChoices .quiz-choice').forEach(b => b.disabled = true);
+  if (correct) {
+    btn.classList.add('is-correct');
+    state.quiz.score++;
+    addStars(1);
+    speak('Hebat! ' + rightAnswer);
+    confetti(20);
+    setTimeout(nextQuiz, 1200);
+  } else {
+    btn.classList.add('is-wrong');
+    setTimeout(() => {
+      $$('#quizChoices .quiz-choice').forEach(b => {
+        if (b.textContent.includes(rightAnswer)) b.classList.add('is-correct');
+      });
+    }, 300);
+    speak('Belum tepat. Jawabannya ' + rightAnswer);
+    setTimeout(nextQuiz, 1800);
+  }
+};
+
+const nextQuiz = () => {
+  state.quiz.index++;
+  if (state.quiz.index >= state.quiz.questions.length) {
+    showResult(state.quiz.score, state.quiz.questions.length);
+  } else {
+    renderQuiz();
+  }
+};
+
+/* ============================================================
+   GAME 4: UMAR
+   ============================================================ */
+const startUmar = () => {
+  state.umar.questions = shuffle(BANK_UMAR).slice(0, 5);
+  state.umar.index = 0;
+  state.umar.score = 0;
+  renderUmar();
+  goTo('umar');
+};
+
+const renderUmar = () => {
+  const i = state.umar.index;
+  const q = state.umar.questions[i];
+  $('#umarProgress').textContent = `Soal ${i + 1}/${state.umar.questions.length}`;
+  $('#umarScore').textContent = state.stars;
+  $('#umarSceneIcon').innerHTML = q.scene;
+  $('#umarSceneText').textContent = q.sit;
+
+  const opts = shuffle([
+    { ...q.a, ok: true },
+    { ...q.b, ok: false }
+  ]);
+  const box = $('#umarChoices');
+  box.innerHTML = '';
+  opts.forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'umar-choice';
+    btn.innerHTML = `<div class="umar-choice__icon">${o.icon}</div><div class="umar-choice__text">${o.text}</div>`;
+    btn.onclick = () => answerUmar(btn, o.ok);
+    box.appendChild(btn);
+  });
+
+  setTimeout(() => speak(q.sit + ' Apa yang Umar lakukan?'), 300);
+};
+
+const answerUmar = (btn, correct) => {
+  $$('#umarChoices .umar-choice').forEach(b => b.disabled = true);
+  if (correct) {
+    btn.classList.add('is-correct');
+    state.umar.score++;
+    addStars(1);
+    speak('Hebat! Betul sekali');
+    confetti(20);
+    setTimeout(nextUmar, 1200);
+  } else {
+    btn.classList.add('is-wrong');
+    setTimeout(() => {
+      $$('#umarChoices .umar-choice').forEach(b => {
+        if (!b.classList.contains('is-wrong')) b.classList.add('is-correct');
+      });
+    }, 300);
+    speak('Belum tepat. Coba yang lain ya');
+    setTimeout(nextUmar, 1800);
+  }
+};
+
+const nextUmar = () => {
+  state.umar.index++;
+  if (state.umar.index >= state.umar.questions.length) {
+    showResult(state.umar.score, state.umar.questions.length);
+  } else {
+    renderUmar();
+  }
+};
+
+/* ============================================================
+   RESULT
+   ============================================================ */
+const showResult = (score, total) => {
+  const full = Math.round((score / total) * 5);
+  $('#resultTitle').textContent = full >= 4 ? 'Alhamdulillah!' : 'Bagus!';
+  $('#resultSub').textContent = `Kamu dapat ${score} dari ${total} bintang`;
+
+  let badge = '', msg = '';
+  if (full >= 5)      { badge = '👑 Juara Rukun Islam'; msg = 'Sempurna! Kamu luar biasa!'; }
+  else if (full >= 4) { badge = '🥇 Bintang Islam';     msg = 'Keren sekali!'; }
+  else if (full >= 3) { badge = '🥈 Anak Sholeh';       msg = 'Bagus! Terus belajar ya!'; }
+  else                { badge = '🥉 Anak Rajin';         msg = 'Ayo coba lagi ya!'; }
+
+  $('#resultBadge').textContent = badge;
+  const starsEl = $('#resultStars');
+  starsEl.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement('div');
+    s.className = 'result__star';
+    s.style.animationDelay = (i * 0.12) + 's';
+    s.innerHTML = `<svg viewBox="0 0 24 24" fill="${i < full ? '#FFC107' : '#E0E0E0'}" stroke="${i < full ? '#F57C00' : '#BDBDBD'}" stroke-width="1" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+    starsEl.appendChild(s);
+  }
+
+  confetti(50);
+  speak(msg + ` Kamu dapat ${score} bintang!`);
+  goTo('result');
+};
+
+/* ============================================================
+   MODAL INFO
+   ============================================================ */
+const openInfo = () => {
+  const m = MATERI[state.learnIndex];
+  if (!m.info) return;
+
+  const modal = $('#modalInfo');
+  $('#modalArabic').textContent = m.info.word;
+  $('#modalLatin').textContent = m.info.latin;
+  $('#modalRoot').textContent = m.info.root;
+  $('#modalMeaning').textContent = m.info.meaning;
+  $('#modalWhy').textContent = m.info.why;
+
+  modal.hidden = false;
+  requestAnimationFrame(() => modal.classList.add('is-open'));
+
+  speak('Arti asli ' + m.name + ' dalam bahasa Arab: ' + m.info.latin + '. Artinya, ' + m.info.meaning);
+};
+
+const closeInfo = () => {
+  const modal = $('#modalInfo');
+  modal.classList.remove('is-open');
+  setTimeout(() => { modal.hidden = true; }, 200);
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+};
+
+/* ============================================================
+   INIT
+   ============================================================ */
+const init = () => {
+  /* Mount mascot + tiles */
+  $('#mascotHome').innerHTML = SVG.umar;
+  $('#tileOrder').innerHTML = SVG.tileOrder;
+  $('#tileMatch').innerHTML = SVG.tileMatch;
+  $('#tileQuiz').innerHTML = SVG.tileQuiz;
+  $('#tileUmar').innerHTML = SVG.tileUmar;
+
+  /* Prevent double-tap zoom on Android */
+  let lastTouch = 0;
+  document.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    if (now - lastTouch <= 350) e.preventDefault();
+    lastTouch = now;
+  }, { passive: false });
+
+  /* Prevent pinch zoom */
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+
+  /* Greeting on first interaction */
+  const greet = () => {
+    setTimeout(() => speak('Assalamualaikum teman-teman! Ayo belajar Rukun Islam bersama Umar!'), 200);
+    document.body.removeEventListener('click', greet);
+    document.body.removeEventListener('touchstart', greet);
+  };
+  document.body.addEventListener('click', greet, { once: true });
+  document.body.addEventListener('touchstart', greet, { once: true });
+};
+
+init();
+</script>
+</body>
+</html>
