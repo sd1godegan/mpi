@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPI Kelas IV — LCC PAI &amp; BP | SDN 1 Godegan</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#0e6b45; --green2:#0a5235; --green3:#e9f6ef;
+    --gold:#c9a227; --bg:#eef3f0; --card:#ffffff; --text:#1c2a23;
+    --muted:#63776c; --line:#dbe7e0; --shadow:0 4px 18px rgba(14,107,69,.09);
+    --top:58px;
+  }
+  body.dark{
+    --green:#3ddc97; --green2:#17a06a; --green3:#10281f; --gold:#e8c14a;
+    --bg:#0c1310; --card:#141d19; --text:#e7f1ea; --muted:#9db3a7;
+    --line:#24342c; --shadow:0 4px 18px rgba(0,0,0,.5);
+  }
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text); line-height:1.65; min-height:100vh;
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .ar{font-family:"Scheherazade New","Traditional Arabic","Amiri",serif;
+      font-size:1.45rem; direction:rtl; unicode-bidi:isolate; line-height:2;}
+
+  /* ============ TOPBAR ============ */
+  .topbar{
+    position:fixed; inset:0 0 auto 0; height:var(--top); z-index:60;
+    display:flex; align-items:center; gap:8px; padding:0 10px;
+    background:linear-gradient(135deg,var(--green2),var(--green));
+    color:#fff; box-shadow:0 2px 14px rgba(0,0,0,.2);
+  }
+  .icon-btn{
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22);
+    color:#fff; width:40px;height:40px;border-radius:11px;cursor:pointer;
+    font-size:1.05rem; display:grid;place-items:center; flex:none; font-family:inherit;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,.28)}
+  .icon-btn:disabled{opacity:.3; cursor:default}
+  .topbar-title{
+    flex:1; min-width:0; font-size:.92rem; font-weight:700; letter-spacing:.3px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-left:4px;
+  }
+  .topbar-title small{display:block;font-size:.66rem;font-weight:400;opacity:.8;letter-spacing:0}
+
+  /* ============ MAIN ============ */
+  main{
+    padding:calc(var(--top) + 20px) 16px 50px;
+    max-width:1040px; margin:0 auto;
+  }
+  .layer{display:none; animation:fade .28s ease}
+  .layer.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* ============ HOME ============ */
+  .hero{
+    background:linear-gradient(150deg,var(--green2),var(--green) 62%,#12855a);
+    color:#fff; border-radius:20px; padding:30px 22px; text-align:center;
+    box-shadow:var(--shadow); position:relative; overflow:hidden; margin-bottom:24px;
+  }
+  .hero::after{
+    content:""; position:absolute; width:260px;height:260px;border-radius:50%;
+    background:rgba(255,255,255,.07); top:-110px; right:-80px;
+  }
+  .badge{
+    display:inline-block; background:var(--gold); color:#1c2a23; font-weight:800;
+    font-size:.66rem; letter-spacing:1px; text-transform:uppercase;
+    padding:5px 13px; border-radius:99px;
+  }
+  .hero h1{margin:12px 0 2px; font-size:clamp(1.6rem,5vw,2.4rem); letter-spacing:1.5px}
+  .hero h2{margin:0; font-size:clamp(.9rem,2.5vw,1.15rem); font-weight:600; opacity:.95}
+  .hero .school{margin:12px 0 0; font-size:.8rem; color:var(--gold); font-weight:700; letter-spacing:.5px}
+  .hero .by{margin:8px 0 0; font-size:.78rem; opacity:.9}
+
+  .section-title{
+    font-size:.72rem; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--muted); font-weight:800; margin:26px 4px 12px;
+  }
+
+  /* ============ MENU GRID ============ */
+  .menu-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px;
+  }
+  .menu-card{
+    background:var(--card); border:1px solid var(--line); border-radius:15px;
+    padding:18px 16px; cursor:pointer; text-align:left; font-family:inherit;
+    color:var(--text); box-shadow:var(--shadow); transition:.18s;
+    display:flex; flex-direction:column; gap:6px; position:relative; overflow:hidden;
+    border-top:4px solid var(--green);
+  }
+  .menu-card:hover{transform:translateY(-3px); box-shadow:0 8px 22px rgba(14,107,69,.16)}
+  .menu-card .mc-ico{font-size:1.6rem; line-height:1; margin-bottom:2px}
+  .menu-card .mc-title{font-weight:800; font-size:.95rem; color:var(--green2)}
+  body.dark .menu-card .mc-title{color:var(--green)}
+  .menu-card .mc-desc{font-size:.78rem; color:var(--muted); line-height:1.5}
+  .menu-card .mc-tag{
+    font-size:.66rem; font-weight:800; letter-spacing:.6px; text-transform:uppercase;
+    color:var(--gold); margin-top:auto; padding-top:6px;
+  }
+  .menu-card.gold{border-top-color:var(--gold)}
+  .menu-card.gold .mc-title{color:var(--gold)}
+
+  /* ============ CONTENT CARDS ============ */
+  .sec-head{margin-bottom:16px; border-bottom:2px solid var(--line); padding-bottom:12px}
+  .sec-head h2{margin:8px 0 6px; font-size:clamp(1.2rem,3.4vw,1.6rem); color:var(--green2)}
+  body.dark .sec-head h2{color:var(--green)}
+  .sec-head .tp{font-size:.85rem;color:var(--muted);margin:0}
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:15px;
+    padding:16px 18px; box-shadow:var(--shadow); margin-bottom:14px;
+  }
+  .card h3{
+    margin:0 0 10px; font-size:.98rem; color:var(--green2);
+    display:flex; align-items:center; gap:8px;
+  }
+  body.dark .card h3{color:var(--green)}
+  .card h3::before{content:""; width:5px;height:18px;border-radius:3px;background:var(--gold); flex:none}
+  .card h4{margin:14px 0 6px;font-size:.88rem;color:var(--green2)}
+  body.dark .card h4{color:var(--green)}
+  .card p{font-size:.87rem; margin:6px 0}
+  .card ul,.card ol{margin:6px 0; padding-left:20px}
+  .card li{font-size:.86rem; margin:3px 0}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:760px){ .grid2{grid-template-columns:1fr} }
+
+  /* ============ PRE / TREE ============ */
+  pre.tree{
+    background:var(--green3); border:1px solid var(--line); border-radius:12px;
+    padding:13px 15px; overflow-x:auto; font-size:.76rem; line-height:1.6;
+    font-family:"Consolas","Monaco","Courier New",monospace; color:var(--text); margin:0;
+  }
+
+  /* ============ TABLES ============ */
+  .tbl-wrap{overflow-x:auto; border-radius:12px; border:1px solid var(--line)}
+  table{width:100%; border-collapse:collapse; background:var(--card); font-size:.83rem; min-width:380px}
+  th,td{padding:8px 11px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top}
+  th{background:var(--green3); color:var(--green2); font-weight:800; font-size:.75rem;
+     text-transform:uppercase; letter-spacing:.5px; white-space:nowrap}
+  body.dark th{color:var(--green)}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--green3)}
+
+  /* ============ FLASHCARD ============ */
+  .flash-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr)); gap:9px}
+  .flash{
+    text-align:left; cursor:pointer; font-family:inherit; font-size:.84rem; color:var(--text);
+    background:var(--card); border:1px solid var(--line); border-left:4px solid var(--gold);
+    border-radius:11px; padding:10px 13px; transition:.15s;
+  }
+  .flash:hover{background:var(--green3); transform:translateY(-1px)}
+  .flash .fq{display:block; font-weight:600}
+  .flash .fa{
+    display:none; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);
+    color:var(--green2); font-weight:800;
+  }
+  body.dark .flash .fa{color:var(--green)}
+  .flash.open .fa{display:block}
+  .flash::after{content:"👁 jawaban"; display:block; margin-top:5px; font-size:.63rem; color:var(--muted)}
+  .flash.open::after{content:"✕ tutup"}
+
+  /* ============ CHECKLIST ============ */
+  .repeat-row{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+    padding:7px 0; border-bottom:1px dashed var(--line); font-size:.84rem;
+  }
+  .repeat-row:last-child{border-bottom:0}
+  .repeat-row > span{flex:1; min-width:120px; font-weight:600}
+  .repeat-row label{display:flex; align-items:center; gap:5px; font-size:.77rem; color:var(--muted); cursor:pointer}
+  .repeat-row input{accent-color:var(--green); width:16px;height:16px;cursor:pointer}
+
+  /* ============ MISC ============ */
+  .note{
+    background:var(--green3); border-left:4px solid var(--gold); border-radius:0 12px 12px 0;
+    padding:11px 15px; font-size:.84rem; margin:12px 0;
+  }
+  .pill{
+    display:inline-block; background:var(--green3); color:var(--green2); font-weight:700;
+    font-size:.68rem; padding:3px 10px; border-radius:99px; margin:0 5px 5px 0;
+  }
+  body.dark .pill{color:var(--green)}
+  .rangkuman{
+    background:var(--card); border:1px solid var(--line); border-left:4px solid var(--green);
+    border-radius:0 13px 13px 0; padding:13px 16px; margin-bottom:11px; box-shadow:var(--shadow);
+  }
+  .rangkuman h4{margin:0 0 5px; font-size:.9rem; color:var(--green2)}
+  body.dark .rangkuman h4{color:var(--green)}
+  .rangkuman ul{margin:0; padding-left:19px}
+  .rangkuman li{font-size:.84rem}
+
+  .filter-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .filter-bar button{
+    font-family:inherit; font-size:.74rem; font-weight:700; cursor:pointer;
+    padding:5px 12px; border-radius:99px; border:1px solid var(--line);
+    background:var(--card); color:var(--muted);
+  }
+  .filter-bar button.active{background:var(--green); color:#fff; border-color:var(--green)}
+
+  .back-inline{
+    display:inline-flex; align-items:center; gap:6px; background:var(--card);
+    border:1px solid var(--line); color:var(--green2); font-weight:700; font-size:.8rem;
+    padding:8px 14px; border-radius:99px; cursor:pointer; font-family:inherit;
+    margin-bottom:14px; box-shadow:var(--shadow);
+  }
+  body.dark .back-inline{color:var(--green)}
+  .back-inline:hover{background:var(--green3)}
+
+  .progres-mini{display:flex;align-items:center;gap:6px;flex:none}
+  .progres-mini .bar{width:66px;height:8px;border-radius:99px;background:rgba(255,255,255,.25);overflow:hidden}
+  .progres-mini .bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+  .progres-mini span{font-size:.7rem;font-weight:700;min-width:32px;text-align:right}
+
+  @media(max-width:560px){
+    .progres-mini{display:none}
+    .topbar-title small{display:none}
+    main{padding:calc(var(--top) + 14px) 12px 40px}
+    .menu-grid{grid-template-columns:1fr 1fr; gap:9px}
+    .menu-card{padding:14px 12px}
+    .menu-card .mc-ico{font-size:1.35rem}
+    .menu-card .mc-title{font-size:.85rem}
+    .menu-card .mc-desc{font-size:.72rem}
+  }
+  @media(max-width:380px){ .menu-grid{grid-template-columns:1fr} }
+
+  @media print{
+    .topbar,.back-inline,.filter-bar,.icon-btn,.progres-mini{display:none!important}
+    .layer{display:block!important; page-break-after:always}
+    main{padding:0;max-width:none}
+    body{background:#fff;color:#000}
+    .card,.flash,.rangkuman{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<header class="topbar">
+  <button id="backBtn" class="icon-btn" title="Kembali" disabled>←</button>
+  <div class="topbar-title" id="topTitle">
+    MPI Kelas IV <small id="topSub">Media Persiapan LCC PAI &amp; BP</small>
+  </div>
+  <div class="progres-mini" title="Progres hafalan">
+    <div class="bar"><i id="progressBar"></i></div>
+    <span id="progressTxt">0%</span>
+  </div>
+  <button id="themeBtn" class="icon-btn" title="Mode gelap/terang">🌙</button>
+  <button id="printBtn" class="icon-btn" title="Cetak / PDF">🖨️</button>
+</header>
+
+<main>
+
+<!-- ============================================================
+     LAYER: HOME
+============================================================ -->
+<section id="layer-home" class="layer active">
+  <div class="hero">
+    <span class="badge">Fase B · Kelas IV</span>
+    <h1>MPI KELAS IV</h1>
+    <h2>Media Persiapan Lomba Cerdas Cermat</h2>
+    <p class="school">SD NEGERI 1 GODEGAN · TAHUN AJARAN 2026/2027</p>
+    <p class="by">Pendidikan Agama Islam &amp; Budi Pekerti · “Aku Cinta Islam”</p>
+  </div>
+
+  <div class="section-title">Menu Utama</div>
+  <div class="menu-grid">
+    <button class="menu-card" onclick="go('halaman-depan')">
+      <span class="mc-ico">📖</span>
+      <span class="mc-title">Halaman Depan</span>
+      <span class="mc-desc">Judul, kata pengantar, peta kompetensi 10 TP, petunjuk penggunaan.</span>
+      <span class="mc-tag">Info</span>
+    </button>
+
+    <button class="menu-card" onclick="go('ganjil')">
+      <span class="mc-ico">📗</span>
+      <span class="mc-title">Semester Ganjil</span>
+      <span class="mc-desc">Modul 1–5: Al-'Alaq, Asmaulhusna, Akhlak Keluarga, Balig, Nabi di Makkah.</span>
+      <span class="mc-tag">5 Modul</span>
+    </button>
+
+    <button class="menu-card" onclick="go('genap')">
+      <span class="mc-ico">📘</span>
+      <span class="mc-title">Semester Genap</span>
+      <span class="mc-desc">Modul 6–10: Al-Ma'un, Iman kepada Rasul, Akhlak Guru, Salat, Hijrah.</span>
+      <span class="mc-tag">5 Modul</span>
+    </button>
+
+    <button class="menu-card gold" onclick="go('zona-hafalan')">
+      <span class="mc-ico">⚡</span>
+      <span class="mc-title">Zona Hafalan Cepat</span>
+      <span class="mc-desc">Kartu kilat interaktif, mind map, tabel ringkas, daftar istilah.</span>
+      <span class="mc-tag">Latihan</span>
+    </button>
+
+    <button class="menu-card gold" onclick="go('zona-fakta')">
+      <span class="mc-ico">🎯</span>
+      <span class="mc-title">Zona Fakta Kunci</span>
+      <span class="mc-desc">Angka penting, nama penting, urutan penting, istilah penting.</span>
+      <span class="mc-tag">Latihan</span>
+    </button>
+
+    <button class="menu-card gold" onclick="go('zona-pengulangan')">
+      <span class="mc-ico">🔁</span>
+      <span class="mc-title">Zona Pengulangan Kilat</span>
+      <span class="mc-desc">10 rangkuman — satu halaman per modul.</span>
+      <span class="mc-tag">Latihan</span>
+    </button>
+
+    <button class="menu-card" onclick="go('glosarium')">
+      <span class="mc-ico">📚</span>
+      <span class="mc-title">Glosarium</span>
+      <span class="mc-desc">Daftar istilah lengkap beserta modul asalnya.</span>
+      <span class="mc-tag">Lampiran</span>
+    </button>
+
+    <button class="menu-card" onclick="go('pustaka')">
+      <span class="mc-ico">📑</span>
+      <span class="mc-title">Daftar Pustaka</span>
+      <span class="mc-desc">Sumber rujukan dan catatan akhir media.</span>
+      <span class="mc-tag">Lampiran</span>
+    </button>
+  </div>
+
+  <div class="note" style="margin-top:20px">
+    <strong>Cara pakai:</strong> pilih salah satu menu di atas untuk membuka halaman materi.
+    Gunakan tombol <strong>←</strong> di kiri atas untuk kembali ke menu sebelumnya.
+    Klik <em>Kartu Kilat</em> untuk menyembunyikan/menampilkan jawaban.
+    Centang <em>Catatan Pengulangan</em> — progres tersimpan otomatis.
+  </div>
+</section>
+
+<!-- ============================================================
+     LAYER: HALAMAN DEPAN
+============================================================ -->
+<section id="layer-halaman-depan" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+
+  <div class="card">
+    <h3>Judul &amp; Identitas</h3>
+    <p><strong>MPI KELAS IV</strong><br>
+    Media Persiapan Lomba Cerdas Cermat<br>
+    Pendidikan Agama Islam dan Budi Pekerti · Fase B — Kelas IV<br>
+    SD Negeri 1 Godegan · Tahun Ajaran 2026/2027</p>
+    <p>Disusun oleh:<br><strong>Ardika Riski Rahmawan, S.Pd.</strong><br>NIP 199605022020121017</p>
+  </div>
+
+  <div class="card">
+    <h3>Kata Pengantar</h3>
+    <p>Media pembelajaran interaktif ini disusun sebagai bahan belajar mandiri bagi siswa kelas IV dalam
+    mempersiapkan Lomba Cerdas Cermat (LCC) Pendidikan Agama Islam dan Budi Pekerti. Materi disajikan
+    secara lengkap, padat, dan terstruktur agar mudah dipelajari, diulang, dan dihafalkan.</p>
+    <p>Media ini berbasis teks murni sehingga ringan, mudah diakses, dan dapat digunakan kapan saja tanpa
+    memerlukan koneksi internet. Soal latihan tidak disertakan karena telah tersedia dalam aplikasi ujian terpisah.</p>
+    <p>Semoga bermanfaat.</p>
+    <p style="margin-bottom:0">Godegan, 30 Juni 2026<br>Guru PAI<br><br>
+    <strong>Ardika Riski Rahmawan, S.Pd.</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>Petunjuk Penggunaan</h3>
+    <ol>
+      <li>Baca peta kompetensi untuk mengetahui cakupan materi.</li>
+      <li>Pelajari modul 1–5 (semester ganjil) terlebih dahulu.</li>
+      <li>Lanjutkan modul 6–10 (semester genap).</li>
+      <li>Gunakan Zona Hafalan Cepat untuk mengulang materi secara singkat.</li>
+      <li>Gunakan Zona Fakta Kunci untuk menghafal angka, nama, urutan, dan istilah penting.</li>
+      <li>Gunakan Zona Pengulangan Kilat untuk membaca ulang rangkuman 1 halaman per modul.</li>
+      <li>Tandai materi yang sudah dikuasai pada Catatan Pengulangan.</li>
+      <li>Ulangi minimal 3 kali sebelum lomba.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Cara Belajar Efektif untuk LCC</h3>
+    <ol>
+      <li><strong>Baca cepat</strong> — baca seluruh materi sekali untuk mengenal.</li>
+      <li><strong>Baca fokus</strong> — baca per modul, tandai fakta kunci.</li>
+      <li><strong>Hafal kilat</strong> — gunakan kartu kilat dan tabel ringkas.</li>
+      <li><strong>Ulang berkala</strong> — ulangi setiap 2–3 hari.</li>
+      <li><strong>Uji diri</strong> — tutup jawaban kartu kilat, coba jawab.</li>
+      <li><strong>Fokus fakta</strong> — angka, nama, urutan, istilah paling sering keluar di LCC.</li>
+      <li><strong>Diskusi</strong> — ajak teman untuk tanya-jawab.</li>
+      <li><strong>Tenang</strong> — baca rangkuman kilat sebelum lomba.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Peta Kompetensi — Semester Ganjil</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Elemen</th><th>TP</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Al-Qur'an Hadis</td><td>4.1 Membaca, menulis, menghafal, dan menjelaskan kandungan Surah Al-'Alaq ayat 1–5</td></tr>
+          <tr><td>2</td><td>Akidah</td><td>4.2 Menjelaskan dan meyakini asmaulhusna As-Sami', Al-Basir, Al-Hafiz, dan Al-Wali</td></tr>
+          <tr><td>3</td><td>Akhlak</td><td>4.3 Menerapkan akhlak terhadap keluarga di rumah melalui kerukunan dan tolong-menolong</td></tr>
+          <tr><td>4</td><td>Fikih</td><td>4.4 Menjelaskan tanda balig dan tanggung jawab yang menyertainya (taklif)</td></tr>
+          <tr><td>5</td><td>SPI</td><td>4.5 Menceritakan dan menjelaskan kisah Nabi Muhammad saw. menerima wahyu dan berdakwah di Makkah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Peta Kompetensi — Semester Genap</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Elemen</th><th>TP</th></tr></thead>
+        <tbody>
+          <tr><td>6</td><td>Al-Qur'an Hadis</td><td>4.6 Membaca, menulis, menghafal, dan menjelaskan kandungan Surah al-Ma'un serta Hadis Riwayat At Tirmidzi nomor 1987 tentang menjaga hubungan baik dengan sesama</td></tr>
+          <tr><td>7</td><td>Akidah</td><td>4.7 Menjelaskan dan meyakini iman kepada rasul-rasul Allah Swt.</td></tr>
+          <tr><td>8</td><td>Akhlak</td><td>4.8 Menerapkan akhlak terhadap guru di sekolah melalui kepatuhan dan rasa hormat</td></tr>
+          <tr><td>9</td><td>Fikih</td><td>4.9 Menerapkan tata cara salat Jumat dan salat sunah (duha dan tahajud)</td></tr>
+          <tr><td>10</td><td>SPI</td><td>4.10 Menceritakan dan menjelaskan kisah Nabi Muhammad saw. hijrah ke Madinah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LAYER: MENU SEMESTER GANJIL
+============================================================ -->
+<section id="layer-ganjil" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Semester Ganjil</span>
+    <h2>Pilih Modul 1–5</h2>
+    <p class="tp">Klik salah satu modul untuk membuka materi.</p>
+  </div>
+
+  <div class="menu-grid">
+    <button class="menu-card" onclick="go('modul1')">
+      <span class="mc-ico">🕋</span>
+      <span class="mc-title">Modul 1</span>
+      <span class="mc-desc">QS Al-'Alaq ayat 1–5 — wahyu pertama di Gua Hira.</span>
+      <span class="mc-tag">Al-Qur'an Hadis</span>
+    </button>
+    <button class="menu-card" onclick="go('modul2')">
+      <span class="mc-ico">👁</span>
+      <span class="mc-title">Modul 2</span>
+      <span class="mc-desc">Asmaulhusna: As-Sami', Al-Basir, Al-Hafiz, Al-Wali.</span>
+      <span class="mc-tag">Akidah</span>
+    </button>
+    <button class="menu-card" onclick="go('modul3')">
+      <span class="mc-ico">🏠</span>
+      <span class="mc-title">Modul 3</span>
+      <span class="mc-desc">Akhlak terhadap keluarga: kerukunan &amp; tolong-menolong.</span>
+      <span class="mc-tag">Akhlak</span>
+    </button>
+    <button class="menu-card" onclick="go('modul4')">
+      <span class="mc-ico">🌱</span>
+      <span class="mc-title">Modul 4</span>
+      <span class="mc-desc">Balig dan taklif — tanda dewasa &amp; tanggung jawab.</span>
+      <span class="mc-tag">Fikih</span>
+    </button>
+    <button class="menu-card" onclick="go('modul5')">
+      <span class="mc-ico">🕌</span>
+      <span class="mc-title">Modul 5</span>
+      <span class="mc-desc">Nabi Muhammad saw. di Makkah — wahyu &amp; dakwah.</span>
+      <span class="mc-tag">SPI</span>
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================
+     LAYER: MENU SEMESTER GENAP
+============================================================ -->
+<section id="layer-genap" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Semester Genap</span>
+    <h2>Pilih Modul 6–10</h2>
+    <p class="tp">Klik salah satu modul untuk membuka materi.</p>
+  </div>
+
+  <div class="menu-grid">
+    <button class="menu-card" onclick="go('modul6')">
+      <span class="mc-ico">🤲</span>
+      <span class="mc-title">Modul 6</span>
+      <span class="mc-desc">QS Al-Ma'un &amp; Hadis At Tirmidzi 1987.</span>
+      <span class="mc-tag">Al-Qur'an Hadis</span>
+    </button>
+    <button class="menu-card" onclick="go('modul7')">
+      <span class="mc-ico">🌟</span>
+      <span class="mc-title">Modul 7</span>
+      <span class="mc-desc">Iman kepada rasul — 25 rasul &amp; sifat-sifatnya.</span>
+      <span class="mc-tag">Akidah</span>
+    </button>
+    <button class="menu-card" onclick="go('modul8')">
+      <span class="mc-ico">🎓</span>
+      <span class="mc-title">Modul 8</span>
+      <span class="mc-desc">Akhlak terhadap guru: patuh, hormat, sopan.</span>
+      <span class="mc-tag">Akhlak</span>
+    </button>
+    <button class="menu-card" onclick="go('modul9')">
+      <span class="mc-ico">🌙</span>
+      <span class="mc-title">Modul 9</span>
+      <span class="mc-desc">Salat Jumat, salat duha, dan salat tahajud.</span>
+      <span class="mc-tag">Fikih</span>
+    </button>
+    <button class="menu-card" onclick="go('modul10')">
+      <span class="mc-ico">🐪</span>
+      <span class="mc-title">Modul 10</span>
+      <span class="mc-desc">Hijrah Nabi Muhammad saw. ke Madinah.</span>
+      <span class="mc-tag">SPI</span>
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 1 — QS AL-'ALAQ 1–5
+============================================================ -->
+<section id="layer-modul1" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 1 · Semester Ganjil</span>
+    <h2>QS Al-'Alaq Ayat 1–5</h2>
+    <p class="tp"><strong>TP 4.1</strong> — Membaca, menulis, menghafal, dan menjelaskan kandungan Surah Al-'Alaq ayat 1–5.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat membaca QS Al-'Alaq 1–5 dengan benar.</li>
+        <li>Siswa dapat menulis QS Al-'Alaq 1–5 dengan benar.</li>
+        <li>Siswa dapat menghafal QS Al-'Alaq 1–5 dengan lancar.</li>
+        <li>Siswa dapat menjelaskan kandungan QS Al-'Alaq 1–5.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">QS AL-'ALAQ 1–5
+├── Identitas
+│   ├── Surah ke-96
+│   ├── 19 ayat (dipelajari 1–5)
+│   ├── Makkiyah
+│   └── Wahyu pertama
+├── Lafal &amp; Arti
+│   ├── Ayat 1: اِقْرَأْ بِاسْمِ رَبِّكَ الَّذِيْ خَلَقَ
+│   ├── Ayat 2: خَلَقَ الْاِنْسَانَ مِنْ عَلَقٍ
+│   ├── Ayat 3: اِقْرَأْ وَرَبُّكَ الْاَكْرَمُ
+│   ├── Ayat 4: الَّذِيْ عَلَّمَ بِالْقَلَمِ
+│   └── Ayat 5: عَلَّمَ الْاِنْسَانَ مَا لَمْ يَعْلَمْ
+├── Kandungan
+│   ├── Perintah membaca
+│   ├── Allah Pencipta
+│   ├── Manusia dari 'alaq
+│   ├── Allah mengajar dengan pena
+│   └── Allah mengajar manusia yang belum tahu
+└── Hikmah
+    ├── Pentingnya ilmu
+    ├── Pentingnya membaca
+    └── Allah sumber ilmu</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Surah Al-'Alaq adalah surah ke-96 dalam Al-Qur'an. Terdiri dari 19 ayat. Diturunkan di Makkah
+    (Makkiyah). Ayat 1–5 merupakan wahyu pertama yang diterima Nabi Muhammad saw. di Gua Hira.</p>
+
+    <h4>Dalil</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ayat</th><th>Lafal</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><span class="ar">اِقْرَأْ بِاسْمِ رَبِّكَ الَّذِيْ خَلَقَ</span></td><td>“Bacalah dengan (menyebut) nama Tuhanmu yang menciptakan.”</td></tr>
+          <tr><td>2</td><td><span class="ar">خَلَقَ الْاِنْسَانَ مِنْ عَلَقٍ</span></td><td>“Dia telah menciptakan manusia dari segumpal darah.”</td></tr>
+          <tr><td>3</td><td><span class="ar">اِقْرَأْ وَرَبُّكَ الْاَكْرَمُ</span></td><td>“Bacalah, dan Tuhanmulah Yang Maha Mulia.”</td></tr>
+          <tr><td>4</td><td><span class="ar">الَّذِيْ عَلَّمَ بِالْقَلَمِ</span></td><td>“Yang mengajar (manusia) dengan pena.”</td></tr>
+          <tr><td>5</td><td><span class="ar">عَلَّمَ الْاِنْسَانَ مَا لَمْ يَعْلَمْ</span></td><td>“Dia mengajar manusia apa yang tidak diketahuinya.”</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Penjelasan per Ayat</h4>
+    <ol>
+      <li><strong>Ayat 1</strong> — Perintah membaca dengan menyebut nama Allah.</li>
+      <li><strong>Ayat 2</strong> — Allah menciptakan manusia dari 'alaq (segumpal darah).</li>
+      <li><strong>Ayat 3</strong> — Perintah membaca lagi, Allah Maha Mulia.</li>
+      <li><strong>Ayat 4</strong> — Allah mengajar manusia dengan pena (tulis-baca).</li>
+      <li><strong>Ayat 5</strong> — Allah mengajar manusia apa yang belum diketahuinya.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Membaca Al-Qur'an setiap hari.</li>
+      <li>Belajar menulis dan membaca.</li>
+      <li>Menyebut nama Allah sebelum belajar.</li>
+      <li>Rajin menuntut ilmu karena Allah yang mengajar manusia.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Pentingnya ilmu bagi manusia.</li>
+      <li>Pentingnya membaca dan menulis.</li>
+      <li>Allah adalah sumber segala ilmu.</li>
+      <li>Manusia harus terus belajar.</li>
+      <li>Ilmu berasal dari Allah, maka harus disyukuri.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Nama surah</td><td>Al-'Alaq</td></tr>
+          <tr><td>Arti</td><td>Segumpal darah</td></tr>
+          <tr><td>Surah ke-</td><td>96</td></tr>
+          <tr><td>Jumlah ayat</td><td>19</td></tr>
+          <tr><td>Ayat yang dipelajari</td><td>1–5</td></tr>
+          <tr><td>Golongan</td><td>Makkiyah</td></tr>
+          <tr><td>Wahyu ke-</td><td>Pertama</td></tr>
+          <tr><td>Tempat turun</td><td>Gua Hira</td></tr>
+          <tr><td>Penerima wahyu</td><td>Nabi Muhammad saw.</td></tr>
+          <tr><td>Malaikat penyampai</td><td>Jibril</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Tabel Ringkas</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Ayat</th><th>Lafal</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>1</td><td><span class="ar">اِقْرَأْ بِاسْمِ رَبِّكَ الَّذِيْ خَلَقَ</span></td><td>Bacalah dengan nama Tuhanmu yang menciptakan</td></tr>
+          <tr><td>2</td><td>2</td><td><span class="ar">خَلَقَ الْاِنْسَانَ مِنْ عَلَقٍ</span></td><td>Dia menciptakan manusia dari segumpal darah</td></tr>
+          <tr><td>3</td><td>3</td><td><span class="ar">اِقْرَأْ وَرَبُّكَ الْاَكْرَمُ</span></td><td>Bacalah, Tuhanmu Maha Mulia</td></tr>
+          <tr><td>4</td><td>4</td><td><span class="ar">الَّذِيْ عَلَّمَ بِالْقَلَمِ</span></td><td>Yang mengajar dengan pena</td></tr>
+          <tr><td>5</td><td>5</td><td><span class="ar">عَلَّمَ الْاِنْسَانَ مَا لَمْ يَعْلَمْ</span></td><td>Dia mengajar manusia apa yang tidak diketahuinya</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m1"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Al-'Alaq = surah ke-96, 19 ayat, Makkiyah.</li>
+      <li>Ayat 1–5 = wahyu pertama di Gua Hira.</li>
+      <li>Isi: perintah membaca, Allah Pencipta, manusia dari 'alaq, Allah mengajar dengan pena, dan Allah mengajar manusia yang belum tahu.</li>
+      <li>Hikmah: pentingnya ilmu, membaca, menulis.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Glosarium Mini</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Al-'Alaq</td><td>Segumpal darah</td></tr>
+          <tr><td>Makkiyah</td><td>Surah yang turun di Makkah</td></tr>
+          <tr><td>Wahyu</td><td>Petunjuk Allah kepada nabi</td></tr>
+          <tr><td>Qalam</td><td>Pena</td></tr>
+          <tr><td>'Alaq</td><td>Segumpal darah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Identitas surah</span>
+      <label><input type="checkbox" data-k="m1-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Lafal ayat 1–5</span>
+      <label><input type="checkbox" data-k="m1-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Arti ayat 1–5</span>
+      <label><input type="checkbox" data-k="m1-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Kandungan</span>
+      <label><input type="checkbox" data-k="m1-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-4b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m1-5a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-5b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 2
+============================================================ -->
+<section id="layer-modul2" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 2 · Semester Ganjil</span>
+    <h2>Asmaulhusna: As-Sami', Al-Basir, Al-Hafiz, Al-Wali</h2>
+    <p class="tp"><strong>TP 4.2</strong> — Menjelaskan dan meyakini asmaulhusna As-Sami', Al-Basir, Al-Hafiz, dan Al-Wali.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan arti As-Sami', Al-Basir, Al-Hafiz, Al-Wali.</li>
+        <li>Siswa dapat meyakini asmaulhusna tersebut.</li>
+        <li>Siswa dapat menyebutkan dalil dan contohnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">ASMAULHUSNA
+├── As-Sami'
+│   ├── Arti: Maha Mendengar
+│   ├── Dalil: QS Al-Baqarah 127
+│   └── Contoh: Allah mendengar doa
+├── Al-Basir
+│   ├── Arti: Maha Melihat
+│   ├── Dalil: QS Al-Hujurat 18
+│   └── Contoh: Allah melihat perbuatan
+├── Al-Hafiz
+│   ├── Arti: Maha Memelihara
+│   ├── Dalil: QS Hud 57
+│   └── Contoh: Allah menjaga makhluk
+└── Al-Wali
+    ├── Arti: Maha Pelindung
+    ├── Dalil: QS Al-Baqarah 257
+    └── Contoh: Allah melindungi orang beriman</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Asmaulhusna adalah nama-nama Allah yang baik dan indah. Jumlahnya 99. Empat di antaranya:</p>
+    <ol>
+      <li><strong>As-Sami'</strong> — Maha Mendengar.</li>
+      <li><strong>Al-Basir</strong> — Maha Melihat.</li>
+      <li><strong>Al-Hafiz</strong> — Maha Memelihara.</li>
+      <li><strong>Al-Wali</strong> — Maha Pelindung.</li>
+    </ol>
+
+    <h4>Dalil</h4>
+    <ul>
+      <li><strong>As-Sami':</strong> QS Al-Baqarah 127 — “Sesungguhnya Engkau Maha Mendengar lagi Maha Mengetahui.”</li>
+      <li><strong>Al-Basir:</strong> QS Al-Hujurat 18 — “Sesungguhnya Allah Maha Melihat apa yang kamu kerjakan.”</li>
+      <li><strong>Al-Hafiz:</strong> QS Hud 57 — “Sesungguhnya Tuhanku Maha Memelihara segala sesuatu.”</li>
+      <li><strong>Al-Wali:</strong> QS Al-Baqarah 257 — “Allah Pelindung orang-orang yang beriman.”</li>
+    </ul>
+
+    <h4>Penjelasan</h4>
+    <ol>
+      <li><strong>As-Sami'</strong> — Allah mendengar semua suara, termasuk bisikan hati.</li>
+      <li><strong>Al-Basir</strong> — Allah melihat semua perbuatan, bahkan yang tersembunyi.</li>
+      <li><strong>Al-Hafiz</strong> — Allah memelihara dan menjaga semua makhluk-Nya.</li>
+      <li><strong>Al-Wali</strong> — Allah melindungi orang beriman dari keburukan.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Berdoa dengan suara lembut karena Allah mendengar.</li>
+      <li>Menjaga perbuatan karena Allah melihat.</li>
+      <li>Yakin Allah menjaga kita.</li>
+      <li>Memohon perlindungan hanya kepada Allah.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Berhati-hati dalam berkata dan berbuat.</li>
+      <li>Tidak sombong karena Allah melihat.</li>
+      <li>Tenang karena Allah menjaga.</li>
+      <li>Hanya Allah tempat berlindung.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Asmaulhusna</th><th>Arti</th><th>Dalil</th></tr></thead>
+        <tbody>
+          <tr><td>As-Sami'</td><td>Maha Mendengar</td><td>QS Al-Baqarah 127</td></tr>
+          <tr><td>Al-Basir</td><td>Maha Melihat</td><td>QS Al-Hujurat 18</td></tr>
+          <tr><td>Al-Hafiz</td><td>Maha Memelihara</td><td>QS Hud 57</td></tr>
+          <tr><td>Al-Wali</td><td>Maha Pelindung</td><td>QS Al-Baqarah 257</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m2"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Asmaulhusna = nama-nama Allah, jumlah 99.</li>
+      <li>As-Sami' = Maha Mendengar · Al-Basir = Maha Melihat.</li>
+      <li>Al-Hafiz = Maha Memelihara · Al-Wali = Maha Pelindung.</li>
+      <li>Hikmah: hati-hati, tidak sombong, tenang, berlindung kepada Allah.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Arti 4 asmaulhusna</span>
+      <label><input type="checkbox" data-k="m2-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Dalil 4 asmaulhusna</span>
+      <label><input type="checkbox" data-k="m2-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh penerapan</span>
+      <label><input type="checkbox" data-k="m2-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m2-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 3
+============================================================ -->
+<section id="layer-modul3" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 3 · Semester Ganjil</span>
+    <h2>Akhlak terhadap Keluarga</h2>
+    <p class="tp"><strong>TP 4.3</strong> — Menerapkan akhlak terhadap keluarga di rumah melalui kerukunan dan tolong-menolong.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan akhlak terhadap keluarga.</li>
+        <li>Siswa dapat menerapkan kerukunan dan tolong-menolong.</li>
+        <li>Siswa dapat menyebutkan contoh sikap.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">AKHLAK TERHADAP KELUARGA
+├── Pengertian
+│   └── Sikap baik kepada anggota keluarga
+├── Bentuk
+│   ├── Birrul walidain (berbakti kepada orang tua)
+│   ├── Kerukunan
+│   └── Tolong-menolong
+├── Contoh
+│   ├── Membantu orang tua
+│   ├── Menyayangi saudara
+│   └── Menjaga kerukunan
+└── Hikmah
+    ├── Keluarga harmonis
+    ├── Dicintai Allah
+    └── Mendapat keberkahan</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Akhlak terhadap keluarga adalah sikap baik, sopan, dan santun kepada anggota keluarga di rumah.</p>
+
+    <h4>Dalil</h4>
+    <ul>
+      <li>QS An-Nisa 36 — “Dan berbaktilah kepada kedua orang tuamu.”</li>
+      <li>Hadis — “Ridha Allah ada pada ridha orang tua.”</li>
+    </ul>
+
+    <h4>Penjelasan</h4>
+    <ol>
+      <li><strong>Birrul walidain</strong> — berbakti kepada kedua orang tua.</li>
+      <li><strong>Kerukunan</strong> — hidup rukun dengan saudara.</li>
+      <li><strong>Tolong-menolong</strong> — saling membantu dalam keluarga.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Membantu ibu memasak.</li>
+      <li>Membantu ayah membersihkan rumah.</li>
+      <li>Menyayangi adik dan kakak.</li>
+      <li>Tidak bertengkar dengan saudara.</li>
+      <li>Meminta izin sebelum keluar rumah.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Keluarga menjadi harmonis.</li>
+      <li>Dicintai Allah dan orang tua.</li>
+      <li>Mendapat keberkahan hidup.</li>
+      <li>Menjadi pribadi yang penyayang.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Birrul walidain</td><td>Berbakti kepada orang tua</td></tr>
+          <tr><td>Dalil</td><td>QS An-Nisa 36</td></tr>
+          <tr><td>Hadis</td><td>Ridha Allah pada ridha orang tua</td></tr>
+          <tr><td>Bentuk akhlak</td><td>Kerukunan, tolong-menolong</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m3"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Akhlak keluarga = sikap baik kepada anggota keluarga.</li>
+      <li>Birrul walidain = berbakti kepada orang tua.</li>
+      <li>Dalil: QS An-Nisa 36.</li>
+      <li>Contoh: membantu, menyayangi, rukun, tolong-menolong.</li>
+      <li>Hikmah: keluarga harmonis, dicintai Allah.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m3-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Dalil</span>
+      <label><input type="checkbox" data-k="m3-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m3-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m3-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 4
+============================================================ -->
+<section id="layer-modul4" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 4 · Semester Ganjil</span>
+    <h2>Balig dan Taklif</h2>
+    <p class="tp"><strong>TP 4.4</strong> — Menjelaskan tanda balig dan tanggung jawab yang menyertainya (taklif).</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan tanda balig.</li>
+        <li>Siswa dapat menjelaskan taklif.</li>
+        <li>Siswa dapat menyebutkan tanggung jawab mukalaf.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">BALIG &amp; TAKLIF
+├── Balig
+│   ├── Arti: Dewasa
+│   ├── Tanda pada laki-laki
+│   └── Tanda pada perempuan
+├── Taklif
+│   ├── Arti: Beban tanggung jawab
+│   └── Orang yang terkena: mukalaf
+└── Tanggung Jawab Mukalaf
+    ├── Salat
+    ├── Puasa
+    ├── Zakat
+    └── Haji</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <ol>
+      <li><strong>Balig</strong> — usia dewasa dalam Islam.</li>
+      <li><strong>Taklif</strong> — beban tanggung jawab syariat.</li>
+      <li><strong>Mukalaf</strong> — orang yang sudah balig dan terkena taklif.</li>
+    </ol>
+
+    <h4>Tanda Balig</h4>
+    <div class="grid2">
+      <div>
+        <p style="margin-bottom:4px"><strong>Laki-laki:</strong></p>
+        <ul><li>Mimpi basah.</li><li>Tumbuh jakun.</li><li>Suara membesar.</li></ul>
+      </div>
+      <div>
+        <p style="margin-bottom:4px"><strong>Perempuan:</strong></p>
+        <ul><li>Haid.</li><li>Tumbuh payudara.</li><li>Pinggul melebar.</li></ul>
+      </div>
+    </div>
+
+    <h4>Dalil</h4>
+    <p>QS Al-Baqarah 286 — “Allah tidak membebani seseorang melainkan sesuai kesanggupannya.”</p>
+
+    <h4>Contoh Tanggung Jawab Mukalaf</h4>
+    <ul>
+      <li>Salat lima waktu.</li>
+      <li>Puasa Ramadan.</li>
+      <li>Zakat.</li>
+      <li>Haji bagi yang mampu.</li>
+      <li>Menjauhi perbuatan haram.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Tumbuh rasa tanggung jawab.</li>
+      <li>Disiplin beribadah.</li>
+      <li>Menjaga perilaku.</li>
+      <li>Siap menjadi muslim dewasa.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Balig</td><td>Dewasa</td></tr>
+          <tr><td>Taklif</td><td>Beban tanggung jawab</td></tr>
+          <tr><td>Mukalaf</td><td>Orang yang sudah balig</td></tr>
+          <tr><td>Dalil</td><td>QS Al-Baqarah 286</td></tr>
+          <tr><td>Tanda balig laki-laki</td><td>Mimpi basah</td></tr>
+          <tr><td>Tanda balig perempuan</td><td>Haid</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m4"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Balig = dewasa.</li>
+      <li>Taklif = beban tanggung jawab.</li>
+      <li>Mukalaf = orang yang sudah balig.</li>
+      <li>Tanda balig laki-laki: mimpi basah. Perempuan: haid.</li>
+      <li>Tanggung jawab: salat, puasa, zakat, haji.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m4-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Tanda balig</span>
+      <label><input type="checkbox" data-k="m4-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Tanggung jawab</span>
+      <label><input type="checkbox" data-k="m4-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Dalil</span>
+      <label><input type="checkbox" data-k="m4-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 5
+============================================================ -->
+<section id="layer-modul5" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 5 · Semester Ganjil</span>
+    <h2>Nabi Muhammad saw. di Makkah</h2>
+    <p class="tp"><strong>TP 4.5</strong> — Menceritakan dan menjelaskan kisah Nabi Muhammad saw. menerima wahyu dan berdakwah di Makkah.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menceritakan kisah Nabi Muhammad saw. menerima wahyu.</li>
+        <li>Siswa dapat menjelaskan dakwah Nabi di Makkah.</li>
+        <li>Siswa dapat menyebutkan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">NABI MUHAMMAD SAW. DI MAKKAH
+├── Kelahiran
+│   ├── Tahun 571 M
+│   ├── Tahun Gajah
+│   └── Yatim
+├── Menerima Wahyu
+│   ├── Usia 40 tahun
+│   ├── Gua Hira
+│   ├── Malaikat Jibril
+│   └── QS Al-'Alaq 1–5
+├── Dakwah
+│   ├── Sembunyi-sembunyi (3 tahun)
+│   ├── Terang-terangan
+│   └── Menghadapi tantangan
+└── Hikmah
+    ├── Sabar
+    ├── Teguh
+    └── Ikhlas</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Kelahiran</h4>
+    <p>Nabi Muhammad saw. lahir di Makkah tahun 571 M (Tahun Gajah). Ayahnya Abdullah, ibunya Aminah. Beliau yatim sejak kecil.</p>
+
+    <h4>Menerima Wahyu</h4>
+    <ul>
+      <li>Usia 40 tahun.</li>
+      <li>Di Gua Hira.</li>
+      <li>Malaikat Jibril menyampaikan wahyu.</li>
+      <li>Wahyu pertama: QS Al-'Alaq 1–5.</li>
+    </ul>
+
+    <h4>Dakwah di Makkah</h4>
+    <ol>
+      <li><strong>Sembunyi-sembunyi</strong> — 3 tahun, kepada keluarga dan sahabat dekat.</li>
+      <li><strong>Terang-terangan</strong> — setelah turun QS Al-Hijr 94.</li>
+      <li><strong>Tantangan</strong> — ditolak, dihina, disiksa.</li>
+    </ol>
+
+    <h4>Contoh Keteladanan</h4>
+    <ul>
+      <li>Sabar menghadapi tantangan.</li>
+      <li>Teguh pada kebenaran.</li>
+      <li>Ikhlas berdakwah.</li>
+      <li>Penyayang kepada umat.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Sabar dalam menghadapi ujian.</li>
+      <li>Teguh pada prinsip.</li>
+      <li>Ikhlas dalam berbuat.</li>
+      <li>Menyebarkan kebaikan.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Tahun lahir</td><td>571 M</td></tr>
+          <tr><td>Tahun Gajah</td><td>571 M</td></tr>
+          <tr><td>Usia menerima wahyu</td><td>40 tahun</td></tr>
+          <tr><td>Tempat wahyu</td><td>Gua Hira</td></tr>
+          <tr><td>Malaikat penyampai</td><td>Jibril</td></tr>
+          <tr><td>Wahyu pertama</td><td>QS Al-'Alaq 1–5</td></tr>
+          <tr><td>Dakwah sembunyi</td><td>3 tahun</td></tr>
+          <tr><td>Dakwah terang</td><td>Setelah QS Al-Hijr 94</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m5"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Nabi lahir 571 M, Tahun Gajah, yatim.</li>
+      <li>Wahyu pertama usia 40 di Gua Hira.</li>
+      <li>Malaikat Jibril, QS Al-'Alaq 1–5.</li>
+      <li>Dakwah: 3 tahun sembunyi, lalu terang-terangan.</li>
+      <li>Hikmah: sabar, teguh, ikhlas.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Kelahiran</span>
+      <label><input type="checkbox" data-k="m5-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Wahyu pertama</span>
+      <label><input type="checkbox" data-k="m5-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Dakwah</span>
+      <label><input type="checkbox" data-k="m5-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m5-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 6
+============================================================ -->
+<section id="layer-modul6" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 6 · Semester Genap</span>
+    <h2>QS Al-Ma'un &amp; Hadis At Tirmidzi 1987</h2>
+    <p class="tp"><strong>TP 4.6</strong> — Membaca, menulis, menghafal, dan menjelaskan kandungan Surah al-Ma'un serta Hadis Riwayat At Tirmidzi nomor 1987 tentang menjaga hubungan baik dengan sesama.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat membaca QS Al-Ma'un.</li>
+        <li>Siswa dapat menghafal QS Al-Ma'un.</li>
+        <li>Siswa dapat menjelaskan kandungan QS Al-Ma'un.</li>
+        <li>Siswa dapat menjelaskan Hadis At Tirmidzi 1987.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">QS AL-MA'UN &amp; HADIS AT TIRMIDZI 1987
+├── QS Al-Ma'un
+│   ├── Surah ke-107
+│   ├── 7 ayat
+│   ├── Makkiyah
+│   └── Arti: Barang berguna
+├── Kandungan
+│   ├── Mendustakan agama
+│   ├── Menghardik anak yatim
+│   ├── Tidak memberi makan orang miskin
+│   ├── Lalai salat
+│   └── Riya
+└── Hadis At Tirmidzi 1987
+    └── Menjaga hubungan baik dengan sesama</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>QS Al-Ma'un</h4>
+    <ul>
+      <li>Surah ke-107.</li>
+      <li>7 ayat.</li>
+      <li>Makkiyah.</li>
+      <li>Arti: barang-barang yang berguna.</li>
+    </ul>
+
+    <h4>Kandungan QS Al-Ma'un</h4>
+    <ol>
+      <li>Pendustaan agama.</li>
+      <li>Menghardik anak yatim.</li>
+      <li>Tidak memberi makan orang miskin.</li>
+      <li>Lalai dalam salat.</li>
+      <li>Riya (pamer).</li>
+      <li>Enggan menolong.</li>
+    </ol>
+
+    <h4>Hadis At Tirmidzi 1987</h4>
+    <p>Tentang menjaga hubungan baik dengan sesama. Muslim yang baik adalah yang menjaga silaturahmi dan tidak memutus hubungan.</p>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Menyayangi anak yatim.</li>
+      <li>Memberi makan orang miskin.</li>
+      <li>Salat tepat waktu.</li>
+      <li>Tidak pamer.</li>
+      <li>Menjaga silaturahmi.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Peduli kepada sesama.</li>
+      <li>Rajin beribadah.</li>
+      <li>Tidak sombong.</li>
+      <li>Menjaga hubungan baik.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Surah</td><td>Al-Ma'un</td></tr>
+          <tr><td>Arti</td><td>Barang berguna</td></tr>
+          <tr><td>Surah ke-</td><td>107</td></tr>
+          <tr><td>Jumlah ayat</td><td>7</td></tr>
+          <tr><td>Golongan</td><td>Makkiyah</td></tr>
+          <tr><td>Hadis</td><td>At Tirmidzi 1987</td></tr>
+          <tr><td>Tema hadis</td><td>Menjaga hubungan baik</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m6"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Al-Ma'un = surah ke-107, 7 ayat, Makkiyah.</li>
+      <li>Arti: barang berguna.</li>
+      <li>Kandungan: ancaman bagi pendusta agama.</li>
+      <li>Hadis At Tirmidzi 1987: menjaga hubungan baik.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Identitas surah</span>
+      <label><input type="checkbox" data-k="m6-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m6-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Lafal</span>
+      <label><input type="checkbox" data-k="m6-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m6-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Kandungan</span>
+      <label><input type="checkbox" data-k="m6-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m6-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hadis</span>
+      <label><input type="checkbox" data-k="m6-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m6-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 7
+============================================================ -->
+<section id="layer-modul7" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 7 · Semester Genap</span>
+    <h2>Iman kepada Rasul</h2>
+    <p class="tp"><strong>TP 4.7</strong> — Menjelaskan dan meyakini iman kepada rasul-rasul Allah Swt.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan iman kepada rasul.</li>
+        <li>Siswa dapat menyebutkan 25 rasul.</li>
+        <li>Siswa dapat menyebutkan sifat rasul.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">IMAN KEPADA RASUL
+├── Pengertian
+│   └── Percaya adanya rasul utusan Allah
+├── 25 Rasul
+│   ├── Adam, Idris, Nuh, Hud, Saleh
+│   ├── Ibrahim, Lut, Ismail, Ishaq, Yakub
+│   ├── Yusuf, Ayyub, Syuaib, Musa, Harun
+│   ├── Zulkifli, Daud, Sulaiman, Ilyas, Ilyasa
+│   ├── Yunus, Zakaria, Yahya, Isa, Muhammad
+├── Sifat Rasul
+│   ├── Wajib: Siddiq, Amanah, Tablig, Fatanah
+│   ├── Mustahil: Kizib, Khianat, Kitman, Baladah
+│   └── Jaiz: makan, minum, tidur
+└── Tugas Rasul
+    ├── Menyampaikan wahyu
+    ├── Membimbing umat
+    └── Menjadi teladan</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Iman kepada rasul adalah percaya bahwa Allah mengutus rasul untuk menyampaikan wahyu.</p>
+
+    <h4>25 Rasul</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Nama</th><th>No</th><th>Nama</th><th>No</th><th>Nama</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Adam</td><td>10</td><td>Yakub</td><td>18</td><td>Sulaiman</td></tr>
+          <tr><td>2</td><td>Idris</td><td>11</td><td>Yusuf</td><td>19</td><td>Ilyas</td></tr>
+          <tr><td>3</td><td>Nuh</td><td>12</td><td>Ayyub</td><td>20</td><td>Ilyasa</td></tr>
+          <tr><td>4</td><td>Hud</td><td>13</td><td>Syuaib</td><td>21</td><td>Yunus</td></tr>
+          <tr><td>5</td><td>Saleh</td><td>14</td><td>Musa</td><td>22</td><td>Zakaria</td></tr>
+          <tr><td>6</td><td>Ibrahim</td><td>15</td><td>Harun</td><td>23</td><td>Yahya</td></tr>
+          <tr><td>7</td><td>Lut</td><td>16</td><td>Zulkifli</td><td>24</td><td>Isa</td></tr>
+          <tr><td>8</td><td>Ismail</td><td>17</td><td>Daud</td><td>25</td><td>Muhammad</td></tr>
+          <tr><td>9</td><td>Ishaq</td><td colspan="4"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Sifat Rasul</h4>
+    <p><strong>Wajib:</strong> Siddiq (jujur), Amanah (dipercaya), Tablig (menyampaikan), Fatanah (cerdas).</p>
+    <p><strong>Mustahil:</strong> Kizib (dusta), Khianat (berkhianat), Kitman (menyembunyikan), Baladah (bodoh).</p>
+    <p><strong>Jaiz:</strong> makan, minum, tidur, menikah.</p>
+
+    <h4>Tugas Rasul</h4>
+    <ol>
+      <li>Menyampaikan wahyu Allah.</li>
+      <li>Membimbing umat.</li>
+      <li>Menjadi teladan.</li>
+    </ol>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Meneladani sifat rasul.</li>
+      <li>Jujur dan amanah.</li>
+      <li>Rajin menyampaikan kebaikan.</li>
+      <li>Cerdas dalam bertindak.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Jumlah rasul</td><td>25</td></tr>
+          <tr><td>Rasul terakhir</td><td>Muhammad saw.</td></tr>
+          <tr><td>Rasul pertama</td><td>Adam a.s.</td></tr>
+          <tr><td>Sifat wajib</td><td>Siddiq, Amanah, Tablig, Fatanah</td></tr>
+          <tr><td>Sifat mustahil</td><td>Kizib, Khianat, Kitman, Baladah</td></tr>
+          <tr><td>Sifat jaiz</td><td>Makan, minum, tidur</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m7"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Iman kepada rasul = percaya rasul utusan Allah.</li>
+      <li>Jumlah rasul 25.</li>
+      <li>Sifat wajib: Siddiq, Amanah, Tablig, Fatanah.</li>
+      <li>Sifat mustahil: Kizib, Khianat, Kitman, Baladah.</li>
+      <li>Tugas: menyampaikan wahyu, membimbing, teladan.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m7-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>25 rasul</span>
+      <label><input type="checkbox" data-k="m7-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Sifat rasul</span>
+      <label><input type="checkbox" data-k="m7-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Tugas rasul</span>
+      <label><input type="checkbox" data-k="m7-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 8
+============================================================ -->
+<section id="layer-modul8" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 8 · Semester Genap</span>
+    <h2>Akhlak terhadap Guru</h2>
+    <p class="tp"><strong>TP 4.8</strong> — Menerapkan akhlak terhadap guru di sekolah melalui kepatuhan dan rasa hormat.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan akhlak terhadap guru.</li>
+        <li>Siswa dapat menerapkan kepatuhan dan hormat.</li>
+        <li>Siswa dapat menyebutkan contoh.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">AKHLAK TERHADAP GURU
+├── Pengertian
+│   └── Sikap baik kepada guru
+├── Bentuk
+│   ├── Patuh
+│   ├── Hormat
+│   └── Sopan
+├── Contoh
+│   ├── Mendengarkan penjelasan
+│   ├── Mengerjakan tugas
+│   ├── Mengucapkan salam
+│   └── Tidak membantah
+└── Hikmah
+    ├── Ilmu berkah
+    ├── Dicintai guru
+    └── Sukses belajar</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Akhlak terhadap guru adalah sikap baik, hormat, dan patuh kepada guru.</p>
+
+    <h4>Dalil</h4>
+    <p>Hadis — “Barang siapa memuliakan guru, maka ia memuliakan Allah.”</p>
+
+    <h4>Penjelasan</h4>
+    <ol>
+      <li><strong>Patuh</strong> — mengikuti perintah guru.</li>
+      <li><strong>Hormat</strong> — menghargai guru.</li>
+      <li><strong>Sopan</strong> — berbicara lembut.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Mendengarkan penjelasan guru.</li>
+      <li>Mengerjakan tugas.</li>
+      <li>Mengucapkan salam.</li>
+      <li>Tidak membantah.</li>
+      <li>Meminta izin.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Ilmu menjadi berkah.</li>
+      <li>Dicintai guru.</li>
+      <li>Sukses belajar.</li>
+      <li>Menjadi pribadi sopan.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Akhlak guru</td><td>Sikap baik kepada guru</td></tr>
+          <tr><td>Bentuk</td><td>Patuh, hormat, sopan</td></tr>
+          <tr><td>Hadis</td><td>Memuliakan guru = memuliakan Allah</td></tr>
+          <tr><td>Hikmah</td><td>Ilmu berkah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m8"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Akhlak kepada guru = sikap baik.</li>
+      <li>Bentuk: patuh, hormat, sopan.</li>
+      <li>Contoh: mendengarkan, mengerjakan tugas, salam.</li>
+      <li>Hikmah: ilmu berkah, dicintai guru.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m8-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m8-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Bentuk</span>
+      <label><input type="checkbox" data-k="m8-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m8-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m8-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m8-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m8-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m8-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 9
+============================================================ -->
+<section id="layer-modul9" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 9 · Semester Genap</span>
+    <h2>Salat Jumat &amp; Salat Sunah</h2>
+    <p class="tp"><strong>TP 4.9</strong> — Menerapkan tata cara salat Jumat dan salat sunah (duha dan tahajud).</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan salat Jumat.</li>
+        <li>Siswa dapat menjelaskan salat duha.</li>
+        <li>Siswa dapat menjelaskan salat tahajud.</li>
+        <li>Siswa dapat menerapkan tata caranya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">SALAT JUMAT &amp; SALAT SUNAH
+├── Salat Jumat
+│   ├── Hukum: Wajib bagi laki-laki
+│   ├── Waktu: Jumat siang
+│   ├── Syarat: Islam, balig, laki-laki
+│   └── Rukun: Khutbah + 2 rakaat
+├── Salat Duha
+│   ├── Hukum: Sunah
+│   ├── Waktu: Pagi
+│   └── Jumlah: 2–12 rakaat
+└── Salat Tahajud
+    ├── Hukum: Sunah
+    ├── Waktu: Malam
+    └── Jumlah: 2–8 rakaat</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Salat Jumat</h4>
+    <ul>
+      <li>Hukum: wajib bagi laki-laki muslim, balig, berakal.</li>
+      <li>Waktu: Jumat siang.</li>
+      <li>Didahului khutbah.</li>
+      <li>2 rakaat.</li>
+      <li>Tidak boleh ditinggalkan tanpa uzur.</li>
+    </ul>
+
+    <h4>Salat Duha</h4>
+    <ul>
+      <li>Hukum: sunah.</li>
+      <li>Waktu: pagi setelah matahari naik.</li>
+      <li>Jumlah: 2–12 rakaat.</li>
+      <li>Hikmah: rezeki lancar.</li>
+    </ul>
+
+    <h4>Salat Tahajud</h4>
+    <ul>
+      <li>Hukum: sunah.</li>
+      <li>Waktu: malam setelah tidur.</li>
+      <li>Jumlah: 2–8 rakaat.</li>
+      <li>Hikmah: doa dikabulkan.</li>
+    </ul>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Salat Jumat di masjid.</li>
+      <li>Salat duha sebelum belajar.</li>
+      <li>Salat tahajud di malam hari.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Disiplin beribadah.</li>
+      <li>Mendekatkan diri kepada Allah.</li>
+      <li>Rezeki lancar.</li>
+      <li>Doa dikabulkan.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Salat Jumat</td><td>Wajib laki-laki</td></tr>
+          <tr><td>Rakaat Jumat</td><td>2</td></tr>
+          <tr><td>Didahului</td><td>Khutbah</td></tr>
+          <tr><td>Salat Duha</td><td>Sunah, pagi</td></tr>
+          <tr><td>Salat Tahajud</td><td>Sunah, malam</td></tr>
+          <tr><td>Jumlah duha</td><td>2–12 rakaat</td></tr>
+          <tr><td>Jumlah tahajud</td><td>2–8 rakaat</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m9"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Salat Jumat: wajib laki-laki, 2 rakaat, didahului khutbah.</li>
+      <li>Salat duha: sunah, pagi, 2–12 rakaat.</li>
+      <li>Salat tahajud: sunah, malam, 2–8 rakaat.</li>
+      <li>Hikmah: disiplin, dekat Allah, rezeki lancar.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Salat Jumat</span>
+      <label><input type="checkbox" data-k="m9-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Salat duha</span>
+      <label><input type="checkbox" data-k="m9-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Salat tahajud</span>
+      <label><input type="checkbox" data-k="m9-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m9-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODUL 10
+============================================================ -->
+<section id="layer-modul10" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 10 · Semester Genap</span>
+    <h2>Hijrah ke Madinah</h2>
+    <p class="tp"><strong>TP 4.10</strong> — Menceritakan dan menjelaskan kisah Nabi Muhammad saw. hijrah ke Madinah.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menceritakan kisah hijrah.</li>
+        <li>Siswa dapat menjelaskan sebab hijrah.</li>
+        <li>Siswa dapat menyebutkan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">HIJRAH KE MADINAH
+├── Sebab
+│   ├── Tekanan Quraisy
+│   ├── Ancaman pembunuhan
+│   └── Undangan penduduk Yatsrib
+├── Peristiwa
+│   ├── Tahun 622 M
+│   ├── Bersama Abu Bakar
+│   ├── Gua Tsur
+│   └── Tiba di Madinah
+├── Sahabat
+│   ├── Abu Bakar
+│   ├── Ali bin Abi Thalib
+│   └── Penduduk Madinah (Ansar)
+└── Hikmah
+    ├── Sabar
+    ├── Tawakal
+    └── Persaudaraan</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Sebab Hijrah</h4>
+    <ol>
+      <li>Tekanan dari Quraisy.</li>
+      <li>Ancaman pembunuhan.</li>
+      <li>Undangan penduduk Yatsrib.</li>
+    </ol>
+
+    <h4>Peristiwa Hijrah</h4>
+    <ul>
+      <li>Tahun 622 M.</li>
+      <li>Nabi bersama Abu Bakar.</li>
+      <li>Bersembunyi di Gua Tsur.</li>
+      <li>Tiba di Madinah.</li>
+      <li>Disambut penduduk Madinah.</li>
+    </ul>
+
+    <h4>Sahabat</h4>
+    <ul>
+      <li>Abu Bakar as-Siddiq.</li>
+      <li>Ali bin Abi Thalib.</li>
+      <li>Penduduk Madinah (Ansar).</li>
+    </ul>
+
+    <h4>Contoh Keteladanan</h4>
+    <ul>
+      <li>Sabar menghadapi tekanan.</li>
+      <li>Tawakal kepada Allah.</li>
+      <li>Menjaga persaudaraan.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Sabar dalam ujian.</li>
+      <li>Tawakal kepada Allah.</li>
+      <li>Persaudaraan sesama muslim.</li>
+      <li>Hijrah sebagai awal kalender Islam.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Tahun hijrah</td><td>622 M</td></tr>
+          <tr><td>Sahabat Nabi</td><td>Abu Bakar</td></tr>
+          <tr><td>Tempat persembunyian</td><td>Gua Tsur</td></tr>
+          <tr><td>Kota tujuan</td><td>Madinah</td></tr>
+          <tr><td>Penduduk Madinah</td><td>Ansar</td></tr>
+          <tr><td>Penduduk Makkah</td><td>Muhajirin</td></tr>
+          <tr><td>Awal kalender</td><td>Hijriah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m10"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Hijrah = perpindahan Nabi dari Makkah ke Madinah.</li>
+      <li>Tahun 622 M.</li>
+      <li>Bersama Abu Bakar, singgah di Gua Tsur.</li>
+      <li>Disambut Ansar.</li>
+      <li>Awal kalender Hijriah.</li>
+      <li>Hikmah: sabar, tawakal, persaudaraan.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Sebab</span>
+      <label><input type="checkbox" data-k="m10-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Peristiwa</span>
+      <label><input type="checkbox" data-k="m10-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Sahabat</span>
+      <label><input type="checkbox" data-k="m10-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m10-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ZONA HAFALAN CEPAT
+============================================================ -->
+<section id="layer-zona-hafalan" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 4</span>
+    <h2>Zona Hafalan Cepat</h2>
+    <p class="tp">Kartu kilat interaktif, mind map, tabel ringkas, dan daftar istilah.</p>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat — Semua Modul</h3>
+    <div class="filter-bar" id="flashFilter">
+      <button class="active" data-f="all">Semua</button>
+      <button data-f="m1">Modul 1</button>
+      <button data-f="m2">Modul 2</button>
+      <button data-f="m3">Modul 3</button>
+      <button data-f="m4">Modul 4</button>
+      <button data-f="m5">Modul 5</button>
+      <button data-f="m6">Modul 6</button>
+      <button data-f="m7">Modul 7</button>
+      <button data-f="m8">Modul 8</button>
+      <button data-f="m9">Modul 9</button>
+      <button data-f="m10">Modul 10</button>
+    </div>
+    <div class="flash-grid" id="flash-all"></div>
+  </div>
+
+  <div class="card">
+    <h3>Mind Map Teks</h3>
+    <div class="grid2">
+<pre class="tree">MIND MAP 1 — AL-QUR'AN HADIS
+├── Al-'Alaq
+│   ├── 96, 19 ayat, Makkiyah
+│   ├── Wahyu pertama (ayat 1–5)
+│   └── Perintah membaca
+└── Al-Ma'un
+    ├── 107, 7 ayat, Makkiyah
+    ├── Ancaman pendusta agama
+    └── Hadis At Tirmidzi 1987</pre>
+<pre class="tree">MIND MAP 2 — AKIDAH
+├── Asmaulhusna
+│   ├── As-Sami', Al-Basir
+│   └── Al-Hafiz, Al-Wali
+└── Iman kepada Rasul
+    ├── 25 rasul
+    ├── Sifat wajib
+    └── Sifat mustahil</pre>
+<pre class="tree">MIND MAP 3 — AKHLAK
+├── Keluarga
+│   ├── Birrul walidain
+│   └── Kerukunan
+└── Guru
+    ├── Patuh
+    ├── Hormat
+    └── Sopan</pre>
+<pre class="tree">MIND MAP 4 — FIKIH
+├── Balig &amp; Taklif
+│   ├── Tanda balig
+│   └── Mukalaf
+└── Salat
+    ├── Jumat
+    ├── Duha
+    └── Tahajud</pre>
+<pre class="tree">MIND MAP 5 — SEJARAH PERADABAN ISLAM
+├── Nabi di Makkah
+│   ├── 571 M
+│   ├── Wahyu 40 tahun (QS Al-'Alaq 1–5)
+│   └── Dakwah
+└── Hijrah
+    ├── 622 M
+    ├── Gua Tsur
+    └── Madinah</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Tabel Ringkas (Kumpulan)</h3>
+    <h4>Tabel 1 — Identitas Surah</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Surah</th><th>Nomor</th><th>Ayat</th><th>Golongan</th></tr></thead>
+        <tbody>
+          <tr><td>Al-'Alaq</td><td>96</td><td>19 (dipelajari 1–5)</td><td>Makkiyah</td></tr>
+          <tr><td>Al-Ma'un</td><td>107</td><td>7</td><td>Makkiyah</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 2 — Asmaulhusna</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nama</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>As-Sami'</td><td>Maha Mendengar</td></tr>
+          <tr><td>Al-Basir</td><td>Maha Melihat</td></tr>
+          <tr><td>Al-Hafiz</td><td>Maha Memelihara</td></tr>
+          <tr><td>Al-Wali</td><td>Maha Pelindung</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 3 — Sifat Rasul</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Wajib</th><th>Arti</th><th>Mustahil</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Siddiq</td><td>Jujur</td><td>Kizib</td><td>Dusta</td></tr>
+          <tr><td>Amanah</td><td>Dipercaya</td><td>Khianat</td><td>Berkhianat</td></tr>
+          <tr><td>Tablig</td><td>Menyampaikan</td><td>Kitman</td><td>Menyembunyikan</td></tr>
+          <tr><td>Fatanah</td><td>Cerdas</td><td>Baladah</td><td>Bodoh</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 4 — Salat</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Salat</th><th>Hukum</th><th>Waktu</th><th>Rakaat</th></tr></thead>
+        <tbody>
+          <tr><td>Jumat</td><td>Wajib</td><td>Jumat siang</td><td>2</td></tr>
+          <tr><td>Duha</td><td>Sunah</td><td>Pagi</td><td>2–12</td></tr>
+          <tr><td>Tahajud</td><td>Sunah</td><td>Malam</td><td>2–8</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 5 — Peristiwa Nabi</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Peristiwa</th><th>Tahun</th><th>Tempat</th></tr></thead>
+        <tbody>
+          <tr><td>Lahir</td><td>571 M</td><td>Makkah</td></tr>
+          <tr><td>Wahyu pertama</td><td>Usia 40</td><td>Gua Hira</td></tr>
+          <tr><td>Hijrah</td><td>622 M</td><td>Madinah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Daftar Istilah Alfabetis</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Al-'Alaq</td><td>Segumpal darah</td></tr>
+          <tr><td>Al-Basir</td><td>Maha Melihat</td></tr>
+          <tr><td>Al-Hafiz</td><td>Maha Memelihara</td></tr>
+          <tr><td>Al-Ma'un</td><td>Barang berguna</td></tr>
+          <tr><td>Al-Wali</td><td>Maha Pelindung</td></tr>
+          <tr><td>Amanah</td><td>Dipercaya</td></tr>
+          <tr><td>Ansar</td><td>Penduduk Madinah penolong</td></tr>
+          <tr><td>As-Sami'</td><td>Maha Mendengar</td></tr>
+          <tr><td>Asmaulhusna</td><td>Nama-nama Allah</td></tr>
+          <tr><td>Balig</td><td>Dewasa</td></tr>
+          <tr><td>Birrul walidain</td><td>Berbakti orang tua</td></tr>
+          <tr><td>Duha</td><td>Salat pagi</td></tr>
+          <tr><td>Fatanah</td><td>Cerdas</td></tr>
+          <tr><td>Hijrah</td><td>Perpindahan</td></tr>
+          <tr><td>Jibril</td><td>Malaikat penyampai wahyu</td></tr>
+          <tr><td>Jumat</td><td>Hari salat wajib</td></tr>
+          <tr><td>Khutbah</td><td>Ceramah sebelum salat</td></tr>
+          <tr><td>Kizib</td><td>Dusta</td></tr>
+          <tr><td>Makkiyah</td><td>Surah turun di Makkah</td></tr>
+          <tr><td>Muhajirin</td><td>Penduduk Makkah yang hijrah</td></tr>
+          <tr><td>Mukalaf</td><td>Orang balig</td></tr>
+          <tr><td>Qalam</td><td>Pena</td></tr>
+          <tr><td>Riya</td><td>Pamer</td></tr>
+          <tr><td>Siddiq</td><td>Jujur</td></tr>
+          <tr><td>Tablig</td><td>Menyampaikan</td></tr>
+          <tr><td>Tahajud</td><td>Salat malam</td></tr>
+          <tr><td>Taklif</td><td>Beban tanggung jawab</td></tr>
+          <tr><td>Wahyu</td><td>Petunjuk Allah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ZONA FAKTA KUNCI
+============================================================ -->
+<section id="layer-zona-fakta" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 5</span>
+    <h2>Zona Fakta Kunci</h2>
+    <p class="tp">Angka penting, nama penting, urutan penting, istilah penting.</p>
+  </div>
+
+  <div class="card">
+    <h3>Angka Penting</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Angka</th></tr></thead>
+        <tbody>
+          <tr><td>Jumlah rasul</td><td>25</td></tr>
+          <tr><td>Jumlah asmaulhusna</td><td>99</td></tr>
+          <tr><td>Surah Al-'Alaq</td><td>96</td></tr>
+          <tr><td>Ayat Al-'Alaq</td><td>19</td></tr>
+          <tr><td>Ayat dipelajari</td><td>1–5</td></tr>
+          <tr><td>Surah Al-Ma'un</td><td>107</td></tr>
+          <tr><td>Ayat Al-Ma'un</td><td>7</td></tr>
+          <tr><td>Tahun lahir Nabi</td><td>571 M</td></tr>
+          <tr><td>Usia wahyu pertama</td><td>40 tahun</td></tr>
+          <tr><td>Dakwah sembunyi</td><td>3 tahun</td></tr>
+          <tr><td>Tahun hijrah</td><td>622 M</td></tr>
+          <tr><td>Rakaat Jumat</td><td>2</td></tr>
+          <tr><td>Rakaat duha</td><td>2–12</td></tr>
+          <tr><td>Rakaat tahajud</td><td>2–8</td></tr>
+          <tr><td>Hadis At Tirmidzi</td><td>1987</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Nama Penting</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nama</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Nabi Muhammad saw.</td><td>Rasul terakhir</td></tr>
+          <tr><td>Nabi Adam a.s.</td><td>Rasul pertama</td></tr>
+          <tr><td>Malaikat Jibril</td><td>Penyampai wahyu</td></tr>
+          <tr><td>Abu Bakar</td><td>Sahabat saat hijrah</td></tr>
+          <tr><td>Ali bin Abi Thalib</td><td>Sahabat Nabi</td></tr>
+          <tr><td>Aminah</td><td>Ibu Nabi</td></tr>
+          <tr><td>Abdullah</td><td>Ayah Nabi</td></tr>
+          <tr><td>Ansar</td><td>Penduduk Madinah</td></tr>
+          <tr><td>Muhajirin</td><td>Penduduk Makkah hijrah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Urutan Penting</h3>
+    <div class="grid2">
+      <div>
+        <h4>Urutan Peristiwa Nabi</h4>
+        <ol>
+          <li>Lahir 571 M.</li>
+          <li>Wahyu pertama usia 40.</li>
+          <li>Dakwah sembunyi 3 tahun.</li>
+          <li>Dakwah terang-terangan.</li>
+          <li>Hijrah 622 M.</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Urutan Sifat Rasul</h4>
+        <ol><li>Siddiq.</li><li>Amanah.</li><li>Tablig.</li><li>Fatanah.</li></ol>
+        <h4>Urutan Salat</h4>
+        <ol><li>Salat Jumat.</li><li>Salat Duha.</li><li>Salat Tahajud.</li></ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Istilah Penting</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Balig</td><td>Dewasa</td></tr>
+          <tr><td>Taklif</td><td>Beban tanggung jawab</td></tr>
+          <tr><td>Mukalaf</td><td>Orang balig</td></tr>
+          <tr><td>Makkiyah</td><td>Surah Makkah</td></tr>
+          <tr><td>Birrul walidain</td><td>Berbakti orang tua</td></tr>
+          <tr><td>Riya</td><td>Pamer</td></tr>
+          <tr><td>Ansar</td><td>Penolong</td></tr>
+          <tr><td>Muhajirin</td><td>Pendatang</td></tr>
+          <tr><td>Hijrah</td><td>Perpindahan</td></tr>
+          <tr><td>Wahyu</td><td>Petunjuk Allah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ZONA PENGULANGAN KILAT
+============================================================ -->
+<section id="layer-zona-pengulangan" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 6</span>
+    <h2>Zona Pengulangan Kilat</h2>
+    <p class="tp">10 rangkuman — satu halaman per modul.</p>
+  </div>
+
+  <div class="rangkuman"><h4>Rangkuman 1 — QS Al-'Alaq</h4>
+    <ul>
+      <li>Surah ke-96, 19 ayat, Makkiyah.</li>
+      <li>Ayat 1–5 = wahyu pertama di Gua Hira.</li>
+      <li>Isi: perintah membaca, Allah Pencipta, manusia dari 'alaq, Allah mengajar dengan pena, dan Allah mengajar manusia yang belum tahu.</li>
+      <li>Hikmah: pentingnya ilmu, membaca, menulis.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 2 — Asmaulhusna</h4>
+    <ul>
+      <li>Asmaulhusna = nama Allah, 99.</li>
+      <li>As-Sami' = Maha Mendengar · Al-Basir = Maha Melihat.</li>
+      <li>Al-Hafiz = Maha Memelihara · Al-Wali = Maha Pelindung.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 3 — Akhlak Keluarga</h4>
+    <ul>
+      <li>Akhlak keluarga = sikap baik kepada keluarga.</li>
+      <li>Birrul walidain = berbakti orang tua. Dalil: QS An-Nisa 36.</li>
+      <li>Contoh: membantu, menyayangi, rukun. Hikmah: keluarga harmonis.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 4 — Balig &amp; Taklif</h4>
+    <ul>
+      <li>Balig = dewasa · Taklif = beban tanggung jawab · Mukalaf = orang balig.</li>
+      <li>Tanda laki-laki: mimpi basah. Tanda perempuan: haid.</li>
+      <li>Tanggung jawab: salat, puasa, zakat, haji.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 5 — Nabi di Makkah</h4>
+    <ul>
+      <li>Lahir 571 M, Tahun Gajah.</li>
+      <li>Wahyu pertama usia 40 di Gua Hira, malaikat Jibril, QS Al-'Alaq 1–5.</li>
+      <li>Dakwah: 3 tahun sembunyi, lalu terang. Hikmah: sabar, teguh, ikhlas.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 6 — Al-Ma'un</h4>
+    <ul>
+      <li>Surah ke-107, 7 ayat, Makkiyah. Arti: barang berguna.</li>
+      <li>Kandungan: ancaman pendusta agama.</li>
+      <li>Hadis At Tirmidzi 1987: menjaga hubungan baik.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 7 — Iman kepada Rasul</h4>
+    <ul>
+      <li>Iman kepada rasul = percaya rasul utusan Allah. Jumlah rasul 25.</li>
+      <li>Sifat wajib: Siddiq, Amanah, Tablig, Fatanah.</li>
+      <li>Sifat mustahil: Kizib, Khianat, Kitman, Baladah.</li>
+      <li>Tugas: menyampaikan wahyu, membimbing, teladan.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 8 — Akhlak Guru</h4>
+    <ul>
+      <li>Akhlak guru = sikap baik kepada guru.</li>
+      <li>Bentuk: patuh, hormat, sopan.</li>
+      <li>Contoh: mendengarkan, mengerjakan tugas, salam. Hikmah: ilmu berkah.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 9 — Salat Jumat &amp; Sunah</h4>
+    <ul>
+      <li>Salat Jumat: wajib laki-laki, 2 rakaat, khutbah.</li>
+      <li>Salat duha: sunah, pagi, 2–12 rakaat.</li>
+      <li>Salat tahajud: sunah, malam, 2–8 rakaat.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 10 — Hijrah</h4>
+    <ul>
+      <li>Hijrah = perpindahan Nabi ke Madinah. Tahun 622 M.</li>
+      <li>Bersama Abu Bakar, singgah Gua Tsur. Disambut Ansar.</li>
+      <li>Awal kalender Hijriah. Hikmah: sabar, tawakal, persaudaraan.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================
+     GLOSARIUM
+============================================================ -->
+<section id="layer-glosarium" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 7</span>
+    <h2>Glosarium</h2>
+    <p class="tp">Daftar istilah lengkap beserta modul asalnya.</p>
+  </div>
+
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th><th>Modul</th></tr></thead>
+        <tbody>
+          <tr><td>Al-'Alaq</td><td>Segumpal darah</td><td>1</td></tr>
+          <tr><td>Al-Basir</td><td>Maha Melihat</td><td>2</td></tr>
+          <tr><td>Al-Hafiz</td><td>Maha Memelihara</td><td>2</td></tr>
+          <tr><td>Al-Ma'un</td><td>Barang berguna</td><td>6</td></tr>
+          <tr><td>Al-Wali</td><td>Maha Pelindung</td><td>2</td></tr>
+          <tr><td>Amanah</td><td>Dipercaya</td><td>7</td></tr>
+          <tr><td>Ansar</td><td>Penduduk Madinah penolong</td><td>10</td></tr>
+          <tr><td>As-Sami'</td><td>Maha Mendengar</td><td>2</td></tr>
+          <tr><td>Asmaulhusna</td><td>Nama-nama Allah</td><td>2</td></tr>
+          <tr><td>Balig</td><td>Dewasa</td><td>4</td></tr>
+          <tr><td>Birrul walidain</td><td>Berbakti orang tua</td><td>3</td></tr>
+          <tr><td>Duha</td><td>Salat pagi</td><td>9</td></tr>
+          <tr><td>Fatanah</td><td>Cerdas</td><td>7</td></tr>
+          <tr><td>Hijrah</td><td>Perpindahan</td><td>10</td></tr>
+          <tr><td>Jibril</td><td>Malaikat penyampai wahyu</td><td>1, 5</td></tr>
+          <tr><td>Jumat</td><td>Hari salat wajib</td><td>9</td></tr>
+          <tr><td>Khutbah</td><td>Ceramah sebelum salat</td><td>9</td></tr>
+          <tr><td>Kizib</td><td>Dusta</td><td>7</td></tr>
+          <tr><td>Makkiyah</td><td>Surah turun di Makkah</td><td>1, 5</td></tr>
+          <tr><td>Muhajirin</td><td>Penduduk Makkah hijrah</td><td>10</td></tr>
+          <tr><td>Mukalaf</td><td>Orang balig</td><td>4</td></tr>
+          <tr><td>Qalam</td><td>Pena</td><td>1</td></tr>
+          <tr><td>Riya</td><td>Pamer</td><td>6</td></tr>
+          <tr><td>Siddiq</td><td>Jujur</td><td>7</td></tr>
+          <tr><td>Tablig</td><td>Menyampaikan</td><td>7</td></tr>
+          <tr><td>Tahajud</td><td>Salat malam</td><td>9</td></tr>
+          <tr><td>Taklif</td><td>Beban tanggung jawab</td><td>4</td></tr>
+          <tr><td>Wahyu</td><td>Petunjuk Allah</td><td>1, 5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DAFTAR PUSTAKA
+============================================================ -->
+<section id="layer-pustaka" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 8</span>
+    <h2>Daftar Pustaka &amp; Catatan Akhir</h2>
+  </div>
+
+  <div class="card">
+    <h3>Daftar Pustaka</h3>
+    <ol>
+      <li>Al-Qur'an dan Terjemahnya. Kementerian Agama RI.</li>
+      <li>Buku Pendidikan Agama Islam dan Budi Pekerti Kelas IV Kurikulum Merdeka.</li>
+      <li>Program Tahunan PAI SD Negeri 1 Godegan Tahun Ajaran 2026/2027.</li>
+      <li>Hadis Riwayat At Tirmidzi nomor 1987.</li>
+      <li>Buku kumpulan hadis pilihan.</li>
+      <li>Sumber pendukung lain yang relevan.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Akhir</h3>
+    <p><strong>MPI Kelas IV</strong> ini terdiri dari:</p>
+    <ul>
+      <li>10 modul materi lengkap.</li>
+      <li>Zona Hafalan Cepat (kartu kilat, mind map, tabel, daftar istilah).</li>
+      <li>Zona Fakta Kunci (angka, nama, urutan, istilah).</li>
+      <li>Zona Pengulangan Kilat (10 rangkuman).</li>
+      <li>Glosarium dan daftar pustaka.</li>
+    </ul>
+    <p><strong>Total:</strong> 10 modul + 3 zona + glosarium + daftar pustaka.</p>
+    <div class="note">Media ini siap digunakan untuk persiapan LCC. Soal latihan tetap menggunakan aplikasi ujian yang sudah Bapak buat.</div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3 style="justify-content:center">Selesai 🎉</h3>
+    <p>Semua materi sudah dibuka. Ulangi minimal 3 kali sebelum lomba.</p>
+    <button class="back-inline" style="margin-top:8px" onclick="go('home')">🏠 Kembali ke Menu Utama</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ================= DATA KARTU KILAT ================= */
+const FLASH = {
+  m1: [
+    ["Surah Al-'Alaq surah ke berapa?", "96"],
+    ["Al-'Alaq artinya?", "Segumpal darah"],
+    ["Berapa jumlah ayat Al-'Alaq?", "19"],
+    ["Ayat berapa yang dipelajari?", "Ayat 1–5"],
+    ["Ayat 1–5 memerintahkan apa?", "Membaca dengan nama Allah"],
+    ["Manusia diciptakan dari apa?", "'Alaq (segumpal darah)"],
+    ["Allah mengajar manusia dengan apa?", "Pena (qalam)"],
+    ["Ayat 5 berisi tentang apa?", "Allah mengajar manusia apa yang belum diketahuinya"],
+    ["Di mana wahyu pertama turun?", "Gua Hira"],
+    ["Malaikat yang menyampaikan wahyu?", "Jibril"],
+    ["Al-'Alaq termasuk surah?", "Makkiyah"],
+    ["Wahyu pertama adalah surah?", "Al-'Alaq ayat 1–5"]
+  ],
+  m2: [
+    ["As-Sami' artinya?", "Maha Mendengar"],
+    ["Al-Basir artinya?", "Maha Melihat"],
+    ["Al-Hafiz artinya?", "Maha Memelihara"],
+    ["Al-Wali artinya?", "Maha Pelindung"],
+    ["Jumlah asmaulhusna?", "99"],
+    ["Dalil As-Sami'?", "QS Al-Baqarah 127"],
+    ["Dalil Al-Basir?", "QS Al-Hujurat 18"],
+    ["Dalil Al-Hafiz?", "QS Hud 57"],
+    ["Dalil Al-Wali?", "QS Al-Baqarah 257"],
+    ["Asmaulhusna artinya?", "Nama-nama Allah yang baik dan indah"]
+  ],
+  m3: [
+    ["Birrul walidain artinya?", "Berbakti kepada orang tua"],
+    ["Dalil berbakti kepada orang tua?", "QS An-Nisa 36"],
+    ["Hadis tentang ridha Allah?", "Ridha Allah ada pada ridha orang tua"],
+    ["Contoh akhlak terhadap keluarga?", "Membantu orang tua"],
+    ["Akhlak terhadap keluarga meliputi?", "Kerukunan dan tolong-menolong"]
+  ],
+  m4: [
+    ["Balig artinya?", "Dewasa"],
+    ["Taklif artinya?", "Beban tanggung jawab"],
+    ["Mukalaf artinya?", "Orang yang sudah balig"],
+    ["Tanda balig laki-laki?", "Mimpi basah"],
+    ["Tanda balig perempuan?", "Haid"],
+    ["Dalil taklif?", "QS Al-Baqarah 286"],
+    ["Contoh tanggung jawab mukalaf?", "Salat, puasa, zakat, haji"]
+  ],
+  m5: [
+    ["Nabi Muhammad lahir tahun?", "571 M"],
+    ["Tahun kelahiran Nabi disebut?", "Tahun Gajah"],
+    ["Nabi menerima wahyu usia?", "40 tahun"],
+    ["Tempat wahyu pertama?", "Gua Hira"],
+    ["Malaikat penyampai wahyu?", "Jibril"],
+    ["Wahyu pertama?", "QS Al-'Alaq 1–5"],
+    ["Dakwah sembunyi berapa tahun?", "3 tahun"],
+    ["Dakwah terang setelah surah?", "QS Al-Hijr 94"],
+    ["Ayah Nabi?", "Abdullah"],
+    ["Ibu Nabi?", "Aminah"]
+  ],
+  m6: [
+    ["QS Al-Ma'un surah ke?", "107"],
+    ["Al-Ma'un artinya?", "Barang berguna"],
+    ["Jumlah ayat Al-Ma'un?", "7"],
+    ["Golongan Al-Ma'un?", "Makkiyah"],
+    ["Hadis tentang menjaga hubungan?", "At Tirmidzi 1987"],
+    ["Kandungan Al-Ma'un?", "Menghardik yatim, tidak memberi makan miskin, lalai salat, riya"]
+  ],
+  m7: [
+    ["Jumlah rasul?", "25"],
+    ["Rasul terakhir?", "Muhammad saw."],
+    ["Rasul pertama?", "Adam a.s."],
+    ["Sifat wajib rasul?", "Siddiq, Amanah, Tablig, Fatanah"],
+    ["Siddiq artinya?", "Jujur"],
+    ["Amanah artinya?", "Dapat dipercaya"],
+    ["Tablig artinya?", "Menyampaikan"],
+    ["Fatanah artinya?", "Cerdas"],
+    ["Sifat mustahil rasul?", "Kizib, Khianat, Kitman, Baladah"],
+    ["Tugas rasul?", "Menyampaikan wahyu"]
+  ],
+  m8: [
+    ["Akhlak terhadap guru artinya?", "Sikap baik kepada guru"],
+    ["Bentuk akhlak kepada guru?", "Patuh, hormat, sopan"],
+    ["Hadis tentang guru?", "Memuliakan guru = memuliakan Allah"],
+    ["Contoh hormat kepada guru?", "Mengucapkan salam"],
+    ["Hikmah akhlak kepada guru?", "Ilmu berkah"]
+  ],
+  m9: [
+    ["Hukum salat Jumat?", "Wajib bagi laki-laki"],
+    ["Rakaat salat Jumat?", "2"],
+    ["Salat Jumat didahului?", "Khutbah"],
+    ["Hukum salat duha?", "Sunah"],
+    ["Waktu salat duha?", "Pagi"],
+    ["Jumlah rakaat duha?", "2–12"],
+    ["Hukum salat tahajud?", "Sunah"],
+    ["Waktu tahajud?", "Malam"],
+    ["Jumlah rakaat tahajud?", "2–8"]
+  ],
+  m10: [
+    ["Tahun hijrah?", "622 M"],
+    ["Sahabat Nabi saat hijrah?", "Abu Bakar"],
+    ["Tempat persembunyian?", "Gua Tsur"],
+    ["Kota tujuan hijrah?", "Madinah"],
+    ["Penduduk Madinah disebut?", "Ansar"],
+    ["Penduduk Makkah yang hijrah disebut?", "Muhajirin"],
+    ["Hijrah menjadi awal?", "Kalender Hijriah"],
+    ["Sebab hijrah?", "Tekanan Quraisy"],
+    ["Hikmah hijrah?", "Sabar, tawakal, persaudaraan"]
+  ]
+};
+
+/* ================= RENDER KARTU ================= */
+function buatKartu(q, a, grup){
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'flash';
+  b.dataset.grup = grup;
+  const fq = document.createElement('span'); fq.className = 'fq'; fq.textContent = q;
+  const fa = document.createElement('span'); fa.className = 'fa'; fa.textContent = a;
+  b.appendChild(fq); b.appendChild(fa);
+  b.addEventListener('click', () => b.classList.toggle('open'));
+  return b;
+}
+Object.keys(FLASH).forEach(k => {
+  const box = document.getElementById('flash-' + k);
+  if(!box) return;
+  FLASH[k].forEach(([q,a]) => box.appendChild(buatKartu(q,a,k)));
+});
+(function(){
+  const box = document.getElementById('flash-all');
+  if(!box) return;
+  Object.keys(FLASH).forEach(k => {
+    FLASH[k].forEach(([q,a]) => box.appendChild(buatKartu(q,a,k)));
+  });
+})();
+(function(){
+  const bar = document.getElementById('flashFilter');
+  if(!bar) return;
+  bar.addEventListener('click', e => {
+    const btn = e.target.closest('button'); if(!btn) return;
+    bar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.f;
+    document.querySelectorAll('#flash-all .flash').forEach(card => {
+      card.style.display = (f === 'all' || card.dataset.grup === f) ? '' : 'none';
+    });
+  });
+})();
+
+/* ================= NAVIGASI LAYER ================= */
+const HOME = 'home';
+let riwayat = [HOME];
+const backBtn = document.getElementById('backBtn');
+const topTitle = document.getElementById('topTitle');
+const topSub = document.getElementById('topSub');
+
+const JUDUL = {
+  'home':              ['MPI Kelas IV', 'Media Persiapan LCC PAI & BP'],
+  'halaman-depan':     ['Halaman Depan', 'Judul, peta kompetensi & petunjuk'],
+  'ganjil':            ['Semester Ganjil', 'Modul 1–5'],
+  'genap':             ['Semester Genap', 'Modul 6–10'],
+  'modul1':            ['Modul 1 — QS Al-\'Alaq 1–5', 'Semester Ganjil'],
+  'modul2':            ['Modul 2 — Asmaulhusna', 'Semester Ganjil'],
+  'modul3':            ['Modul 3 — Akhlak Keluarga', 'Semester Ganjil'],
+  'modul4':            ['Modul 4 — Balig & Taklif', 'Semester Ganjil'],
+  'modul5':            ['Modul 5 — Nabi di Makkah', 'Semester Ganjil'],
+  'modul6':            ['Modul 6 — Al-Ma\'un & Hadis', 'Semester Genap'],
+  'modul7':            ['Modul 7 — Iman kepada Rasul', 'Semester Genap'],
+  'modul8':            ['Modul 8 — Akhlak kepada Guru', 'Semester Genap'],
+  'modul9':            ['Modul 9 — Salat Jumat & Sunah', 'Semester Genap'],
+  'modul10':           ['Modul 10 — Hijrah ke Madinah', 'Semester Genap'],
+  'zona-hafalan':      ['Zona Hafalan Cepat', 'Kartu kilat & tabel'],
+  'zona-fakta':        ['Zona Fakta Kunci', 'Angka, nama, urutan'],
+  'zona-pengulangan':  ['Zona Pengulangan Kilat', '10 rangkuman'],
+  'glosarium':         ['Glosarium', 'Daftar istilah'],
+  'pustaka':           ['Daftar Pustaka', 'Sumber & catatan akhir']
+};
+
+function go(id, push = true){
+  const target = document.getElementById('layer-' + id);
+  if(!target) return;
+  document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+  target.classList.add('active');
+  if(push) riwayat.push(id);
+  const [t, s] = JUDUL[id] || ['MPI Kelas IV', 'Media Persiapan LCC'];
+  topTitle.childNodes[0].nodeValue = t + ' ';
+  topSub.textContent = s;
+  backBtn.disabled = riwayat.length <= 1;
+  window.scrollTo({top:0, behavior:'smooth'});
+  try { history.replaceState(null, '', '#' + id); } catch(e){}
+}
+
+function kembali(){
+  if(riwayat.length <= 1) return;
+  riwayat.pop();
+  go(riwayat[riwayat.length - 1], false);
+}
+
+backBtn.addEventListener('click', kembali);
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') kembali();
+});
+
+(function(){
+  const id = (location.hash || '').replace('#','');
+  if(id && document.getElementById('layer-' + id)){
+    riwayat = [HOME, id];
+    go(id, false);
+  }
+})();
+
+/* ================= CHECKLIST + PROGRES ================= */
+const KUNCI = 'mpi4-lcc-checklist-v3';
+const semuaCheckbox = [...document.querySelectorAll('.repeat-row input[type=checkbox]')];
+const progressBar = document.getElementById('progressBar');
+const progressTxt = document.getElementById('progressTxt');
+
+function muatChecklist(){
+  let data = {};
+  try { data = JSON.parse(localStorage.getItem(KUNCI)) || {}; } catch(e){ data = {}; }
+  semuaCheckbox.forEach(cb => { cb.checked = !!data[cb.dataset.k]; });
+  perbaruiProgres();
+}
+function simpanChecklist(){
+  const data = {};
+  semuaCheckbox.forEach(cb => { if(cb.checked) data[cb.dataset.k] = 1; });
+  try { localStorage.setItem(KUNCI, JSON.stringify(data)); } catch(e){}
+  perbaruiProgres();
+}
+function perbaruiProgres(){
+  const total = semuaCheckbox.length || 1;
+  const terisi = semuaCheckbox.filter(cb => cb.checked).length;
+  const persen = Math.round(terisi / total * 100);
+  if(progressBar) progressBar.style.width = persen + '%';
+  if(progressTxt) progressTxt.textContent = persen + '%';
+}
+semuaCheckbox.forEach(cb => cb.addEventListener('change', simpanChecklist));
+muatChecklist();
+
+/* ================= TEMA ================= */
+const themeBtn = document.getElementById('themeBtn');
+const TEMA = 'mpi4-tema-v3';
+function pasangTema(gelap){
+  document.body.classList.toggle('dark', gelap);
+  themeBtn.textContent = gelap ? '☀️' : '🌙';
+}
+let gelapTersimpan = false;
+try { gelapTersimpan = localStorage.getItem(TEMA) === 'dark'; } catch(e){}
+pasangTema(gelapTersimpan);
+themeBtn.addEventListener('click', () => {
+  const gelap = !document.body.classList.contains('dark');
+  pasangTema(gelap);
+  try { localStorage.setItem(TEMA, gelap ? 'dark' : 'light'); } catch(e){}
+});
+
+/* ================= CETAK ================= */
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+</script>
+</body>
+</html>
