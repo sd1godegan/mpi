@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPI Kelas VI — LCC PAI &amp; BP | SDN 1 Godegan</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --green:#0e6b45; --green2:#0a5235; --green3:#e9f6ef;
+    --gold:#c9a227; --bg:#eef3f0; --card:#ffffff; --text:#1c2a23;
+    --muted:#63776c; --line:#dbe7e0; --shadow:0 4px 18px rgba(14,107,69,.09);
+    --top:58px;
+  }
+  body.dark{
+    --green:#3ddc97; --green2:#17a06a; --green3:#10281f; --gold:#e8c14a;
+    --bg:#0c1310; --card:#141d19; --text:#e7f1ea; --muted:#9db3a7;
+    --line:#24342c; --shadow:0 4px 18px rgba(0,0,0,.5);
+  }
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text); line-height:1.65; min-height:100vh;
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .ar{font-family:"Scheherazade New","Traditional Arabic","Amiri",serif;
+      font-size:1.4rem; direction:rtl; unicode-bidi:isolate; line-height:2;}
+
+  .topbar{
+    position:fixed; inset:0 0 auto 0; height:var(--top); z-index:60;
+    display:flex; align-items:center; gap:8px; padding:0 10px;
+    background:linear-gradient(135deg,var(--green2),var(--green));
+    color:#fff; box-shadow:0 2px 14px rgba(0,0,0,.2);
+  }
+  .icon-btn{
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.22);
+    color:#fff; width:40px;height:40px;border-radius:11px;cursor:pointer;
+    font-size:1.05rem; display:grid;place-items:center; flex:none; font-family:inherit;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,.28)}
+  .icon-btn:disabled{opacity:.3; cursor:default}
+  .topbar-title{
+    flex:1; min-width:0; font-size:.92rem; font-weight:700; letter-spacing:.3px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-left:4px;
+  }
+  .topbar-title small{display:block;font-size:.66rem;font-weight:400;opacity:.8;letter-spacing:0}
+
+  main{padding:calc(var(--top) + 20px) 16px 50px; max-width:1040px; margin:0 auto;}
+  .layer{display:none; animation:fade .28s ease}
+  .layer.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .hero{
+    background:linear-gradient(150deg,var(--green2),var(--green) 62%,#12855a);
+    color:#fff; border-radius:20px; padding:30px 22px; text-align:center;
+    box-shadow:var(--shadow); position:relative; overflow:hidden; margin-bottom:24px;
+  }
+  .hero::after{
+    content:""; position:absolute; width:260px;height:260px;border-radius:50%;
+    background:rgba(255,255,255,.07); top:-110px; right:-80px;
+  }
+  .badge{
+    display:inline-block; background:var(--gold); color:#1c2a23; font-weight:800;
+    font-size:.66rem; letter-spacing:1px; text-transform:uppercase;
+    padding:5px 13px; border-radius:99px;
+  }
+  .hero h1{margin:12px 0 2px; font-size:clamp(1.6rem,5vw,2.4rem); letter-spacing:1.5px}
+  .hero h2{margin:0; font-size:clamp(.9rem,2.5vw,1.15rem); font-weight:600; opacity:.95}
+  .hero .school{margin:12px 0 0; font-size:.8rem; color:var(--gold); font-weight:700; letter-spacing:.5px}
+  .hero .by{margin:8px 0 0; font-size:.78rem; opacity:.9}
+
+  .section-title{
+    font-size:.72rem; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--muted); font-weight:800; margin:26px 4px 12px;
+  }
+
+  .menu-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px;}
+  .menu-card{
+    background:var(--card); border:1px solid var(--line); border-radius:15px;
+    padding:18px 16px; cursor:pointer; text-align:left; font-family:inherit;
+    color:var(--text); box-shadow:var(--shadow); transition:.18s;
+    display:flex; flex-direction:column; gap:6px; position:relative; overflow:hidden;
+    border-top:4px solid var(--green);
+  }
+  .menu-card:hover{transform:translateY(-3px); box-shadow:0 8px 22px rgba(14,107,69,.16)}
+  .menu-card .mc-ico{font-size:1.6rem; line-height:1; margin-bottom:2px}
+  .menu-card .mc-title{font-weight:800; font-size:.95rem; color:var(--green2)}
+  body.dark .menu-card .mc-title{color:var(--green)}
+  .menu-card .mc-desc{font-size:.78rem; color:var(--muted); line-height:1.5}
+  .menu-card .mc-tag{
+    font-size:.66rem; font-weight:800; letter-spacing:.6px; text-transform:uppercase;
+    color:var(--gold); margin-top:auto; padding-top:6px;
+  }
+  .menu-card.gold{border-top-color:var(--gold)}
+  .menu-card.gold .mc-title{color:var(--gold)}
+
+  .sec-head{margin-bottom:16px; border-bottom:2px solid var(--line); padding-bottom:12px}
+  .sec-head h2{margin:8px 0 6px; font-size:clamp(1.2rem,3.4vw,1.6rem); color:var(--green2)}
+  body.dark .sec-head h2{color:var(--green)}
+  .sec-head .tp{font-size:.85rem;color:var(--muted);margin:0}
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:15px;
+    padding:16px 18px; box-shadow:var(--shadow); margin-bottom:14px;
+  }
+  .card h3{
+    margin:0 0 10px; font-size:.98rem; color:var(--green2);
+    display:flex; align-items:center; gap:8px;
+  }
+  body.dark .card h3{color:var(--green)}
+  .card h3::before{content:""; width:5px;height:18px;border-radius:3px;background:var(--gold); flex:none}
+  .card h4{margin:14px 0 6px;font-size:.88rem;color:var(--green2)}
+  body.dark .card h4{color:var(--green)}
+  .card p{font-size:.87rem; margin:6px 0}
+  .card ul,.card ol{margin:6px 0; padding-left:20px}
+  .card li{font-size:.86rem; margin:3px 0}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:760px){ .grid2{grid-template-columns:1fr} }
+
+  pre.tree{
+    background:var(--green3); border:1px solid var(--line); border-radius:12px;
+    padding:13px 15px; overflow-x:auto; font-size:.76rem; line-height:1.6;
+    font-family:"Consolas","Monaco","Courier New",monospace; color:var(--text); margin:0;
+  }
+
+  .tbl-wrap{overflow-x:auto; border-radius:12px; border:1px solid var(--line)}
+  table{width:100%; border-collapse:collapse; background:var(--card); font-size:.83rem; min-width:380px}
+  th,td{padding:8px 11px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top}
+  th{background:var(--green3); color:var(--green2); font-weight:800; font-size:.75rem;
+     text-transform:uppercase; letter-spacing:.5px; white-space:nowrap}
+  body.dark th{color:var(--green)}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--green3)}
+
+  .flash-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr)); gap:9px}
+  .flash{
+    text-align:left; cursor:pointer; font-family:inherit; font-size:.84rem; color:var(--text);
+    background:var(--card); border:1px solid var(--line); border-left:4px solid var(--gold);
+    border-radius:11px; padding:10px 13px; transition:.15s;
+  }
+  .flash:hover{background:var(--green3); transform:translateY(-1px)}
+  .flash .fq{display:block; font-weight:600}
+  .flash .fa{
+    display:none; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line);
+    color:var(--green2); font-weight:800;
+  }
+  body.dark .flash .fa{color:var(--green)}
+  .flash.open .fa{display:block}
+  .flash::after{content:"👁 jawaban"; display:block; margin-top:5px; font-size:.63rem; color:var(--muted)}
+  .flash.open::after{content:"✕ tutup"}
+
+  .repeat-row{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+    padding:7px 0; border-bottom:1px dashed var(--line); font-size:.84rem;
+  }
+  .repeat-row:last-child{border-bottom:0}
+  .repeat-row > span{flex:1; min-width:120px; font-weight:600}
+  .repeat-row label{display:flex; align-items:center; gap:5px; font-size:.77rem; color:var(--muted); cursor:pointer}
+  .repeat-row input{accent-color:var(--green); width:16px;height:16px;cursor:pointer}
+
+  .note{
+    background:var(--green3); border-left:4px solid var(--gold); border-radius:0 12px 12px 0;
+    padding:11px 15px; font-size:.84rem; margin:12px 0;
+  }
+  .pill{
+    display:inline-block; background:var(--green3); color:var(--green2); font-weight:700;
+    font-size:.68rem; padding:3px 10px; border-radius:99px; margin:0 5px 5px 0;
+  }
+  body.dark .pill{color:var(--green)}
+  .rangkuman{
+    background:var(--card); border:1px solid var(--line); border-left:4px solid var(--green);
+    border-radius:0 13px 13px 0; padding:13px 16px; margin-bottom:11px; box-shadow:var(--shadow);
+  }
+  .rangkuman h4{margin:0 0 5px; font-size:.9rem; color:var(--green2)}
+  body.dark .rangkuman h4{color:var(--green)}
+  .rangkuman ul{margin:0; padding-left:19px}
+  .rangkuman li{font-size:.84rem}
+
+  .filter-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .filter-bar button{
+    font-family:inherit; font-size:.74rem; font-weight:700; cursor:pointer;
+    padding:5px 12px; border-radius:99px; border:1px solid var(--line);
+    background:var(--card); color:var(--muted);
+  }
+  .filter-bar button.active{background:var(--green); color:#fff; border-color:var(--green)}
+
+  .back-inline{
+    display:inline-flex; align-items:center; gap:6px; background:var(--card);
+    border:1px solid var(--line); color:var(--green2); font-weight:700; font-size:.8rem;
+    padding:8px 14px; border-radius:99px; cursor:pointer; font-family:inherit;
+    margin-bottom:14px; box-shadow:var(--shadow);
+  }
+  body.dark .back-inline{color:var(--green)}
+  .back-inline:hover{background:var(--green3)}
+
+  .progres-mini{display:flex;align-items:center;gap:6px;flex:none}
+  .progres-mini .bar{width:66px;height:8px;border-radius:99px;background:rgba(255,255,255,.25);overflow:hidden}
+  .progres-mini .bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+  .progres-mini span{font-size:.7rem;font-weight:700;min-width:32px;text-align:right}
+
+  @media(max-width:560px){
+    .progres-mini{display:none}
+    .topbar-title small{display:none}
+    main{padding:calc(var(--top) + 14px) 12px 40px}
+    .menu-grid{grid-template-columns:1fr 1fr; gap:9px}
+    .menu-card{padding:14px 12px}
+    .menu-card .mc-ico{font-size:1.35rem}
+    .menu-card .mc-title{font-size:.85rem}
+    .menu-card .mc-desc{font-size:.72rem}
+  }
+  @media(max-width:380px){ .menu-grid{grid-template-columns:1fr} }
+
+  @media print{
+    .topbar,.back-inline,.filter-bar,.icon-btn,.progres-mini{display:none!important}
+    .layer{display:block!important; page-break-after:always}
+    main{padding:0;max-width:none}
+    body{background:#fff;color:#000}
+    .card,.flash,.rangkuman{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button id="backBtn" class="icon-btn" title="Kembali" disabled>←</button>
+  <div class="topbar-title" id="topTitle">
+    MPI Kelas VI <small id="topSub">Media Persiapan LCC PAI &amp; BP</small>
+  </div>
+  <div class="progres-mini" title="Progres hafalan">
+    <div class="bar"><i id="progressBar"></i></div>
+    <span id="progressTxt">0%</span>
+  </div>
+  <button id="themeBtn" class="icon-btn" title="Mode gelap/terang">🌙</button>
+  <button id="printBtn" class="icon-btn" title="Cetak / PDF">🖨️</button>
+</header>
+
+<main>
+
+<!-- ================= HOME ================= -->
+<section id="layer-home" class="layer active">
+  <div class="hero">
+    <span class="badge">Fase C · Kelas VI</span>
+    <h1>MPI KELAS VI</h1>
+    <h2>Media Persiapan Lomba Cerdas Cermat</h2>
+    <p class="school">SD NEGERI 1 GODEGAN · TAHUN AJARAN 2026/2027</p>
+    <p class="by">Pendidikan Agama Islam &amp; Budi Pekerti · “Islam Sempurna, Hidup Bermakna”</p>
+  </div>
+
+  <div class="section-title">Menu Utama</div>
+  <div class="menu-grid">
+    <button class="menu-card" onclick="go('halaman-depan')">
+      <span class="mc-ico">📖</span>
+      <span class="mc-title">Halaman Depan</span>
+      <span class="mc-desc">Judul, kata pengantar, peta kompetensi 10 TP, petunjuk penggunaan.</span>
+      <span class="mc-tag">Info</span>
+    </button>
+
+    <button class="menu-card" onclick="go('ganjil')">
+      <span class="mc-ico">📗</span>
+      <span class="mc-title">Semester Ganjil</span>
+      <span class="mc-desc">Modul 1–5: Al-Kafirun, Asmaulhusna, Akhlak-Toleransi, Halal-Haram, Khulafaurasyidin 1.</span>
+      <span class="mc-tag">5 Modul</span>
+    </button>
+
+    <button class="menu-card" onclick="go('genap')">
+      <span class="mc-ico">📘</span>
+      <span class="mc-title">Semester Genap</span>
+      <span class="mc-desc">Modul 6–10: Hadis Bukhari, Qada'-Qadar, Hewan-Tumbuhan, Infak-Wakaf, Khulafaurasyidin 2.</span>
+      <span class="mc-tag">5 Modul</span>
+    </button>
+
+    <button class="menu-card gold" onclick="go('zona-hafalan')">
+      <span class="mc-ico">⚡</span>
+      <span class="mc-title">Zona Hafalan Cepat</span>
+      <span class="mc-desc">Kartu kilat interaktif, mind map, tabel ringkas, daftar istilah.</span>
+      <span class="mc-tag">Latihan</span>
+    </button>
+
+    <button class="menu-card gold" onclick="go('zona-fakta')">
+      <span class="mc-ico">🎯</span>
+      <span class="mc-title">Zona Fakta Kunci</span>
+      <span class="mc-desc">Angka penting, nama penting, urutan penting, istilah penting.</span>
+      <span class="mc-tag">Latihan</span>
+    </button>
+
+    <button class="menu-card gold" onclick="go('zona-pengulangan')">
+      <span class="mc-ico">🔁</span>
+      <span class="mc-title">Zona Pengulangan Kilat</span>
+      <span class="mc-desc">10 rangkuman — satu halaman per modul.</span>
+      <span class="mc-tag">Latihan</span>
+    </button>
+
+    <button class="menu-card" onclick="go('glosarium')">
+      <span class="mc-ico">📚</span>
+      <span class="mc-title">Glosarium</span>
+      <span class="mc-desc">Daftar istilah lengkap beserta modul asalnya.</span>
+      <span class="mc-tag">Lampiran</span>
+    </button>
+
+    <button class="menu-card" onclick="go('pustaka')">
+      <span class="mc-ico">📑</span>
+      <span class="mc-title">Daftar Pustaka</span>
+      <span class="mc-desc">Sumber rujukan dan catatan akhir media.</span>
+      <span class="mc-tag">Lampiran</span>
+    </button>
+  </div>
+
+  <div class="note" style="margin-top:20px">
+    <strong>Cara pakai:</strong> pilih salah satu menu di atas untuk membuka halaman materi.
+    Gunakan tombol <strong>←</strong> di kiri atas untuk kembali ke menu sebelumnya.
+    Klik <em>Kartu Kilat</em> untuk menyembunyikan/menampilkan jawaban.
+    Centang <em>Catatan Pengulangan</em> — progres tersimpan otomatis.
+  </div>
+</section>
+
+<!-- ================= HALAMAN DEPAN ================= -->
+<section id="layer-halaman-depan" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+
+  <div class="card">
+    <h3>Judul &amp; Identitas</h3>
+    <p><strong>MPI KELAS VI</strong><br>
+    Media Persiapan Lomba Cerdas Cermat<br>
+    Pendidikan Agama Islam dan Budi Pekerti · Fase C — Kelas VI<br>
+    SD Negeri 1 Godegan · Tahun Ajaran 2026/2027</p>
+    <p>Disusun oleh:<br><strong>Ardika Riski Rahmawan, S.Pd.</strong><br>NIP 199605022020121017</p>
+  </div>
+
+  <div class="card">
+    <h3>Kata Pengantar</h3>
+    <p>Media pembelajaran interaktif ini disusun sebagai bahan belajar mandiri bagi siswa kelas VI dalam
+    mempersiapkan Lomba Cerdas Cermat (LCC) Pendidikan Agama Islam dan Budi Pekerti. Materi disajikan
+    secara lengkap, padat, dan terstruktur agar mudah dipelajari, diulang, dan dihafalkan.</p>
+    <p>Media ini berbasis teks murni sehingga ringan, mudah diakses, dan dapat digunakan kapan saja tanpa
+    memerlukan koneksi internet. Soal latihan tidak disertakan karena telah tersedia dalam aplikasi ujian terpisah.</p>
+    <p>Semoga bermanfaat.</p>
+    <p style="margin-bottom:0">Godegan, 30 Juni 2026<br>Guru PAI<br><br>
+    <strong>Ardika Riski Rahmawan, S.Pd.</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>Petunjuk Penggunaan</h3>
+    <ol>
+      <li>Baca peta kompetensi untuk mengetahui cakupan materi.</li>
+      <li>Pelajari modul 1–5 (semester ganjil) terlebih dahulu.</li>
+      <li>Lanjutkan modul 6–10 (semester genap).</li>
+      <li>Gunakan Zona Hafalan Cepat untuk mengulang materi secara singkat.</li>
+      <li>Gunakan Zona Fakta Kunci untuk menghafal angka, nama, urutan, dan istilah penting.</li>
+      <li>Gunakan Zona Pengulangan Kilat untuk membaca ulang rangkuman 1 halaman per modul.</li>
+      <li>Tandai materi yang sudah dikuasai pada Catatan Pengulangan.</li>
+      <li>Ulangi minimal 3 kali sebelum lomba.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Cara Belajar Efektif untuk LCC</h3>
+    <ol>
+      <li><strong>Baca cepat</strong> — baca seluruh materi sekali untuk mengenal.</li>
+      <li><strong>Baca fokus</strong> — baca per modul, tandai fakta kunci.</li>
+      <li><strong>Hafal kilat</strong> — gunakan kartu kilat dan tabel ringkas.</li>
+      <li><strong>Ulang berkala</strong> — ulangi setiap 2–3 hari.</li>
+      <li><strong>Uji diri</strong> — tutup jawaban kartu kilat, coba jawab.</li>
+      <li><strong>Fokus fakta</strong> — angka, nama, urutan, istilah paling sering keluar di LCC.</li>
+      <li><strong>Diskusi</strong> — ajak teman untuk tanya-jawab.</li>
+      <li><strong>Tenang</strong> — baca rangkuman kilat sebelum lomba.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Peta Kompetensi — Semester Ganjil</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Elemen</th><th>TP</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Al-Qur'an Hadis</td><td>6.1 Membaca, menulis, menghafal, dan menjelaskan kandungan Surah Al-Kafirun</td></tr>
+          <tr><td>2</td><td>Akidah</td><td>6.2 Menjelaskan dan meyakini asmaulhusna Al-Ghaffar, Al-'Afuw, Al-Ahad, dan As-Samad</td></tr>
+          <tr><td>3</td><td>Akhlak</td><td>6.3 Menerapkan akhlak terhadap teman serta sikap toleransi terhadap warga non-muslim</td></tr>
+          <tr><td>4</td><td>Fikih</td><td>6.4 Menerapkan konsumsi makanan dan minuman yang halal serta menghindari yang haram</td></tr>
+          <tr><td>5</td><td>SPI</td><td>6.5 Menceritakan dan menjelaskan kisah khulafaurasyidin (Abu Bakar as-Siddiq dan Umar bin Khattab)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Peta Kompetensi — Semester Genap</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Elemen</th><th>TP</th></tr></thead>
+        <tbody>
+          <tr><td>6</td><td>Al-Qur'an Hadis</td><td>6.6 Menjelaskan pesan Hadis Riwayat Bukhori nomor 6484 tentang berbuat baik kepada teman</td></tr>
+          <tr><td>7</td><td>Akidah</td><td>6.7 Menjelaskan dan meyakini iman kepada qada' dan qadar</td></tr>
+          <tr><td>8</td><td>Akhlak</td><td>6.8 Menerapkan akhlak terhadap hewan dan tumbuhan di lingkungan sekitar</td></tr>
+          <tr><td>9</td><td>Fikih</td><td>6.9 Menerapkan tata cara dan hikmah ibadah infak, sedekah, dan wakaf</td></tr>
+          <tr><td>10</td><td>SPI</td><td>6.10 Menceritakan dan menjelaskan kisah khulafaurasyidin (Utsman bin Affan dan Ali bin Abi Thalib)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MENU GANJIL ================= -->
+<section id="layer-ganjil" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Semester Ganjil</span>
+    <h2>Pilih Modul 1–5</h2>
+    <p class="tp">Klik salah satu modul untuk membuka materi.</p>
+  </div>
+
+  <div class="menu-grid">
+    <button class="menu-card" onclick="go('modul1')">
+      <span class="mc-ico">🕊️</span>
+      <span class="mc-title">Modul 1</span>
+      <span class="mc-desc">QS Al-Kafirun — toleransi beragama &amp; teguh akidah.</span>
+      <span class="mc-tag">Al-Qur'an Hadis</span>
+    </button>
+    <button class="menu-card" onclick="go('modul2')">
+      <span class="mc-ico">💫</span>
+      <span class="mc-title">Modul 2</span>
+      <span class="mc-desc">Asmaulhusna: Al-Ghaffar, Al-'Afuw, Al-Ahad, As-Samad.</span>
+      <span class="mc-tag">Akidah</span>
+    </button>
+    <button class="menu-card" onclick="go('modul3')">
+      <span class="mc-ico">🤝</span>
+      <span class="mc-title">Modul 3</span>
+      <span class="mc-desc">Akhlak terhadap teman &amp; toleransi terhadap non-muslim.</span>
+      <span class="mc-tag">Akhlak</span>
+    </button>
+    <button class="menu-card" onclick="go('modul4')">
+      <span class="mc-ico">🍎</span>
+      <span class="mc-title">Modul 4</span>
+      <span class="mc-desc">Makanan &amp; minuman halal-haram.</span>
+      <span class="mc-tag">Fikih</span>
+    </button>
+    <button class="menu-card" onclick="go('modul5')">
+      <span class="mc-ico">👑</span>
+      <span class="mc-title">Modul 5</span>
+      <span class="mc-desc">Khulafaurasyidin 1: Abu Bakar &amp; Umar bin Khattab.</span>
+      <span class="mc-tag">SPI</span>
+    </button>
+  </div>
+</section>
+
+<!-- ================= MENU GENAP ================= -->
+<section id="layer-genap" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Semester Genap</span>
+    <h2>Pilih Modul 6–10</h2>
+    <p class="tp">Klik salah satu modul untuk membuka materi.</p>
+  </div>
+
+  <div class="menu-grid">
+    <button class="menu-card" onclick="go('modul6')">
+      <span class="mc-ico">📜</span>
+      <span class="mc-title">Modul 6</span>
+      <span class="mc-desc">Hadis Bukhari 6484 — berbuat baik kepada teman.</span>
+      <span class="mc-tag">Al-Qur'an Hadis</span>
+    </button>
+    <button class="menu-card" onclick="go('modul7')">
+      <span class="mc-ico">⚖️</span>
+      <span class="mc-title">Modul 7</span>
+      <span class="mc-desc">Iman kepada qada' dan qadar — takdir mubram &amp; muallaq.</span>
+      <span class="mc-tag">Akidah</span>
+    </button>
+    <button class="menu-card" onclick="go('modul8')">
+      <span class="mc-ico">🌱</span>
+      <span class="mc-title">Modul 8</span>
+      <span class="mc-desc">Akhlak terhadap hewan &amp; tumbuhan di lingkungan sekitar.</span>
+      <span class="mc-tag">Akhlak</span>
+    </button>
+    <button class="menu-card" onclick="go('modul9')">
+      <span class="mc-ico">💝</span>
+      <span class="mc-title">Modul 9</span>
+      <span class="mc-desc">Infak, sedekah, dan wakaf — perbedaan &amp; hikmahnya.</span>
+      <span class="mc-tag">Fikih</span>
+    </button>
+    <button class="menu-card" onclick="go('modul10')">
+      <span class="mc-ico">🕌</span>
+      <span class="mc-title">Modul 10</span>
+      <span class="mc-desc">Khulafaurasyidin 2: Utsman bin Affan &amp; Ali bin Abi Thalib.</span>
+      <span class="mc-tag">SPI</span>
+    </button>
+  </div>
+</section>
+
+<!-- ================= MODUL 1 ================= -->
+<section id="layer-modul1" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 1 · Semester Ganjil</span>
+    <h2>QS Al-Kafirun</h2>
+    <p class="tp"><strong>TP 6.1</strong> — Membaca, menulis, menghafal, dan menjelaskan kandungan Surah Al-Kafirun.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat membaca QS Al-Kafirun dengan benar.</li>
+        <li>Siswa dapat menulis QS Al-Kafirun dengan benar.</li>
+        <li>Siswa dapat menghafal QS Al-Kafirun dengan lancar.</li>
+        <li>Siswa dapat menjelaskan kandungan QS Al-Kafirun.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">QS AL-KAFIRUN
+├── Identitas
+│   ├── Surah ke-109
+│   ├── 6 ayat
+│   ├── Makkiyah
+│   └── Arti: Orang-orang kafir
+├── Lafal &amp; Arti
+│   ├── Ayat 1: قُلْ يٰٓاَيُّهَا الْكٰفِرُوْنَ
+│   ├── Ayat 2: لَآ اَعْبُدُ مَا تَعْبُدُوْنَ
+│   ├── Ayat 3: وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُ
+│   ├── Ayat 4: وَلَآ اَنَا عَابِدٌ مَّا عَبَدْتُّمْ
+│   ├── Ayat 5: وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُ
+│   └── Ayat 6: لَكُمْ دِيْنُكُمْ وَلِيَ دِيْنِ
+├── Kandungan
+│   ├── Toleransi beragama
+│   ├── Tidak mencampur aduk ibadah
+│   ├── Tegas dalam akidah
+│   └── Menghormati keyakinan
+└── Hikmah
+    ├── Toleransi
+    ├── Teguh akidah
+    └── Tidak memaksa agama</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Surah Al-Kafirun adalah surah ke-109 dalam Al-Qur'an. Terdiri dari 6 ayat. Diturunkan di Makkah
+    (Makkiyah). Al-Kafirun artinya orang-orang kafir.</p>
+
+    <h4>Dalil</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ayat</th><th>Lafal</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><span class="ar">قُلْ يٰٓاَيُّهَا الْكٰفِرُوْنَ</span></td><td>“Katakanlah, hai orang-orang kafir.”</td></tr>
+          <tr><td>2</td><td><span class="ar">لَآ اَعْبُدُ مَا تَعْبُدُوْنَ</span></td><td>“Aku tidak menyembah apa yang kamu sembah.”</td></tr>
+          <tr><td>3</td><td><span class="ar">وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُ</span></td><td>“Dan kamu bukan penyembah apa yang aku sembah.”</td></tr>
+          <tr><td>4</td><td><span class="ar">وَلَآ اَنَا عَابِدٌ مَّا عَبَدْتُّمْ</span></td><td>“Dan aku tidak pernah menjadi penyembah apa yang kamu sembah.”</td></tr>
+          <tr><td>5</td><td><span class="ar">وَلَآ اَنْتُمْ عٰبِدُوْنَ مَآ اَعْبُدُ</span></td><td>“Dan kamu tidak pernah menjadi penyembah apa yang aku sembah.”</td></tr>
+          <tr><td>6</td><td><span class="ar">لَكُمْ دِيْنُكُمْ وَلِيَ دِيْنِ</span></td><td>“Untukmu agamamu, dan untukku agamaku.”</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Penjelasan per Ayat</h4>
+    <ol>
+      <li><strong>Ayat 1</strong> — Perintah menegaskan kepada orang kafir.</li>
+      <li><strong>Ayat 2–5</strong> — Penegasan tidak mencampur aduk ibadah.</li>
+      <li><strong>Ayat 6</strong> — Toleransi: untukmu agamamu, untukku agamaku.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Menghormati teman non-muslim.</li>
+      <li>Tidak mengganggu ibadah orang lain.</li>
+      <li>Teguh pada akidah Islam.</li>
+      <li>Tidak memaksa agama.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Toleransi beragama.</li>
+      <li>Teguh pada akidah.</li>
+      <li>Tidak memaksa agama.</li>
+      <li>Menghormati keyakinan.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Nama surah</td><td>Al-Kafirun</td></tr>
+          <tr><td>Arti</td><td>Orang-orang kafir</td></tr>
+          <tr><td>Surah ke-</td><td>109</td></tr>
+          <tr><td>Jumlah ayat</td><td>6</td></tr>
+          <tr><td>Golongan</td><td>Makkiyah</td></tr>
+          <tr><td>Ayat terakhir</td><td>لَكُمْ دِيْنُكُمْ وَلِيَ دِيْنِ</td></tr>
+          <tr><td>Tema</td><td>Toleransi beragama</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m1"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Al-Kafirun = surah ke-109, 6 ayat, Makkiyah.</li>
+      <li>Arti: orang-orang kafir.</li>
+      <li>Ayat terakhir: lakum dinukum waliyadin.</li>
+      <li>Tema: toleransi beragama.</li>
+      <li>Hikmah: teguh akidah, tidak memaksa agama.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Identitas surah</span>
+      <label><input type="checkbox" data-k="m1-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Lafal ayat 1–6</span>
+      <label><input type="checkbox" data-k="m1-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Arti ayat 1–6</span>
+      <label><input type="checkbox" data-k="m1-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Kandungan</span>
+      <label><input type="checkbox" data-k="m1-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-4b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m1-5a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m1-5b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 2 ================= -->
+<section id="layer-modul2" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 2 · Semester Ganjil</span>
+    <h2>Asmaulhusna: Al-Ghaffar, Al-'Afuw, Al-Ahad, As-Samad</h2>
+    <p class="tp"><strong>TP 6.2</strong> — Menjelaskan dan meyakini asmaulhusna Al-Ghaffar, Al-'Afuw, Al-Ahad, dan As-Samad.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan arti Al-Ghaffar, Al-'Afuw, Al-Ahad, As-Samad.</li>
+        <li>Siswa dapat meyakini asmaulhusna tersebut.</li>
+        <li>Siswa dapat menyebutkan dalil dan contohnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">ASMAULHUSNA
+├── Al-Ghaffar
+│   ├── Arti: Maha Pengampun
+│   ├── Dalil: QS Az-Zumar 53
+│   └── Contoh: Allah mengampuni dosa
+├── Al-'Afuw
+│   ├── Arti: Maha Pemaaf
+│   ├── Dalil: QS Al-Baqarah 52
+│   └── Contoh: Allah memaafkan hamba
+├── Al-Ahad
+│   ├── Arti: Maha Esa
+│   ├── Dalil: QS Al-Ikhlas 1
+│   └── Contoh: Allah satu-satunya Tuhan
+└── As-Samad
+    ├── Arti: Maha Dibutuhkan
+    ├── Dalil: QS Al-Ikhlas 2
+    └── Contoh: semua bergantung Allah</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Asmaulhusna adalah nama-nama Allah yang baik dan indah. Jumlahnya 99. Empat di antaranya:</p>
+    <ol>
+      <li><strong>Al-Ghaffar</strong> — Maha Pengampun.</li>
+      <li><strong>Al-'Afuw</strong> — Maha Pemaaf.</li>
+      <li><strong>Al-Ahad</strong> — Maha Esa.</li>
+      <li><strong>As-Samad</strong> — Maha Dibutuhkan.</li>
+    </ol>
+
+    <h4>Dalil</h4>
+    <ul>
+      <li><strong>Al-Ghaffar:</strong> QS Az-Zumar 53 — “Sesungguhnya Allah mengampuni dosa-dosa semuanya.”</li>
+      <li><strong>Al-'Afuw:</strong> QS Al-Baqarah 52 — “Sesungguhnya Allah Maha Pemaaf.”</li>
+      <li><strong>Al-Ahad:</strong> QS Al-Ikhlas 1 — “Katakanlah, Dialah Allah Yang Maha Esa.”</li>
+      <li><strong>As-Samad:</strong> QS Al-Ikhlas 2 — “Allah yang menjadi tumpuan segala sesuatu.”</li>
+    </ul>
+
+    <h4>Penjelasan</h4>
+    <ol>
+      <li><strong>Al-Ghaffar</strong> — Allah mengampuni dosa hamba-Nya yang bertobat.</li>
+      <li><strong>Al-'Afuw</strong> — Allah memaafkan kesalahan.</li>
+      <li><strong>Al-Ahad</strong> — Allah satu, tidak ada sekutu.</li>
+      <li><strong>As-Samad</strong> — semua makhluk bergantung kepada Allah.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Bertaubat kepada Allah.</li>
+      <li>Memohon ampun.</li>
+      <li>Tidak menyekutukan Allah.</li>
+      <li>Bergantung hanya kepada Allah.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Rajin bertaubat.</li>
+      <li>Tidak putus asa.</li>
+      <li>Tauhid yang kuat.</li>
+      <li>Hanya bergantung kepada Allah.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Asmaulhusna</th><th>Arti</th><th>Dalil</th></tr></thead>
+        <tbody>
+          <tr><td>Al-Ghaffar</td><td>Maha Pengampun</td><td>QS Az-Zumar 53</td></tr>
+          <tr><td>Al-'Afuw</td><td>Maha Pemaaf</td><td>QS Al-Baqarah 52</td></tr>
+          <tr><td>Al-Ahad</td><td>Maha Esa</td><td>QS Al-Ikhlas 1</td></tr>
+          <tr><td>As-Samad</td><td>Maha Dibutuhkan</td><td>QS Al-Ikhlas 2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m2"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Al-Ghaffar = Maha Pengampun.</li>
+      <li>Al-'Afuw = Maha Pemaaf.</li>
+      <li>Al-Ahad = Maha Esa.</li>
+      <li>As-Samad = Maha Dibutuhkan.</li>
+      <li>Hikmah: rajin bertaubat, tauhid kuat.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Arti 4 asmaulhusna</span>
+      <label><input type="checkbox" data-k="m2-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Dalil 4 asmaulhusna</span>
+      <label><input type="checkbox" data-k="m2-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh penerapan</span>
+      <label><input type="checkbox" data-k="m2-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m2-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m2-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 3 ================= -->
+<section id="layer-modul3" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 3 · Semester Ganjil</span>
+    <h2>Akhlak terhadap Teman &amp; Toleransi</h2>
+    <p class="tp"><strong>TP 6.3</strong> — Menerapkan akhlak terhadap teman serta sikap toleransi terhadap warga non-muslim.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan akhlak terhadap teman.</li>
+        <li>Siswa dapat menerapkan sikap toleransi terhadap non-muslim.</li>
+        <li>Siswa dapat menyebutkan contoh dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">AKHLAK TERHADAP TEMAN &amp; TOLERANSI
+├── Akhlak terhadap Teman
+│   ├── Menyayangi
+│   ├── Membantu
+│   ├── Tidak bertengkar
+│   └── Memaafkan
+├── Toleransi terhadap Non-Muslim
+│   ├── Menghormati
+│   ├── Tidak mengganggu
+│   ├── Hidup damai
+│   └── Tidak memaksa agama
+└── Hikmah
+    ├── Persaudaraan
+    ├── Kerukunan
+    └── Dicintai Allah</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <ol>
+      <li><strong>Akhlak terhadap teman</strong> — sikap baik kepada teman.</li>
+      <li><strong>Toleransi</strong> — menghormati perbedaan keyakinan.</li>
+    </ol>
+
+    <h4>Dalil</h4>
+    <ul>
+      <li>Hadis — “Barang siapa beriman kepada Allah dan hari akhir, hendaklah ia berbuat baik kepada tetangganya.”</li>
+      <li>QS Al-Kafirun 6 — “Untukmu agamamu, dan untukku agamaku.”</li>
+    </ul>
+
+    <h4>Akhlak terhadap Teman</h4>
+    <ol>
+      <li>Menyayangi.</li>
+      <li>Membantu.</li>
+      <li>Tidak bertengkar.</li>
+      <li>Memaafkan.</li>
+      <li>Berbagi.</li>
+    </ol>
+
+    <h4>Toleransi terhadap Non-Muslim</h4>
+    <ol>
+      <li>Menghormati keyakinan.</li>
+      <li>Tidak mengganggu ibadah.</li>
+      <li>Hidup damai.</li>
+      <li>Tidak memaksa agama.</li>
+      <li>Tetap tegas dalam akidah.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Membantu teman yang kesusahan.</li>
+      <li>Tidak membedakan teman.</li>
+      <li>Menghormati teman non-muslim.</li>
+      <li>Tidak mengganggu ibadah orang lain.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Persaudaraan.</li>
+      <li>Kerukunan.</li>
+      <li>Dicintai Allah.</li>
+      <li>Hidup damai.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Akhlak teman</td><td>Sikap baik kepada teman</td></tr>
+          <tr><td>Toleransi</td><td>Menghormati perbedaan</td></tr>
+          <tr><td>Dalil</td><td>QS Al-Kafirun 6</td></tr>
+          <tr><td>Batas toleransi</td><td>Tidak mencampur akidah</td></tr>
+          <tr><td>Hikmah</td><td>Persaudaraan, kerukunan</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m3"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Akhlak teman = sikap baik kepada teman.</li>
+      <li>Toleransi = menghormati perbedaan.</li>
+      <li>Dalil: QS Al-Kafirun 6.</li>
+      <li>Contoh: membantu, menghormati, tidak mengganggu.</li>
+      <li>Hikmah: persaudaraan, kerukunan, hidup damai.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m3-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Dalil</span>
+      <label><input type="checkbox" data-k="m3-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m3-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m3-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m3-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 4 ================= -->
+<section id="layer-modul4" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 4 · Semester Ganjil</span>
+    <h2>Makanan dan Minuman Halal-Haram</h2>
+    <p class="tp"><strong>TP 6.4</strong> — Menerapkan konsumsi makanan dan minuman yang halal serta menghindari yang haram.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan pengertian halal dan haram.</li>
+        <li>Siswa dapat menyebutkan kriteria halal-haram.</li>
+        <li>Siswa dapat menyebutkan contoh dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">MAKANAN &amp; MINUMAN HALAL-HARAM
+├── Halal
+│   ├── Arti: Diperbolehkan
+│   ├── Kriteria: zat, cara, proses
+│   └── Contoh: nasi, sayur, buah
+├── Haram
+│   ├── Arti: Dilarang
+│   ├── Kriteria: zat, cara
+│   └── Contoh: babi, khamr, bangkai
+├── Dampak
+│   ├── Halal: berkah, sehat
+│   └── Haram: dosa, sakit
+└── Hikmah
+    ├── Sehat
+    ├── Berkah
+    └── Ibadah diterima</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <ol>
+      <li><strong>Halal</strong> — diperbolehkan dalam Islam.</li>
+      <li><strong>Haram</strong> — dilarang dalam Islam.</li>
+    </ol>
+
+    <h4>Dalil</h4>
+    <ul>
+      <li>QS Al-Baqarah 168 — “Hai sekalian manusia, makanlah yang halal lagi baik dari apa yang terdapat di bumi.”</li>
+      <li>QS Al-Maidah 90 — “Sesungguhnya khamr, judi, berhala, dan undian adalah perbuatan keji.”</li>
+    </ul>
+
+    <h4>Kriteria Halal</h4>
+    <ol>
+      <li>Zatnya halal.</li>
+      <li>Cara memperolehnya halal.</li>
+      <li>Prosesnya halal.</li>
+    </ol>
+
+    <h4>Kriteria Haram</h4>
+    <ol>
+      <li>Zatnya haram (babi, khamr, bangkai, darah).</li>
+      <li>Cara memperolehnya haram (mencuri, menipu).</li>
+      <li>Membahayakan.</li>
+    </ol>
+
+    <h4>Contoh Halal</h4>
+    <ul>
+      <li>Nasi, sayur, buah.</li>
+      <li>Daging sapi, ayam, kambing (disembelih syar'i).</li>
+      <li>Air, susu.</li>
+    </ul>
+
+    <h4>Contoh Haram</h4>
+    <ul>
+      <li>Babi.</li>
+      <li>Khamr (minuman keras).</li>
+      <li>Bangkai.</li>
+      <li>Darah.</li>
+      <li>Makanan hasil mencuri.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Sehat jasmani.</li>
+      <li>Berkah.</li>
+      <li>Ibadah diterima.</li>
+      <li>Terhindar dari penyakit.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Halal</td><td>Diperbolehkan</td></tr>
+          <tr><td>Haram</td><td>Dilarang</td></tr>
+          <tr><td>Dalil halal</td><td>QS Al-Baqarah 168</td></tr>
+          <tr><td>Dalil haram</td><td>QS Al-Maidah 90</td></tr>
+          <tr><td>Contoh haram</td><td>Babi, khamr, bangkai</td></tr>
+          <tr><td>Hikmah</td><td>Sehat, berkah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m4"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Halal = diperbolehkan.</li>
+      <li>Haram = dilarang.</li>
+      <li>Dalil: QS Al-Baqarah 168, QS Al-Maidah 90.</li>
+      <li>Contoh halal: nasi, sayur, buah. Contoh haram: babi, khamr, bangkai.</li>
+      <li>Hikmah: sehat, berkah, ibadah diterima.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m4-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Kriteria</span>
+      <label><input type="checkbox" data-k="m4-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m4-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m4-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m4-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 5 ================= -->
+<section id="layer-modul5" class="layer">
+  <button class="back-inline" onclick="go('ganjil')">← Modul Ganjil</button>
+  <div class="sec-head">
+    <span class="badge">Modul 5 · Semester Ganjil</span>
+    <h2>Khulafaurasyidin: Abu Bakar &amp; Umar</h2>
+    <p class="tp"><strong>TP 6.5</strong> — Menceritakan dan menjelaskan kisah khulafaurasyidin (Abu Bakar as-Siddiq dan Umar bin Khattab).</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menceritakan kisah Abu Bakar as-Siddiq.</li>
+        <li>Siswa dapat menceritakan kisah Umar bin Khattab.</li>
+        <li>Siswa dapat menyebutkan keteladanan dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">KHULAFAURASYIDIN (1)
+├── Abu Bakar as-Siddiq
+│   ├── Khalifah ke-1 (632–634 M)
+│   ├── Sahabat terdekat Nabi
+│   ├── Gelar: As-Siddiq
+│   └── Jasa: memerangi murtad
+├── Umar bin Khattab
+│   ├── Khalifah ke-2 (634–644 M)
+│   ├── Gelar: Al-Faruq
+│   ├── Jasa: perluasan wilayah
+│   └── Membentuk administrasi
+└── Hikmah
+    ├── Jujur
+    ├── Adil
+    └── Tegas</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Khulafaurasyidin adalah empat khalifah pengganti Nabi Muhammad saw. yang mendapat petunjuk. Dua di antaranya:</p>
+    <ol>
+      <li><strong>Abu Bakar as-Siddiq</strong> — khalifah ke-1.</li>
+      <li><strong>Umar bin Khattab</strong> — khalifah ke-2.</li>
+    </ol>
+
+    <h4>Abu Bakar as-Siddiq</h4>
+    <ul>
+      <li>Nama: Abdullah bin Abu Kuhafah.</li>
+      <li>Lahir: 573 M.</li>
+      <li>Khalifah: 632–634 M.</li>
+      <li>Gelar: As-Siddiq (yang membenarkan).</li>
+      <li>Sahabat terdekat Nabi.</li>
+      <li>Jasa: memerangi orang murtad, mengumpulkan Al-Qur'an, memerangi nabi palsu.</li>
+    </ul>
+
+    <h4>Umar bin Khattab</h4>
+    <ul>
+      <li>Nama: Umar bin Khattab.</li>
+      <li>Lahir: 581 M.</li>
+      <li>Khalifah: 634–644 M.</li>
+      <li>Gelar: Al-Faruq (pembeda).</li>
+      <li>Jasa: perluasan wilayah Islam, membentuk administrasi negara, menetapkan kalender Hijriah, membentuk Baitul Mal.</li>
+    </ul>
+
+    <h4>Contoh Keteladanan</h4>
+    <ul>
+      <li>Abu Bakar: jujur, dermawan, rendah hati.</li>
+      <li>Umar: adil, tegas, sederhana.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Jujur.</li>
+      <li>Adil.</li>
+      <li>Tegas.</li>
+      <li>Sederhana.</li>
+      <li>Dermawan.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Khalifah ke-1</td><td>Abu Bakar as-Siddiq</td></tr>
+          <tr><td>Khalifah ke-2</td><td>Umar bin Khattab</td></tr>
+          <tr><td>Gelar Abu Bakar</td><td>As-Siddiq</td></tr>
+          <tr><td>Gelar Umar</td><td>Al-Faruq</td></tr>
+          <tr><td>Khalifah Abu Bakar</td><td>632–634 M</td></tr>
+          <tr><td>Khalifah Umar</td><td>634–644 M</td></tr>
+          <tr><td>Kalender Hijriah</td><td>Ditetapkan Umar</td></tr>
+          <tr><td>Jasa Abu Bakar</td><td>Memerangi murtad</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m5"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Abu Bakar as-Siddiq: khalifah ke-1 (632–634 M).</li>
+      <li>Umar bin Khattab: khalifah ke-2 (634–644 M).</li>
+      <li>Gelar: As-Siddiq, Al-Faruq.</li>
+      <li>Jasa: memerangi murtad, administrasi, kalender Hijriah.</li>
+      <li>Hikmah: jujur, adil, tegas.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Abu Bakar</span>
+      <label><input type="checkbox" data-k="m5-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Umar</span>
+      <label><input type="checkbox" data-k="m5-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Jasa</span>
+      <label><input type="checkbox" data-k="m5-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m5-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m5-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 6 ================= -->
+<section id="layer-modul6" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 6 · Semester Genap</span>
+    <h2>Hadis Bukhari 6484</h2>
+    <p class="tp"><strong>TP 6.6</strong> — Menjelaskan pesan Hadis Riwayat Bukhori nomor 6484 tentang berbuat baik kepada teman.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan pesan hadis Bukhari 6484.</li>
+        <li>Siswa dapat menerapkan berbuat baik kepada teman.</li>
+        <li>Siswa dapat menyebutkan contoh dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">HADIS BUKHARI 6484
+├── Isi Hadis
+│   └── Berbuat baik kepada teman
+├── Bentuk
+│   ├── Menyayangi
+│   ├── Membantu
+│   ├── Memaafkan
+│   └── Berbagi
+└── Hikmah
+    ├── Persaudaraan
+    ├── Dicintai Allah
+    └── Hidup damai</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Isi Hadis</h4>
+    <p>Hadis Riwayat Bukhori nomor 6484 berisi pesan tentang berbuat baik kepada teman.</p>
+
+    <h4>Penjelasan</h4>
+    <ol>
+      <li><strong>Menyayangi</strong> — mencintai teman.</li>
+      <li><strong>Membantu</strong> — menolong teman.</li>
+      <li><strong>Memaafkan</strong> — memaafkan kesalahan.</li>
+      <li><strong>Berbagi</strong> — berbagi kebahagiaan.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Membantu teman yang kesusahan.</li>
+      <li>Berbagi bekal.</li>
+      <li>Memaafkan kesalahan.</li>
+      <li>Menghibur teman sedih.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Persaudaraan.</li>
+      <li>Dicintai Allah.</li>
+      <li>Hidup damai.</li>
+      <li>Banyak teman.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Hadis</td><td>Bukhari 6484</td></tr>
+          <tr><td>Tema</td><td>Berbuat baik kepada teman</td></tr>
+          <tr><td>Bentuk</td><td>Menyayangi, membantu, memaafkan</td></tr>
+          <tr><td>Hikmah</td><td>Persaudaraan, dicintai Allah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m6"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Hadis Bukhari 6484: berbuat baik kepada teman.</li>
+      <li>Bentuk: menyayangi, membantu, memaafkan, berbagi.</li>
+      <li>Hikmah: persaudaraan, dicintai Allah.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Isi hadis</span>
+      <label><input type="checkbox" data-k="m6-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m6-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m6-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m6-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m6-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m6-3b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 7 ================= -->
+<section id="layer-modul7" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 7 · Semester Genap</span>
+    <h2>Iman kepada Qada' dan Qadar</h2>
+    <p class="tp"><strong>TP 6.7</strong> — Menjelaskan dan meyakini iman kepada qada' dan qadar.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan pengertian qada' dan qadar.</li>
+        <li>Siswa dapat membedakan takdir mubram dan muallaq.</li>
+        <li>Siswa dapat menyebutkan contoh dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">IMAN KEPADA QADA' &amp; QADAR
+├── Qada'
+│   ├── Arti: Ketetapan Allah sejak azali
+│   └── Contoh: kelahiran, kematian
+├── Qadar
+│   ├── Arti: Pelaksanaan ketetapan
+│   └── Contoh: rezeki, jodoh
+├── Takdir
+│   ├── Mubram: tidak bisa diubah
+│   └── Muallaq: bisa diubah dengan usaha
+└── Hikmah
+    ├── Sabar
+    ├── Ikhtiar
+    └── Tawakal</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <ol>
+      <li><strong>Qada'</strong> — ketetapan Allah sejak azali.</li>
+      <li><strong>Qadar</strong> — pelaksanaan ketetapan Allah.</li>
+      <li><strong>Takdir</strong> — ketetapan Allah.</li>
+    </ol>
+
+    <h4>Dalil</h4>
+    <p>QS Al-Qamar 49 — “Sesungguhnya Kami menciptakan segala sesuatu menurut ukuran.”</p>
+
+    <h4>Pembagian Takdir</h4>
+    <ol>
+      <li><strong>Takdir Mubram</strong> — tidak bisa diubah. Contoh: kelahiran, kematian, jenis kelamin.</li>
+      <li><strong>Takdir Muallaq</strong> — bisa diubah dengan usaha. Contoh: rezeki, kepandaian, kesehatan.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Bersabar atas musibah.</li>
+      <li>Berusaha keras.</li>
+      <li>Bertawakal setelah usaha.</li>
+      <li>Berdoa.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Sabar.</li>
+      <li>Ikhtiar.</li>
+      <li>Tawakal.</li>
+      <li>Tidak putus asa.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Qada'</td><td>Ketetapan sejak azali</td></tr>
+          <tr><td>Qadar</td><td>Pelaksanaan ketetapan</td></tr>
+          <tr><td>Takdir mubram</td><td>Tidak bisa diubah</td></tr>
+          <tr><td>Takdir muallaq</td><td>Bisa diubah</td></tr>
+          <tr><td>Dalil</td><td>QS Al-Qamar 49</td></tr>
+          <tr><td>Contoh mubram</td><td>Kematian</td></tr>
+          <tr><td>Contoh muallaq</td><td>Rezeki</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m7"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Qada' = ketetapan azali.</li>
+      <li>Qadar = pelaksanaan.</li>
+      <li>Takdir mubram: tidak bisa diubah.</li>
+      <li>Takdir muallaq: bisa diubah.</li>
+      <li>Hikmah: sabar, ikhtiar, tawakal.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m7-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Pembagian takdir</span>
+      <label><input type="checkbox" data-k="m7-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m7-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m7-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m7-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 8 ================= -->
+<section id="layer-modul8" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 8 · Semester Genap</span>
+    <h2>Akhlak terhadap Hewan &amp; Tumbuhan</h2>
+    <p class="tp"><strong>TP 6.8</strong> — Menerapkan akhlak terhadap hewan dan tumbuhan di lingkungan sekitar.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan akhlak terhadap hewan dan tumbuhan.</li>
+        <li>Siswa dapat menerapkan kasih sayang dan pelestarian.</li>
+        <li>Siswa dapat menyebutkan contoh dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">AKHLAK TERHADAP HEWAN &amp; TUMBUHAN
+├── Hewan
+│   ├── Memberi makan
+│   ├── Tidak menyiksa
+│   ├── Menyayangi
+│   └── Tidak membunuh tanpa alasan
+├── Tumbuhan
+│   ├── Menyiram
+│   ├── Tidak menebang sembarangan
+│   ├── Menanam
+│   └── Merawat
+└── Hikmah
+    ├── Dicintai Allah
+    ├── Lingkungan lestari
+    └── Seimbang</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Akhlak terhadap hewan dan tumbuhan adalah sikap baik kepada makhluk hidup di sekitar.</p>
+
+    <h4>Dalil</h4>
+    <ul>
+      <li>Hadis — “Seorang wanita masuk neraka karena menyiksa kucing.”</li>
+      <li>Hadis — “Barang siapa menanam tanaman, maka buahnya menjadi sedekah.”</li>
+    </ul>
+
+    <h4>Akhlak terhadap Hewan</h4>
+    <ol>
+      <li>Memberi makan.</li>
+      <li>Tidak menyiksa.</li>
+      <li>Menyayangi.</li>
+      <li>Tidak membunuh tanpa alasan.</li>
+    </ol>
+
+    <h4>Akhlak terhadap Tumbuhan</h4>
+    <ol>
+      <li>Menyiram.</li>
+      <li>Tidak menebang sembarangan.</li>
+      <li>Menanam.</li>
+      <li>Merawat.</li>
+    </ol>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Memberi makan kucing.</li>
+      <li>Menyiram tanaman.</li>
+      <li>Menanam pohon.</li>
+      <li>Tidak menyiksa hewan.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Dicintai Allah.</li>
+      <li>Lingkungan lestari.</li>
+      <li>Keseimbangan alam.</li>
+      <li>Pahala sedekah.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Akhlak hewan</td><td>Memberi makan, tidak menyiksa</td></tr>
+          <tr><td>Akhlak tumbuhan</td><td>Menyiram, menanam</td></tr>
+          <tr><td>Hadis</td><td>Wanita menyiksa kucing</td></tr>
+          <tr><td>Hadis</td><td>Menanam = sedekah</td></tr>
+          <tr><td>Hikmah</td><td>Lingkungan lestari</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m8"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Akhlak hewan: memberi makan, tidak menyiksa.</li>
+      <li>Akhlak tumbuhan: menyiram, menanam.</li>
+      <li>Hadis: menyiksa kucing masuk neraka.</li>
+      <li>Hadis: menanam = sedekah.</li>
+      <li>Hikmah: lingkungan lestari, dicintai Allah.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m8-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m8-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m8-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m8-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m8-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m8-3b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 9 ================= -->
+<section id="layer-modul9" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 9 · Semester Genap</span>
+    <h2>Infak, Sedekah, dan Wakaf</h2>
+    <p class="tp"><strong>TP 6.9</strong> — Menerapkan tata cara dan hikmah ibadah infak, sedekah, dan wakaf.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menjelaskan pengertian infak, sedekah, dan wakaf.</li>
+        <li>Siswa dapat membedakan ketiganya.</li>
+        <li>Siswa dapat menyebutkan contoh dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">INFAK, SEDEKAH, WAKAF
+├── Infak
+│   ├── Arti: Membelanjakan harta
+│   ├── Waktu: kapan saja
+│   └── Contoh: memberi bantuan
+├── Sedekah
+│   ├── Arti: Pemberian sukarela
+│   ├── Bentuk: harta, tenaga, senyum
+│   └── Contoh: memberi makan
+├── Wakaf
+│   ├── Arti: Harta untuk kepentingan umum
+│   ├── Sifat: tetap, tidak berkurang
+│   └── Contoh: tanah untuk masjid
+└── Hikmah
+    ├── Pahala
+    ├── Membersihkan harta
+    └── Kepedulian</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <ol>
+      <li><strong>Infak</strong> — membelanjakan harta di jalan Allah.</li>
+      <li><strong>Sedekah</strong> — pemberian sukarela.</li>
+      <li><strong>Wakaf</strong> — harta untuk kepentingan umum.</li>
+    </ol>
+
+    <h4>Dalil</h4>
+    <p>QS Al-Baqarah 261 — “Perumpamaan orang yang menafkahkan hartanya di jalan Allah seperti sebutir benih yang menumbuhkan tujuh bulir.”</p>
+
+    <h4>Perbedaan</h4>
+    <ul>
+      <li><strong>Infak:</strong> bisa wajib atau sunah.</li>
+      <li><strong>Sedekah:</strong> sukarela, lebih luas (tenaga, senyum).</li>
+      <li><strong>Wakaf:</strong> harta tetap, manfaat untuk umum.</li>
+    </ul>
+
+    <h4>Contoh</h4>
+    <ul>
+      <li>Infak: memberi bantuan bencana.</li>
+      <li>Sedekah: memberi makan orang miskin.</li>
+      <li>Wakaf: tanah untuk masjid.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Mendapat pahala.</li>
+      <li>Membersihkan harta.</li>
+      <li>Menumbuhkan kepedulian.</li>
+      <li>Mendekatkan diri kepada Allah.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Infak</td><td>Membelanjakan harta</td></tr>
+          <tr><td>Sedekah</td><td>Pemberian sukarela</td></tr>
+          <tr><td>Wakaf</td><td>Harta untuk umum</td></tr>
+          <tr><td>Dalil</td><td>QS Al-Baqarah 261</td></tr>
+          <tr><td>Contoh wakaf</td><td>Tanah untuk masjid</td></tr>
+          <tr><td>Hikmah</td><td>Pahala, kepedulian</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m9"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Infak = membelanjakan harta.</li>
+      <li>Sedekah = pemberian sukarela.</li>
+      <li>Wakaf = harta untuk umum.</li>
+      <li>Dalil: QS Al-Baqarah 261.</li>
+      <li>Hikmah: pahala, kepedulian, membersihkan harta.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Pengertian</span>
+      <label><input type="checkbox" data-k="m9-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Perbedaan</span>
+      <label><input type="checkbox" data-k="m9-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Contoh</span>
+      <label><input type="checkbox" data-k="m9-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m9-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m9-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= MODUL 10 ================= -->
+<section id="layer-modul10" class="layer">
+  <button class="back-inline" onclick="go('genap')">← Modul Genap</button>
+  <div class="sec-head">
+    <span class="badge">Modul 10 · Semester Genap</span>
+    <h2>Khulafaurasyidin: Utsman &amp; Ali</h2>
+    <p class="tp"><strong>TP 6.10</strong> — Menceritakan dan menjelaskan kisah khulafaurasyidin (Utsman bin Affan dan Ali bin Abi Thalib).</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Tujuan Pembelajaran</h3>
+      <ol>
+        <li>Siswa dapat menceritakan kisah Utsman bin Affan.</li>
+        <li>Siswa dapat menceritakan kisah Ali bin Abi Thalib.</li>
+        <li>Siswa dapat menyebutkan keteladanan dan hikmahnya.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Peta Konsep</h3>
+<pre class="tree">KHULAFAURASYIDIN (2)
+├── Utsman bin Affan
+│   ├── Khalifah ke-3 (644–656 M)
+│   ├── Gelar: Dzun Nurain
+│   ├── Jasa: membukukan Al-Qur'an
+│   └── Dermawan
+├── Ali bin Abi Thalib
+│   ├── Khalifah ke-4 (656–661 M)
+│   ├── Gelar: Babul Ilmi
+│   ├── Jasa: memindahkan pusat ke Kufah
+│   └── Cerdas
+└── Hikmah
+    ├── Dermawan
+    ├── Cerdas
+    └── Berani</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Materi Inti</h3>
+    <h4>Pengertian</h4>
+    <p>Khulafaurasyidin adalah empat khalifah pengganti Nabi Muhammad saw. Dua di antaranya:</p>
+    <ol>
+      <li><strong>Utsman bin Affan</strong> — khalifah ke-3.</li>
+      <li><strong>Ali bin Abi Thalib</strong> — khalifah ke-4.</li>
+    </ol>
+
+    <h4>Utsman bin Affan</h4>
+    <ul>
+      <li>Nama: Utsman bin Affan.</li>
+      <li>Lahir: 576 M.</li>
+      <li>Khalifah: 644–656 M.</li>
+      <li>Gelar: Dzun Nurain (pemilik dua cahaya).</li>
+      <li>Jasa: membukukan Al-Qur'an, membangun angkatan laut, memperluas Masjid Nabawi.</li>
+      <li>Sifat: dermawan, pemalu, lembut.</li>
+    </ul>
+
+    <h4>Ali bin Abi Thalib</h4>
+    <ul>
+      <li>Nama: Ali bin Abi Thalib.</li>
+      <li>Lahir: 600 M.</li>
+      <li>Khalifah: 656–661 M.</li>
+      <li>Gelar: Babul Ilmi (pintu ilmu).</li>
+      <li>Jasa: memindahkan pusat pemerintahan ke Kufah, menata administrasi, menegakkan keadilan.</li>
+      <li>Sifat: cerdas, berani, zuhud.</li>
+    </ul>
+
+    <h4>Contoh Keteladanan</h4>
+    <ul>
+      <li>Utsman: dermawan, pemalu.</li>
+      <li>Ali: cerdas, berani, adil.</li>
+    </ul>
+
+    <h4>Hikmah</h4>
+    <ol>
+      <li>Dermawan.</li>
+      <li>Cerdas.</li>
+      <li>Berani.</li>
+      <li>Adil.</li>
+      <li>Zuhud.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Fakta Kunci LCC</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Khalifah ke-3</td><td>Utsman bin Affan</td></tr>
+          <tr><td>Khalifah ke-4</td><td>Ali bin Abi Thalib</td></tr>
+          <tr><td>Gelar Utsman</td><td>Dzun Nurain</td></tr>
+          <tr><td>Gelar Ali</td><td>Babul Ilmi</td></tr>
+          <tr><td>Khalifah Utsman</td><td>644–656 M</td></tr>
+          <tr><td>Khalifah Ali</td><td>656–661 M</td></tr>
+          <tr><td>Jasa Utsman</td><td>Membukukan Al-Qur'an</td></tr>
+          <tr><td>Jasa Ali</td><td>Memindahkan pusat ke Kufah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat</h3>
+    <div class="flash-grid" id="flash-m10"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rangkuman Kilat</h3>
+    <ul>
+      <li>Utsman bin Affan: khalifah ke-3 (644–656 M), gelar Dzun Nurain.</li>
+      <li>Ali bin Abi Thalib: khalifah ke-4 (656–661 M), gelar Babul Ilmi.</li>
+      <li>Jasa: membukukan Al-Qur'an, memindahkan pusat ke Kufah.</li>
+      <li>Hikmah: dermawan, cerdas, berani, adil.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Pengulangan</h3>
+    <div class="repeat-row"><span>Utsman</span>
+      <label><input type="checkbox" data-k="m10-1a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-1b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Ali</span>
+      <label><input type="checkbox" data-k="m10-2a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-2b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Jasa</span>
+      <label><input type="checkbox" data-k="m10-3a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-3b"> Dihafal</label></div>
+    <div class="repeat-row"><span>Hikmah</span>
+      <label><input type="checkbox" data-k="m10-4a"> Dibaca</label>
+      <label><input type="checkbox" data-k="m10-4b"> Dihafal</label></div>
+  </div>
+</section>
+
+<!-- ================= ZONA HAFALAN CEPAT ================= -->
+<section id="layer-zona-hafalan" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 4</span>
+    <h2>Zona Hafalan Cepat</h2>
+    <p class="tp">Kartu kilat interaktif, mind map, tabel ringkas, dan daftar istilah.</p>
+  </div>
+
+  <div class="card">
+    <h3>Kartu Kilat — Semua Modul</h3>
+    <div class="filter-bar" id="flashFilter">
+      <button class="active" data-f="all">Semua</button>
+      <button data-f="m1">Modul 1</button>
+      <button data-f="m2">Modul 2</button>
+      <button data-f="m3">Modul 3</button>
+      <button data-f="m4">Modul 4</button>
+      <button data-f="m5">Modul 5</button>
+      <button data-f="m6">Modul 6</button>
+      <button data-f="m7">Modul 7</button>
+      <button data-f="m8">Modul 8</button>
+      <button data-f="m9">Modul 9</button>
+      <button data-f="m10">Modul 10</button>
+    </div>
+    <div class="flash-grid" id="flash-all"></div>
+  </div>
+
+  <div class="card">
+    <h3>Mind Map Teks</h3>
+    <div class="grid2">
+<pre class="tree">MIND MAP 1 — AL-QUR'AN HADIS
+├── Al-Kafirun
+│   ├── 109, 6 ayat, Makkiyah
+│   ├── Toleransi beragama
+│   └── Lakum dinukum waliyadin
+└── Hadis Bukhari 6484
+    └── Berbuat baik kepada teman</pre>
+<pre class="tree">MIND MAP 2 — AKIDAH
+├── Asmaulhusna
+│   ├── Al-Ghaffar, Al-'Afuw
+│   └── Al-Ahad, As-Samad
+└── Qada' &amp; Qadar
+    ├── Qada': ketetapan azali
+    ├── Qadar: pelaksanaan
+    └── Mubram &amp; Muallaq</pre>
+<pre class="tree">MIND MAP 3 — AKHLAK
+├── Teman &amp; Toleransi
+│   ├── Menyayangi
+│   ├── Menghormati
+│   └── Teguh akidah
+└── Hewan &amp; Tumbuhan
+    ├── Memberi makan
+    ├── Menyiram
+    └── Menanam</pre>
+<pre class="tree">MIND MAP 4 — FIKIH
+├── Halal-Haram
+│   ├── Halal: diperbolehkan
+│   └── Haram: dilarang
+└── Infak, Sedekah, Wakaf
+    ├── Infak: membelanjakan
+    ├── Sedekah: sukarela
+    └── Wakaf: harta umum</pre>
+<pre class="tree">MIND MAP 5 — SEJARAH PERADABAN ISLAM
+├── Abu Bakar &amp; Umar
+│   ├── Khalifah 1 &amp; 2
+│   ├── As-Siddiq &amp; Al-Faruq
+│   └── Jasa: murtad, administrasi
+└── Utsman &amp; Ali
+    ├── Khalifah 3 &amp; 4
+    ├── Dzun Nurain &amp; Babul Ilmi
+    └── Jasa: Al-Qur'an, Kufah</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Tabel Ringkas (Kumpulan)</h3>
+    <h4>Tabel 1 — Identitas Surah</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Surah</th><th>Nomor</th><th>Ayat</th><th>Golongan</th></tr></thead>
+        <tbody>
+          <tr><td>Al-Kafirun</td><td>109</td><td>6</td><td>Makkiyah</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 2 — Asmaulhusna</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nama</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Al-Ghaffar</td><td>Maha Pengampun</td></tr>
+          <tr><td>Al-'Afuw</td><td>Maha Pemaaf</td></tr>
+          <tr><td>Al-Ahad</td><td>Maha Esa</td></tr>
+          <tr><td>As-Samad</td><td>Maha Dibutuhkan</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 3 — Takdir</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Qada'</td><td>Ketetapan azali</td></tr>
+          <tr><td>Qadar</td><td>Pelaksanaan</td></tr>
+          <tr><td>Mubram</td><td>Tidak bisa diubah</td></tr>
+          <tr><td>Muallaq</td><td>Bisa diubah</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 4 — Infak, Sedekah, Wakaf</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th><th>Contoh</th></tr></thead>
+        <tbody>
+          <tr><td>Infak</td><td>Membelanjakan</td><td>Bantuan bencana</td></tr>
+          <tr><td>Sedekah</td><td>Sukarela</td><td>Memberi makan</td></tr>
+          <tr><td>Wakaf</td><td>Harta umum</td><td>Tanah masjid</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Tabel 5 — Khulafaurasyidin</h4>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Khalifah</th><th>Gelar</th><th>Jasa</th></tr></thead>
+        <tbody>
+          <tr><td>Abu Bakar</td><td>As-Siddiq</td><td>Memerangi murtad</td></tr>
+          <tr><td>Umar</td><td>Al-Faruq</td><td>Administrasi</td></tr>
+          <tr><td>Utsman</td><td>Dzun Nurain</td><td>Membukukan Al-Qur'an</td></tr>
+          <tr><td>Ali</td><td>Babul Ilmi</td><td>Pusat ke Kufah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Daftar Istilah Alfabetis</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Al-'Afuw</td><td>Maha Pemaaf</td></tr>
+          <tr><td>Al-Ahad</td><td>Maha Esa</td></tr>
+          <tr><td>Al-Faruq</td><td>Pembeda</td></tr>
+          <tr><td>Al-Ghaffar</td><td>Maha Pengampun</td></tr>
+          <tr><td>Al-Kafirun</td><td>Orang-orang kafir</td></tr>
+          <tr><td>As-Samad</td><td>Maha Dibutuhkan</td></tr>
+          <tr><td>As-Siddiq</td><td>Yang membenarkan</td></tr>
+          <tr><td>Babul Ilmi</td><td>Pintu ilmu</td></tr>
+          <tr><td>Dzun Nurain</td><td>Pemilik dua cahaya</td></tr>
+          <tr><td>Halal</td><td>Diperbolehkan</td></tr>
+          <tr><td>Haram</td><td>Dilarang</td></tr>
+          <tr><td>Ikhtiar</td><td>Usaha</td></tr>
+          <tr><td>Infak</td><td>Membelanjakan harta</td></tr>
+          <tr><td>Khamr</td><td>Minuman keras</td></tr>
+          <tr><td>Khulafaurasyidin</td><td>Khalifah yang mendapat petunjuk</td></tr>
+          <tr><td>Mubram</td><td>Pasti</td></tr>
+          <tr><td>Muallaq</td><td>Tergantung</td></tr>
+          <tr><td>Murtad</td><td>Keluar dari Islam</td></tr>
+          <tr><td>Qada'</td><td>Ketetapan azali</td></tr>
+          <tr><td>Qadar</td><td>Pelaksanaan</td></tr>
+          <tr><td>Sedekah</td><td>Pemberian sukarela</td></tr>
+          <tr><td>Toleransi</td><td>Menghormati</td></tr>
+          <tr><td>Wakaf</td><td>Harta untuk umum</td></tr>
+          <tr><td>Zuhud</td><td>Sederhana</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ZONA FAKTA KUNCI ================= -->
+<section id="layer-zona-fakta" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 5</span>
+    <h2>Zona Fakta Kunci</h2>
+    <p class="tp">Angka penting, nama penting, urutan penting, istilah penting.</p>
+  </div>
+
+  <div class="card">
+    <h3>Angka Penting</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Fakta</th><th>Angka</th></tr></thead>
+        <tbody>
+          <tr><td>Surah Al-Kafirun</td><td>109</td></tr>
+          <tr><td>Ayat Al-Kafirun</td><td>6</td></tr>
+          <tr><td>Jumlah asmaulhusna</td><td>99</td></tr>
+          <tr><td>Khalifah Abu Bakar</td><td>632–634 M</td></tr>
+          <tr><td>Khalifah Umar</td><td>634–644 M</td></tr>
+          <tr><td>Khalifah Utsman</td><td>644–656 M</td></tr>
+          <tr><td>Khalifah Ali</td><td>656–661 M</td></tr>
+          <tr><td>Jumlah khulafaurasyidin</td><td>4</td></tr>
+          <tr><td>Hadis Bukhari</td><td>6484</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Nama Penting</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nama</th><th>Keterangan</th></tr></thead>
+        <tbody>
+          <tr><td>Abu Bakar as-Siddiq</td><td>Khalifah ke-1</td></tr>
+          <tr><td>Umar bin Khattab</td><td>Khalifah ke-2</td></tr>
+          <tr><td>Utsman bin Affan</td><td>Khalifah ke-3</td></tr>
+          <tr><td>Ali bin Abi Thalib</td><td>Khalifah ke-4</td></tr>
+          <tr><td>Bukhari</td><td>Perawi hadis</td></tr>
+          <tr><td>Nabi Muhammad saw.</td><td>Rasul terakhir</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Urutan Penting</h3>
+    <div class="grid2">
+      <div>
+        <h4>Urutan Khulafaurasyidin</h4>
+        <ol>
+          <li>Abu Bakar as-Siddiq.</li>
+          <li>Umar bin Khattab.</li>
+          <li>Utsman bin Affan.</li>
+          <li>Ali bin Abi Thalib.</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Urutan Gelar</h4>
+        <ol>
+          <li>As-Siddiq.</li>
+          <li>Al-Faruq.</li>
+          <li>Dzun Nurain.</li>
+          <li>Babul Ilmi.</li>
+        </ol>
+        <h4>Urutan Takdir</h4>
+        <ol>
+          <li>Qada'.</li>
+          <li>Qadar.</li>
+          <li>Mubram.</li>
+          <li>Muallaq.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Istilah Penting</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td>Khulafaurasyidin</td><td>Khalifah pengganti Nabi</td></tr>
+          <tr><td>Toleransi</td><td>Menghormati perbedaan</td></tr>
+          <tr><td>Halal</td><td>Diperbolehkan</td></tr>
+          <tr><td>Haram</td><td>Dilarang</td></tr>
+          <tr><td>Qada'</td><td>Ketetapan azali</td></tr>
+          <tr><td>Qadar</td><td>Pelaksanaan</td></tr>
+          <tr><td>Mubram</td><td>Tidak bisa diubah</td></tr>
+          <tr><td>Muallaq</td><td>Bisa diubah</td></tr>
+          <tr><td>Infak</td><td>Membelanjakan harta</td></tr>
+          <tr><td>Sedekah</td><td>Pemberian sukarela</td></tr>
+          <tr><td>Wakaf</td><td>Harta untuk umum</td></tr>
+          <tr><td>Dzun Nurain</td><td>Pemilik dua cahaya</td></tr>
+          <tr><td>Babul Ilmi</td><td>Pintu ilmu</td></tr>
+          <tr><td>As-Siddiq</td><td>Yang membenarkan</td></tr>
+          <tr><td>Al-Faruq</td><td>Pembeda</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ZONA PENGULANGAN ================= -->
+<section id="layer-zona-pengulangan" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 6</span>
+    <h2>Zona Pengulangan Kilat</h2>
+    <p class="tp">10 rangkuman — satu halaman per modul.</p>
+  </div>
+
+  <div class="rangkuman"><h4>Rangkuman 1 — QS Al-Kafirun</h4>
+    <ul>
+      <li>Surah ke-109, 6 ayat, Makkiyah. Arti: orang-orang kafir.</li>
+      <li>Ayat terakhir: lakum dinukum waliyadin.</li>
+      <li>Tema: toleransi beragama.</li>
+      <li>Hikmah: teguh akidah, tidak memaksa agama.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 2 — Asmaulhusna</h4>
+    <ul>
+      <li>Al-Ghaffar = Maha Pengampun · Al-'Afuw = Maha Pemaaf.</li>
+      <li>Al-Ahad = Maha Esa · As-Samad = Maha Dibutuhkan.</li>
+      <li>Hikmah: rajin bertaubat, tauhid kuat.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 3 — Akhlak Teman &amp; Toleransi</h4>
+    <ul>
+      <li>Akhlak teman = sikap baik kepada teman.</li>
+      <li>Toleransi = menghormati perbedaan. Dalil: QS Al-Kafirun 6.</li>
+      <li>Batas toleransi: tidak mencampur akidah. Hikmah: persaudaraan, hidup damai.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 4 — Halal-Haram</h4>
+    <ul>
+      <li>Halal = diperbolehkan · Haram = dilarang.</li>
+      <li>Dalil: QS Al-Baqarah 168, QS Al-Maidah 90.</li>
+      <li>Contoh haram: babi, khamr, bangkai. Hikmah: sehat, berkah.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 5 — Abu Bakar &amp; Umar</h4>
+    <ul>
+      <li>Abu Bakar as-Siddiq: khalifah ke-1 (632–634 M).</li>
+      <li>Umar bin Khattab: khalifah ke-2 (634–644 M).</li>
+      <li>Gelar: As-Siddiq, Al-Faruq.</li>
+      <li>Jasa: memerangi murtad, administrasi, kalender Hijriah.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 6 — Hadis Bukhari 6484</h4>
+    <ul>
+      <li>Hadis Bukhari 6484: berbuat baik kepada teman.</li>
+      <li>Bentuk: menyayangi, membantu, memaafkan.</li>
+      <li>Hikmah: persaudaraan, dicintai Allah.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 7 — Qada' &amp; Qadar</h4>
+    <ul>
+      <li>Qada' = ketetapan azali · Qadar = pelaksanaan.</li>
+      <li>Mubram: tidak bisa diubah · Muallaq: bisa diubah.</li>
+      <li>Hikmah: sabar, ikhtiar, tawakal.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 8 — Hewan &amp; Tumbuhan</h4>
+    <ul>
+      <li>Akhlak hewan: memberi makan, tidak menyiksa.</li>
+      <li>Akhlak tumbuhan: menyiram, menanam.</li>
+      <li>Hadis: menyiksa kucing masuk neraka · menanam = sedekah.</li>
+      <li>Hikmah: lingkungan lestari.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 9 — Infak, Sedekah, Wakaf</h4>
+    <ul>
+      <li>Infak = membelanjakan harta · Sedekah = pemberian sukarela · Wakaf = harta untuk umum.</li>
+      <li>Dalil: QS Al-Baqarah 261.</li>
+      <li>Hikmah: pahala, kepedulian.</li>
+    </ul>
+  </div>
+  <div class="rangkuman"><h4>Rangkuman 10 — Utsman &amp; Ali</h4>
+    <ul>
+      <li>Utsman bin Affan: khalifah ke-3 (644–656 M), gelar Dzun Nurain.</li>
+      <li>Ali bin Abi Thalib: khalifah ke-4 (656–661 M), gelar Babul Ilmi.</li>
+      <li>Jasa: membukukan Al-Qur'an, memindahkan pusat ke Kufah.</li>
+      <li>Hikmah: dermawan, cerdas, berani, adil.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= GLOSARIUM ================= -->
+<section id="layer-glosarium" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 7</span>
+    <h2>Glosarium</h2>
+    <p class="tp">Daftar istilah lengkap beserta modul asalnya.</p>
+  </div>
+
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Istilah</th><th>Arti</th><th>Modul</th></tr></thead>
+        <tbody>
+          <tr><td>Al-'Afuw</td><td>Maha Pemaaf</td><td>2</td></tr>
+          <tr><td>Al-Ahad</td><td>Maha Esa</td><td>2</td></tr>
+          <tr><td>Al-Faruq</td><td>Pembeda</td><td>5</td></tr>
+          <tr><td>Al-Ghaffar</td><td>Maha Pengampun</td><td>2</td></tr>
+          <tr><td>Al-Kafirun</td><td>Orang-orang kafir</td><td>1</td></tr>
+          <tr><td>As-Samad</td><td>Maha Dibutuhkan</td><td>2</td></tr>
+          <tr><td>As-Siddiq</td><td>Yang membenarkan</td><td>5</td></tr>
+          <tr><td>Babul Ilmi</td><td>Pintu ilmu</td><td>10</td></tr>
+          <tr><td>Dzun Nurain</td><td>Pemilik dua cahaya</td><td>10</td></tr>
+          <tr><td>Halal</td><td>Diperbolehkan</td><td>4</td></tr>
+          <tr><td>Haram</td><td>Dilarang</td><td>4</td></tr>
+          <tr><td>Ikhtiar</td><td>Usaha</td><td>7</td></tr>
+          <tr><td>Infak</td><td>Membelanjakan harta</td><td>9</td></tr>
+          <tr><td>Khamr</td><td>Minuman keras</td><td>4</td></tr>
+          <tr><td>Khulafaurasyidin</td><td>Khalifah yang mendapat petunjuk</td><td>5, 10</td></tr>
+          <tr><td>Mubram</td><td>Pasti</td><td>7</td></tr>
+          <tr><td>Muallaq</td><td>Tergantung</td><td>7</td></tr>
+          <tr><td>Murtad</td><td>Keluar dari Islam</td><td>5</td></tr>
+          <tr><td>Qada'</td><td>Ketetapan azali</td><td>7</td></tr>
+          <tr><td>Qadar</td><td>Pelaksanaan</td><td>7</td></tr>
+          <tr><td>Sedekah</td><td>Pemberian sukarela</td><td>9</td></tr>
+          <tr><td>Toleransi</td><td>Menghormati</td><td>3</td></tr>
+          <tr><td>Wakaf</td><td>Harta untuk umum</td><td>9</td></tr>
+          <tr><td>Zuhud</td><td>Sederhana</td><td>10</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PUSTAKA ================= -->
+<section id="layer-pustaka" class="layer">
+  <button class="back-inline" onclick="go('home')">← Menu Utama</button>
+  <div class="sec-head">
+    <span class="badge">Bagian 8</span>
+    <h2>Daftar Pustaka &amp; Catatan Akhir</h2>
+  </div>
+
+  <div class="card">
+    <h3>Daftar Pustaka</h3>
+    <ol>
+      <li>Al-Qur'an dan Terjemahnya. Kementerian Agama RI.</li>
+      <li>Buku Pendidikan Agama Islam dan Budi Pekerti Kelas VI Kurikulum Merdeka.</li>
+      <li>Program Tahunan PAI SD Negeri 1 Godegan Tahun Ajaran 2026/2027.</li>
+      <li>Hadis Riwayat Bukhori nomor 6484.</li>
+      <li>Buku kumpulan hadis pilihan.</li>
+      <li>Sumber pendukung lain yang relevan.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Catatan Akhir</h3>
+    <p><strong>MPI Kelas VI</strong> ini terdiri dari:</p>
+    <ul>
+      <li>10 modul materi lengkap.</li>
+      <li>Zona Hafalan Cepat (kartu kilat, mind map, tabel, daftar istilah).</li>
+      <li>Zona Fakta Kunci (angka, nama, urutan, istilah).</li>
+      <li>Zona Pengulangan Kilat (10 rangkuman).</li>
+      <li>Glosarium dan daftar pustaka.</li>
+    </ul>
+    <p><strong>Total:</strong> 10 modul + 3 zona + glosarium + daftar pustaka.</p>
+    <div class="note">Media ini siap digunakan untuk persiapan LCC. Soal latihan tetap menggunakan aplikasi ujian yang sudah Bapak buat.</div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3 style="justify-content:center">Selesai 🎉</h3>
+    <p>Semua materi sudah dibuka. Ulangi minimal 3 kali sebelum lomba.</p>
+    <button class="back-inline" style="margin-top:8px" onclick="go('home')">🏠 Kembali ke Menu Utama</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ================= DATA KARTU KILAT ================= */
+const FLASH = {
+  m1: [
+    ["Surah Al-Kafirun surah ke?", "109"],
+    ["Al-Kafirun artinya?", "Orang-orang kafir"],
+    ["Jumlah ayat Al-Kafirun?", "6"],
+    ["Golongan Al-Kafirun?", "Makkiyah"],
+    ["Ayat terakhir Al-Kafirun?", "لَكُمْ دِيْنُكُمْ وَلِيَ دِيْنِ"],
+    ["Arti ayat terakhir?", "Untukmu agamamu, untukku agamaku"],
+    ["Tema Al-Kafirun?", "Toleransi beragama"],
+    ["Hikmah Al-Kafirun?", "Teguh akidah"],
+    ["Sikap kepada non-muslim?", "Menghormati"],
+    ["Larangan dalam Al-Kafirun?", "Mencampur aduk ibadah"]
+  ],
+  m2: [
+    ["Al-Ghaffar artinya?", "Maha Pengampun"],
+    ["Al-'Afuw artinya?", "Maha Pemaaf"],
+    ["Al-Ahad artinya?", "Maha Esa"],
+    ["As-Samad artinya?", "Maha Dibutuhkan"],
+    ["Dalil Al-Ghaffar?", "QS Az-Zumar 53"],
+    ["Dalil Al-'Afuw?", "QS Al-Baqarah 52"],
+    ["Dalil Al-Ahad?", "QS Al-Ikhlas 1"],
+    ["Dalil As-Samad?", "QS Al-Ikhlas 2"],
+    ["Jumlah asmaulhusna?", "99"],
+    ["Hikmah Al-Ghaffar?", "Rajin bertaubat"]
+  ],
+  m3: [
+    ["Akhlak terhadap teman artinya?", "Sikap baik kepada teman"],
+    ["Toleransi artinya?", "Menghormati perbedaan"],
+    ["Dalil toleransi?", "QS Al-Kafirun 6"],
+    ["Batas toleransi?", "Tidak mencampur akidah"],
+    ["Contoh toleransi?", "Menghormati teman non-muslim"],
+    ["Hikmah akhlak teman?", "Persaudaraan"],
+    ["Larangan dalam berteman?", "Membeda-bedakan"],
+    ["Sikap kepada non-muslim?", "Menghormati"],
+    ["Akhlak kepada teman meliputi?", "Menyayangi, membantu, memaafkan"],
+    ["Hikmah toleransi?", "Hidup damai"]
+  ],
+  m4: [
+    ["Halal artinya?", "Diperbolehkan"],
+    ["Haram artinya?", "Dilarang"],
+    ["Dalil halal?", "QS Al-Baqarah 168"],
+    ["Dalil haram?", "QS Al-Maidah 90"],
+    ["Contoh haram?", "Babi, khamr, bangkai"],
+    ["Contoh halal?", "Nasi, sayur, buah"],
+    ["Kriteria halal?", "Zat, cara, proses"],
+    ["Hikmah halal?", "Sehat, berkah"],
+    ["Dampak haram?", "Dosa, sakit"],
+    ["Ibadah diterima jika?", "Makan halal"]
+  ],
+  m5: [
+    ["Khalifah ke-1?", "Abu Bakar as-Siddiq"],
+    ["Khalifah ke-2?", "Umar bin Khattab"],
+    ["Gelar Abu Bakar?", "As-Siddiq"],
+    ["Gelar Umar?", "Al-Faruq"],
+    ["Abu Bakar menjabat?", "632–634 M"],
+    ["Umar menjabat?", "634–644 M"],
+    ["Kalender Hijriah ditetapkan?", "Umar bin Khattab"],
+    ["Jasa Abu Bakar?", "Memerangi murtad"],
+    ["Jasa Umar?", "Administrasi negara"],
+    ["Keteladanan Umar?", "Adil, tegas"]
+  ],
+  m6: [
+    ["Hadis tentang teman?", "Bukhari 6484"],
+    ["Tema hadis Bukhari 6484?", "Berbuat baik kepada teman"],
+    ["Bentuk berbuat baik?", "Menyayangi, membantu, memaafkan"],
+    ["Hikmah berbuat baik?", "Persaudaraan"],
+    ["Contoh berbuat baik?", "Membantu teman"],
+    ["Dalil?", "Hadis Bukhari 6484"]
+  ],
+  m7: [
+    ["Qada' artinya?", "Ketetapan sejak azali"],
+    ["Qadar artinya?", "Pelaksanaan ketetapan"],
+    ["Takdir mubram?", "Tidak bisa diubah"],
+    ["Takdir muallaq?", "Bisa diubah"],
+    ["Contoh mubram?", "Kematian"],
+    ["Contoh muallaq?", "Rezeki"],
+    ["Dalil qada' qadar?", "QS Al-Qamar 49"],
+    ["Sikap terhadap takdir?", "Sabar, ikhtiar, tawakal"],
+    ["Hikmah iman qada' qadar?", "Tidak putus asa"],
+    ["Usaha mengubah takdir?", "Ikhtiar"]
+  ],
+  m8: [
+    ["Akhlak terhadap hewan?", "Memberi makan, tidak menyiksa"],
+    ["Akhlak terhadap tumbuhan?", "Menyiram, menanam"],
+    ["Hadis tentang kucing?", "Wanita masuk neraka karena menyiksa kucing"],
+    ["Menanam tanaman pahalanya?", "Sedekah"],
+    ["Hikmah akhlak hewan?", "Dicintai Allah"],
+    ["Contoh menyayangi hewan?", "Memberi makan"],
+    ["Contoh merawat tumbuhan?", "Menyiram"],
+    ["Larangan terhadap hewan?", "Menyiksa"],
+    ["Larangan terhadap tumbuhan?", "Menebang sembarangan"],
+    ["Hikmah bagi lingkungan?", "Lestari"]
+  ],
+  m9: [
+    ["Infak artinya?", "Membelanjakan harta"],
+    ["Sedekah artinya?", "Pemberian sukarela"],
+    ["Wakaf artinya?", "Harta untuk umum"],
+    ["Dalil infak?", "QS Al-Baqarah 261"],
+    ["Contoh wakaf?", "Tanah untuk masjid"],
+    ["Sedekah bisa berupa?", "Harta, tenaga, senyum"],
+    ["Hikmah infak?", "Pahala"],
+    ["Sifat wakaf?", "Tetap, tidak berkurang"],
+    ["Perbedaan infak dan sedekah?", "Infak harta, sedekah lebih luas"],
+    ["Hikmah sedekah?", "Kepedulian"]
+  ],
+  m10: [
+    ["Khalifah ke-3?", "Utsman bin Affan"],
+    ["Khalifah ke-4?", "Ali bin Abi Thalib"],
+    ["Gelar Utsman?", "Dzun Nurain"],
+    ["Gelar Ali?", "Babul Ilmi"],
+    ["Utsman menjabat?", "644–656 M"],
+    ["Ali menjabat?", "656–661 M"],
+    ["Jasa Utsman?", "Membukukan Al-Qur'an"],
+    ["Jasa Ali?", "Memindahkan pusat ke Kufah"],
+    ["Sifat Utsman?", "Dermawan"],
+    ["Sifat Ali?", "Cerdas, berani"]
+  ]
+};
+
+/* ================= RENDER KARTU ================= */
+function buatKartu(q, a, grup){
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'flash';
+  b.dataset.grup = grup;
+  const fq = document.createElement('span'); fq.className = 'fq'; fq.textContent = q;
+  const fa = document.createElement('span'); fa.className = 'fa'; fa.textContent = a;
+  b.appendChild(fq); b.appendChild(fa);
+  b.addEventListener('click', () => b.classList.toggle('open'));
+  return b;
+}
+Object.keys(FLASH).forEach(k => {
+  const box = document.getElementById('flash-' + k);
+  if(!box) return;
+  FLASH[k].forEach(([q,a]) => box.appendChild(buatKartu(q,a,k)));
+});
+(function(){
+  const box = document.getElementById('flash-all');
+  if(!box) return;
+  Object.keys(FLASH).forEach(k => {
+    FLASH[k].forEach(([q,a]) => box.appendChild(buatKartu(q,a,k)));
+  });
+})();
+(function(){
+  const bar = document.getElementById('flashFilter');
+  if(!bar) return;
+  bar.addEventListener('click', e => {
+    const btn = e.target.closest('button'); if(!btn) return;
+    bar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.f;
+    document.querySelectorAll('#flash-all .flash').forEach(card => {
+      card.style.display = (f === 'all' || card.dataset.grup === f) ? '' : 'none';
+    });
+  });
+})();
+
+/* ================= NAVIGASI LAYER ================= */
+const HOME = 'home';
+let riwayat = [HOME];
+const backBtn = document.getElementById('backBtn');
+const topTitle = document.getElementById('topTitle');
+const topSub = document.getElementById('topSub');
+
+const JUDUL = {
+  'home':              ['MPI Kelas VI', 'Media Persiapan LCC PAI & BP'],
+  'halaman-depan':     ['Halaman Depan', 'Judul, peta kompetensi & petunjuk'],
+  'ganjil':            ['Semester Ganjil', 'Modul 1–5'],
+  'genap':             ['Semester Genap', 'Modul 6–10'],
+  'modul1':            ['Modul 1 — QS Al-Kafirun', 'Semester Ganjil'],
+  'modul2':            ['Modul 2 — Asmaulhusna', 'Semester Ganjil'],
+  'modul3':            ['Modul 3 — Akhlak Teman & Toleransi', 'Semester Ganjil'],
+  'modul4':            ['Modul 4 — Halal & Haram', 'Semester Ganjil'],
+  'modul5':            ['Modul 5 — Abu Bakar & Umar', 'Semester Ganjil'],
+  'modul6':            ['Modul 6 — Hadis Bukhari 6484', 'Semester Genap'],
+  'modul7':            ['Modul 7 — Qada\' & Qadar', 'Semester Genap'],
+  'modul8':            ['Modul 8 — Hewan & Tumbuhan', 'Semester Genap'],
+  'modul9':            ['Modul 9 — Infak, Sedekah, Wakaf', 'Semester Genap'],
+  'modul10':           ['Modul 10 — Utsman & Ali', 'Semester Genap'],
+  'zona-hafalan':      ['Zona Hafalan Cepat', 'Kartu kilat & tabel'],
+  'zona-fakta':        ['Zona Fakta Kunci', 'Angka, nama, urutan'],
+  'zona-pengulangan':  ['Zona Pengulangan Kilat', '10 rangkuman'],
+  'glosarium':         ['Glosarium', 'Daftar istilah'],
+  'pustaka':           ['Daftar Pustaka', 'Sumber & catatan akhir']
+};
+
+function go(id, push = true){
+  const target = document.getElementById('layer-' + id);
+  if(!target) return;
+  document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+  target.classList.add('active');
+  if(push) riwayat.push(id);
+  const [t, s] = JUDUL[id] || ['MPI Kelas VI', 'Media Persiapan LCC'];
+  topTitle.childNodes[0].nodeValue = t + ' ';
+  topSub.textContent = s;
+  backBtn.disabled = riwayat.length <= 1;
+  window.scrollTo({top:0, behavior:'smooth'});
+  try { history.replaceState(null, '', '#' + id); } catch(e){}
+}
+
+function kembali(){
+  if(riwayat.length <= 1) return;
+  riwayat.pop();
+  go(riwayat[riwayat.length - 1], false);
+}
+
+backBtn.addEventListener('click', kembali);
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') kembali();
+});
+
+(function(){
+  const id = (location.hash || '').replace('#','');
+  if(id && document.getElementById('layer-' + id)){
+    riwayat = [HOME, id];
+    go(id, false);
+  }
+})();
+
+/* ================= CHECKLIST + PROGRES ================= */
+const KUNCI = 'mpi6-lcc-checklist-v1';
+const semuaCheckbox = [...document.querySelectorAll('.repeat-row input[type=checkbox]')];
+const progressBar = document.getElementById('progressBar');
+const progressTxt = document.getElementById('progressTxt');
+
+function muatChecklist(){
+  let data = {};
+  try { data = JSON.parse(localStorage.getItem(KUNCI)) || {}; } catch(e){ data = {}; }
+  semuaCheckbox.forEach(cb => { cb.checked = !!data[cb.dataset.k]; });
+  perbaruiProgres();
+}
+function simpanChecklist(){
+  const data = {};
+  semuaCheckbox.forEach(cb => { if(cb.checked) data[cb.dataset.k] = 1; });
+  try { localStorage.setItem(KUNCI, JSON.stringify(data)); } catch(e){}
+  perbaruiProgres();
+}
+function perbaruiProgres(){
+  const total = semuaCheckbox.length || 1;
+  const terisi = semuaCheckbox.filter(cb => cb.checked).length;
+  const persen = Math.round(terisi / total * 100);
+  if(progressBar) progressBar.style.width = persen + '%';
+  if(progressTxt) progressTxt.textContent = persen + '%';
+}
+semuaCheckbox.forEach(cb => cb.addEventListener('change', simpanChecklist));
+muatChecklist();
+
+/* ================= TEMA ================= */
+const themeBtn = document.getElementById('themeBtn');
+const TEMA = 'mpi6-tema-v1';
+function pasangTema(gelap){
+  document.body.classList.toggle('dark', gelap);
+  themeBtn.textContent = gelap ? '☀️' : '🌙';
+}
+let gelapTersimpan = false;
+try { gelapTersimpan = localStorage.getItem(TEMA) === 'dark'; } catch(e){}
+pasangTema(gelapTersimpan);
+themeBtn.addEventListener('click', () => {
+  const gelap = !document.body.classList.contains('dark');
+  pasangTema(gelap);
+  try { localStorage.setItem(TEMA, gelap ? 'dark' : 'light'); } catch(e){}
+});
+
+/* ================= CETAK ================= */
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+</script>
+</body>
+</html>
