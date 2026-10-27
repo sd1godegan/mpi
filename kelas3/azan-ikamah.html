@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>MPI Game: Azan &amp; Ikamah</title>
+<style>
+  /* ============ RESET & BASE ============ */
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none; user-select: none; margin: 0; padding: 0; }
+  html, body { height: 100vh; width: 100vw; overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #e8f5e9, #fff8e1); color: #1b5e20; }
+
+  /* ============ SCREEN SYSTEM ============ */
+  .screen { display: none; height: 100vh; width: 100vw; padding: 1.5vh 1.5vw;
+    flex-direction: column; overflow: hidden; }
+  .screen.active { display: flex; }
+
+  h1 { font-size: clamp(28px, 3.2vw, 52px); text-align: center; color: #1b5e20; line-height: 1.2; }
+  h2 { font-size: clamp(20px, 2.2vw, 36px); color: #2e7d32; text-align: center; line-height: 1.2; }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    background: linear-gradient(145deg, #43a047, #2e7d32); color: #fff; border: none;
+    border-radius: 16px; padding: 1.5vh 2.5vw; font-size: clamp(16px, 1.5vw, 24px);
+    font-weight: bold; cursor: pointer; min-height: 8vh; min-width: 12vw;
+    box-shadow: 0 5px 0 #1b5e20, 0 8px 18px rgba(0,0,0,0.18);
+    transition: transform 0.08s, box-shadow 0.08s; touch-action: manipulation;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 0.5vw; font-family: inherit;
+  }
+  .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #1b5e20; }
+  .btn.small { min-height: 6vh; min-width: auto; padding: 1vh 1.8vw;
+    font-size: clamp(14px, 1.2vw, 20px); }
+  .btn.back { background: linear-gradient(145deg, #ff9800, #e65100);
+    box-shadow: 0 5px 0 #bf360c, 0 8px 18px rgba(0,0,0,0.18); }
+  .btn.back:active { box-shadow: 0 1px 0 #bf360c; }
+  .btn.yellow { background: linear-gradient(145deg, #fbc02d, #f57f17); color: #1b5e20;
+    box-shadow: 0 5px 0 #e65100, 0 8px 18px rgba(0,0,0,0.18); }
+  .btn.yellow:active { box-shadow: 0 1px 0 #e65100; }
+  .btn.blue { background: linear-gradient(145deg, #42a5f5, #1565c0);
+    box-shadow: 0 5px 0 #0d47a1, 0 8px 18px rgba(0,0,0,0.18); }
+  .btn.blue:active { box-shadow: 0 1px 0 #0d47a1; }
+
+  /* ============ MENU ============ */
+  .menu-header { text-align: center; padding: 1vh 0; flex-shrink: 0; }
+  .menu-sub { font-size: clamp(14px, 1.2vw, 20px); opacity: 0.75; margin-top: 0.5vh; }
+  .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.5vh 1.5vw; flex: 1; min-height: 0; padding: 1vh 0; }
+  .game-card {
+    background: linear-gradient(145deg, #fff, #e8f5e9); border: 4px solid #66bb6a;
+    border-radius: 22px; padding: 1.2vh 0.8vw; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 7px 18px rgba(46,125,50,0.22); transition: transform 0.12s;
+    text-align: center; font-weight: bold; font-size: clamp(14px, 1.3vw, 20px);
+    color: #1b5e20; gap: 0.5vh; min-height: 0; overflow: hidden;
+  }
+  .game-card:active { transform: scale(0.94); }
+  .game-card .icon { font-size: clamp(30px, 3.2vw, 54px); line-height: 1; }
+  .game-card .label { line-height: 1.2; }
+  .game-card .stars { font-size: clamp(16px, 1.5vw, 24px); letter-spacing: 0.2vw; }
+  .menu-footer { flex-shrink: 0; display: flex; gap: 1vw; justify-content: center;
+    flex-wrap: wrap; padding-top: 1vh; }
+
+  /* ============ GAME HEADER ============ */
+  .game-header { display: flex; justify-content: space-between; align-items: center;
+    gap: 1vw; margin-bottom: 1.2vh; flex-shrink: 0; }
+  .score-box { background: #fff; border-radius: 14px; padding: 0.8vh 1.8vw;
+    font-size: clamp(18px, 1.6vw, 28px); font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
+
+  /* ============ CONTENT ============ */
+  .content { flex: 1; display: flex; flex-direction: column; justify-content: center;
+    align-items: center; gap: 1.5vh; min-height: 0; overflow: hidden; }
+
+  /* ============ QUESTION ============ */
+  .question {
+    background: #fff; border: 4px solid #66bb6a; border-radius: 18px;
+    padding: 2vh 3vw; text-align: center;
+    font-size: clamp(20px, 2vw, 34px); font-weight: bold; color: #1b5e20;
+    max-width: 94vw; min-height: 12vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 5px 18px rgba(46,125,50,0.18); gap: 0.6vh; flex-shrink: 0;
+  }
+  .question .hint { font-size: clamp(14px, 1.2vw, 20px); font-weight: normal;
+    color: #558b2f; font-style: italic; }
+
+  /* ============ OPTIONS ============ */
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vh 1.5vw;
+    width: 92vw; max-width: 1400px; }
+  .options.three { grid-template-columns: repeat(3, 1fr); }
+  .option {
+    background: linear-gradient(145deg, #fff, #e8f5e9); border: 4px solid #66bb6a;
+    border-radius: 14px; padding: 1.8vh 1.5vw;
+    font-size: clamp(16px, 1.5vw, 24px); font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 0 #2e7d32, 0 6px 14px rgba(0,0,0,0.12);
+    color: #1b5e20; transition: transform 0.08s, box-shadow 0.08s;
+    min-height: 9vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; font-family: inherit; line-height: 1.2;
+  }
+  .option:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #2e7d32; }
+  .option.correct { background: linear-gradient(145deg, #a5d6a7, #66bb6a);
+    border-color: #2e7d32; animation: pop 0.3s; }
+  .option.wrong { background: linear-gradient(145deg, #ef9a9a, #e57373);
+    border-color: #c62828; animation: shake 0.3s; }
+  .option:disabled { cursor: default; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)}
+    75%{transform:translateX(10px)} }
+  @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)} }
+
+  /* ============ SUSUN ============ */
+  .seq-slots { display: flex; gap: 0.8vw; flex-wrap: wrap; justify-content: center;
+    width: 94vw; flex-shrink: 0; }
+  .seq-slot { min-width: 5.5vw; height: 5.5vh; border: 3px dashed #a5d6a7;
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: clamp(14px, 1.2vw, 20px); color: #a5d6a7; font-weight: bold;
+    padding: 0 0.6vw; }
+  .seq-slot.filled { border: 3px solid #2e7d32;
+    background: linear-gradient(145deg, #a5d6a7, #66bb6a); color: #fff; }
+  .seq-pool { display: grid; grid-template-columns: repeat(auto-fit, minmax(18vw, 1fr));
+    gap: 1vh 1vw; width: 96vw; max-width: 1600px; overflow-y: auto;
+    max-height: 42vh; padding: 0.5vh; }
+  .seq-card {
+    background: linear-gradient(145deg, #fff, #e8f5e9); border: 3px solid #66bb6a;
+    border-radius: 14px; padding: 1.2vh 0.8vw;
+    font-size: clamp(14px, 1.2vw, 20px); font-weight: bold; cursor: pointer;
+    text-align: center; color: #1b5e20; box-shadow: 0 4px 0 #2e7d32;
+    transition: transform 0.1s, opacity 0.2s; min-height: 7vh;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1.2; font-family: inherit;
+  }
+  .seq-card:active { transform: translateY(3px); box-shadow: 0 1px 0 #2e7d32; }
+  .seq-card.used { opacity: 0.25; pointer-events: none; }
+  .seq-card.correct { background: linear-gradient(145deg, #a5d6a7, #66bb6a);
+    animation: pop 0.3s; }
+  .seq-card.wrong { background: linear-gradient(145deg, #ef9a9a, #e57373);
+    animation: shake 0.3s; }
+
+  /* ============ MEMORY ============ */
+  #screen-g7 .content { padding: 0; }
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1.2vh 0.8vw;
+    width: 94vw; max-width: 1600px;
+    height: 100%; min-height: 0;
+  }
+  .mem-card {
+    background: linear-gradient(145deg, #fbc02d, #f57f17);
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #fff; font-weight: bold;
+    box-shadow: 0 5px 0 #e65100, 0 6px 14px rgba(0,0,0,0.15);
+    transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+    font-size: clamp(22px, 2.4vw, 42px); overflow: hidden;
+    text-align: center; padding: 0.5vh 0.4vw;
+  }
+  .mem-card:active:not(.matched):not(.flipped) {
+    transform: scale(0.95); box-shadow: 0 2px 0 #e65100;
+  }
+  .mem-card .face {
+    font-size: clamp(11px, 1vw, 16px); line-height: 1.15;
+    word-break: break-word; padding: 0.4vh;
+  }
+  .mem-card.flipped {
+    background: linear-gradient(145deg, #fff, #e8f5e9); color: #1b5e20;
+    box-shadow: 0 5px 0 #2e7d32;
+  }
+  .mem-card.matched {
+    background: linear-gradient(145deg, #a5d6a7, #66bb6a); color: #fff;
+    box-shadow: 0 5px 0 #1b5e20; animation: pop 0.3s;
+  }
+
+  /* ============ TIMER ============ */
+  .timer-wrap { width: 80vw; max-width: 1200px; }
+  .timer-bar { width: 100%; height: 2.5vh; background: #c8e6c9;
+    border-radius: 20px; overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+  .timer-fill { height: 100%; background: linear-gradient(90deg, #66bb6a, #43a047);
+    transition: width 1s linear, background 0.3s; border-radius: 20px; }
+  .timer-fill.low { background: linear-gradient(90deg, #ef5350, #c62828); }
+
+  /* ============ FEEDBACK ============ */
+  .feedback { font-size: clamp(18px, 1.8vw, 30px); font-weight: bold;
+    height: 4.5vh; display: flex; align-items: center; justify-content: center;
+    color: #1b5e20; text-align: center; padding: 0 2vw; flex-shrink: 0; }
+  .feedback.ok { color: #2e7d32; }
+  .feedback.err { color: #c62828; }
+
+  /* ============ BLANK INPUT ============ */
+  .blank-input {
+    display: flex; flex-wrap: wrap; gap: 0.5vw; justify-content: center;
+    align-items: center; font-size: clamp(20px, 2vw, 34px); font-weight: bold;
+    background: #fff; padding: 2.5vh 3vw; border-radius: 18px;
+    border: 4px solid #66bb6a; color: #1b5e20; max-width: 92vw;
+    line-height: 1.4; text-align: center;
+    box-shadow: 0 5px 18px rgba(46,125,50,0.18); flex-shrink: 0;
+  }
+  .blank-input .blank { color: #e65100; letter-spacing: 0.1em; }
+
+  /* ============ END SCREEN ============ */
+  .end-box {
+    background: #fff; border-radius: 22px; padding: 3vh 5vw; text-align: center;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.18); border: 5px solid #66bb6a;
+    display: flex; flex-direction: column; align-items: center; gap: 1.8vh;
+    max-width: 90vw;
+  }
+  .stars-big { font-size: clamp(56px, 6.5vw, 100px); letter-spacing: 0.4vw; line-height: 1; }
+  .confetti { position: fixed; width: 14px; height: 14px; top: -20px;
+    animation: fall 3s linear forwards; z-index: 9999; pointer-events: none; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+  /* ============ SCOREBOARD ============ */
+  #skor-content { min-width: 60vw; font-size: clamp(16px, 1.4vw, 22px);
+    line-height: 1.8; text-align: left; }
+  .skor-row { display: flex; justify-content: space-between;
+    padding: 0.8vh 1.5vw; border-bottom: 2px dashed #a5d6a7; }
+  .skor-total { padding: 2vh; font-size: clamp(20px, 1.8vw, 30px);
+    font-weight: bold; color: #2e7d32; text-align: center; }
+
+  /* ============ UTILITIES ============ */
+  .hidden { display: none !important; }
+  .row { display: flex; gap: 1vw; align-items: center; justify-content: center;
+    flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .menu-grid { grid-template-columns: repeat(2, 1fr); }
+    .options.three { grid-template-columns: 1fr; }
+    .memory-grid { grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== MENU ==================== -->
+<div id="screen-menu" class="screen active">
+  <div class="menu-header">
+    <h1>🎮 Game Azan &amp; Ikamah</h1>
+    <p class="menu-sub">Sentuh kartu untuk mulai bermain</p>
+  </div>
+  <div class="menu-grid">
+    <div class="game-card" onclick="startSusun('azan')">
+      <div class="icon">🧩</div>
+      <div class="label">Susun Lafaz Azan</div>
+      <div class="stars" id="stars-g1">☆☆☆</div>
+    </div>
+    <div class="game-card" onclick="startSusun('ikamah')">
+      <div class="icon">🧩</div>
+      <div class="label">Susun Lafaz Ikamah</div>
+      <div class="stars" id="stars-g2">☆☆☆</div>
+    </div>
+    <div class="game-card" onclick="startG3()">
+      <div class="icon">🕌</div>
+      <div class="label">Azan atau Ikamah?</div>
+      <div class="stars" id="stars-g3">☆☆☆</div>
+    </div>
+    <div class="game-card" onclick="startG4()">
+      <div class="icon">🗣️</div>
+      <div class="label">Jawab Seruanku</div>
+      <div class="stars" id="stars-g4">☆☆☆</div>
+    </div>
+    <div class="game-card" onclick="startG5()">
+      <div class="icon">✏️</div>
+      <div class="label">Tebak Lafaz Hilang</div>
+      <div class="stars" id="stars-g5">☆☆☆</div>
+    </div>
+    <div class="game-card" onclick="startG6()">
+      <div class="icon">✅</div>
+      <div class="label">Klik yang Benar</div>
+      <div class="stars" id="stars-g6">☆☆☆</div>
+    </div>
+    <div class="game-card" onclick="startG7()">
+      <div class="icon">🃏</div>
+      <div class="label">Ingat Kartu</div>
+      <div class="stars" id="stars-g7">☆☆☆</div>
+    </div>
+    <div class="game-card" onclick="startG8()">
+      <div class="icon">⚡</div>
+      <div class="label">Lomba Cepat</div>
+      <div class="stars" id="stars-g8">☆☆☆</div>
+    </div>
+  </div>
+  <div class="menu-footer">
+    <button class="btn small blue" onclick="showSkor()">🏆 Papan Skor</button>
+    <button class="btn small yellow" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <button class="btn small back" onclick="resetSemua()">🔄 Reset Skor</button>
+  </div>
+</div>
+
+<!-- ==================== G1 & G2: SUSUN ==================== -->
+<div id="screen-susun" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2 id="susun-title">Susun Lafaz</h2>
+    <div class="score-box" id="susun-info">0 / 0</div>
+  </div>
+  <div class="content">
+    <div class="seq-slots" id="seq-slots"></div>
+    <div class="seq-pool" id="seq-pool"></div>
+    <div class="feedback" id="susun-fb">Sentuh lafaz sesuai urutan yang benar</div>
+  </div>
+</div>
+
+<!-- ==================== G3 ==================== -->
+<div id="screen-g3" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2>🕌 Azan, Ikamah, atau Keduanya?</h2>
+    <div class="score-box" id="g3-skor">0 / 0</div>
+  </div>
+  <div class="content">
+    <div class="question" id="g3-q">...</div>
+    <div class="options three" id="g3-opts"></div>
+    <div class="feedback" id="g3-fb"></div>
+  </div>
+</div>
+
+<!-- ==================== G4 ==================== -->
+<div id="screen-g4" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2>🗣️ Jawab Seruanku</h2>
+    <div class="score-box" id="g4-skor">0 / 0</div>
+  </div>
+  <div class="content">
+    <div class="question" id="g4-q">...</div>
+    <div class="options" id="g4-opts"></div>
+    <div class="feedback" id="g4-fb"></div>
+  </div>
+</div>
+
+<!-- ==================== G5 ==================== -->
+<div id="screen-g5" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2>✏️ Tebak Lafaz Hilang</h2>
+    <div class="score-box" id="g5-skor">0 / 0</div>
+  </div>
+  <div class="content">
+    <div class="blank-input" id="g5-q">...</div>
+    <div class="options three" id="g5-opts"></div>
+    <div class="feedback" id="g5-fb"></div>
+  </div>
+</div>
+
+<!-- ==================== G6 ==================== -->
+<div id="screen-g6" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2>✅ Klik Tulisan yang Benar</h2>
+    <div class="score-box" id="g6-skor">0 / 0</div>
+  </div>
+  <div class="content">
+    <div class="question" id="g6-q">Pilih tulisan yang benar:</div>
+    <div class="options" id="g6-opts"></div>
+    <div class="feedback" id="g6-fb"></div>
+  </div>
+</div>
+
+<!-- ==================== G7 MEMORY ==================== -->
+<div id="screen-g7" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2>🃏 Ingat Kartu</h2>
+    <div class="score-box" id="g7-skor">0 pasang</div>
+  </div>
+  <div class="content">
+    <div class="memory-grid" id="g7-grid"></div>
+  </div>
+</div>
+
+<!-- ==================== G8 SPEED ==================== -->
+<div id="screen-g8" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2>⚡ Lomba Cepat</h2>
+    <div class="score-box" id="g8-skor">⏱ 60s</div>
+  </div>
+  <div class="content">
+    <div class="timer-wrap"><div class="timer-bar"><div class="timer-fill" id="g8-timer"></div></div></div>
+    <div class="question" id="g8-q">...</div>
+    <div class="options" id="g8-opts"></div>
+    <div class="feedback" id="g8-fb"></div>
+  </div>
+</div>
+
+<!-- ==================== SKOR ==================== -->
+<div id="screen-skor" class="screen">
+  <div class="game-header">
+    <button class="btn small back" onclick="goto('menu')">🔙 Menu</button>
+    <h2>🏆 Papan Skor</h2>
+    <div style="width:110px"></div>
+  </div>
+  <div class="content">
+    <div class="end-box" id="skor-content"></div>
+  </div>
+</div>
+
+<!-- ==================== END ==================== -->
+<div id="screen-end" class="screen">
+  <div class="content">
+    <div class="end-box">
+      <h1 id="end-title">Selamat!</h1>
+      <div class="stars-big" id="end-stars">⭐⭐⭐</div>
+      <p id="end-detail" style="font-size:clamp(18px,1.7vw,28px);font-weight:bold"></p>
+      <div class="row">
+        <button class="btn" onclick="goto('menu')">🏠 Menu</button>
+        <button class="btn yellow" onclick="ulangiGame()">🔁 Ulangi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const shuffle = arr => arr.slice().sort(() => Math.random() - 0.5);
+
+/* ============================================================
+   AUDIO (Web Audio API)
+   ============================================================ */
+let actx = null;
+function ensureAudio() {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+  } catch (e) { /* Audio tidak tersedia */ }
+}
+
+/* FIX #1: ensureAudio() dipanggil di playTone agar bunyi pertama keluar */
+function playTone(freq, dur, type = 'sine', vol = 0.15) {
+  ensureAudio();
+  if (!actx) return;
+  try {
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime + dur);
+  } catch (e) { /* abaikan */ }
+}
+const sfx = {
+  click:   () => playTone(500, 0.05, 'square', 0.07),
+  correct: () => { playTone(880, 0.10); setTimeout(() => playTone(1320, 0.12), 80); },
+  wrong:   () => playTone(180, 0.30, 'sawtooth', 0.14),
+  win:     () => [523, 659, 784, 1047].forEach((f, i) =>
+                    setTimeout(() => playTone(f, 0.20), i * 100))
+};
+
+/* Aktifkan AudioContext saat interaksi pertama (fallback) */
+['click', 'touchstart'].forEach(ev =>
+  document.addEventListener(ev, ensureAudio, { once: true, passive: true }));
+
+/* ============================================================
+   SESSION & TIMEOUT MANAGEMENT
+   ============================================================ */
+let sessionId = 0;
+function schedule(fn, ms) {
+  const sid = sessionId;
+  setTimeout(() => { if (sid === sessionId) fn(); }, ms);
+}
+function invalidateSession() {
+  sessionId++;
+  if (g8State.timer) { clearInterval(g8State.timer); g8State.timer = null; }
+}
+
+/* ============================================================
+   SCORE (localStorage) — FIX #4: try/catch untuk kiosk mode
+   ============================================================ */
+const GAME_KEYS = ['g1','g2','g3','g4','g5','g6','g7','g8'];
+function getScore(k) {
+  try { return parseInt(localStorage.getItem('mpi_' + k) || '0', 10) || 0; }
+  catch (e) { return 0; }
+}
+function setScore(k, stars) {
+  try {
+    if (stars > getScore(k)) localStorage.setItem('mpi_' + k, String(stars));
+  } catch (e) {}
+}
+function starsHtml(n) { return '⭐'.repeat(n) + '☆'.repeat(3 - n); }
+function starsFromScore(sc, max) {
+  if (max <= 0) return 0;
+  const p = sc / max;
+  return p >= 0.85 ? 3 : p >= 0.65 ? 2 : p >= 0.40 ? 1 : 0;
+}
+function updateMenuStars() {
+  GAME_KEYS.forEach(k => {
+    const el = $('stars-' + k);
+    if (el) el.textContent = starsHtml(getScore(k));
+  });
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+let lastGame = 'menu';
+function goto(screenId) {
+  invalidateSession();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = $('screen-' + screenId);
+  if (target) target.classList.add('active');
+  if (screenId === 'menu') updateMenuStars();
+}
+
+function gotoEnd(title, stars, detail, key) {
+  const endScreen = $('screen-end');
+  if (endScreen.classList.contains('active')) return;
+
+  lastGame = key;
+  $('end-title').textContent = title;
+  $('end-stars').textContent = starsHtml(stars);
+  $('end-detail').textContent = detail;
+  setScore(key, stars);
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  endScreen.classList.add('active');
+  updateMenuStars();
+
+  if (stars >= 2) { sfx.win(); confetti(); }
+}
+
+function ulangiGame() {
+  invalidateSession();
+  const map = {
+    g1: () => startSusun('azan'),
+    g2: () => startSusun('ikamah'),
+    g3: startG3, g4: startG4, g5: startG5,
+    g6: startG6, g7: startG7, g8: startG8
+  };
+  if (map[lastGame]) map[lastGame](); else goto('menu');
+}
+
+function toggleFullscreen() {
+  try {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  } catch (e) {}
+}
+
+function confetti() {
+  const colors = ['#f44336','#e91e63','#9c27b0','#3f51b5','#03a9f4',
+                  '#009688','#4caf50','#ffeb3b','#ff9800'];
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDelay = (Math.random() * 0.8) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4200);
+  }
+}
+
+function resetSemua() {
+  if (!confirm('Reset semua skor?')) return;
+  GAME_KEYS.forEach(k => { try { localStorage.removeItem('mpi_' + k); } catch (e) {} });
+  updateMenuStars();
+}
+
+/* Cegah context menu (long-press) di IFP */
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const AZAN_LAFAZ = [
+  "Allahu Akbar, Allahu Akbar",
+  "Asyhadu an la ilaha illallah",
+  "Asyhadu anna Muhammadar Rasulullah",
+  "Hayya 'alash shalah",
+  "Hayya 'alal falah",
+  "Allahu Akbar, Allahu Akbar",
+  "La ilaha illallah"
+];
+const IKAMAH_LAFAZ = [
+  "Allahu Akbar, Allahu Akbar",
+  "Asyhadu an la ilaha illallah",
+  "Asyhadu anna Muhammadar Rasulullah",
+  "Hayya 'alash shalah",
+  "Hayya 'alal falah",
+  "Qad qaamatish shalah",
+  "Allahu Akbar, Allahu Akbar",
+  "La ilaha illallah"
+];
+
+/* ============================================================
+   G1 & G2: SUSUN LAFAZ
+   ============================================================ */
+const susun = { list: [], placed: 0, key: 'g1' };
+
+function startSusun(type) {
+  susun.key = type === 'azan' ? 'g1' : 'g2';
+  susun.list = (type === 'azan' ? AZAN_LAFAZ : IKAMAH_LAFAZ).slice();
+  susun.placed = 0;
+
+  $('susun-title').textContent = '🧩 Susun Lafaz ' +
+    (type === 'azan' ? 'Azan' : 'Ikamah');
+
+  const slots = $('seq-slots');
+  slots.innerHTML = '';
+  susun.list.forEach((_, i) => {
+    const s = document.createElement('div');
+    s.className = 'seq-slot';
+    s.textContent = i + 1;
+    slots.appendChild(s);
+  });
+
+  const pool = $('seq-pool');
+  pool.innerHTML = '';
+  shuffle(susun.list).forEach(lafaz => {
+    const card = document.createElement('div');
+    card.className = 'seq-card';
+    card.textContent = lafaz;
+    card.dataset.value = lafaz;
+    card.onclick = () => tapSusun(card);
+    pool.appendChild(card);
+  });
+
+  $('susun-info').textContent = `Urutan: 0/${susun.list.length}`;
+  setFeedback('susun-fb', 'Sentuh lafaz sesuai urutan yang benar', '');
+  goto('susun');
+}
+
+function tapSusun(card) {
+  /* FIX #2: cek 'correct' juga untuk cegah double-tap dalam 280ms */
+  if (card.classList.contains('used') || card.classList.contains('correct')) return;
+  const expected = susun.list[susun.placed];
+  if (card.dataset.value === expected) {
+    card.classList.add('correct');
+    schedule(() => card.classList.add('used'), 280);
+    $('seq-slots').children[susun.placed].classList.add('filled');
+    susun.placed++;
+    $('susun-info').textContent = `Urutan: ${susun.placed}/${susun.list.length}`;
+    sfx.correct();
+    setFeedback('susun-fb', '✅ Benar!', 'ok');
+    if (susun.placed === susun.list.length) {
+      schedule(() => gotoEnd('🎉 Hebat!', 3,
+        `${susun.list.length}/${susun.list.length} lafaz tersusun benar`, susun.key), 600);
+    }
+  } else {
+    card.classList.add('wrong');
+    schedule(() => card.classList.remove('wrong'), 400);
+    sfx.wrong();
+    setFeedback('susun-fb', '❌ Belum tepat, coba lafaz lain', 'err');
+  }
+}
+
+/* ============================================================
+   G3: AZAN / IKAMAH / KEDUANYA
+   ============================================================ */
+const G3_DATA = [
+  { t: "Qad qaamatish shalah",             j: "ikamah",   ket: "Hanya ada di ikamah" },
+  { t: "Ash-shalaatu khairun minan naum",  j: "azan",     ket: "Tambahan khusus Azan Subuh" },
+  { t: "Hayya 'alash shalah",              j: "keduanya", ket: "Ada di azan dan ikamah" },
+  { t: "Allahu Akbar, Allahu Akbar",       j: "keduanya", ket: "Ada di azan dan ikamah" },
+  { t: "La ilaha illallah",                j: "keduanya", ket: "Ada di azan dan ikamah" },
+  { t: "Asyhadu anna Muhammadar Rasulullah", j: "keduanya", ket: "Ada di azan dan ikamah" },
+  { t: "Qad qaamatish shalah",             j: "ikamah",   ket: "Hanya ada di ikamah" },
+  { t: "Hayya 'alal falah",                j: "keduanya", ket: "Ada di azan dan ikamah" }
+];
+const g3State = { list: [], idx: 0, benar: 0 };
+
+function startG3() {
+  g3State.list = shuffle(G3_DATA);
+  g3State.idx = 0;
+  g3State.benar = 0;
+  goto('g3');
+  renderG3();
+}
+
+function renderG3() {
+  if (g3State.idx >= g3State.list.length) {
+    const stars = starsFromScore(g3State.benar, g3State.list.length);
+    return gotoEnd('Selesai G3', stars,
+      `${g3State.benar}/${g3State.list.length} benar`, 'g3');
+  }
+  const d = g3State.list[g3State.idx];
+  $('g3-q').textContent = `"${d.t}"`;
+  $('g3-skor').textContent = `${g3State.benar} / ${g3State.list.length}`;
+  setFeedback('g3-fb', '', '');
+
+  const opts = $('g3-opts');
+  opts.innerHTML = '';
+  [
+    { v: 'azan',     label: '🕌 Azan' },
+    { v: 'ikamah',   label: '⏰ Ikamah' },
+    { v: 'keduanya', label: '🔄 Keduanya' }
+  ].forEach(({ v, label }) => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.textContent = label;
+    b.dataset.v = v;  /* FIX #3: simpan dataset.v agar highlight benar bisa pakai ini */
+    b.onclick = () => jawabG3(b, v, d);
+    opts.appendChild(b);
+  });
+}
+
+function jawabG3(btn, pilih, d) {
+  document.querySelectorAll('#g3-opts .option').forEach(x => x.disabled = true);
+  if (pilih === d.j) {
+    btn.classList.add('correct');
+    g3State.benar++;
+    sfx.correct();
+    setFeedback('g3-fb', `✅ Benar! (${d.ket})`, 'ok');
+  } else {
+    btn.classList.add('wrong');
+    /* FIX #3: sekarang dataset.v tersedia, highlight benar akurat */
+    document.querySelectorAll('#g3-opts .option').forEach(x => {
+      if (x.dataset.v === d.j) x.classList.add('correct');
+    });
+    sfx.wrong();
+    setFeedback('g3-fb', `❌ Jawaban benar: ${d.ket}`, 'err');
+  }
+  $('g3-skor').textContent = `${g3State.benar} / ${g3State.list.length}`;
+  g3State.idx++;
+  schedule(renderG3, 1400);
+}
+
+/* ============================================================
+   G4: JAWAB SERUAN
+   ============================================================ */
+const G4_DATA = [
+  { soal: "Hayya 'alash shalah", benar: "La hawla wa la quwwata illa billah",
+    salah: ["Allahu Akbar, Allahu Akbar", "La ilaha illallah"],
+    hint: "Ada jawaban khusus untuk seruan ini" },
+  { soal: "Hayya 'alal falah", benar: "La hawla wa la quwwata illa billah",
+    salah: ["Qad qaamatish shalah", "Allahu Akbar, Allahu Akbar"],
+    hint: "Ada jawaban khusus untuk seruan ini" },
+  { soal: "Allahu Akbar, Allahu Akbar", benar: "Allahu Akbar, Allahu Akbar",
+    salah: ["La hawla wa la quwwata illa billah", "La ilaha illallah"],
+    hint: "Ulangi seperti yang diucapkan muazin" },
+  { soal: "Asyhadu an la ilaha illallah", benar: "Asyhadu an la ilaha illallah",
+    salah: ["Allahu Akbar, Allahu Akbar", "Hayya 'alash shalah"],
+    hint: "Ulangi seperti yang diucapkan muazin" },
+  { soal: "Asyhadu anna Muhammadar Rasulullah", benar: "Asyhadu anna Muhammadar Rasulullah",
+    salah: ["La ilaha illallah", "Allahu Akbar, Allahu Akbar"],
+    hint: "Ulangi seperti yang diucapkan muazin" },
+  { soal: "La ilaha illallah", benar: "La ilaha illallah",
+    salah: ["Allahu Akbar, Allahu Akbar", "Hayya 'alash shalah"],
+    hint: "Ulangi seperti yang diucapkan muazin" }
+];
+const g4State = { list: [], idx: 0, benar: 0 };
+
+function startG4() {
+  g4State.list = shuffle(G4_DATA);
+  g4State.idx = 0;
+  g4State.benar = 0;
+  goto('g4');
+  renderG4();
+}
+
+function renderG4() {
+  if (g4State.idx >= g4State.list.length) {
+    const stars = starsFromScore(g4State.benar, g4State.list.length);
+    return gotoEnd('Selesai G4', stars,
+      `${g4State.benar}/${g4State.list.length} benar`, 'g4');
+  }
+  const d = g4State.list[g4State.idx];
+  const q = $('g4-q');
+  q.innerHTML = `Muazin: "${d.soal}"<div class="hint">💡 ${d.hint}</div>`;
+  $('g4-skor').textContent = `${g4State.benar} / ${g4State.list.length}`;
+  setFeedback('g4-fb', '', '');
+
+  const opts = $('g4-opts');
+  opts.innerHTML = '';
+  shuffle([d.benar, ...d.salah]).forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.textContent = v;
+    b.onclick = () => jawabG4(b, v, d.benar);
+    opts.appendChild(b);
+  });
+}
+
+function jawabG4(btn, pilih, jawab) {
+  document.querySelectorAll('#g4-opts .option').forEach(x => x.disabled = true);
+  if (pilih === jawab) {
+    btn.classList.add('correct');
+    g4State.benar++;
+    sfx.correct();
+    setFeedback('g4-fb', '✅ Tepat sekali!', 'ok');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#g4-opts .option').forEach(x => {
+      if (x.textContent === jawab) x.classList.add('correct');
+    });
+    sfx.wrong();
+    setFeedback('g4-fb', `❌ Jawaban benar: ${jawab}`, 'err');
+  }
+  g4State.idx++;
+  $('g4-skor').textContent = `${g4State.benar} / ${g4State.list.length}`;
+  schedule(renderG4, 1500);
+}
+
+/* ============================================================
+   G5: TEBAK LAFAZ HILANG
+   ============================================================ */
+const G5_DATA = [
+  { teks: "Asyhadu an ___ ilaha illallah", jawab: "la",        salah: ["li", "lu"] },
+  { teks: "Hayya 'alal ___",                jawab: "falah",     salah: ["shalah", "naum"] },
+  { teks: "Hayya 'alash ___",               jawab: "shalah",    salah: ["falah", "naum"] },
+  { teks: "Qad ___ shalah",                 jawab: "qaamatish", salah: ["qoamatis", "qaamati"] },
+  { teks: "Allahu ___",                     jawab: "Akbar",     salah: ["Asghar", "Awwal"] },
+  { teks: "La ilaha ___ Allah",             jawab: "illallah",  salah: ["ilallah", "illallahu"] },
+  { teks: "Ash-shalaatu khairun minan ___", jawab: "naum",      salah: ["qaum", "yaum"] },
+  { teks: "Asyhadu anna ___ Rasulullah",    jawab: "Muhammadar", salah: ["Muhammadun", "Muhammadin"] }
+];
+const g5State = { list: [], idx: 0, benar: 0 };
+
+function startG5() {
+  g5State.list = shuffle(G5_DATA);
+  g5State.idx = 0;
+  g5State.benar = 0;
+  goto('g5');
+  renderG5();
+}
+
+function renderG5() {
+  if (g5State.idx >= g5State.list.length) {
+    const stars = starsFromScore(g5State.benar, g5State.list.length);
+    return gotoEnd('Selesai G5', stars,
+      `${g5State.benar}/${g5State.list.length} benar`, 'g5');
+  }
+  const d = g5State.list[g5State.idx];
+  $('g5-q').innerHTML = d.teks.replace('___', '<span class="blank">___</span>');
+  $('g5-skor').textContent = `${g5State.benar} / ${g5State.list.length}`;
+  setFeedback('g5-fb', '', '');
+
+  const opts = $('g5-opts');
+  opts.innerHTML = '';
+  shuffle([d.jawab, ...d.salah]).forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.textContent = v;
+    b.onclick = () => jawabG5(b, v, d.jawab);
+    opts.appendChild(b);
+  });
+}
+
+function jawabG5(btn, pilih, jawab) {
+  document.querySelectorAll('#g5-opts .option').forEach(x => x.disabled = true);
+  if (pilih === jawab) {
+    btn.classList.add('correct');
+    g5State.benar++;
+    sfx.correct();
+    setFeedback('g5-fb', '✅ Benar!', 'ok');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#g5-opts .option').forEach(x => {
+      if (x.textContent === jawab) x.classList.add('correct');
+    });
+    sfx.wrong();
+    setFeedback('g5-fb', `❌ Jawaban: ${jawab}`, 'err');
+  }
+  g5State.idx++;
+  $('g5-skor').textContent = `${g5State.benar} / ${g5State.list.length}`;
+  schedule(renderG5, 1300);
+}
+
+/* ============================================================
+   G6: KLIK TULISAN YANG BENAR
+   ============================================================ */
+const G6_DATA = [
+  { benar: "Qad qaamatish shalah",
+    salah: ["Qad qoamatis sholat", "Kod qomatish shalah", "Qad qamati syalah"] },
+  { benar: "Hayya 'alash shalah",
+    salah: ["Hayya ala sholat", "Haiya 'alasy syalah", "Hayya ala sallah"] },
+  { benar: "Ash-shalaatu khairun minan naum",
+    salah: ["As-salatu khairu minan naum", "Ash-shalaatu khairun minan yaum", "Ash-shalaatu khoirun minan naum"] },
+  { benar: "Asyhadu anna Muhammadar Rasulullah",
+    salah: ["Ashadu anna Muhammadar Rasulullah", "Asyhadu anna Muhammadar Rosulullah", "Asyhadu anna Muhammada Rasulullah"] },
+  { benar: "Allahu Akbar",
+    salah: ["Allahul Akbar", "Allahu Akbaru", "Allaahu Akbar"] },
+  { benar: "La hawla wa la quwwata illa billah",
+    salah: ["La haula wa la quwwata illa billah", "La hawla wa la quwwati illa billah", "La hawla wa la quwwata illa billahi"] }
+];
+const g6State = { list: [], idx: 0, benar: 0 };
+
+function startG6() {
+  g6State.list = shuffle(G6_DATA);
+  g6State.idx = 0;
+  g6State.benar = 0;
+  goto('g6');
+  renderG6();
+}
+
+function renderG6() {
+  if (g6State.idx >= g6State.list.length) {
+    const stars = starsFromScore(g6State.benar, g6State.list.length);
+    return gotoEnd('Selesai G6', stars,
+      `${g6State.benar}/${g6State.list.length} benar`, 'g6');
+  }
+  const d = g6State.list[g6State.idx];
+  $('g6-skor').textContent = `${g6State.benar} / ${g6State.list.length}`;
+  setFeedback('g6-fb', '', '');
+
+  const opts = $('g6-opts');
+  opts.innerHTML = '';
+  shuffle([d.benar, ...d.salah]).forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.textContent = v;
+    b.onclick = () => jawabG6(b, v, d.benar);
+    opts.appendChild(b);
+  });
+}
+
+function jawabG6(btn, pilih, jawab) {
+  document.querySelectorAll('#g6-opts .option').forEach(x => x.disabled = true);
+  if (pilih === jawab) {
+    btn.classList.add('correct');
+    g6State.benar++;
+    sfx.correct();
+    setFeedback('g6-fb', '✅ Tulisan benar!', 'ok');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#g6-opts .option').forEach(x => {
+      if (x.textContent === jawab) x.classList.add('correct');
+    });
+    sfx.wrong();
+    setFeedback('g6-fb', `❌ Yang benar: ${jawab}`, 'err');
+  }
+  g6State.idx++;
+  $('g6-skor').textContent = `${g6State.benar} / ${g6State.list.length}`;
+  schedule(renderG6, 1500);
+}
+
+/* ============================================================
+   G7: INGAT KARTU (MEMORY)
+   ============================================================ */
+const MEM_LAFAZ = [
+  "Allahu Akbar",
+  "Asyhadu an la ilaha illallah",
+  "Hayya 'alash shalah",
+  "Hayya 'alal falah",
+  "Qad qaamatish shalah",
+  "La ilaha illallah"
+];
+const g7State = { first: null, locked: false, matched: 0, attempts: 0 };
+
+function startG7() {
+  g7State.first = null;
+  g7State.locked = false;
+  g7State.matched = 0;
+  g7State.attempts = 0;
+
+  $('g7-skor').textContent = '0 pasang';
+
+  const grid = $('g7-grid');
+  grid.innerHTML = '';
+
+  const cards = shuffle([...MEM_LAFAZ, ...MEM_LAFAZ]);
+  cards.forEach(v => {
+    const el = document.createElement('div');
+    el.className = 'mem-card';
+    el.dataset.v = v;
+    el.textContent = '?';
+    el.onclick = () => tapMemory(el);
+    grid.appendChild(el);
+  });
+
+  goto('g7');
+}
+
+function tapMemory(el) {
+  if (g7State.locked) return;
+  if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
+
+  el.classList.add('flipped');
+  el.innerHTML = `<div class="face">${el.dataset.v}</div>`;
+  sfx.click();
+
+  if (!g7State.first) { g7State.first = el; return; }
+
+  g7State.attempts++;
+
+  if (g7State.first.dataset.v === el.dataset.v) {
+    const a = g7State.first;
+    a.classList.add('matched');
+    el.classList.add('matched');
+    g7State.first = null;
+    g7State.matched++;
+    sfx.correct();
+    $('g7-skor').textContent = `${g7State.matched} pasang`;
+
+    if (g7State.matched === MEM_LAFAZ.length) {
+      const stars = g7State.attempts <= 7 ? 3 :
+                    g7State.attempts <= 10 ? 2 : 1;
+      schedule(() => gotoEnd('Selesai G7', stars,
+        `${g7State.attempts} percobaan untuk ${MEM_LAFAZ.length} pasang`, 'g7'), 500);
+    }
+  } else {
+    g7State.locked = true;
+    sfx.wrong();
+    const a = g7State.first;
+    const b = el;
+    schedule(() => {
+      if (a.classList.contains('matched')) return;
+      a.classList.remove('flipped');
+      a.textContent = '?';
+      b.classList.remove('flipped');
+      b.textContent = '?';
+      g7State.first = null;
+      g7State.locked = false;
+    }, 900);
+  }
+}
+
+/* ============================================================
+   G8: LOMBA CEPAT
+   ============================================================ */
+const g8State = { questions: [], idx: 0, benar: 0, timeLeft: 60, timer: null };
+
+function startG8() {
+  invalidateSession();
+
+  const pool = [
+    ...G3_DATA.map(d => ({
+      soal: `"${d.t}" → golongan?`,
+      benar: d.j === 'azan' ? 'Azan' : d.j === 'ikamah' ? 'Ikamah' : 'Keduanya',
+      salah: d.j === 'azan' ? ['Ikamah', 'Keduanya'] :
+             d.j === 'ikamah' ? ['Azan', 'Keduanya'] : ['Azan', 'Ikamah']
+    })),
+    ...G4_DATA.map(d => ({
+      soal: `Jawaban untuk "${d.soal}"?`,
+      benar: d.benar,
+      salah: d.salah
+    })),
+    ...G6_DATA.map(d => ({
+      soal: 'Pilih tulisan yang benar:',
+      benar: d.benar,
+      salah: d.salah.slice(0, 2)
+    }))
+  ];
+
+  g8State.questions = shuffle(pool).slice(0, 15);
+  g8State.idx = 0;
+  g8State.benar = 0;
+  g8State.timeLeft = 60;
+
+  $('g8-skor').textContent = '⏱ 60s';
+  $('g8-timer').style.width = '100%';
+  $('g8-timer').classList.remove('low');
+
+  goto('g8');
+  renderG8();
+
+  g8State.timer = setInterval(() => {
+    g8State.timeLeft--;
+    $('g8-skor').textContent = '⏱ ' + g8State.timeLeft + 's';
+    $('g8-timer').style.width = (g8State.timeLeft / 60 * 100) + '%';
+    if (g8State.timeLeft <= 15) $('g8-timer').classList.add('low');
+    if (g8State.timeLeft <= 0) {
+      clearInterval(g8State.timer);
+      g8State.timer = null;
+      const stars = starsFromScore(g8State.benar, g8State.questions.length);
+      gotoEnd('⏱ Waktu Habis!', stars,
+        `${g8State.benar}/${g8State.questions.length} benar`, 'g8');
+    }
+  }, 1000);
+}
+
+function renderG8() {
+  if (g8State.idx >= g8State.questions.length) {
+    if (g8State.timer) { clearInterval(g8State.timer); g8State.timer = null; }
+    const stars = starsFromScore(g8State.benar, g8State.questions.length);
+    return gotoEnd('Selesai G8', stars,
+      `${g8State.benar}/${g8State.questions.length} benar`, 'g8');
+  }
+  const d = g8State.questions[g8State.idx];
+  $('g8-q').textContent = d.soal;
+  setFeedback('g8-fb', '', '');
+
+  const opts = $('g8-opts');
+  opts.innerHTML = '';
+  shuffle([d.benar, ...d.salah]).forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.textContent = v;
+    b.onclick = () => jawabG8(b, v, d.benar);
+    opts.appendChild(b);
+  });
+}
+
+function jawabG8(btn, pilih, jawab) {
+  if (btn.disabled) return;
+  document.querySelectorAll('#g8-opts .option').forEach(x => x.disabled = true);
+
+  if (pilih === jawab) {
+    btn.classList.add('correct');
+    g8State.benar++;
+    sfx.correct();
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#g8-opts .option').forEach(x => {
+      if (x.textContent === jawab) x.classList.add('correct');
+    });
+    sfx.wrong();
+  }
+  g8State.idx++;
+  schedule(renderG8, 650);
+}
+
+/* ============================================================
+   SCOREBOARD
+   ============================================================ */
+const SKOR_META = [
+  ['g1', 'G1. Susun Azan'],
+  ['g2', 'G2. Susun Ikamah'],
+  ['g3', 'G3. Azan/Ikamah/Keduanya'],
+  ['g4', 'G4. Jawab Seruan'],
+  ['g5', 'G5. Tebak Lafaz'],
+  ['g6', 'G6. Klik yang Benar'],
+  ['g7', 'G7. Ingat Kartu'],
+  ['g8', 'G8. Lomba Cepat']
+];
+
+function showSkor() {
+  let html = '';
+  let total = 0;
+  SKOR_META.forEach(([k, n]) => {
+    const s = getScore(k);
+    total += s;
+    html += `<div class="skor-row"><span>${n}</span><span>${starsHtml(s)}</span></div>`;
+  });
+  const motivasi =
+    total >= 20 ? '🏆 LUAR BIASA!' :
+    total >= 14 ? '🌟 HEBAT!' :
+    total >= 8  ? '👍 BAGUS!' : '💪 TERUS SEMANGAT!';
+  html += `<div class="skor-total">Total bintang: ${total} / 24<br>${motivasi}</div>`;
+  $('skor-content').innerHTML = html;
+  goto('skor');
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function setFeedback(id, text, cls) {
+  const el = $(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'feedback' + (cls ? ' ' + cls : '');
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+updateMenuStars();
+</script>
+</body>
+</html>
