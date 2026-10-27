@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Generator RPP Literasi &amp; Numerasi</title>
+<style>
+    :root {
+        --primary: #1e3a8a;
+        --primary-light: #3b82f6;
+        --accent: #f59e0b;
+        --danger: #dc2626;
+        --success: #059669;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-500: #6b7280;
+        --gray-700: #374151;
+        --gray-900: #111827;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Segoe UI', 'Inter', sans-serif;
+        background: var(--gray-100);
+        color: var(--gray-900);
+        padding: 16px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    .app {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    .panel {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        max-height: 92vh;
+    }
+    .panel-header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        color: #fff;
+        padding: 12px 18px;
+        font-weight: 700;
+        font-size: 13px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .badge {
+        background: rgba(255,255,255,0.2);
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 600;
+    }
+    .badge.warn { background: var(--accent); }
+    .panel-body {
+        padding: 16px 18px;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    /* ===== PANEL UNDUH ===== */
+    .download-section {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 2px solid var(--primary-light);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+    }
+    .download-title {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 12px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .download-title .num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 50%;
+        font-size: 10px;
+    }
+    .download-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .download-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 10px 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        border: 1px solid var(--gray-200);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .download-card .icon { font-size: 20px; }
+    .download-card .title {
+        font-weight: 700;
+        font-size: 11.5px;
+        color: var(--primary);
+    }
+    .download-card .desc {
+        font-size: 9.5px;
+        color: var(--gray-500);
+        line-height: 1.4;
+        margin-bottom: 4px;
+    }
+    .download-card .actions {
+        display: flex;
+        gap: 4px;
+        margin-top: 2px;
+    }
+    .action-btn {
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+        font-size: 9.5px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        transition: all 0.15s;
+    }
+    .action-btn.primary { background: var(--primary); color: #fff; }
+    .action-btn.primary:hover { background: #1e40af; }
+    .action-btn.secondary { background: var(--gray-200); color: var(--gray-900); }
+    .action-btn.secondary:hover { background: #d1d5db; }
+    .download-card .file-id {
+        font-size: 8.5px;
+        color: var(--gray-500);
+        margin-top: 4px;
+        font-family: 'Consolas', monospace;
+        padding: 3px 5px;
+        background: var(--gray-50);
+        border-radius: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .download-card .file-id code {
+        color: var(--primary);
+        font-weight: 600;
+    }
+    .download-note {
+        font-size: 9.5px;
+        color: var(--primary);
+        margin-top: 8px;
+        text-align: center;
+        font-style: italic;
+        padding: 6px 8px;
+        background: rgba(255,255,255,0.6);
+        border-radius: 5px;
+        line-height: 1.4;
+    }
+    .download-note.warn {
+        background: #fef3c7;
+        color: #92400e;
+        text-align: left;
+        border-left: 3px solid var(--accent);
+        font-style: normal;
+    }
+    .download-note code {
+        background: #fff;
+        padding: 1px 4px;
+        border-radius: 3px;
+        font-family: 'Consolas', monospace;
+        font-size: 8.5px;
+        color: var(--gray-900);
+    }
+    .copy-toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--success);
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(5,150,105,0.3);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    .copy-toast.show { opacity: 1; transform: translateY(0); }
+
+    fieldset {
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+    }
+    fieldset.locked { border-color: var(--primary-light); background: #f0f7ff; }
+    fieldset.optional { border-color: var(--gray-200); }
+    legend {
+        padding: 0 6px;
+        font-weight: 700;
+        font-size: 11px;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    fieldset.optional legend { color: var(--gray-500); }
+    .field { margin-bottom: 9px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 4px;
+        font-size: 11px;
+        color: var(--gray-700);
+    }
+    .field label .req { color: var(--danger); font-size: 12px; margin-left: 2px; }
+    .field input,
+    .field select,
+    .field textarea {
+        width: 100%;
+        padding: 6px 9px;
+        border: 1px solid var(--gray-200);
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 12px;
+        background: #fff;
+        color: var(--gray-900);
+    }
+    .field textarea { min-height: 60px; resize: vertical; line-height: 1.4; }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+        outline: 2px solid var(--primary-light);
+        border-color: transparent;
+    }
+    .field .hint {
+        font-size: 10px;
+        color: var(--gray-500);
+        font-style: italic;
+        margin-top: 3px;
+        line-height: 1.4;
+    }
+    .field .hint a { color: var(--primary); }
+    .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .checkbox-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 4px 0;
+        min-height: 30px;
+    }
+    .checkbox-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 11px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 999px;
+        font-size: 11px;
+        color: var(--gray-700);
+        background: #fff;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.15s;
+    }
+    .checkbox-item:hover { border-color: var(--primary-light); }
+    .checkbox-item input[type="checkbox"] { display: none; }
+    .checkbox-item .box {
+        width: 14px;
+        height: 14px;
+        border: 1.5px solid var(--gray-500);
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: transparent;
+        transition: all 0.15s;
+    }
+    .checkbox-item input:checked ~ .box {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+    }
+    .checkbox-item input:checked ~ .box::after { content: "✓"; }
+    .checkbox-item input:checked ~ .label-text { font-weight: 600; color: var(--primary); }
+    .checkbox-item.hidden { display: none; }
+
+    .filter-note {
+        font-size: 10px;
+        color: var(--primary);
+        background: #eff6ff;
+        padding: 6px 10px;
+        border-radius: 5px;
+        margin-top: 4px;
+        line-height: 1.5;
+        border-left: 3px solid var(--primary-light);
+    }
+    .filter-note strong { color: var(--primary); }
+    .filter-note .saran { color: var(--success); font-weight: 600; }
+
+    .toolbar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .btn {
+        padding: 7px 14px;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 11.5px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-secondary { background: var(--gray-200); color: var(--gray-900); }
+    .btn-secondary:hover { background: #d1d5db; }
+    .copy-status {
+        color: var(--success);
+        font-weight: 600;
+        font-size: 11px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .copy-status.show { opacity: 1; }
+    .preview-pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow: visible;
+        font-family: 'Consolas', 'Monaco', monospace;
+        font-size: 10.5px;
+        line-height: 1.5;
+        background: var(--gray-50);
+        padding: 14px;
+        border-radius: 6px;
+        color: var(--gray-900);
+        border: 1px solid var(--gray-200);
+    }
+    @media print {
+        @page { size: A4; margin: 2.54cm; }
+        * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        html, body { background: #fff !important; padding: 0 !important; font-size: 10pt; }
+        .app { display: block; max-width: 100%; }
+        .panel-left { display: none !important; }
+        .panel-right { box-shadow: none; border-radius: 0; max-height: none; display: block; }
+        .panel-header, .toolbar { display: none !important; }
+        .panel-body { padding: 0; overflow: visible; max-height: none; }
+        .preview-pre {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            overflow: visible !important;
+            max-height: none !important;
+            background: none !important;
+            border: none !important;
+            padding: 0 !important;
+            font-size: 9pt !important;
+            line-height: 1.35 !important;
+        }
+    }
+    @media (max-width: 900px) {
+        .app { grid-template-columns: 1fr; }
+        .panel { max-height: none; }
+        .download-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+<div class="app">
+
+    <div class="panel panel-left">
+        <div class="panel-header">
+            <span>📝 Isi Konteks RPP</span>
+            <span class="badge">5 Wajib + 8 Opsional</span>
+        </div>
+        <div class="panel-body">
+
+            <!-- ============ PANEL UNDUH (ANTI-BLOKIR) ============ -->
+            <div class="download-section">
+                <div class="download-title">
+                    <span class="num">1</span>
+                    Unduh Blueprint &amp; Template
+                </div>
+                <div class="download-grid">
+
+                    <!-- BLUEPRINT -->
+                    <div class="download-card">
+                        <div class="icon">📘</div>
+                        <div class="title">Blueprint Pedoman</div>
+                        <div class="desc">Panduan lengkap penyusunan RPP</div>
+                        <div class="actions">
+                            <a class="action-btn primary"
+                               href="https://docs.google.com/uc?export=download&id=1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4"
+                               target="_blank" rel="noopener">
+                                ⬇ Buka
+                            </a>
+                            <button class="action-btn secondary"
+                                    onclick="copyFileLink('https://docs.google.com/uc?export=download&id=1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4','Blueprint')">
+                                📋 Salin Link
+                            </button>
+                        </div>
+                        <div class="file-id">ID: <code>1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4</code></div>
+                    </div>
+
+                    <!-- TEMPLATE -->
+                    <div class="download-card">
+                        <div class="icon">📄</div>
+                        <div class="title">Template HTML</div>
+                        <div class="desc">Struktur RPP A–G siap pakai</div>
+                        <div class="actions">
+                            <a class="action-btn primary"
+                               href="https://docs.google.com/uc?export=download&id=19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ"
+                               target="_blank" rel="noopener">
+                                ⬇ Buka
+                            </a>
+                            <button class="action-btn secondary"
+                                    onclick="copyFileLink('https://docs.google.com/uc?export=download&id=19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ','Template')">
+                                📋 Salin Link
+                            </button>
+                        </div>
+                        <div class="file-id">ID: <code>19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ</code></div>
+                    </div>
+
+                </div>
+
+                <!-- Catatan Anti-Blokir -->
+                <div class="download-note warn">
+                    ⚠️ <strong>Jika Google Drive diblokir</strong> (ERR_BLOCKED_BY_RESPONSE):<br>
+                    1. Klik <strong>📋 Salin Link</strong> → buka di HP / hotspot pribadi.<br>
+                    2. Atau ganti <code>docs.google.com</code> ↔ <code>drive.google.com</code> secara manual.<br>
+                    3. Atau gunakan link alternatif: <code>drive.usercontent.google.com/download?id=<b>FILE_ID</b></code>
+                </div>
+            </div>
+
+            <form id="rpp-form">
+                <fieldset class="locked">
+                    <legend>🔒 Wajib — Mengunci Relevansi</legend>
+                    <div class="field-row">
+                        <div class="field">
+                            <label>Mata Pelajaran Utama <span class="req">*</span></label>
+                            <select name="mapel" id="mapel-select">
+                                <option value="">— Pilih mapel —</option>
+                                <option>IPAS</option>
+                                <option>Pendidikan Pancasila</option>
+                                <option>Bahasa Indonesia</option>
+                                <option>Matematika</option>
+                                <option>PJOK</option>
+                                <option>Seni Budaya</option>
+                                <option>Bahasa Jawa</option>
+                                <option>Bahasa Inggris</option>
+                            </select>
+                            <div class="hint">Mapel inti — konten utama RPP</div>
+                        </div>
+                        <div class="field">
+                            <label>Kelas / Fase <span class="req">*</span></label>
+                            <select name="kelas">
+                                <option value="">— Pilih kelas —</option>
+                                <option>I / A</option>
+                                <option>II / A</option>
+                                <option>III / B</option>
+                                <option>IV / B</option>
+                                <option>V / C</option>
+                                <option>VI / C</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Materi Pokok <span class="req">*</span></label>
+                        <input name="materi" placeholder="Contoh: Indonesiaku Kaya Alamnya">
+                    </div>
+                    <div class="field">
+                        <label>Capaian Pembelajaran (CP) <span class="req">*</span></label>
+                        <textarea name="cp" placeholder="Kutip PERSIS dari dokumen CP resmi Kurikulum Merdeka..."></textarea>
+                        <div class="hint">📎 <a href="https://kurikulum.kemdikbud.go.id/kurikulum-merdeka/" target="_blank">Buka CP Resmi Kurikulum Merdeka</a> — jangan dikarang!</div>
+                    </div>
+                    <div class="field">
+                        <label>Tujuan Pembelajaran (TP) <span class="req">*</span></label>
+                        <textarea name="tp" placeholder="1. Mengidentifikasi...&#10;2. Menyajikan data...&#10;3. Mengomunikasikan...&#10;(Boleh draf kasar; AI akan merapikan + menambah label literasi/numerasi)"></textarea>
+                    </div>
+                </fieldset>
+
+                <fieldset class="optional">
+                    <legend>⚙️ Opsional — Personalisasi &amp; Identitas</legend>
+                    <div class="field">
+                        <label>Mapel Pendukung (Lintas Disiplin)</label>
+                        <div class="checkbox-grid" id="pendukung-grid">
+                            <label class="checkbox-item" data-mapel="Bahasa Indonesia">
+                                <input type="checkbox" name="pendukung" value="Bahasa Indonesia">
+                                <span class="box"></span>
+                                <span class="label-text">Bahasa Indonesia</span>
+                            </label>
+                            <label class="checkbox-item" data-mapel="Matematika">
+                                <input type="checkbox" name="pendukung" value="Matematika">
+                                <span class="box"></span>
+                                <span class="label-text">Matematika</span>
+                            </label>
+                            <label class="checkbox-item" data-mapel="IPAS">
+                                <input type="checkbox" name="pendukung" value="IPAS">
+                                <span class="box"></span>
+                                <span class="label-text">IPAS</span>
+                            </label>
+                            <label class="checkbox-item" data-mapel="Pendidikan Pancasila">
+                                <input type="checkbox" name="pendukung" value="Pendidikan Pancasila">
+                                <span class="box"></span>
+                                <span class="label-text">Pendidikan Pancasila</span>
+                            </label>
+                            <label class="checkbox-item" data-mapel="PJOK">
+                                <input type="checkbox" name="pendukung" value="PJOK">
+                                <span class="box"></span>
+                                <span class="label-text">PJOK</span>
+                            </label>
+                            <label class="checkbox-item" data-mapel="Seni Budaya">
+                                <input type="checkbox" name="pendukung" value="Seni Budaya">
+                                <span class="box"></span>
+                                <span class="label-text">Seni Budaya</span>
+                            </label>
+                        </div>
+                        <div class="filter-note" id="pendukung-note">
+                            Kosongkan → AI pilih otomatis (Bahasa Indonesia + Matematika)
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Nama Satuan Pendidikan</label>
+                        <input name="satuan" placeholder="Contoh: SD Negeri Bantul">
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label>Nama Guru</label>
+                            <input name="guru" placeholder="Contoh: Ibu Siti Rahayu, S.Pd.">
+                        </div>
+                        <div class="field">
+                            <label>NIP Guru</label>
+                            <input name="nip_guru" placeholder="Contoh: 19850512 201001 2 003">
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label>Nama Kepala Sekolah</label>
+                            <input name="kepsek" placeholder="Contoh: Bapak Ahmad, S.Pd., M.Pd.">
+                        </div>
+                        <div class="field">
+                            <label>NIP Kepala Sekolah</label>
+                            <input name="nip_kepsek" placeholder="Contoh: 19720815 199503 1 002">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Konteks Lokal</label>
+                        <input name="konteks_lokal" placeholder="Default: Pedesaan Kabupaten Bantul">
+                    </div>
+                    <div class="field">
+                        <label>Alokasi Waktu</label>
+                        <input name="alokasi" placeholder="Default: 2 JP (2 × 35 menit)">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-right">
+        <div class="panel-header">
+            <span>🤖 Prompt Siap Salin</span>
+            <span class="badge warn" id="status-badge">—</span>
+        </div>
+        <div class="panel-body">
+            <div class="toolbar">
+                <button class="btn btn-primary" onclick="copyPrompt()">📋 Salin Prompt</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Cetak PDF</button>
+                <span class="copy-status" id="copy-status">✓ Tersalin!</span>
+            </div>
+            <pre class="preview-pre" id="prompt-output"></pre>
+        </div>
+    </div>
+
+</div>
+
+<!-- Toast notification -->
+<div class="copy-toast" id="copy-toast">✓ Link berhasil disalin!</div>
+
+<script>
+    const form = document.getElementById('rpp-form');
+    const output = document.getElementById('prompt-output');
+    const statusBadge = document.getElementById('status-badge');
+    const mapelSelect = document.getElementById('mapel-select');
+    const pendukungGrid = document.getElementById('pendukung-grid');
+    const pendukungNote = document.getElementById('pendukung-note');
+    const copyToast = document.getElementById('copy-toast');
+
+    // ============================================================
+    // FILE ID & URL MULTI-FORMAT (anti-blokir)
+    // ============================================================
+    const FILE_ID_BLUEPRINT = '1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4';
+    const FILE_ID_TEMPLATE  = '19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ';
+
+    // URL utama untuk prompt (pakai docs.google.com — biasanya tidak diblokir)
+    const LINK_BLUEPRINT = `https://docs.google.com/uc?export=download&id=${FILE_ID_BLUEPRINT}`;
+    const LINK_TEMPLATE  = `https://docs.google.com/uc?export=download&id=${FILE_ID_TEMPLATE}`;
+
+    // Alternatif (dicantumkan di prompt sebagai fallback)
+    const ALT_BLUEPRINT_1 = `https://drive.usercontent.google.com/download?id=${FILE_ID_BLUEPRINT}&export=download`;
+    const ALT_BLUEPRINT_2 = `https://drive.google.com/uc?export=download&id=${FILE_ID_BLUEPRINT}`;
+    const ALT_TEMPLATE_1  = `https://drive.usercontent.google.com/download?id=${FILE_ID_TEMPLATE}&export=download`;
+    const ALT_TEMPLATE_2  = `https://drive.google.com/uc?export=download&id=${FILE_ID_TEMPLATE}`;
+
+    // ============================================================
+    // FUNGSI SALIN LINK FILE (dengan toast)
+    // ============================================================
+    window.copyFileLink = function(url, label) {
+        const doCopy = () => {
+            showToast(`✓ Link ${label} tersalin!`);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(doCopy).catch(fallback);
+        } else { fallback(); }
+        function fallback() {
+            const ta = document.createElement('textarea');
+            ta.value = url;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); doCopy(); }
+            catch (e) { alert('Gagal menyalin. Silakan salin manual.'); }
+            document.body.removeChild(ta);
+        }
+    };
+
+    function showToast(msg) {
+        copyToast.textContent = msg;
+        copyToast.classList.add('show');
+        setTimeout(() => copyToast.classList.remove('show'), 2500);
+    }
+
+    // ============================================================
+    // FILTER CERDAS: Sembunyikan mapel yang sudah jadi mapel utama
+    // ============================================================
+    const SARAN_PER_MAPEL = {
+        'IPAS': 'Bahasa Indonesia + Matematika',
+        'Pendidikan Pancasila': 'Bahasa Indonesia + Matematika',
+        'Matematika': 'Bahasa Indonesia (soal cerita)',
+        'Bahasa Indonesia': 'Matematika (tafsir data)',
+        'PJOK': 'Matematika (pengukuran)',
+        'Seni Budaya': 'Matematika (geometri/pola)',
+        'Bahasa Jawa': 'Bahasa Indonesia + Matematika',
+        'Bahasa Inggris': 'Bahasa Indonesia + Matematika'
+    };
+
+    function updatePendukungFilter() {
+        const mapelUtama = mapelSelect.value;
+        const items = pendukungGrid.querySelectorAll('.checkbox-item');
+        let hiddenCount = 0;
+
+        items.forEach(item => {
+            const mapelItem = item.dataset.mapel;
+            const cb = item.querySelector('input[type="checkbox"]');
+
+            if (mapelUtama && mapelItem === mapelUtama) {
+                cb.checked = false;
+                cb.disabled = true;
+                item.classList.add('hidden');
+                hiddenCount++;
+            } else {
+                cb.disabled = false;
+                item.classList.remove('hidden');
+            }
+        });
+
+        const totalItems = items.length;
+        const availableCount = totalItems - hiddenCount;
+
+        if (!mapelUtama) {
+            pendukungNote.innerHTML = '💡 <strong>Default:</strong> Kosongkan → AI pilih otomatis (Bahasa Indonesia + Matematika)';
+            pendukungNote.style.background = '#f9fafb';
+            pendukungNote.style.color = '#6b7280';
+            pendukungNote.style.borderLeftColor = '#d1d5db';
+        } else {
+            const saran = SARAN_PER_MAPEL[mapelUtama] || 'Bahasa Indonesia + Matematika';
+            let html = '';
+            if (hiddenCount > 0) {
+                html += `🔒 <strong>${mapelUtama}</strong> disembunyikan (sudah jadi mapel utama) — `;
+            }
+            html += `${availableCount} dari ${totalItems} pilihan tersedia`;
+            html += `<br>💡 <span class="saran">Saran: ${saran}</span>`;
+            pendukungNote.innerHTML = html;
+            pendukungNote.style.background = '#eff6ff';
+            pendukungNote.style.color = '#1e3a8a';
+            pendukungNote.style.borderLeftColor = '#3b82f6';
+        }
+    }
+
+    mapelSelect.addEventListener('change', () => {
+        updatePendukungFilter();
+        updatePreview();
+    });
+    updatePendukungFilter();
+
+    // ============================================================
+    // DATA & PROMPT
+    // ============================================================
+    function getData() {
+        const d = {};
+        form.querySelectorAll('input:not([type="checkbox"]), textarea, select').forEach(el => {
+            d[el.name] = (el.value || '').trim();
+        });
+        const pendukung = [];
+        form.querySelectorAll('input[name="pendukung"]:checked').forEach(el => pendukung.push(el.value));
+        d.pendukung = pendukung;
+        return d;
+    }
+    function isWajibLengkap(d) {
+        return d.mapel && d.kelas && d.materi && d.cp && d.tp;
+    }
+    function val(key, fallback) {
+        const v = (key || '').trim();
+        return v || fallback;
+    }
+
+    function generatePrompt() {
+        const d = getData();
+
+        const mapel  = val(d.mapel,  '___[WAJIB DIPILIH: Mata Pelajaran]___');
+        const kelas  = val(d.kelas,  '___[WAJIB DIPILIH: Kelas / Fase]___');
+        const materi = val(d.materi, '___[WAJIB DIISI: Materi Pokok]___');
+        const cp     = val(d.cp,     '___[CP KOSONG — WAJIB DIKUTIP DARI DOKUMEN RESMI]___');
+        const tp     = val(d.tp,     '___[TP KOSONG — AI DIMINTA MERUMUSKAN SARAN TP]___');
+
+        const pendukungFiltered = (d.pendukung || []).filter(p => p !== d.mapel);
+        const pendukung = pendukungFiltered.length > 0
+            ? pendukungFiltered.join(' + ')
+            : '[KOSONG — AI WAJIB PILIH OTOMATIS: Bahasa Indonesia + Matematika, kecuali tidak relevan]';
+
+        const satuan       = val(d.satuan,        '[ISI: nama satuan pendidikan]');
+        const guru         = val(d.guru,          '[ISI: nama guru]');
+        const nip_guru     = val(d.nip_guru,      '(................................)');
+        const kepsek       = val(d.kepsek,        '[ISI: nama kepala sekolah]');
+        const nip_kepsek   = val(d.nip_kepsek,    '(................................)');
+        const konteksLokal = val(d.konteks_lokal, 'Pedesaan Kabupaten Bantul');
+        const alokasi      = val(d.alokasi,       '2 JP (2 × 35 menit)');
+
+        const lengkap = isWajibLengkap(d);
+        const isMathAtauBIndo = /matematika|bahasa indonesia/i.test(d.mapel);
+
+        return `╔═══════════════════════════════════════════════════════╗
+║  PROMPT GENERATOR — RPP TERINTEGRASI LITERASI & NUM. ║
+║  Kabupaten Bantul                                     ║
+╚═══════════════════════════════════════════════════════╝
+
+Anda adalah perancang RPP profesional Kabupaten Bantul.
+TUGAS: Susun RPP Terintegrasi Literasi & Numerasi dalam format HTML.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📥 LAMPIRAN WAJIB — UNDUH DAN UNGGAH KE AI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sebelum menyusun RPP, WAJIB unduh & unggah 2 file berikut
+ke AI (ChatGPT/Claude/Gemini). Jika satu URL diblokir,
+gunakan alternatif URL di bawahnya.
+
+  📘 1. BLUEPRINT PEDOMAN RPP
+     URL 1 (utama)  : ${LINK_BLUEPRINT}
+     URL 2 (alternatif) : ${ALT_BLUEPRINT_1}
+     URL 3 (fallback)   : ${ALT_BLUEPRINT_2}
+     File ID        : ${FILE_ID_BLUEPRINT}
+
+  📄 2. TEMPLATE HTML RPP
+     URL 1 (utama)  : ${LINK_TEMPLATE}
+     URL 2 (alternatif) : ${ALT_TEMPLATE_1}
+     URL 3 (fallback)   : ${ALT_TEMPLATE_2}
+     File ID        : ${FILE_ID_TEMPLATE}
+
+  ⚠️  JIKA KEDUA FILE BELUM DIUNGGAH ke AI, hentikan proses
+      dan minta pengguna mengunggahnya terlebih dahulu.
+
+  💡 TIPS jika Google Drive diblokir jaringan:
+     • Coba ganti "docs.google.com" → "drive.google.com"
+       (atau sebaliknya) secara manual di browser.
+     • Atau buka link di HP / jaringan pribadi / hotspot.
+     • Atau berikan FILE ID kepada pengguna untuk diunduh
+       manual dari akun Google Drive mereka.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 LANGKAH 0 — WAJIB DIBACA SEBELUM MENULIS (NON-NEGOTIABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sebelum menyusun RPP, Anda WAJIB:
+
+  1. BACA dengan cermat lampiran BLUEPRINT PEDOMAN PENYUSUNAN
+     RPP TERINTEGRASI LITERASI & NUMERASI (Kabupaten Bantul).
+     Pahami: landasan teoritis (Bagian I), struktur RPP (II),
+     ketentuan khusus lintas mapel vs mapel tertentu (III),
+     alur praktis 4 langkah (IV), checklist validasi (V),
+     implementasi prinsip mendalam (VI), dan template RPP (VIII).
+
+  2. BACA dengan cermat lampiran TEMPLATE HTML RPP. Pahami:
+     • Struktur Section A–G dan numbering (A–G, 1–n, a–d)
+     • Class CSS: .section, .field, .stage, .answer-box, .chip
+     • Aturan @page { size: A4; margin: 2.54cm; }
+     • Aturan @media print untuk binding judul–konten
+
+  3. JIKA salah satu lampiran TIDAK TERLAMPIR atau TIDAK
+     TERBACA, hentikan proses dan beri tahu saya:
+     "⚠️ Lampiran [Blueprint / Template] belum ada. Mohon unggah
+     dulu sebelum saya menyusun RPP."
+
+  4. Baru setelah membaca KEDUA lampiran, susun RPP HTML dengan
+     struktur & CSS yang IDENTIK dengan template.
+
+  ⚠️  DILARANG menyusun RPP dengan struktur CSS/HTML buatan sendiri.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 1 — KONTEKS WAJIB (LOCKING)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Mata Pelajaran Utama  : ${mapel}
+2. Kelas / Fase          : ${kelas}
+3. Materi Pokok          : ${materi}
+4. Capaian Pembelajaran  :
+${cp}
+5. Tujuan Pembelajaran   :
+${tp}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 2 — KONTEKS OPSIONAL (IDENTITAS & LINTAS DISIPLIN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Mapel Pendukung (Lintas) : ${pendukung}
+• Nama Satuan Pendidikan   : ${satuan}
+• Nama Guru                : ${guru}
+• NIP Guru                 : ${nip_guru}
+• Nama Kepala Sekolah      : ${kepsek}
+• NIP Kepala Sekolah       : ${nip_kepsek}
+• Konteks Lokal            : ${konteksLokal}
+• Alokasi Waktu            : ${alokasi}
+
+  ℹ️  CATATAN: Mapel pendukung TIDAK BOLEH sama dengan mapel
+      utama. Jika field kosong, AI wajib pilih otomatis.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 3 — ATURAN KHUSUS (Sesuai Blueprint Bagian III)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 A. ATURAN LINTAS MAPEL (untuk mapel non-Matematika/non-B.Indo)
+   • Materi utama (IPAS, Pancasila, PJOK, Seni) TETAP menjadi
+     TUJUAN UTAMA.
+   • Literasi & numerasi masuk sebagai ALAT BELAJAR, bukan
+     menggantikan tujuan mapel.
+   • Porsi literasi/numerasi proporsional: 20–30% dari total
+     aktivitas.
+   • DILARANG mengubah mapel utama menjadi mapel pendukung.
+     Contoh: IPAS tetap IPAS, TIDAK BERUBAH menjadi Matematika
+     meski mengintegrasikan numerasi.
+   • Sebut mapel pendukung eksplisit di C.2 (Lintas Disiplin
+     Ilmu) — format: "${mapel} + [mapel pendukung]"
+
+📌 B. ATURAN KHUSUS MAPEL MATEMATIKA / BAHASA INDONESIA
+${isMathAtauBIndo ? `   ⚠️  Mapel utama Anda adalah "${mapel}" — aturan khusus berlaku:
+   • Jika MATEMATIKA: Numerasi menjadi TUJUAN UTAMA (bukan alat).
+     Wajib ada konteks nyata (soal cerita real-life). Mapel
+     pendukung ideal: Bahasa Indonesia (teks soal).
+   • Jika BAHASA INDONESIA: Literasi menjadi TUJUAN UTAMA.
+     Wajib ada muatan numerasi dalam teks (data, angka, statistik).
+     Mapel pendukung ideal: Matematika (tafsir data).` : `   (Aturan ini tidak berlaku — mapel utama Anda bukan Matematika
+    atau Bahasa Indonesia. Fokus pada aturan A di atas.)`}
+
+📌 C. ATURAN JIKA MAPEL PENDUKUNG KOSONG
+   • AI WAJIB memilih minimal 1 mapel pendukung yang relevan.
+   • Default rekomendasi:
+     - Bahasa Indonesia (literasi: baca/tulis/simak/bicara)
+     - Matematika (numerasi: data/pengukuran/bilangan)
+   • KECUALI materi tidak memungkinkan — pilih yang lebih relevan.
+   • Tulis di RPP hasil: "Mapel Pendukung (AI auto-select): ..."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 4 — STRUKTUR RPP (WAJIB IKUTI PERSIS TEMPLATE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A. IDENTITAS PEMBELAJARAN (tabel 6 baris)
+   • Satuan Pendidikan, Kelas/Fase/Semester, Mata Pelajaran,
+     Materi Pokok, Pertemuan Ke-, Alokasi Waktu.
+
+B. IDENTIFIKASI MURID & PROFIL LULUSAN (field 1–5)
+   1. Kesiapan Murid
+   2. Minat Murid
+   3. Cara Belajar Dominan
+   4. Lingkungan Belajar
+   5. Dimensi Profil Lulusan — PILIH 2–4 DARI DAFTAR 8:
+      ☐ Keimanan dan Ketakwaan terhadap Tuhan YME
+      ☐ Kewargaan
+      ☐ Penalaran Kritis
+      ☐ Kreativitas
+      ☐ Kolaborasi
+      ☐ Kemandirian
+      ☐ Kesehatan
+      ☐ Komunikasi
+      ⚠️ DILARANG mengarang dimensi baru.
+
+C. DESAIN PEMBELAJARAN (field 1–12)
+   1. Capaian Pembelajaran (CP) — kutip dari Bagian 1
+   2. Lintas Disiplin Ilmu — ${mapel} + ${pendukung}
+   3. Tujuan Pembelajaran (TP) — rapikan + tambah label
+      literasi/numerasi
+   4. Pemahaman Bermakna — AI ciptakan (mengapa penting)
+   5. Pertanyaan Pemantik — AI susun 2–3 pertanyaan kritis
+   6. Konteks Numerasi — AI isi: domain + konteks + keterkaitan
+   7. Strategi Literasi — PILIH 1–2 DARI DAFTAR 6:
+      ☐ Read Aloud
+      ☐ Lingkungan Kaya Teks
+      ☐ EGRA
+      ☐ Menulis Reflektif
+      ☐ Diskusi Berbasis Teks
+      ☐ Literasi Multimodal
+      ⚠️ DILARANG mengarang strategi baru.
+   8. Strategi Numerasi — PILIH 1–2 DARI DAFTAR 3:
+      ☐ Lintas Disiplin
+      ☐ Bincang Numerasi (STAR)
+      ☐ Lingkungan Kaya Numerasi
+      ⚠️ DILARANG mengarang strategi baru.
+   9. Praktik Pedagogis — AI pilih (Inkuiri, PBL, permainan, dll.)
+   10. Mitra Pembelajaran — AI susun (murid-murid, murid-guru,
+       murid-orang tua)
+   11. Lingkungan Pembelajaran — AI susun (nyaman, toleran, digital)
+   12. Sarana & Prasarana — AI susun daftar alat/bahan
+
+D. PENGALAMAN BELAJAR (3 stage, sub-field a–d)
+   D.1 Kegiatan Awal:
+       a. Orientasi & Apersepsi
+       b. Bincang Numerasi (STAR) / Membaca Nyaring (Read Aloud)
+       c. Pertanyaan Pemantik
+       d. Perencanaan Strategi (Berkesadaran)
+   D.2 Kegiatan Inti:
+       a. Memahami (mengamati, membaca, diskusi awal)
+       b. Mengaplikasi (aktivitas literasi + numerasi)
+       c. Menciptakan (produk/karya murid)
+       d. Merefleksi (refleksi pemahaman)
+   D.3 Kegiatan Penutup:
+       a. Refleksi Pembelajaran (perasaan + pemahaman)
+       b. Penguatan Guru (konsep kunci + apresiasi)
+       c. Tindak Lanjut (tugas + materi berikutnya)
+       d. Penutup (doa + salam)
+
+E. ASESMEN PEMBELAJARAN (field 1–4)
+   1. Asesmen Awal (Diagnostik) — EGRA / diagnostik numerasi
+   2. Asesmen Proses (Formatif) — observasi keaktifan, cara mengukur
+   3. Asesmen Akhir (Sumatif) — produk/unjuk kerja/tes
+   4. Rubrik Penilaian — 4 ASPEK × 4 SKOR (1–4):
+      • Pemahaman Konsep (Mapel)
+      • Bernalar (Numerasi)
+      • Berkomunikasi (Literasi)
+      • Berkarya (Kreativitas/Produk)
+      + Rumus: Nilai Akhir = (Skor Perolehan ÷ Skor Maksimal) × 100
+
+F. LAMPIRAN (tabel 5 baris)
+   1. LKPD — judul LKPD
+   2. Bahan Bacaan/Teks — judul buku/teks
+   3. Media Pembelajaran — daftar media
+   4. Rubrik Penilaian Lengkap
+   5. Daftar Pustaka/Referensi
+
+G. CHECKLIST VALIDASI (8 pertanyaan)
+   1. Kemampuan literasi/numerasi tertulis eksplisit di TP & C.6?
+   2. Ada bagian penggunaan informasi kuantitatif/teks bacaan?
+   3. Pertanyaan pemantik mendorong berpikir kritis?
+   4. Ada bukti perkembangan literasi/numerasi (LKPD/rubrik/karya)?
+   5. Materi dipahami & digunakan dalam konteks nyata (Meaningful)?
+   6. RPP mencerminkan prinsip Mindful, Meaningful, Joyful?
+   7. Dimensi Profil Lulusan relevan dengan aktivitas?
+   8. Strategi literasi/numerasi sesuai materi & murid?
+
+SIGNATURE (kolom tanda tangan)
+   • Mengetahui, Kepala Sekolah
+     Nama : ${kepsek}
+     NIP  : ${nip_kepsek}
+   • [Kota], [Tanggal] — Guru Kelas
+     Nama : ${guru}
+     NIP  : ${nip_guru}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 5 — 3 LAPIS ATURAN BAKU (WAJIB DIPATUHI)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔒 LAPIS 1 — REGULASI (Permendikdasmen No. 1 Tahun 2026)
+   • Komponen minimum RPP: TP, Langkah Pembelajaran, Asesmen —
+     WAJIB ADA & TERISI.
+   • CP adalah DOKUMEN HUKUM (SK Menteri) — JANGAN mengarang,
+     meringkas, atau memparafrase CP.
+   • Jika CP kosong, tulis: [CP KOSONG — WAJIB DIKUTIP]
+
+🔒 LAPIS 2 — DATA FAKTUAL
+   • Nama sekolah, guru, NIP guru, kepsek, NIP kepsek: gunakan
+     nilai dari Bagian 2. JANGAN diubah atau dikarang.
+   • NIP diletakkan di kolom tanda tangan (bukan di body).
+
+🔒 LAPIS 3 — KONTEN AKADEMIK
+   • JANGAN memfabrikasi fakta, sitasi, atau referensi.
+   • JANGAN mengarang nama tokoh, rumus, atau istilah teknis.
+   • Jika ragu, tulis [SARAN: ...] agar guru memverifikasi.
+
+✅ YANG BOLEH DIKREASIKAN AI:
+   • Aktivitas di Section D (Awal–Inti–Penutup)
+   • Pemahaman Bermakna, Pertanyaan Pemantik
+   • Konteks Numerasi, Strategi Literasi/Numerasi (dari daftar)
+   • Praktik Pedagogis, Mitra, Lingkungan, Sarana
+   • Asesmen Awal/Proses/Akhir + Rubrik 4 aspek
+   • Dimensi Profil Lulusan (dari daftar 8)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 6 — CSS WAJIB (PERTAHANKAN TEMPLATE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• @page { size: A4; margin: 2.54cm; }
+• @media print dengan page-break rules:
+  - Heading tidak di akhir halaman (page-break-after: avoid)
+  - Konten pertama tidak di awal halaman baru (page-break-before: avoid)
+  - Blok kecil tidak terpotong (page-break-inside: avoid)
+• Font Segoe UI / Inter, ukuran 11pt
+• Warna primary #1e3a8a, accent #f59e0b
+• DILARANG membuat style baru di luar template.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 7 — OUTPUT FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Kembalikan SATU blok kode HTML lengkap (dari <!DOCTYPE html>
+sampai </html>) — tanpa penjelasan di luar kode.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BAGIAN 8 — CHECKLIST VALIDASI SEBELUM OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+□ Sudah membaca blueprint & template (Langkah 0)
+□ Struktur A–G lengkap sesuai sub-struktur Bagian 4
+□ CSS identik template — tidak ada style baru
+□ Mapel pendukung eksplisit di C.2 — format: "${mapel} + [pendukung]"
+□ Mapel pendukung TIDAK SAMA dengan mapel utama
+□ Dimensi Profil Lulusan HANYA dari 8 pilihan — tidak mengarang
+□ Strategi Literasi HANYA dari 6 pilihan — tidak mengarang
+□ Strategi Numerasi HANYA dari 3 pilihan — tidak mengarang
+□ TP memuat 3 komponen: konten mapel + literasi + numerasi
+□ C.6 Konteks Numerasi: domain + konteks + keterkaitan
+□ Section D.1/D.2/D.3 memuat sub-field a–d sesuai template
+□ Section E.4 Rubrik: 4 aspek × 4 skor + rumus nilai akhir
+□ Section F Lampiran: 5 baris (LKPD, Teks, Media, Rubrik, Pustaka)
+□ Section G Checklist: 8 pertanyaan
+□ @media print dipertahankan utuh (binding judul–konten)
+□ Kolom tanda tangan terisi nama + NIP (guru & kepsek)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${lengkap
+    ? '✅ Semua field wajib sudah lengkap. Hasilkan HTML RPP lengkap sekarang.'
+    : '⚠️  MASIH ADA FIELD WAJIB KOSONG. Hasilkan HTML RPP, tandai bagian kosong dengan [WAJIB DIISI: ...].'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`;
+    }
+
+    function updatePreview() {
+        output.textContent = generatePrompt();
+        const d = getData();
+        if (isWajibLengkap(d)) {
+            statusBadge.textContent = '✅ Siap';
+            statusBadge.style.background = 'rgba(5,150,105,0.3)';
+        } else {
+            const missing = [];
+            if (!d.mapel) missing.push('Mapel');
+            if (!d.kelas) missing.push('Kelas');
+            if (!d.materi) missing.push('Materi');
+            if (!d.cp) missing.push('CP');
+            if (!d.tp) missing.push('TP');
+            statusBadge.textContent = '⚠️ Kurang: ' + missing.join(', ');
+            statusBadge.style.background = 'rgba(245,158,11,0.9)';
+        }
+    }
+
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+    updatePreview();
+
+    function copyPrompt() {
+        const text = output.textContent;
+        const status = document.getElementById('copy-status');
+        const showStatus = () => {
+            status.classList.add('show');
+            setTimeout(() => status.classList.remove('show'), 2000);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(showStatus).catch(fallback);
+        } else { fallback(); }
+        function fallback() {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); showStatus(); }
+            catch (e) { alert('Gagal menyalin. Silakan salin manual.'); }
+            document.body.removeChild(ta);
+        }
+    }
+</script>
+</body>
+</html>
