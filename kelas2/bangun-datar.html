@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>LKPD Literasi Kelas 2 — Kancil dan Kura-kura (WYSIWYG A4)</title>
+<style>
+  /* ============================================================
+     WYSIWYG A4 — Tampilan di layar SAMA dengan hasil cetak.
+     Kertas A4: 210mm × 297mm, margin normal 2.54cm (1 inch).
+     ============================================================ */
+
+  :root {
+    --primary: #1e40af;
+    --primary-soft: #dbeafe;
+    --primary-deep: #1e3a8a;
+    --accent: #f59e0b;
+    --accent-soft: #fef3c7;
+    --green: #059669;
+    --green-soft: #d1fae5;
+    --rose: #e11d48;
+    --rose-soft: #ffe4e6;
+    --ink: #111827;
+    --muted: #6b7280;
+    --line: #d1d5db;
+    --line-soft: #e5e7eb;
+    --bg-soft: #f9fafb;
+
+    --paper-w: 210mm;
+    --paper-h: 297mm;
+    --margin: 25.4mm;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #4b5563;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* ====== KERTAS A4 (WYSIWYG) ====== */
+  .paper {
+    width: var(--paper-w);
+    min-height: var(--paper-h);
+    margin: 8mm auto;
+    padding: var(--margin);
+    background: #fff;
+    box-shadow: 0 6px 24px rgba(0,0,0,.35);
+    position: relative;
+    page-break-after: always;
+    break-after: page;
+  }
+  .paper:last-of-type {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .paper::before {
+    content: attr(data-page);
+    position: absolute;
+    top: -8mm;
+    left: 0;
+    font-size: 9pt;
+    color: #d1d5db;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ====== ANTI-TERPOTONG ====== */
+  .keep,
+  .soal-block,
+  .cerita-card,
+  table,
+  .identitas,
+  .catatan,
+  .gambar-scene {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ====== HEADER DOKUMEN ====== */
+  .doc-header {
+    text-align: center;
+    border-bottom: 3px double var(--primary);
+    padding-bottom: 8pt;
+    margin-bottom: 14pt;
+  }
+  .doc-header .badge {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-size: 8.5pt;
+    letter-spacing: 1.2px;
+    padding: 2.5pt 10pt;
+    border-radius: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .doc-header h1 {
+    font-size: 16pt;
+    margin: 6pt 0 2pt;
+    color: var(--primary-deep);
+    letter-spacing: .3px;
+  }
+  .doc-header .subtitle {
+    font-size: 10.5pt;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* ====== JUDUL SEKSI ====== */
+  h2.section-title {
+    font-size: 12pt;
+    color: var(--primary-deep);
+    margin: 14pt 0 8pt;
+    padding-left: 8pt;
+    border-left: 4px solid var(--accent);
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* ====== TABEL ====== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0 12pt;
+    font-size: 10pt;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 5pt 7pt;
+    vertical-align: top;
+  }
+  th {
+    background: var(--primary-soft);
+    color: var(--primary-deep);
+    text-align: center;
+    font-weight: 600;
+    font-size: 9.5pt;
+  }
+  tbody tr:nth-child(even) { background: var(--bg-soft); }
+  .center { text-align: center; }
+
+  /* ====== IDENTITAS SISWA ====== */
+  .identitas {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8pt;
+    padding: 10pt 14pt;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+    margin: 10pt 0 14pt;
+  }
+  .identitas table { margin: 0; }
+  .identitas td {
+    border: none;
+    padding: 3pt 4pt;
+    font-size: 10.5pt;
+  }
+  .garis {
+    border-bottom: 1.5px dotted var(--primary);
+    display: inline-block;
+    min-width: 150pt;
+  }
+
+  /* ====== SCENE GAMBAR (SVG) ====== */
+  .gambar-scene {
+    border: 2px solid var(--primary-soft);
+    border-radius: 10pt;
+    padding: 8pt 10pt 4pt;
+    background: linear-gradient(180deg, #eff6ff 0%, #ecfdf5 100%);
+    margin: 10pt 0 14pt;
+    text-align: center;
+  }
+  .gambar-scene svg {
+    width: 100%;
+    max-width: 400pt;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  .gambar-scene .caption {
+    font-size: 9.5pt;
+    color: var(--muted);
+    font-style: italic;
+    margin: 4pt 0 4pt;
+  }
+
+  /* ====== KOTAK CERITA ====== */
+  .cerita-card {
+    border: 1.5px solid var(--primary-soft);
+    border-left: 5pt solid var(--primary);
+    border-radius: 8pt;
+    padding: 10pt 14pt;
+    background: #fbfdff;
+    margin: 10pt 0 14pt;
+    position: relative;
+  }
+  .cerita-card .judul {
+    font-weight: 700;
+    color: var(--primary-deep);
+    font-size: 11.5pt;
+    margin: 0 0 6pt;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6pt;
+  }
+  .cerita-card p { margin: 0; }
+  .cerita-card p span.line {
+    display: block;
+    margin: 1pt 0;
+  }
+
+  .cerita-flex {
+    display: flex;
+    gap: 10pt;
+    align-items: flex-start;
+  }
+  .cerita-flex .teks { flex: 1; }
+  .cerita-flex .ikon-sisi {
+    flex-shrink: 0;
+    width: 60pt;
+    text-align: center;
+  }
+  .cerita-flex .ikon-sisi svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ====== TAG LEVEL ====== */
+  .level-tag {
+    display: inline-block;
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: .6px;
+    padding: 2.5pt 8pt;
+    border-radius: 5pt;
+    margin-bottom: 5pt;
+    text-transform: uppercase;
+  }
+  .tag-l1 { background: var(--green-soft); color: var(--green); }
+  .tag-l2 { background: var(--accent-soft); color: #92400e; }
+  .tag-l3 { background: var(--rose-soft); color: var(--rose); }
+
+  /* ====== BLOK SOAL ====== */
+  .soal-block {
+    border: 1px solid var(--line-soft);
+    border-radius: 8pt;
+    padding: 9pt 12pt;
+    margin: 8pt 0;
+    background: #fff;
+  }
+  .soal-block .pertanyaan {
+    margin: 0 0 4pt;
+    font-weight: 500;
+    font-size: 11pt;
+  }
+  .poin {
+    color: var(--muted);
+    font-size: 9pt;
+    font-weight: 400;
+  }
+  .jawab-line {
+    border-bottom: 1px dotted #9ca3af;
+    display: block;
+    height: 20pt;
+    margin: 3pt 0 1pt;
+  }
+
+  /* ====== TANDA TANGAN ====== */
+  .ttd {
+    margin-top: 18pt;
+    text-align: right;
+    font-size: 10.5pt;
+    color: var(--muted);
+  }
+  .ttd .garis-ttd {
+    display: inline-block;
+    border-bottom: 1.5px dotted var(--primary);
+    min-width: 150pt;
+    margin-top: 26pt;
+  }
+
+  /* ====== CATATAN ====== */
+  .catatan {
+    background: var(--accent-soft);
+    border-left: 4pt solid var(--accent);
+    padding: 8pt 12pt;
+    border-radius: 6pt;
+    font-size: 10pt;
+    margin-top: 10pt;
+  }
+  .catatan ul { margin: 5pt 0 0 16pt; padding: 0; }
+  .catatan li { margin: 2pt 0; }
+
+  /* ============================================================
+     PENGATURAN CETAK
+     ============================================================ */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  @media print {
+    html, body {
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .paper {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0;
+      padding: 25.4mm;
+      box-shadow: none;
+      page-break-after: always;
+      break-after: page;
+    }
+    .paper:last-of-type {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .paper::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HALAMAN 1 — KISI-KISI ==================== -->
+<section class="paper" data-page="Halaman 1 dari 4 · Kisi-Kisi">
+  <header class="doc-header">
+    <span class="badge">Kisi-Kisi Penilaian</span>
+    <h1>LKPD Literasi — Kelas 2 / Fase A</h1>
+    <p class="subtitle">Tema: Cerita Rakyat Nusantara · “Kancil dan Kura-kura”</p>
+  </header>
+
+  <!-- BANNER GAMBAR KANCIL & KURA-KURA -->
+  <div class="gambar-scene">
+    <svg viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg" aria-label="Kancil dan Kura-kura">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#dbeafe"/>
+          <stop offset="100%" stop-color="#f0fdf4"/>
+        </linearGradient>
+        <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#86efac"/>
+          <stop offset="100%" stop-color="#4ade80"/>
+        </linearGradient>
+      </defs>
+      <rect width="500" height="160" fill="url(#sky)"/>
+      <ellipse cx="500" cy="160" rx="520" ry="60" fill="url(#ground)"/>
+      <circle cx="440" cy="35" r="18" fill="#fde047" opacity="0.9"/>
+      <ellipse cx="90" cy="30" rx="22" ry="10" fill="#fff" opacity="0.85"/>
+      <ellipse cx="110" cy="28" rx="18" ry="9" fill="#fff" opacity="0.85"/>
+      <ellipse cx="200" cy="40" rx="18" ry="8" fill="#fff" opacity="0.7"/>
+      <rect x="55" y="70" width="8" height="55" fill="#7c2d12"/>
+      <circle cx="59" cy="60" r="26" fill="#22c55e"/>
+      <circle cx="44" cy="70" r="18" fill="#16a34a"/>
+      <circle cx="76" cy="70" r="18" fill="#16a34a"/>
+      <g transform="translate(140,70)">
+        <ellipse cx="0" cy="20" rx="30" ry="16" fill="#b45309"/>
+        <circle cx="-8" cy="15" r="3" fill="#fef3c7"/>
+        <circle cx="-2" cy="22" r="2.5" fill="#fef3c7"/>
+        <circle cx="6" cy="16" r="2.5" fill="#fef3c7"/>
+        <circle cx="10" cy="24" r="2" fill="#fef3c7"/>
+        <rect x="-18" y="32" width="4" height="14" fill="#7c2d12"/>
+        <rect x="-8" y="32" width="4" height="14" fill="#7c2d12"/>
+        <rect x="6" y="32" width="4" height="14" fill="#7c2d12"/>
+        <rect x="16" y="32" width="4" height="14" fill="#7c2d12"/>
+        <ellipse cx="-30" cy="18" rx="6" ry="4" fill="#92400e"/>
+        <ellipse cx="26" cy="6" rx="14" ry="12" fill="#b45309"/>
+        <ellipse cx="34" cy="0" rx="9" ry="8" fill="#b45309"/>
+        <ellipse cx="30" cy="-8" rx="4" ry="7" fill="#92400e" transform="rotate(-20 30 -8)"/>
+        <ellipse cx="38" cy="-8" rx="4" ry="7" fill="#92400e" transform="rotate(20 38 -8)"/>
+        <circle cx="36" cy="-1" r="1.8" fill="#111"/>
+        <circle cx="43" cy="2" r="1.5" fill="#111"/>
+      </g>
+      <g transform="translate(320,88)">
+        <ellipse cx="0" cy="12" rx="34" ry="18" fill="#166534"/>
+        <path d="M -30 10 Q 0 -18 30 10 Q 0 20 -30 10 Z" fill="#15803d"/>
+        <path d="M -30 10 Q 0 -18 30 10" fill="none" stroke="#052e16" stroke-width="1.5"/>
+        <line x1="-15" y1="-2" x2="-15" y2="12" stroke="#052e16" stroke-width="1"/>
+        <line x1="0" y1="-8" x2="0" y2="14" stroke="#052e16" stroke-width="1"/>
+        <line x1="15" y1="-2" x2="15" y2="12" stroke="#052e16" stroke-width="1"/>
+        <ellipse cx="-22" cy="26" rx="7" ry="4" fill="#166534"/>
+        <ellipse cx="22" cy="26" rx="7" ry="4" fill="#166534"/>
+        <ellipse cx="-38" cy="6" rx="10" ry="9" fill="#22c55e"/>
+        <circle cx="-44" cy="4" r="1.5" fill="#111"/>
+        <path d="M -46 10 Q -42 13 -38 10" fill="none" stroke="#111" stroke-width="1"/>
+      </g>
+      <path d="M 60 145 q 4 -12 8 0" stroke="#15803d" stroke-width="2" fill="none"/>
+      <path d="M 240 148 q 4 -12 8 0" stroke="#15803d" stroke-width="2" fill="none"/>
+      <path d="M 400 145 q 4 -12 8 0" stroke="#15803d" stroke-width="2" fill="none"/>
+    </svg>
+    <p class="caption">Kancil dan Kura-kura di tepi hutan</p>
+  </div>
+
+  <table class="keep">
+    <thead>
+      <tr>
+        <th style="width:5%">No</th>
+        <th style="width:22%">Tujuan Pembelajaran</th>
+        <th style="width:7%">Level</th>
+        <th style="width:33%">Indikator Soal</th>
+        <th style="width:10%">Bentuk</th>
+        <th style="width:8%">No.</th>
+        <th style="width:8%">Skor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="center">1</td>
+        <td>Menemukan informasi tersurat</td>
+        <td class="center">L1</td>
+        <td>Siswa dapat menyebutkan tokoh yang berlomba lari.</td>
+        <td class="center">Isian</td>
+        <td class="center">1</td>
+        <td class="center">10</td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td>Menemukan informasi tersurat</td>
+        <td class="center">L1</td>
+        <td>Siswa dapat menyebutkan tempat Kancil tidur.</td>
+        <td class="center">Isian</td>
+        <td class="center">2</td>
+        <td class="center">10</td>
+      </tr>
+      <tr>
+        <td class="center">3</td>
+        <td>Memahami isi cerita</td>
+        <td class="center">L2</td>
+        <td>Siswa dapat menjelaskan sebab Kancil kalah.</td>
+        <td class="center">Isian</td>
+        <td class="center">3</td>
+        <td class="center">15</td>
+      </tr>
+      <tr>
+        <td class="center">4</td>
+        <td>Memahami isi cerita</td>
+        <td class="center">L2</td>
+        <td>Siswa dapat menjelaskan usaha Kura-kura sehingga menang.</td>
+        <td class="center">Isian</td>
+        <td class="center">4</td>
+        <td class="center">15</td>
+      </tr>
+      <tr>
+        <td class="center">5</td>
+        <td>Mengevaluasi tindakan tokoh</td>
+        <td class="center">L3</td>
+        <td>Siswa dapat menilai sikap Kancil dan memberi alasan.</td>
+        <td class="center">Uraian</td>
+        <td class="center">5</td>
+        <td class="center">25</td>
+      </tr>
+      <tr>
+        <td class="center">6</td>
+        <td>Merefleksi pesan cerita</td>
+        <td class="center">L3</td>
+        <td>Siswa dapat menyebutkan pelajaran dari cerita.</td>
+        <td class="center">Uraian</td>
+        <td class="center">6</td>
+        <td class="center">25</td>
+      </tr>
+      <tr>
+        <td colspan="6" class="center"><strong>Total Skor</strong></td>
+        <td class="center"><strong>100</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="catatan">
+    <strong>Proporsi Level Kognitif:</strong>
+    <ul>
+      <li><strong>L1</strong> — Menemukan Informasi Tersurat: <strong>20%</strong></li>
+      <li><strong>L2</strong> — Memahami Isi Cerita: <strong>30%</strong></li>
+      <li><strong>L3</strong> — Mengevaluasi &amp; Merefleksi: <strong>50%</strong></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== HALAMAN 2 — SOAL ==================== -->
+<section class="paper" data-page="Halaman 2 dari 4 · Lembar Soal">
+  <header class="doc-header">
+    <span class="badge">Lembar Kerja Peserta Didik</span>
+    <h1>LKPD Literasi — Kelas 2 / Fase A</h1>
+    <p class="subtitle">Tema: Cerita Rakyat Nusantara · “Kancil dan Kura-kura”</p>
+  </header>
+
+  <div class="identitas">
+    <table>
+      <tr>
+        <td style="width:14%">Nama</td>
+        <td style="width:36%">: <span class="garis"></span></td>
+        <td style="width:14%">Kelas</td>
+        <td style="width:36%">: <span class="garis"></span></td>
+      </tr>
+      <tr>
+        <td>No. Absen</td>
+        <td>: <span class="garis"></span></td>
+        <td>Hari/Tanggal</td>
+        <td>: <span class="garis"></span></td>
+      </tr>
+      <tr>
+        <td>Nilai</td>
+        <td colspan="3">: <span class="garis"></span></td>
+      </tr>
+    </table>
+  </div>
+
+  <h2 class="section-title">A. Bacalah cerita berikut ini dengan teliti!</h2>
+
+  <!-- GAMBAR ADEGAN CERITA -->
+  <div class="gambar-scene">
+    <svg viewBox="0 0 500 190" xmlns="http://www.w3.org/2000/svg" aria-label="Ilustrasi Kancil dan Kura-kura berlomba">
+      <defs>
+        <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#bfdbfe"/>
+          <stop offset="100%" stop-color="#fef9c3"/>
+        </linearGradient>
+        <linearGradient id="gras2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#86efac"/>
+          <stop offset="100%" stop-color="#22c55e"/>
+        </linearGradient>
+      </defs>
+      <rect width="500" height="190" fill="url(#sky2)"/>
+      <ellipse cx="250" cy="190" rx="600" ry="70" fill="url(#gras2)"/>
+      <circle cx="60" cy="40" r="22" fill="#fbbf24"/>
+      <circle cx="60" cy="40" r="30" fill="#fde047" opacity="0.35"/>
+      <g fill="#fff" opacity="0.9">
+        <ellipse cx="180" cy="35" rx="24" ry="11"/>
+        <ellipse cx="202" cy="32" rx="18" ry="9"/>
+        <ellipse cx="400" cy="45" rx="20" ry="9"/>
+        <ellipse cx="418" cy="43" rx="16" ry="8"/>
+      </g>
+      <path d="M 0 140 Q 80 90 160 140 Z" fill="#4ade80" opacity="0.6"/>
+      <path d="M 320 145 Q 400 95 500 145 Z" fill="#4ade80" opacity="0.6"/>
+      <rect x="240" y="80" width="10" height="70" fill="#78350f"/>
+      <circle cx="245" cy="70" r="32" fill="#16a34a"/>
+      <circle cx="222" cy="85" r="22" fill="#22c55e"/>
+      <circle cx="268" cy="85" r="22" fill="#22c55e"/>
+      <circle cx="245" cy="55" r="22" fill="#15803d"/>
+      <g transform="translate(75,100)">
+        <line x1="-40" y1="22" x2="-55" y2="22" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+        <line x1="-42" y1="28" x2="-58" y2="28" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+        <line x1="-40" y1="34" x2="-52" y2="34" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+        <ellipse cx="0" cy="20" rx="32" ry="17" fill="#b45309"/>
+        <circle cx="-10" cy="14" r="3" fill="#fef3c7"/>
+        <circle cx="-2" cy="22" r="2.5" fill="#fef3c7"/>
+        <circle cx="8" cy="15" r="2.5" fill="#fef3c7"/>
+        <circle cx="14" cy="24" r="2" fill="#fef3c7"/>
+        <rect x="-16" y="33" width="4" height="14" fill="#7c2d12" transform="rotate(-25 -14 33)"/>
+        <rect x="-4" y="33" width="4" height="14" fill="#7c2d12" transform="rotate(15 -2 33)"/>
+        <rect x="8" y="33" width="4" height="14" fill="#7c2d12" transform="rotate(-15 10 33)"/>
+        <rect x="18" y="33" width="4" height="14" fill="#7c2d12" transform="rotate(25 20 33)"/>
+        <ellipse cx="-32" cy="16" rx="7" ry="4" fill="#92400e" transform="rotate(-20 -32 16)"/>
+        <ellipse cx="28" cy="8" rx="14" ry="12" fill="#b45309"/>
+        <ellipse cx="36" cy="2" rx="9" ry="8" fill="#b45309"/>
+        <ellipse cx="32" cy="-6" rx="4" ry="7" fill="#92400e" transform="rotate(-20 32 -6)"/>
+        <ellipse cx="40" cy="-6" rx="4" ry="7" fill="#92400e" transform="rotate(20 40 -6)"/>
+        <circle cx="38" cy="1" r="1.8" fill="#111"/>
+        <circle cx="45" cy="4" r="1.5" fill="#111"/>
+      </g>
+      <g transform="translate(380,110)">
+        <ellipse cx="0" cy="14" rx="36" ry="20" fill="#166534"/>
+        <path d="M -32 12 Q 0 -22 32 12 Q 0 22 -32 12 Z" fill="#15803d"/>
+        <path d="M -32 12 Q 0 -22 32 12" fill="none" stroke="#052e16" stroke-width="1.5"/>
+        <line x1="-16" y1="-2" x2="-16" y2="14" stroke="#052e16" stroke-width="1"/>
+        <line x1="0" y1="-10" x2="0" y2="16" stroke="#052e16" stroke-width="1"/>
+        <line x1="16" y1="-2" x2="16" y2="14" stroke="#052e16" stroke-width="1"/>
+        <ellipse cx="-22" cy="30" rx="7" ry="4" fill="#166534"/>
+        <ellipse cx="22" cy="30" rx="7" ry="4" fill="#166534"/>
+        <ellipse cx="-40" cy="8" rx="11" ry="10" fill="#22c55e"/>
+        <circle cx="-46" cy="5" r="1.6" fill="#111"/>
+        <path d="M -48 12 Q -44 15 -40 12" fill="none" stroke="#111" stroke-width="1"/>
+        <path d="M 34 16 l 8 3 l -6 4 Z" fill="#166534"/>
+      </g>
+      <g transform="translate(465,80)">
+        <line x1="0" y1="0" x2="0" y2="80" stroke="#111" stroke-width="2"/>
+        <rect x="-3" y="0" width="18" height="10" fill="#fff" stroke="#111" stroke-width="1"/>
+        <rect x="-3" y="0" width="9" height="5" fill="#111"/>
+        <rect x="6" y="5" width="9" height="5" fill="#111"/>
+      </g>
+      <g stroke="#15803d" stroke-width="2" fill="none">
+        <path d="M 40 175 q 4 -12 8 0"/>
+        <path d="M 150 180 q 4 -12 8 0"/>
+        <path d="M 300 180 q 4 -12 8 0"/>
+        <path d="M 440 178 q 4 -12 8 0"/>
+      </g>
+    </svg>
+    <p class="caption">Kancil berlari cepat, Kura-kura berjalan pelan tetapi tidak berhenti.</p>
+  </div>
+
+  <div class="cerita-card">
+    <p class="judul">
+      <svg class="icon-inline" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:22pt;height:22pt;">
+        <circle cx="20" cy="20" r="19" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+        <text x="20" y="26" text-anchor="middle" font-size="16" font-family="Georgia, serif" fill="#1e40af" font-weight="bold">K</text>
+      </svg>
+      Kancil dan Kura-kura
+    </p>
+    <div class="cerita-flex">
+      <div class="teks">
+        <p>
+          <span class="line">Di tepi hutan, Kancil bertemu dengan Kura-kura.</span>
+          <span class="line">Kancil berkata bahwa Kura-kura jalannya sangat lambat.</span>
+          <span class="line">Kura-kura menjawab bahwa walau lambat, ia bisa sampai tujuan.</span>
+          <span class="line">Mereka lalu sepakat untuk mengadakan lomba lari.</span>
+          <span class="line">Lomba pun dimulai, Kancil berlari sangat cepat.</span>
+          <span class="line">Kura-kura berjalan pelan tetapi tidak pernah berhenti.</span>
+          <span class="line">Di tengah jalan, Kancil merasa lelah dan mengantuk.</span>
+          <span class="line">Kancil melihat pohon rindang lalu tidur di bawahnya.</span>
+          <span class="line">Kura-kura terus berjalan dan akhirnya sampai di garis finis.</span>
+          <span class="line">Kancil terbangun dan terkejut karena ia sudah kalah.</span>
+        </p>
+      </div>
+      <div class="ikon-sisi">
+        <svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" aria-label="Kancil">
+          <ellipse cx="40" cy="55" rx="35" ry="6" fill="#d1fae5"/>
+          <ellipse cx="35" cy="35" rx="22" ry="12" fill="#b45309"/>
+          <circle cx="30" cy="32" r="2" fill="#fef3c7"/>
+          <circle cx="38" cy="38" r="2" fill="#fef3c7"/>
+          <rect x="24" y="44" width="3" height="9" fill="#7c2d12"/>
+          <rect x="32" y="44" width="3" height="9" fill="#7c2d12"/>
+          <rect x="42" y="44" width="3" height="9" fill="#7c2d12"/>
+          <ellipse cx="55" cy="25" rx="10" ry="9" fill="#b45309"/>
+          <ellipse cx="59" cy="19" rx="3" ry="5" fill="#92400e"/>
+          <ellipse cx="52" cy="19" rx="3" ry="5" fill="#92400e"/>
+          <circle cx="58" cy="24" r="1.3" fill="#111"/>
+          <circle cx="63" cy="27" r="1.1" fill="#111"/>
+        </svg>
+        <svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" style="margin-top:6pt" aria-label="Kura-kura">
+          <ellipse cx="40" cy="55" rx="35" ry="6" fill="#d1fae5"/>
+          <ellipse cx="40" cy="38" rx="26" ry="14" fill="#166534"/>
+          <path d="M 16 36 Q 40 14 64 36 Q 40 44 16 36 Z" fill="#15803d"/>
+          <path d="M 16 36 Q 40 14 64 36" fill="none" stroke="#052e16" stroke-width="1.2"/>
+          <line x1="28" y1="26" x2="28" y2="38" stroke="#052e16" stroke-width="1"/>
+          <line x1="40" y1="20" x2="40" y2="40" stroke="#052e16" stroke-width="1"/>
+          <line x1="52" y1="26" x2="52" y2="38" stroke="#052e16" stroke-width="1"/>
+          <ellipse cx="24" cy="50" rx="5" ry="3" fill="#166534"/>
+          <ellipse cx="56" cy="50" rx="5" ry="3" fill="#166534"/>
+          <ellipse cx="14" cy="32" rx="8" ry="7" fill="#22c55e"/>
+          <circle cx="11" cy="30" r="1.3" fill="#111"/>
+          <path d="M 9 35 Q 12 37 15 35" fill="none" stroke="#111" stroke-width="0.9"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">B. Jawablah soal-soal di bawah ini dengan benar!</h2>
+
+  <!-- L1 -->
+  <div class="soal-block">
+    <span class="level-tag tag-l1">L1 · Menemukan Informasi Tersurat (20%)</span>
+
+    <p class="pertanyaan">1. Siapa yang berlomba lari dengan Kura-kura? <span class="poin">(10 poin)</span></p>
+    <span class="jawab-line"></span>
+
+    <p class="pertanyaan" style="margin-top:8pt;">2. Di mana Kancil tidur saat lomba berlangsung? <span class="poin">(10 poin)</span></p>
+    <span class="jawab-line"></span>
+  </div>
+
+  <!-- L2 -->
+  <div class="soal-block">
+    <span class="level-tag tag-l2">L2 · Memahami Isi Cerita (30%)</span>
+
+    <p class="pertanyaan">3. Mengapa Kancil kalah dalam lomba lari? <span class="poin">(15 poin)</span></p>
+    <span class="jawab-line"></span>
+    <span class="jawab-line"></span>
+
+    <p class="pertanyaan" style="margin-top:8pt;">4. Apa yang dilakukan Kura-kura sehingga bisa menang? <span class="poin">(15 poin)</span></p>
+    <span class="jawab-line"></span>
+    <span class="jawab-line"></span>
+  </div>
+
+  <!-- L3 -->
+  <div class="soal-block">
+    <span class="level-tag tag-l3">L3 · Mengevaluasi dan Merefleksi (50%)</span>
+
+    <p class="pertanyaan">5. Menurutmu, apakah sikap Kancil baik? Mengapa? <span class="poin">(25 poin)</span></p>
+    <span class="jawab-line"></span>
+    <span class="jawab-line"></span>
+    <span class="jawab-line"></span>
+
+    <p class="pertanyaan" style="margin-top:8pt;">6. Apa pelajaran yang kamu dapat dari cerita ini? <span class="poin">(25 poin)</span></p>
+    <span class="jawab-line"></span>
+    <span class="jawab-line"></span>
+    <span class="jawab-line"></span>
+  </div>
+
+  <div class="ttd">
+    Paraf Guru:<br>
+    <span class="garis-ttd"></span>
+  </div>
+</section>
+
+<!-- ==================== HALAMAN 3 — RUBRIK PENILAIAN ==================== -->
+<section class="paper" data-page="Halaman 3 dari 4 · Rubrik Penilaian">
+  <header class="doc-header">
+    <span class="badge">Rubrik Penilaian</span>
+    <h1>Rubrik Penilaian Literasi</h1>
+    <p class="subtitle">Kelas 2 / Fase A · “Kancil dan Kura-kura”</p>
+  </header>
+
+  <h2 class="section-title">A. Rubrik Soal Isian (L1 &amp; L2)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:6%">No</th>
+        <th style="width:8%">Level</th>
+        <th style="width:34%">Kunci Jawaban</th>
+        <th style="width:10%">Skor</th>
+        <th style="width:42%">Kriteria</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="center">1</td>
+        <td class="center">L1</td>
+        <td>Kancil</td>
+        <td class="center">10</td>
+        <td>Skor 10 jika jawaban benar; skor 0 jika salah/kosong.</td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td class="center">L1</td>
+        <td>Di bawah pohon (rindang)</td>
+        <td class="center">10</td>
+        <td>Skor 10 jika jawaban benar; skor 0 jika salah/kosong.</td>
+      </tr>
+      <tr>
+        <td class="center">3</td>
+        <td class="center">L2</td>
+        <td>Karena Kancil tidur saat lomba</td>
+        <td class="center">15</td>
+        <td>Skor 15 jika jawaban benar; skor 0 jika salah/kosong.</td>
+      </tr>
+      <tr>
+        <td class="center">4</td>
+        <td class="center">L2</td>
+        <td>Kura-kura berjalan terus tanpa berhenti / tidak menyerah</td>
+        <td class="center">15</td>
+        <td>Skor 15 jika jawaban benar; skor 0 jika salah/kosong.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">B. Rubrik Soal Uraian (L3)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:6%">No</th>
+        <th style="width:8%">Level</th>
+        <th style="width:30%">Aspek yang Dinilai</th>
+        <th style="width:14%">Skor Maks.</th>
+        <th style="width:42%">Deskripsi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="center">5</td>
+        <td class="center">L3</td>
+        <td>Ketepatan penilaian sikap tokoh</td>
+        <td class="center">15</td>
+        <td>Jawaban sesuai konteks cerita dan logis.</td>
+      </tr>
+      <tr>
+        <td class="center">5</td>
+        <td class="center">L3</td>
+        <td>Kualitas alasan</td>
+        <td class="center">10</td>
+        <td>Alasan jelas, relevan, dan mudah dipahami.</td>
+      </tr>
+      <tr>
+        <td class="center">6</td>
+        <td class="center">L3</td>
+        <td>Ketepatan pesan moral</td>
+        <td class="center">15</td>
+        <td>Pesan sesuai isi cerita.</td>
+      </tr>
+      <tr>
+        <td class="center">6</td>
+        <td class="center">L3</td>
+        <td>Kualitas refleksi</td>
+        <td class="center">10</td>
+        <td>Refleksi menggunakan bahasa sendiri dan bermakna.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">C. Pedoman Penskoran L3</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Kriteria</th>
+        <th style="width:20%">Skor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Jawaban tepat + alasan jelas</td><td class="center">25</td></tr>
+      <tr><td>Jawaban tepat + alasan kurang jelas</td><td class="center">15–20</td></tr>
+      <tr><td>Jawaban kurang tepat</td><td class="center">5–10</td></tr>
+      <tr><td>Tidak menjawab</td><td class="center">0</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="section-title">D. Konversi Nilai Akhir</h2>
+  <div class="catatan">
+    <strong>Nilai Akhir = Jumlah Skor Perolehan</strong><br>
+    Skor maksimal 100, sehingga jumlah skor perolehan langsung menjadi nilai akhir.
+  </div>
+</section>
+
+<!-- ==================== HALAMAN 4 — KUNCI JAWABAN ==================== -->
+<section class="paper" data-page="Halaman 4 dari 4 · Kunci Jawaban">
+  <header class="doc-header">
+    <span class="badge">Kunci Jawaban</span>
+    <h1>Kunci Jawaban LKPD</h1>
+    <p class="subtitle">Kelas 2 / Fase A · “Kancil dan Kura-kura”</p>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:6%">No</th>
+        <th style="width:8%">Level</th>
+        <th style="width:66%">Kunci Jawaban</th>
+        <th style="width:20%">Skor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="center">1</td>
+        <td class="center">L1</td>
+        <td>Kancil</td>
+        <td class="center">10</td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td class="center">L1</td>
+        <td>Di bawah pohon (rindang)</td>
+        <td class="center">10</td>
+      </tr>
+      <tr>
+        <td class="center">3</td>
+        <td class="center">L2</td>
+        <td>Karena Kancil tidur saat lomba</td>
+        <td class="center">15</td>
+      </tr>
+      <tr>
+        <td class="center">4</td>
+        <td class="center">L2</td>
+        <td>Kura-kura berjalan terus tanpa berhenti / tidak menyerah</td>
+        <td class="center">15</td>
+      </tr>
+      <tr>
+        <td class="center">5</td>
+        <td class="center">L3</td>
+        <td>
+          Jawaban bervariasi. Contoh:<br>
+          • “Tidak, karena Kancil sombong dan tidur saat lomba.”<br>
+          • “Tidak baik, karena sombong bisa membuat kita kalah.”
+        </td>
+        <td class="center">25</td>
+      </tr>
+      <tr>
+        <td class="center">6</td>
+        <td class="center">L3</td>
+        <td>
+          Jawaban bervariasi. Contoh:<br>
+          • “Kita tidak boleh sombong.”<br>
+          • “Sabar dan tidak menyerah bisa membuat kita berhasil.”
+        </td>
+        <td class="center">25</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="center"><strong>Total Skor</strong></td>
+        <td class="center"><strong>100</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- GAMBAR PENUTUP -->
+  <div class="gambar-scene">
+    <svg viewBox="0 0 500 130" xmlns="http://www.w3.org/2000/svg" aria-label="Kura-kura menang, Kancil menyesal">
+      <defs>
+        <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fef3c7"/>
+          <stop offset="100%" stop-color="#fef9c3"/>
+        </linearGradient>
+      </defs>
+      <rect width="500" height="130" fill="url(#sky3)"/>
+      <ellipse cx="250" cy="130" rx="550" ry="50" fill="#86efac"/>
+      <g opacity="0.9">
+        <rect x="80" y="20" width="6" height="6" fill="#ef4444" transform="rotate(20 83 23)"/>
+        <rect x="140" y="15" width="6" height="6" fill="#3b82f6" transform="rotate(-30 143 18)"/>
+        <rect x="220" y="25" width="6" height="6" fill="#f59e0b" transform="rotate(45 223 28)"/>
+        <rect x="300" y="18" width="6" height="6" fill="#10b981" transform="rotate(-15 303 21)"/>
+        <rect x="380" y="22" width="6" height="6" fill="#8b5cf6" transform="rotate(30 383 25)"/>
+        <circle cx="180" cy="30" r="3" fill="#ec4899"/>
+        <circle cx="350" cy="28" r="3" fill="#06b6d4"/>
+      </g>
+      <g transform="translate(300,75)">
+        <ellipse cx="0" cy="14" rx="36" ry="20" fill="#166534"/>
+        <path d="M -32 12 Q 0 -22 32 12 Q 0 22 -32 12 Z" fill="#15803d"/>
+        <path d="M -32 12 Q 0 -22 32 12" fill="none" stroke="#052e16" stroke-width="1.5"/>
+        <line x1="-16" y1="-2" x2="-16" y2="14" stroke="#052e16" stroke-width="1"/>
+        <line x1="0" y1="-10" x2="0" y2="16" stroke="#052e16" stroke-width="1"/>
+        <line x1="16" y1="-2" x2="16" y2="14" stroke="#052e16" stroke-width="1"/>
+        <ellipse cx="-22" cy="30" rx="7" ry="4" fill="#166534"/>
+        <ellipse cx="22" cy="30" rx="7" ry="4" fill="#166534"/>
+        <ellipse cx="-40" cy="8" rx="11" ry="10" fill="#22c55e"/>
+        <circle cx="-46" cy="5" r="1.6" fill="#111"/>
+        <path d="M -48 12 Q -44 15 -40 12" fill="none" stroke="#111" stroke-width="1"/>
+      </g>
+      <g transform="translate(300,35)">
+        <circle cx="0" cy="0" r="12" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
+        <text x="0" y="4" text-anchor="middle" font-size="12" font-family="Georgia, serif" fill="#78350f" font-weight="bold">1</text>
+      </g>
+      <g transform="translate(140,80)">
+        <ellipse cx="0" cy="20" rx="30" ry="16" fill="#b45309"/>
+        <circle cx="-8" cy="15" r="3" fill="#fef3c7"/>
+        <circle cx="-2" cy="22" r="2.5" fill="#fef3c7"/>
+        <circle cx="6" cy="16" r="2.5" fill="#fef3c7"/>
+        <rect x="-16" y="32" width="4" height="12" fill="#7c2d12"/>
+        <rect x="-6" y="32" width="4" height="12" fill="#7c2d12"/>
+        <rect x="6" y="32" width="4" height="12" fill="#7c2d12"/>
+        <rect x="16" y="32" width="4" height="12" fill="#7c2d12"/>
+        <ellipse cx="26" cy="6" rx="14" ry="12" fill="#b45309"/>
+        <ellipse cx="34" cy="0" rx="9" ry="8" fill="#b45309"/>
+        <ellipse cx="30" cy="-8" rx="4" ry="7" fill="#92400e" transform="rotate(-20 30 -8)"/>
+        <ellipse cx="38" cy="-8" rx="4" ry="7" fill="#92400e" transform="rotate(20 38 -8)"/>
+        <path d="M 32 -2 Q 34 0 36 -2" fill="none" stroke="#111" stroke-width="1"/>
+        <circle cx="43" cy="2" r="1.5" fill="#111"/>
+      </g>
+    </svg>
+    <p class="caption">Kura-kura menang karena sabar dan tidak menyerah.</p>
+  </div>
+
+  <div class="catatan">
+    <strong>Catatan Penilaian:</strong>
+    <ul>
+      <li>Soal L1 dan L2 dinilai objektif (benar/salah).</li>
+      <li>Soal L3 dinilai menggunakan rubrik pada halaman Rubrik Penilaian.</li>
+      <li>Jawaban L3 yang berbeda tetap diterima selama sesuai konteks cerita dan memiliki alasan yang logis.</li>
+    </ul>
+  </div>
+</section>
+
+</body>
+</html>
