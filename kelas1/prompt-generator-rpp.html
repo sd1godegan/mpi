@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator RPP, Asesmen & LKPD — Literasi Numerasi</title>
+<style>
+    :root {
+        --indigo-50: #eef2ff; --indigo-100: #e0e7ff; --indigo-500: #6366f1; --indigo-600: #4f46e5; --indigo-700: #4338ca;
+        --teal-50: #f0fdfa; --teal-500: #14b8a6; --teal-600: #0d9488; --teal-700: #0f766e;
+        --emerald-50: #ecfdf5; --emerald-500: #10b981; --emerald-600: #059669; --emerald-700: #047857;
+        --amber-500: #f59e0b; --amber-50: #fffbeb; --amber-700: #b45309;
+        --red-500: #ef4444;
+        --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1; --slate-400: #94a3b8;
+        --slate-500: #64748b; --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
+        --radius: 10px; --radius-lg: 14px;
+        --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+        --font-sans: 'Inter', 'Segoe UI', sans-serif; --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); font-size: 14px; line-height: 1.55; color: var(--slate-800); background: var(--slate-100); min-height: 100vh; padding: 16px; }
+    .app { max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    
+    /* HEADER & FLOW */
+    .app-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--slate-200); }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-icon { width: 44px; height: 44px; background: linear-gradient(135deg, var(--indigo-600), var(--indigo-500)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 12px rgba(79,70,229,0.25); }
+    .brand-text h1 { font-size: 17px; font-weight: 700; color: var(--slate-900); }
+    .brand-text p { font-size: 12px; color: var(--slate-500); }
+    .status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+    .status-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .status-pill.ready { background: #dcfce7; color: var(--emerald-600); }
+    .status-pill.warning { background: var(--amber-50); color: var(--amber-700); }
+    .status-pill.neutral { background: var(--slate-100); color: var(--slate-500); }
+    
+    .flow-banner { background: #fff; border: 2px solid var(--indigo-100); border-radius: var(--radius-lg); padding: 20px 24px; box-shadow: var(--shadow-sm); }
+    .flow-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .flow-header .badge-warn { background: var(--amber-500); color: #fff; padding: 4px 12px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+    .flow-header h2 { font-size: 14px; font-weight: 700; color: var(--slate-900); }
+    .flow-steps { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: stretch; }
+    .flow-step { background: #fff; border-radius: var(--radius); padding: 14px 16px; border: 1.5px solid var(--slate-200); }
+    .flow-step.step-1 { border-color: var(--indigo-500); background: var(--indigo-50); }
+    .flow-step.step-2 { border-color: var(--teal-500); background: var(--teal-50); }
+    .flow-step.step-3 { border-color: var(--emerald-500); background: var(--emerald-50); }
+    .flow-step-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+    .flow-step.step-1 .flow-step-num { background: var(--indigo-600); }
+    .flow-step.step-2 .flow-step-num { background: var(--teal-600); }
+    .flow-step.step-3 .flow-step-num { background: var(--emerald-600); }
+    .flow-step h3 { font-size: 12.5px; font-weight: 700; margin-bottom: 4px; }
+    .flow-step .sub { font-size: 10.5px; color: var(--slate-500); font-weight: 600; margin-bottom: 6px; }
+    .flow-step .detail { font-size: 11px; color: var(--slate-700); line-height: 1.45; }
+    .flow-arrow { display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--slate-400); font-weight: 700; }
+    .flow-note { margin-top: 14px; padding: 10px 14px; background: var(--amber-50); border-left: 3px solid var(--amber-500); border-radius: 6px; font-size: 11.5px; color: var(--amber-700); }
+    .flow-note strong { color: #78350f; font-weight: 700; }
+
+    /* MAIN GRID */
+    .main-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+    .card { background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--slate-200); box-shadow: var(--shadow-xs); overflow: hidden; }
+    .card-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--slate-200); background: var(--slate-50); }
+    .card-header h2 { font-size: 13px; font-weight: 700; }
+    .card-header .badge { margin-left: auto; padding: 3px 10px; background: var(--indigo-100); color: var(--indigo-700); border-radius: 999px; font-size: 10px; font-weight: 700; }
+    .card-body { padding: 16px 20px; }
+    .left-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .right-col { position: sticky; top: 16px; min-width: 0; display: flex; flex-direction: column; max-height: calc(100vh - 32px); }
+    .right-col .card { display: flex; flex-direction: column; max-height: 100%; min-height: 0; }
+    .right-col .card-body { overflow-y: auto; flex: 1; min-height: 0; }
+
+    /* FILES */
+    .files-list { display: flex; flex-direction: column; gap: 8px; }
+    .file-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius); transition: all 0.15s; }
+    .file-item:hover { background: #fff; border-color: var(--indigo-500); box-shadow: var(--shadow-sm); }
+    .file-icon { flex-shrink: 0; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; background: linear-gradient(135deg, var(--indigo-50), var(--indigo-100)); border: 1px solid var(--indigo-100); }
+    .file-icon.teal { background: linear-gradient(135deg, var(--teal-50), #ccfbf1); border-color: #99f6e4; }
+    .file-icon.emerald { background: linear-gradient(135deg, var(--emerald-50), #d1fae5); border-color: #a7f3d0; }
+    .file-info { flex: 1; min-width: 0; }
+    .file-info .name { font-size: 12.5px; font-weight: 700; }
+    .file-info .desc { font-size: 10.5px; color: var(--slate-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-actions { display: flex; gap: 4px; }
+    .icon-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--slate-200); background: #fff; color: var(--slate-600); cursor: pointer; font-size: 12px; text-decoration: none; }
+    .icon-btn:hover { background: var(--indigo-50); border-color: var(--indigo-500); }
+    .files-note { margin-top: 12px; padding: 10px 12px; background: var(--amber-50); border-left: 3px solid var(--amber-500); border-radius: 6px; font-size: 11px; color: var(--amber-700); }
+
+    /* FORM */
+    .form-sections { display: flex; flex-direction: column; gap: 18px; }
+    .form-section { padding: 16px; border-radius: var(--radius); border: 1px solid var(--slate-200); background: #fff; }
+    .form-section.required { background: var(--indigo-50); border-color: var(--indigo-100); }
+    .form-section.asesmen { background: var(--teal-50); border-color: #ccfbf1; }
+    .form-section-title { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 12px; font-weight: 700; color: var(--indigo-700); text-transform: uppercase; }
+    .form-section.asesmen .form-section-title { color: var(--teal-700); }
+    .form-section-title::before { content: ""; width: 3px; height: 14px; background: currentColor; border-radius: 2px; }
+    .field { margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .field-grid .field { margin-bottom: 0; }
+    .field label:not(.chip-check) { display: block; font-size: 11.5px; font-weight: 600; color: var(--slate-700); margin-bottom: 6px; }
+    .field label .req { color: var(--red-500); margin-left: 2px; }
+    .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1.5px solid var(--slate-200); border-radius: 8px; font-family: inherit; font-size: 12.5px; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--indigo-500); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .field textarea { resize: vertical; min-height: 64px; }
+    .field-hint { font-size: 10.5px; color: var(--slate-500); margin-top: 5px; }
+
+    /* CHIPS */
+    .chips-wrap { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+    .chip-check { display: flex !important; flex-direction: row; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; border: 1.5px solid var(--slate-200); border-radius: 8px; background: #fff; cursor: pointer; }
+    .chip-check:hover { border-color: var(--indigo-500); background: var(--indigo-50); transform: translateX(2px); }
+    .chip-check input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .chip-check .check-box { flex-shrink: 0; width: 18px; height: 18px; border: 1.5px solid var(--slate-300); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; }
+    .chip-check input:checked ~ .check-box { background: var(--indigo-600); border-color: var(--indigo-600); color: #fff; }
+    .chip-check input:checked ~ .check-box::after { content: "✓"; }
+    .chip-check.hidden { display: none !important; }
+    .chip-note { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 11px; background: var(--slate-50); color: var(--slate-500); border-left: 3px solid var(--slate-300); }
+
+    /* PREVIEW TABS */
+    .preview-tabs { display: flex; gap: 4px; padding: 10px 16px 0; border-bottom: 1px solid var(--slate-200); background: var(--slate-50); }
+    .preview-tab { flex: 1; padding: 10px 14px; border: none; background: transparent; border-radius: 8px 8px 0 0; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--slate-500); cursor: pointer; display: flex; flex-direction: column; align-items: center; margin-bottom: -1px; border-bottom: 2px solid transparent; }
+    .preview-tab.active { color: var(--indigo-600); border-bottom-color: var(--indigo-600); background: #fff; }
+    .preview-tab.asesmen.active { color: var(--teal-600); border-bottom-color: var(--teal-600); }
+    .preview-tab.lkpd.active { color: var(--emerald-600); border-bottom-color: var(--emerald-600); }
+    .preview-tab .step-num { font-size: 9px; text-transform: uppercase; opacity: 0.7; }
+
+    .preview-toolbar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #fff; border-bottom: 1px solid var(--slate-200); }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: none; border-radius: 8px; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--indigo-600); color: #fff; }
+    .btn-teal { background: var(--teal-600); color: #fff; }
+    .btn-emerald { background: var(--emerald-600); color: #fff; }
+    .btn-ghost { background: var(--slate-100); color: var(--slate-700); }
+    .copy-status { font-size: 11.5px; font-weight: 600; color: var(--emerald-600); opacity: 0; transition: opacity 0.25s; margin-left: auto; }
+    .copy-status.show { opacity: 1; }
+
+    .preview-content { padding: 16px; }
+    .step-banner { padding: 12px 16px; border-radius: 8px; margin-bottom: 14px; font-size: 11.5px; line-height: 1.55; }
+    .step-banner.indigo { background: var(--indigo-50); border-left: 3px solid var(--indigo-500); color: var(--indigo-700); }
+    .step-banner.teal { background: var(--teal-50); border-left: 3px solid var(--teal-500); color: var(--teal-700); }
+    .step-banner.emerald { background: var(--emerald-50); border-left: 3px solid var(--emerald-500); color: var(--emerald-700); }
+    .step-banner .title { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; text-transform: uppercase; }
+    .upload-checklist { background: #fff; border: 1.5px dashed var(--slate-300); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 11px; }
+    .upload-checklist .title { font-weight: 700; font-size: 10.5px; color: var(--slate-700); margin-bottom: 6px; }
+    .upload-checklist ul { list-style: none; padding: 0; }
+    .upload-checklist li { padding: 3px 0; color: var(--slate-600); }
+    .upload-checklist li::before { content: "☐ "; color: var(--indigo-500); font-weight: 700; margin-right: 4px; }
+
+    .preview-pre { white-space: pre-wrap; word-wrap: break-word; font-family: var(--font-mono); font-size: 10.5px; line-height: 1.55; color: var(--slate-700); background: var(--slate-50); padding: 16px; border-radius: 8px; border: 1px solid var(--slate-200); overflow: visible; }
+    .tab-content { display: none; } .tab-content.active { display: block; }
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; background: var(--slate-900); color: #fff; border-radius: 10px; font-size: 12.5px; font-weight: 600; opacity: 0; transform: translateY(12px); transition: all 0.3s; z-index: 9999; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon">🎯</div>
+            <div class="brand-text">
+                <h1>Generator RPP, Asesmen & LKPD</h1>
+                <p>Literasi Numerasi · Kabupaten Bantul · Alur 1 Chat Berkelanjutan</p>
+            </div>
+        </div>
+        <div class="status-pill neutral" id="status-pill">
+            <span class="dot"></span><span id="status-text">Belum siap</span>
+        </div>
+    </header>
+
+    <section class="flow-banner">
+        <div class="flow-header">
+            <span class="badge-warn">PENTING</span>
+            <h2>Alur 3 Tahap — Berurutan di Dalam 1 Ruang Chat</h2>
+        </div>
+        <div class="flow-steps">
+            <div class="flow-step step-1">
+                <span class="flow-step-num">1</span><h3>Hasilkan RPP</h3><div class="sub">Tahap 1</div>
+                <div class="detail">Buka <strong>1 chat baru</strong>, upload <strong>2 file</strong> (Blueprint + Template RPP).<br>Salin Prompt 1 → AI hasilkan RPP HTML.</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step step-2">
+                <span class="flow-step-num">2</span><h3>Hasilkan Asesmen</h3><div class="sub">Tahap 2 (Lanjutan)</div>
+                <div class="detail"><strong>Tetap di chat yang sama.</strong> Upload <strong>2 file baru</strong> (Pedoman + Template Asesmen).<br>Salin Prompt 2 → AI hasilkan Asesmen HTML.</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step step-3">
+                <span class="flow-step-num">3</span><h3>Hasilkan LKPD</h3><div class="sub">Tahap 3 (Lanjutan)</div>
+                <div class="detail"><strong>Tetap di chat yang sama.</strong> Upload <strong>1 file baru</strong> (Template LKPD).<br>Salin Prompt 3 → AI hasilkan LKPD HTML.</div>
+            </div>
+        </div>
+        <div class="flow-note">
+            <strong>Mengapa berurutan di 1 chat?</strong> ✓ AI sudah memahami konteks RPP & Blueprint untuk Asesmen/LKPD · ✓ Tidak perlu upload ulang file RPP & Blueprint.
+        </div>
+    </section>
+
+    <main class="main-grid">
+        <div class="left-col">
+            <div class="card">
+                <div class="card-header"><span class="icon">📥</span><h2>File Pendukung</h2><span class="badge">5 file</span></div>
+                <div class="card-body">
+                    <div class="files-list">
+                        <!-- File 1 -->
+                        <div class="file-item">
+                            <div class="file-icon">📘</div>
+                            <div class="file-info"><div class="name">Blueprint RPP</div><div class="desc">Panduan penyusunan RPP (Tahap 1)</div></div>
+                            <div class="file-actions">
+                                <a class="icon-btn" href="https://drive.google.com/file/d/1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4/view" target="_blank">👁</a>
+                                <button class="icon-btn" onclick="copyLink('https://drive.google.com/file/d/1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4/view','Blueprint RPP')">📋</button>
+                                <a class="icon-btn download" href="https://drive.google.com/uc?export=download&id=1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4" target="_blank">⬇</a>
+                            </div>
+                        </div>
+                        <!-- File 2 -->
+                        <div class="file-item">
+                            <div class="file-icon">📄</div>
+                            <div class="file-info"><div class="name">Template RPP</div><div class="desc">Struktur A–G siap pakai (Tahap 1)</div></div>
+                            <div class="file-actions">
+                                <a class="icon-btn" href="https://drive.google.com/file/d/19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ/view" target="_blank">👁</a>
+                                <button class="icon-btn" onclick="copyLink('https://drive.google.com/file/d/19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ/view','Template RPP')">📋</button>
+                                <a class="icon-btn download" href="https://drive.google.com/uc?export=download&id=19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ" target="_blank">⬇</a>
+                            </div>
+                        </div>
+                        <!-- File 3 -->
+                        <div class="file-item">
+                            <div class="file-icon teal">📋</div>
+                            <div class="file-info"><div class="name">Pedoman Asesmen</div><div class="desc">Panduan L1/L2/L3 (Tahap 2)</div></div>
+                            <div class="file-actions">
+                                <a class="icon-btn" href="https://drive.google.com/file/d/1bSzfu-uNXvoOs45M8ydhS__Yq5XpCtIG/view" target="_blank">👁</a>
+                                <button class="icon-btn" onclick="copyLink('https://drive.google.com/file/d/1bSzfu-uNXvoOs45M8ydhS__Yq5XpCtIG/view','Pedoman Asesmen')">📋</button>
+                                <a class="icon-btn download" href="https://drive.google.com/uc?export=download&id=1bSzfu-uNXvoOs45M8ydhS__Yq5XpCtIG" target="_blank">⬇</a>
+                            </div>
+                        </div>
+                        <!-- File 4 -->
+                        <div class="file-item">
+                            <div class="file-icon teal">📝</div>
+                            <div class="file-info"><div class="name">Template Asesmen</div><div class="desc">Kisi + Soal + Kunci (Tahap 2)</div></div>
+                            <div class="file-actions">
+                                <a class="icon-btn" href="https://drive.google.com/file/d/1iqft26RMgCNg6ZJYVxyCk9FnGCMcbPAM/view" target="_blank">👁</a>
+                                <button class="icon-btn" onclick="copyLink('https://drive.google.com/file/d/1iqft26RMgCNg6ZJYVxyCk9FnGCMcbPAM/view','Template Asesmen')">📋</button>
+                                <a class="icon-btn download" href="https://drive.google.com/uc?export=download&id=1iqft26RMgCNg6ZJYVxyCk9FnGCMcbPAM" target="_blank">⬇</a>
+                            </div>
+                        </div>
+                        <!-- File 5 -->
+                        <div class="file-item">
+                            <div class="file-icon emerald">📋</div>
+                            <div class="file-info"><div class="name">Template LKPD Hybrid</div><div class="desc">Core A/B + Flexible C–G (Tahap 3)</div></div>
+                            <div class="file-actions">
+                                <a class="icon-btn" href="https://drive.google.com/file/d/1RUcOrSgzqs8lUX8yuEDG5jEP89L7CgWd/view" target="_blank">👁</a>
+                                <button class="icon-btn" onclick="copyLink('https://drive.google.com/file/d/1RUcOrSgzqs8lUX8yuEDG5jEP89L7CgWd/view','Template LKPD')">📋</button>
+                                <a class="icon-btn download" href="https://drive.google.com/uc?export=download&id=1RUcOrSgzqs8lUX8yuEDG5jEP89L7CgWd" target="_blank">⬇</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="files-note">⚠️ <strong>Jika Drive diblokir:</strong> klik <strong>📋</strong> salin link → buka di HP/hotspot, atau <strong>⬇</strong> unduh langsung.</div>
+                </div>
+            </div>
+
+            <form class="card" id="main-form">
+                <div class="card-header"><span class="icon">📝</span><h2>Konteks Pembelajaran</h2><span class="badge">Isi sekali</span></div>
+                <div class="card-body">
+                    <div class="form-sections">
+                        <div class="form-section required">
+                            <div class="form-section-title">🔒 Wajib — Mengunci Relevansi</div>
+                            <div class="field-grid">
+                                <div class="field">
+                                    <label>Mata Pelajaran <span class="req">*</span></label>
+                                    <select name="mapel" id="mapel-select">
+                                        <option value="">— Pilih mapel —</option>
+                                        <option>IPAS</option><option>Pendidikan Pancasila</option><option>Bahasa Indonesia</option>
+                                        <option>Matematika</option><option>PJOK</option><option>Seni Budaya</option>
+                                        <option>Bahasa Jawa</option><option>Bahasa Inggris</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Kelas / Fase <span class="req">*</span></label>
+                                    <select name="kelas">
+                                        <option value="">— Pilih kelas —</option>
+                                        <option>I / A</option><option>II / A</option><option>III / B</option>
+                                        <option>IV / B</option><option>V / C</option><option>VI / C</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>Materi Pokok <span class="req">*</span></label>
+                                <input name="materi" placeholder="Contoh: Indonesiaku Kaya Alamnya">
+                            </div>
+                            <div class="field">
+                                <label>Capaian Pembelajaran (CP) <span class="req">*</span></label>
+                                <textarea name="cp" placeholder="Kutip PERSIS dari dokumen CP resmi..."></textarea>
+                                <div class="field-hint">📎 <a href="https://kurikulum.kemdikbud.go.id/kurikulum-merdeka/" target="_blank">Buka CP Resmi</a> — jangan dikarang!</div>
+                            </div>
+                            <div class="field">
+                                <label>Tujuan Pembelajaran (TP) <span class="req">*</span></label>
+                                <textarea name="tp" placeholder="1. Mengidentifikasi...&#10;2. Menyajikan data..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-title">⚙️ Opsional — Personalisasi</div>
+                            <div class="field">
+                                <label>Mapel Pendukung (Lintas Disiplin)</label>
+                                <div class="chips-wrap" id="pendukung-grid">
+                                    <label class="chip-check" data-mapel="Bahasa Indonesia"><input type="checkbox" name="pendukung" value="Bahasa Indonesia"><span class="check-box"></span><span class="chip-label">Bahasa Indonesia</span></label>
+                                    <label class="chip-check" data-mapel="Matematika"><input type="checkbox" name="pendukung" value="Matematika"><span class="check-box"></span><span class="chip-label">Matematika</span></label>
+                                    <label class="chip-check" data-mapel="IPAS"><input type="checkbox" name="pendukung" value="IPAS"><span class="check-box"></span><span class="chip-label">IPAS</span></label>
+                                    <label class="chip-check" data-mapel="Pendidikan Pancasila"><input type="checkbox" name="pendukung" value="Pendidikan Pancasila"><span class="check-box"></span><span class="chip-label">Pendidikan Pancasila</span></label>
+                                    <label class="chip-check" data-mapel="PJOK"><input type="checkbox" name="pendukung" value="PJOK"><span class="check-box"></span><span class="chip-label">PJOK</span></label>
+                                    <label class="chip-check" data-mapel="Seni Budaya"><input type="checkbox" name="pendukung" value="Seni Budaya"><span class="check-box"></span><span class="chip-label">Seni Budaya</span></label>
+                                </div>
+                                <div class="chip-note" id="pendukung-note">Kosongkan → AI pilih otomatis (Bahasa Indonesia + Matematika)</div>
+                            </div>
+                            <div class="field"><label>Nama Satuan Pendidikan</label><input name="satuan" placeholder="Contoh: SD Negeri Bantul"></div>
+                            <div class="field-grid">
+                                <div class="field"><label>Nama Guru</label><input name="guru" placeholder="Ibu Siti Rahayu, S.Pd."></div>
+                                <div class="field"><label>NIP Guru</label><input name="nip_guru" placeholder="19850512 201001 2 003"></div>
+                            </div>
+                            <div class="field-grid">
+                                <div class="field"><label>Nama Kepala Sekolah</label><input name="kepsek" placeholder="Bapak Ahmad, S.Pd."></div>
+                                <div class="field"><label>NIP Kepala Sekolah</label><input name="nip_kepsek" placeholder="19720815 199503 1 002"></div>
+                            </div>
+                            <div class="field-grid">
+                                <div class="field"><label>Konteks Lokal</label><input name="konteks_lokal" placeholder="Pedesaan Kabupaten Bantul"></div>
+                                <div class="field"><label>Alokasi Waktu</label><input name="alokasi" placeholder="2 JP (2 × 35 menit)"></div>
+                            </div>
+                            <div class="field-grid">
+                                <div class="field"><label>Jumlah Siswa</label><input name="jumlah_siswa" type="number" min="1" max="100" placeholder="28"></div>
+                                <div class="field"><label>Tanggal Pelaksanaan</label><input name="tanggal" type="date"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-section asesmen">
+                            <div class="form-section-title">📝 Pengaturan Asesmen (Tahap 2)</div>
+                            <div class="field">
+                                <label>Jumlah Soal</label>
+                                <select name="jumlah_soal">
+                                    <option value="auto">Auto (AI tentukan dari TP — default 10)</option>
+                                    <option value="5">5 soal</option><option value="8">8 soal</option>
+                                    <option value="10" selected>10 soal</option><option value="12">12 soal</option>
+                                    <option value="15">15 soal</option><option value="20">20 soal</option>
+                                </select>
+                            </div>
+                            <div class="field"><label>Catatan Khusus Asesmen</label><textarea name="catatan_asesmen" placeholder="Contoh: fokus soal cerita..."></textarea></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="right-col">
+            <div class="card">
+                <div class="card-header"><span class="icon">🤖</span><h2>Prompt Siap Salin</h2></div>
+                <div class="preview-tabs">
+                    <button class="preview-tab active" data-tab="rpp" onclick="switchTab('rpp')"><span class="step-num">Tahap 1</span><span class="tab-label">📄 RPP</span></button>
+                    <button class="preview-tab asesmen" data-tab="asesmen" onclick="switchTab('asesmen')"><span class="step-num">Tahap 2</span><span class="tab-label">📝 Asesmen</span></button>
+                    <button class="preview-tab lkpd" data-tab="lkpd" onclick="switchTab('lkpd')"><span class="step-num">Tahap 3</span><span class="tab-label">📋 LKPD</span></button>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="tab-content active" id="tab-rpp">
+                        <div class="preview-toolbar">
+                            <button class="btn btn-primary" onclick="copyPrompt('rpp')">📋 Salin Prompt 1</button>
+                            <span class="copy-status" id="copy-rpp">✓ Tersalin</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="step-banner indigo">
+                                <span class="title">📄 Tahap 1 — Hasilkan RPP</span>
+                                Buka <strong>chat AI baru</strong>, unggah <strong>2 file</strong> (Blueprint RPP + Template RPP), lalu paste prompt ini.
+                            </div>
+                            <div class="upload-checklist">
+                                <div class="title">📎 File Tahap 1</div>
+                                <ul><li>Blueprint RPP</li><li>Template RPP</li></ul>
+                            </div>
+                            <pre class="preview-pre" id="preview-rpp"></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-asesmen">
+                        <div class="preview-toolbar">
+                            <button class="btn btn-teal" onclick="copyPrompt('asesmen')">📋 Salin Prompt 2</button>
+                            <span class="copy-status" id="copy-asesmen">✓ Tersalin</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="step-banner teal">
+                                <span class="title">📝 Tahap 2 — Hasilkan Asesmen</span>
+                                <strong>Tetap di chat yang sama</strong>, unggah <strong>2 file baru</strong> (Pedoman + Template Asesmen). Paste prompt ini.
+                            </div>
+                            <div class="upload-checklist">
+                                <div class="title">📎 File Tahap 2</div>
+                                <ul><li>Pedoman Asesmen</li><li>Template Asesmen</li></ul>
+                            </div>
+                            <pre class="preview-pre" id="preview-asesmen"></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-lkpd">
+                        <div class="preview-toolbar">
+                            <button class="btn btn-emerald" onclick="copyPrompt('lkpd')">📋 Salin Prompt 3</button>
+                            <span class="copy-status" id="copy-lkpd">✓ Tersalin</span>
+                        </div>
+                        <div class="preview-content">
+                            <div class="step-banner emerald">
+                                <span class="title">📋 Tahap 3 — Hasilkan LKPD</span>
+                                <strong>Tetap di chat yang sama</strong>, unggah <strong>1 file baru</strong> (Template LKPD), lalu paste prompt ini.
+                            </div>
+                            <div class="upload-checklist">
+                                <div class="title">📎 File Tahap 3</div>
+                                <ul><li>Template LKPD</li></ul>
+                            </div>
+                            <pre class="preview-pre" id="preview-lkpd"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const FILES = {
+    blueprintRpp:    { id: '1ZQ75bPi72HIT-4Q5xo-OUKSA1waTUuB4', label: 'Blueprint RPP' },
+    templateRpp:     { id: '19ZwUl1KBqcPiDubrxuXWA-0XOVf-c1BJ', label: 'Template RPP' },
+    pedomanAsesmen:  { id: '1bSzfu-uNXvoOs45M8ydhS__Yq5XpCtIG', label: 'Pedoman Asesmen' },
+    templateAsesmen: { id: '1iqft26RMgCNg6ZJYVxyCk9FnGCMcbPAM', label: 'Template Asesmen' },
+    templateLkpd:    { id: '1RUcOrSgzqs8lUX8yuEDG5jEP89L7CgWd', label: 'Template LKPD' }
+};
+const urlView = (id) => `https://drive.google.com/file/d/${id}/view`;
+const form = document.getElementById('main-form');
+const mapelSelect = document.getElementById('mapel-select');
+const pendukungGrid = document.getElementById('pendukung-grid');
+const pendukungNote = document.getElementById('pendukung-note');
+const previewRpp = document.getElementById('preview-rpp');
+const previewAsesmen = document.getElementById('preview-asesmen');
+const previewLkpd = document.getElementById('preview-lkpd');
+const statusPill = document.getElementById('status-pill');
+const statusText = document.getElementById('status-text');
+
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2400); }
+window.copyLink = function(url, label) { navigator.clipboard.writeText(url).then(() => showToast(`Link ${label} tersalin`)); };
+function formatTanggal(iso) { if (!iso) return '[ISI: tanggal]'; const b = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']; const d = new Date(iso); return `${d.getDate()} ${b[d.getMonth()]} ${d.getFullYear()}`; }
+function getData() { const d = {}; form.querySelectorAll('input:not([type="checkbox"]), textarea, select').forEach(el => { d[el.name] = (el.value || '').trim(); }); d.pendukung = Array.from(form.querySelectorAll('input[name="pendukung"]:checked')).map(el => el.value); return d; }
+function isReady(d) { return d.mapel && d.kelas && d.materi && d.cp && d.tp; }
+const v = (val, fallback) => (val || '').trim() || fallback;
+
+const SARAN = { 'IPAS': 'Bahasa Indonesia + Matematika', 'Pendidikan Pancasila': 'Bahasa Indonesia + Matematika', 'Matematika': 'Bahasa Indonesia (soal cerita)', 'Bahasa Indonesia': 'Matematika (tafsir data)', 'PJOK': 'Matematika (pengukuran)', 'Seni Budaya': 'Matematika (geometri/pola)', 'Bahasa Jawa': 'Bahasa Indonesia + Matematika', 'Bahasa Inggris': 'Bahasa Indonesia + Matematika' };
+function updatePendukungFilter() {
+    const mapelUtama = mapelSelect.value;
+    const items = pendukungGrid.querySelectorAll('.chip-check');
+    let hidden = 0;
+    items.forEach(item => {
+        const mapel = item.dataset.mapel;
+        const cb = item.querySelector('input');
+        if (mapelUtama && mapel === mapelUtama) { cb.checked = false; cb.disabled = true; item.classList.add('hidden'); hidden++; }
+        else { cb.disabled = false; item.classList.remove('hidden'); }
+    });
+    const total = items.length; const available = total - hidden;
+    if (!mapelUtama) { pendukungNote.textContent = 'Kosongkan → AI pilih otomatis (Bahasa Indonesia + Matematika)'; pendukungNote.className = 'chip-note'; }
+    else { const saran = SARAN[mapelUtama] || 'Bahasa Indonesia + Matematika'; pendukungNote.innerHTML = `🔒 <strong>${mapelUtama}</strong> disembunyikan · ${available}/${total} pilihan · 💡 Saran: <strong>${saran}</strong>`; pendukungNote.className = 'chip-note info'; }
+}
+
+function generatePromptRpp() {
+    const d = getData();
+    const mapel = v(d.mapel, '___[WAJIB DIPILIH]___');
+    const kelas = v(d.kelas, '___[WAJIB DIPILIH]___');
+    const materi = v(d.materi, '___[WAJIB DIISI]___');
+    const cp = v(d.cp, '___[CP KOSONG]___');
+    const tp = v(d.tp, '___[TP KOSONG]___');
+    const pendukungList = d.pendukung.filter(p => p !== d.mapel);
+    const pendukung = pendukungList.length ? pendukungList.join(' + ') : '[KOSONG — AI PILIH OTOMATIS]';
+    const satuan = v(d.satuan, '[ISI: nama sekolah]');
+    const guru = v(d.guru, '[ISI: nama guru]');
+    const nipGuru = v(d.nip_guru, '(................................)');
+    const kepsek = v(d.kepsek, '[ISI: nama kepsek]');
+    const nipKepsek = v(d.nip_kepsek, '(................................)');
+    const konteks = v(d.konteks_lokal, 'Pedesaan Bantul');
+    const alokasi = v(d.alokasi, '2 JP (2 × 35 menit)');
+    const jumlahSiswa = v(d.jumlah_siswa, '[ISI: jumlah siswa]');
+    const tanggal = formatTanggal(d.tanggal);
+    const ready = isReady(d);
+
+    return `PROMPT 1 — RPP TERINTEGRASI LITERASI & NUMERASI
+Tahap 1 · Kabupaten Bantul
+
+⚠️ INI ADALAH TAHAP 1 (RPP). Hanya hasilkan RPP.
+
+📥 LAMPIRAN WAJIB (2 FILE):
+1. Blueprint RPP: ${urlView(FILES.blueprintRpp.id)}
+2. Template RPP: ${urlView(FILES.templateRpp.id)}
+
+📌 LANGKAH 0: BACA & PATUHI BLUEPRINT & TEMPLATE.
+Jangan mengarang struktur CSS baru.
+
+BAGIAN 1 — KONTEKS WAJIB
+1. Mata Pelajaran : ${mapel}
+2. Kelas / Fase   : ${kelas}
+3. Materi Pokok   : ${materi}
+4. CP             : ${cp}
+5. TP             : ${tp}
+
+BAGIAN 2 — KONTEKS OPSIONAL
+• Mapel Pendukung : ${pendukung}
+• Nama Sekolah   : ${satuan}
+• Nama Guru      : ${guru} (NIP: ${nipGuru})
+• Nama Kepsek    : ${kepsek} (NIP: ${nipKepsek})
+• Konteks Lokal  : ${konteks}
+• Alokasi Waktu  : ${alokasi}
+• Jumlah Siswa   : ${jumlahSiswa}
+• Tanggal        : ${tanggal}
+
+BAGIAN 3 — ATURAN KHUSUS
+• Mapel pendukung tidak boleh sama dengan mapel utama.
+• Prinsip: Mindful, Meaningful, Joyful.
+
+BAGIAN 4 — STRUKTUR & CSS WAJIB (PERSIS TEMPLATE)
+• Section A–G lengkap.
+• 8 Dimensi Profil Lulusan (Pilih 2-4).
+• 6 Strategi Literasi, 3 Strategi Numerasi.
+• 4 Domain Numerasi, 3 Konteks Numerasi.
+• Rubrik E.4: 4 aspek × 4 skor.
+
+📌 CSS PRINT (HIERARCHICAL BINDING) — TULIS PERSIS DI TAG <style>:
+• .section { page-break-inside: auto; }
+• .field, .stage-sub { page-break-inside: avoid; }
+• .section-header, .field-label { page-break-after: avoid; }
+• table { page-break-inside: auto; }
+• tr { page-break-inside: avoid; }
+• thead { display: table-header-group; }
+
+BAGIAN 5 — OUTPUT FORMAT
+Kembalikan SATU blok kode HTML lengkap (<!DOCTYPE html> s.d. </html>).
+
+${ready ? '✅ Semua field wajib lengkap. Hasilkan HTML RPP sekarang.' : '⚠️ Masih ada field wajib kosong. Hasilkan HTML RPP, tandai bagian kosong dengan [WAJIB DIISI: ...].'}
+
+🎯 SETELAH RPP JADI — LANJUT KE TAHAP 2:
+1. Simpan RPP sebagai file .html
+2. TETAP DI CHAT INI (jangan buka chat baru)
+3. Buka tab "Tahap 2: Asesmen" di generator
+4. Copy Prompt 2 → paste ke chat ini`;
+}
+
+function generatePromptAsesmen() {
+    const d = getData();
+    const mapel = v(d.mapel, '___[WAJIB DIPILIH]___');
+    const kelas = v(d.kelas, '___[WAJIB DIPILIH]___');
+    const materi = v(d.materi, '___[WAJIB DIISI]___');
+    const tp = v(d.tp, '___[TP KOSONG]___');
+    const jumlahSiswa = v(d.jumlah_siswa, '[ISI: jumlah siswa]');
+    const tanggal = formatTanggal(d.tanggal);
+    const jumlah = d.jumlah_soal || '10';
+    const isAuto = jumlah === 'auto';
+    let l1, l2, l3;
+    if (isAuto) { l1 = l2 = l3 = '(AI hitung otomatis)'; } 
+    else { const n = parseInt(jumlah) || 10; l1 = `${Math.round(n * 0.3)} soal (30%)`; l2 = `${Math.round(n * 0.5)} soal (50%)`; l3 = `${Math.max(1, Math.round(n * 0.2))} soal (20%)`; }
+    const catatan = v(d.catatan_asesmen, '[Tidak ada catatan khusus]');
+
+    return `PROMPT 2 — ASESMEN LITERASI & NUMERASI
+Tahap 2 · Konsisten dengan RPP (Chat yang sama)
+
+⚠️ INI ADALAH TAHAP 2 (ASESMEN). Hanya hasilkan Asesmen.
+
+📥 LAMPIRAN WAJIB (2 FILE BARU):
+1. Pedoman Asesmen: ${urlView(FILES.pedomanAsesmen.id)}
+2. Template Asesmen: ${urlView(FILES.templateAsesmen.id)}
+ℹ️ (RPP & Blueprint sudah diingat oleh AI, tidak perlu upload ulang).
+
+📌 LANGKAH 0: BACA RPP YANG SUDAH ANDA BUAT DI ATAS. Soal WAJIB mengacu TP dari RPP. BACA TEMPLATE. Patuhi CSS.
+
+BAGIAN 1 — KONTEKS
+• Mapel: ${mapel}, Kelas: ${kelas}, Materi: ${materi}
+• Jumlah Siswa: ${jumlahSiswa}, Tanggal: ${tanggal}
+• TP: ${tp}
+
+BAGIAN 2 — PENGATURAN
+• Jumlah Soal: ${isAuto ? 'Auto' : jumlah + ' soal'}
+• Distribusi: L1 (${l1}), L2 (${l2}), L3 (${l3})
+
+BAGIAN 3 — REFERENSI CEPAT
+• Bobot: PG=1, PGK=1, B-S=1, Menjodohkan=1, Esai=4.
+• Rumus: Nilai = (Skor Perolehan / Skor Maks) × 100.
+• Min. 3 bentuk soal berbeda.
+
+BAGIAN 4 — STRUKTUR OUTPUT (3 DOKUMEN, 1 HTML)
+1. KISI-KISI (Guru, TANPA TTD)
+2. LEMBAR SOAL (Siswa, TANPA TTD)
+3. KUNCI & RUBRIK (Guru, TANPA TTD)
+Pemisah: <div style="page-break-before: always"></div>
+
+📌 CSS PRINT (SMART TABLE) — TULIS PERSIS DI TAG <style>:
+• table { page-break-inside: auto; }
+• tr { page-break-inside: avoid; }
+• thead { display: table-header-group; }
+• td, th { padding: 4px 6px; } /* Padding Minimal */
+• .stimulus table { width: auto; } /* Auto-fit */
+• Tabel Menjodohkan: col 45%-10%-45%, vertical-align middle.
+
+BAGIAN 5 — OUTPUT FORMAT
+Kembalikan SATU blok kode HTML lengkap.
+
+🎯 SETELAH ASESMEN JADI — LANJUT KE TAHAP 3:
+1. Simpan Asesmen sebagai file .html
+2. TETAP DI CHAT INI
+3. Buka tab "Tahap 3: LKPD" di generator
+4. Copy Prompt 3 → paste ke chat ini`;
+}
+
+function generatePromptLkpd() {
+    const d = getData();
+    const mapel = v(d.mapel, '___[WAJIB DIPILIH]___');
+    const kelas = v(d.kelas, '___[WAJIB DIPILIH]___');
+    const materi = v(d.materi, '___[WAJIB DIISI]___');
+    const satuan = v(d.satuan, '[ISI: nama sekolah]');
+    const guru = v(d.guru, '[ISI: nama guru]');
+    const jumlahSiswa = v(d.jumlah_siswa, '[ISI: jumlah siswa]');
+    const tanggal = formatTanggal(d.tanggal);
+
+    return `PROMPT 3 — LKPD HYBRID (CORE + FLEXIBLE)
+Tahap 3 · Konsisten dengan RPP (Chat yang sama)
+
+⚠️ INI ADALAH TAHAP 3 (LKPD). Hanya hasilkan LKPD.
+
+📥 LAMPIRAN WAJIB (1 FILE BARU):
+1. Template LKPD: ${urlView(FILES.templateLkpd.id)}
+ℹ️ (RPP & Blueprint sudah diingat oleh AI, tidak perlu upload ulang).
+
+📌 LANGKAH 0: BACA RPP. EKSTRAK C.6 & D.2.c. BACA TEMPLATE LKPD.
+
+BAGIAN 1 — KONTEKS
+• Mapel: ${mapel}, Kelas: ${kelas}, Materi: ${materi}
+• Tanggal: ${tanggal}, Sekolah: ${satuan}, Guru: ${guru}
+
+BAGIAN 2 — ATURAN PEMILIHAN SECTION
+🔒 CORE (WAJIB): Header, Identitas, Tujuan, Petunjuk, A (Membaca), B (Menjawab), Refleksi.
+⚙️ FLEKSIBEL (PILIH 0–3): C (Tabel), D (Hitung), E (Gambar), F (Diskusi), G (Karya).
+(Hapus section HTML yang tidak dipakai).
+
+BAGIAN 3 — CSS PRINT
+• .section-head { page-break-after: avoid; }
+• .stimulus, .tabel-numerasi { page-break-inside: auto; }
+• .soal-item, .jawab-box { page-break-inside: avoid; }
+• table { page-break-inside: auto; }
+• td, th { padding: 4px 6px; }
+• .stimulus table { width: auto; }
+
+BAGIAN 4 — OUTPUT FORMAT
+Kembalikan SATU blok HTML lengkap.
+Tulis komentar <!-- ANALISIS SECTION --> di awal file.`;
+}
+
+function updateAll() {
+    previewRpp.textContent = generatePromptRpp();
+    previewAsesmen.textContent = generatePromptAsesmen();
+    previewLkpd.textContent = generatePromptLkpd();
+
+    const d = getData();
+    if (isReady(d)) {
+        statusPill.className = 'status-pill ready';
+        statusText.textContent = 'Siap menghasilkan';
+    } else {
+        const missing = [];
+        if (!d.mapel) missing.push('Mapel');
+        if (!d.kelas) missing.push('Kelas');
+        if (!d.materi) missing.push('Materi');
+        if (!d.cp) missing.push('CP');
+        if (!d.tp) missing.push('TP');
+        statusPill.className = 'status-pill warning';
+        statusText.textContent = 'Kurang: ' + missing.join(', ');
+    }
+}
+
+window.switchTab = function(name) {
+    document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.preview-tab[data-tab="${name}"]`).classList.add('active');
+    document.getElementById(`tab-${name}`).classList.add('active');
+};
+
+window.copyPrompt = function(type) {
+    const map = { rpp: previewRpp, asesmen: previewAsesmen, lkpd: previewLkpd };
+    const text = map[type].textContent;
+    const statusEl = document.getElementById(`copy-${type}`);
+    const done = () => { statusEl.classList.add('show'); setTimeout(() => statusEl.classList.remove('show'), 2000); showToast(`Prompt ${type.toUpperCase()} tersalin`); };
+    if (navigator.clipboard?.writeText) { navigator.clipboard.writeText(text).then(done).catch(fallback); } else { fallback(); }
+    function fallback() {
+        const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+};
+
+form.addEventListener('input', (e) => { if (e.target.name === 'mapel') updatePendukungFilter(); updateAll(); });
+form.addEventListener('change', (e) => { if (e.target.name === 'mapel') updatePendukungFilter(); updateAll(); });
+updatePendukungFilter(); updateAll();
+</script>
+</body>
+</html>
