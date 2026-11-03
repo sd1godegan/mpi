@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPI Rukun Islam Kelas 3</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 untuk Popup Ceria -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #7dd3fc, #818cf8, #f472b6);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            touch-action: manipulation; /* Cegah zoom ganda di mobile */
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animasi Layar & Interaksi */
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .shake-error { animation: shake 0.4s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+        }
+
+        /* Tombol ala Game Anak */
+        .btn-game {
+            transition: all 0.1s ease;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.15);
+        }
+        .btn-game:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+        }
+
+        /* Custom SweetAlert */
+        .swal2-popup { font-family: 'Fredoka', sans-serif !important; border-radius: 1.5rem !important; }
+        .swal2-title { font-weight: 900 !important; color: #4f46e5 !important; }
+    </style>
+</head>
+<body class="min-h-screen p-4 flex justify-center items-center text-slate-800">
+
+    <!-- KANVAS UTAMA IFP (Tinggi diset tetap agar layout atas/bawah stabil) -->
+    <div class="w-full max-w-5xl h-[90vh] min-h-[650px] max-h-[900px] bg-white/90 backdrop-blur-md rounded-[3rem] shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)] border-8 border-white/80 overflow-hidden relative flex flex-col">
+        
+        <!-- ==================== MENU UTAMA ==================== -->
+        <div id="screen-menu" class="screen flex flex-col w-full h-full fade-in">
+            <!-- Display Atas (Hanya untuk dilihat) -->
+            <div class="h-[40%] flex flex-col justify-center items-center relative pt-8">
+                <div class="bg-yellow-300 w-40 h-40 rounded-full absolute top-5 left-10 mix-blend-multiply blur-3xl opacity-60"></div>
+                <div class="bg-pink-300 w-40 h-40 rounded-full absolute bottom-0 right-10 mix-blend-multiply blur-3xl opacity-60"></div>
+                
+                <h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mb-2 drop-shadow-sm pop-in text-center leading-tight">
+                    MPI Rukun Islam
+                </h1>
+                <p class="text-3xl font-bold text-slate-500 pop-in" style="animation-delay: 0.1s;">Kelas 1 SD</p>
+            </div>
+
+            <!-- Interaktif Bawah (Ramah jangkauan anak di IFP) -->
+            <div class="h-[60%] flex flex-col justify-end items-center pb-12 px-6 gap-6 pop-in w-full max-w-2xl mx-auto" style="animation-delay: 0.2s;">
+                <p class="text-2xl font-black text-slate-400 mb-2">👇 Sentuh Mainanmu di Sini 👇</p>
+                <button onclick="navigasi('screen-game1')" class="btn-game w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white text-3xl font-black py-6 rounded-3xl border-b-8 border-blue-600">
+                    🎮 Kuis Maraton
+                </button>
+                <button onclick="navigasi('screen-game2')" class="btn-game w-full bg-gradient-to-r from-emerald-400 to-green-500 text-white text-3xl font-black py-6 rounded-3xl border-b-8 border-green-600">
+                    🚂 Susun Kereta
+                </button>
+                <button onclick="navigasi('screen-game3')" class="btn-game w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-3xl font-black py-6 rounded-3xl border-b-8 border-orange-600">
+                    🔗 Tarik Garis Ikon
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== GAME 1: KUIS MARATON ==================== -->
+        <div id="screen-game1" class="screen hidden flex-col w-full h-full fade-in">
+            <!-- Display Atas -->
+            <div class="h-[45%] flex flex-col items-center justify-center p-6 relative bg-indigo-50/50 rounded-b-[3rem]">
+                <div class="absolute top-6 w-full px-8 flex justify-between">
+                    <div class="bg-blue-100 px-6 py-2 rounded-2xl border-4 border-blue-300 font-black text-blue-700 text-2xl">Skor: <span id="g1-score">0</span></div>
+                    <div class="bg-pink-100 px-4 py-2 rounded-2xl border-4 border-pink-300 text-3xl tracking-widest" id="g1-lives">❤️❤️❤️</div>
+                </div>
+                
+                <div id="g1-qbox" class="bg-gradient-to-b from-indigo-500 to-purple-600 w-full max-w-3xl rounded-3xl p-8 md:p-12 shadow-xl border-4 border-indigo-300 mt-12">
+                    <h2 id="g1-question" class="text-4xl md:text-5xl font-black text-white text-center leading-tight">Memuat...</h2>
+                </div>
+            </div>
+
+            <!-- Interaktif Bawah -->
+            <div class="h-[55%] flex flex-col items-center justify-end p-6 pb-8 w-full">
+                <div id="g1-options" class="grid grid-cols-2 gap-4 w-full max-w-4xl mb-6 flex-1 items-end pb-4">
+                    <!-- Options JS -->
+                </div>
+                <!-- Tombol Kembali di dasar layar -->
+                <button onclick="kembaliKeMenu()" class="btn-game bg-rose-400 text-white px-8 py-4 rounded-2xl font-black text-2xl border-b-4 border-rose-600">⬅ Kembali ke Menu Utama</button>
+            </div>
+        </div>
+
+        <!-- ==================== GAME 2: SUSUN KERETA ==================== -->
+        <div id="screen-game2" class="screen hidden flex-col w-full h-full fade-in">
+            <!-- Display Atas -->
+            <div class="h-[45%] flex flex-col items-center justify-center p-6">
+                <h2 class="text-4xl md:text-5xl font-black text-emerald-600 mb-2">Kereta Rukun Islam</h2>
+                <p class="text-2xl text-slate-500 font-bold">Urutkan dari 1 sampai 5!</p>
+                
+                <!-- Area Drop Kereta -->
+                <div id="g2-slots" class="flex gap-2 md:gap-4 mt-10 w-full max-w-4xl justify-center items-end h-[150px]">
+                    <!-- Slots JS (Gerbong) -->
+                </div>
+            </div>
+
+            <!-- Interaktif Bawah -->
+            <div class="h-[55%] flex flex-col items-center justify-end p-6 pb-8 w-full bg-emerald-50/50 rounded-t-[3rem] border-t-4 border-emerald-100">
+                <p class="text-slate-500 font-black mb-4 text-2xl">👇 Sentuh gerbong di bawah ini 👇</p>
+                
+                <!-- Pilihan Teks -->
+                <div id="g2-choices" class="flex flex-wrap justify-center gap-3 md:gap-5 w-full max-w-4xl mb-8 flex-1 content-start pt-2">
+                    <!-- Choices JS -->
+                </div>
+
+                <div class="flex gap-4 w-full max-w-3xl justify-center mt-auto">
+                    <button onclick="kembaliKeMenu()" class="btn-game bg-rose-400 text-white px-6 py-4 rounded-2xl font-black text-2xl border-b-4 border-rose-600 w-1/2">⬅ Kembali</button>
+                    <button id="g2-btn-check" onclick="cekJawabanG2()" class="hidden btn-game bg-blue-500 text-white font-black py-4 px-6 rounded-2xl border-b-4 border-blue-700 w-1/2 text-2xl">Cek Jawaban 🔍</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== GAME 3: PASANG IKON ==================== -->
+        <div id="screen-game3" class="screen hidden flex-col w-full h-full fade-in">
+            <!-- Display Atas -->
+            <div class="h-[30%] flex flex-col items-center justify-center p-6">
+                <h2 class="text-4xl md:text-5xl font-black text-amber-600 mb-2">Pasang Ikon</h2>
+                <p class="text-2xl text-slate-500 font-bold text-center">Sentuh gambar (kiri), lalu namanya (kanan)!</p>
+            </div>
+
+            <!-- Interaktif Bawah -->
+            <div class="h-[70%] flex flex-col items-center justify-end p-6 pb-8 w-full bg-amber-50/50 rounded-t-[3rem] border-t-4 border-amber-100">
+                <div class="flex w-full max-w-4xl gap-6 mb-6 flex-1" id="g3-board">
+                    <!-- Kolom Kiri -->
+                    <div class="flex-1 flex flex-col gap-3 justify-end h-full pb-2" id="g3-left"></div>
+                    <!-- Kolom Kanan -->
+                    <div class="flex-1 flex flex-col gap-3 justify-end h-full pb-2" id="g3-right"></div>
+                </div>
+                
+                <button onclick="kembaliKeMenu()" class="btn-game bg-rose-400 text-white px-8 py-4 rounded-2xl font-black text-2xl border-b-4 border-rose-600 mt-auto">⬅ Kembali ke Menu Utama</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // --- SISTEM NAVIGASI ---
+        function navigasi(idTarget) {
+            document.querySelectorAll('.screen').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+            });
+            const target = document.getElementById(idTarget);
+            target.classList.remove('hidden');
+            target.classList.add('flex');
+
+            if(idTarget === 'screen-game1') initGame1();
+            if(idTarget === 'screen-game2') initGame2();
+            if(idTarget === 'screen-game3') initGame3();
+        }
+
+        function kembaliKeMenu() {
+            Swal.fire({
+                title: 'Kembali ke Menu?',
+                text: 'Permainan akan diulang dari awal.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3b82f6',
+                cancelButtonColor: '#f43f5e',
+                confirmButtonText: 'Ya, Kembali',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) navigasi('screen-menu');
+            });
+        }
+
+        function acakArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function mainkanSuara(jenis) {}
+
+        // ==================== LOGIKA GAME 1 (Soal Kelas 1 SD) ====================
+        const soalG1 = [
+            { t: "Rukun Islam ada ...", b: "Lima", s: ["Empat", "Tiga", "Enam"] },
+            { t: "Rukun Islam pertama membaca ...", b: "Syahadat", s: ["Shalat", "Zakat", "Puasa"] },
+            { t: "Rukun Islam kedua mengerjakan ...", b: "Shalat", s: ["Haji", "Zakat", "Puasa"] },
+            { t: "Rukun Islam ketiga membayar ...", b: "Zakat", s: ["Shalat", "Haji", "Syahadat"] },
+            { t: "Rukun Islam keempat beribadah ...", b: "Puasa", s: ["Zakat", "Shalat", "Syahadat"] },
+            { t: "Rukun Islam kelima pergi ...", b: "Haji", s: ["Shalat", "Puasa", "Zakat"] },
+            { t: "Tuhan kita adalah ...", b: "Allah", s: ["Malaikat", "Nabi", "Rasul"] },
+            { t: "Nabi kita adalah Nabi ...", b: "Muhammad", s: ["Adam", "Ibrahim", "Isa"] },
+            { t: "Shalat sehari semalam ada ... waktu.", b: "Lima", s: ["Tiga", "Empat", "Enam"] },
+            { t: "Puasa wajib dilakukan di bulan ...", b: "Ramadhan", s: ["Syawal", "Rajab", "Muharram"] }
+        ];
+
+        let skorG1 = 0;
+        let nyawaG1 = 3;
+        let soalTersediaG1 = [];
+
+        function initGame1() {
+            skorG1 = 0;
+            nyawaG1 = 3;
+            soalTersediaG1 = acakArray(soalG1); 
+            updateUIG1();
+            tampilkanSoalG1();
+        }
+
+        function updateUIG1() {
+            document.getElementById('g1-score').innerText = skorG1;
+            document.getElementById('g1-lives').innerText = '❤️'.repeat(nyawaG1) + '🖤'.repeat(3 - nyawaG1);
+        }
+
+        function tampilkanSoalG1() {
+            if (nyawaG1 <= 0) {
+                gameOverG1();
+                return;
+            }
+
+            if (soalTersediaG1.length === 0) soalTersediaG1 = acakArray(soalG1);
+
+            const soalSkrg = soalTersediaG1.pop();
+            const qBox = document.getElementById('g1-qbox');
+            
+            qBox.classList.remove('pop-in');
+            void qBox.offsetWidth; 
+            qBox.classList.add('pop-in');
+
+            document.getElementById('g1-question').innerText = soalSkrg.t;
+
+            let opsi = [{teks: soalSkrg.b, benar: true}];
+            soalSkrg.s.forEach(s => opsi.push({teks: s, benar: false}));
+            opsi = acakArray(opsi);
+
+            const wadah = document.getElementById('g1-options');
+            wadah.innerHTML = '';
+            
+            opsi.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "btn-game bg-white border-4 border-slate-300 text-slate-700 font-black text-2xl md:text-3xl h-[100px] md:h-[120px] rounded-3xl hover:bg-slate-50 flex items-center justify-center";
+                btn.innerText = opt.teks;
+                btn.onclick = () => cekJawabanG1(opt.benar, btn);
+                wadah.appendChild(btn);
+            });
+        }
+
+        function cekJawabanG1(benar, btn) {
+            Array.from(document.getElementById('g1-options').children).forEach(b => b.disabled = true);
+
+            if (benar) {
+                btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                skorG1 += 10;
+                updateUIG1();
+                setTimeout(tampilkanSoalG1, 800);
+            } else {
+                btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+                btn.classList.add('bg-red-500', 'text-white', 'border-red-600', 'shake-error');
+                nyawaG1--;
+                updateUIG1();
+                
+                setTimeout(() => {
+                    btn.classList.remove('shake-error');
+                    tampilkanSoalG1();
+                }, 800);
+            }
+        }
+
+        function gameOverG1() {
+            Swal.fire({
+                title: 'Game Over! 😭',
+                html: `<p class="text-3xl font-bold">Skor Kamu: <span class="text-blue-500">${skorG1}</span></p>`,
+                icon: 'error',
+                confirmButtonText: 'Main Lagi',
+                confirmButtonColor: '#10b981',
+                allowOutsideClick: false
+            }).then(() => initGame1());
+        }
+
+        // ==================== LOGIKA GAME 2 ====================
+        const rukunIslamUrut = ["Syahadat", "Shalat", "Zakat", "Puasa", "Haji"];
+        let slotsG2 = [null, null, null, null, null]; 
+        let optionsG2 = []; 
+
+        function initGame2() {
+            slotsG2 = [null, null, null, null, null];
+            optionsG2 = acakArray(rukunIslamUrut);
+            document.getElementById('g2-btn-check').classList.add('hidden');
+            renderG2();
+        }
+
+        function renderG2() {
+            const slotContainer = document.getElementById('g2-slots');
+            slotContainer.innerHTML = '';
+            
+            slotsG2.forEach((isi, index) => {
+                const div = document.createElement('div');
+                if (isi === null) {
+                    // Kotak Kosong (Gerbong transparan)
+                    div.className = "relative w-[18%] md:w-32 h-24 md:h-36 border-4 border-dashed border-slate-300 bg-white/50 rounded-2xl flex items-center justify-center text-slate-300 font-black text-5xl";
+                    div.innerHTML = `${index + 1}
+                        <div class="absolute -bottom-3 left-2 w-5 h-5 bg-slate-300 rounded-full"></div>
+                        <div class="absolute -bottom-3 right-2 w-5 h-5 bg-slate-300 rounded-full"></div>`;
+                } else {
+                    // Gerbong Terisi
+                    div.className = "btn-game relative w-[18%] md:w-32 h-24 md:h-36 bg-gradient-to-t from-emerald-500 to-emerald-400 border-4 border-emerald-600 rounded-2xl flex items-center justify-center text-white font-black text-sm md:text-2xl cursor-pointer pop-in text-center break-words px-1";
+                    div.innerHTML = `${isi}
+                        <div class="absolute -bottom-3 left-2 w-5 h-5 bg-slate-800 rounded-full"></div>
+                        <div class="absolute -bottom-3 right-2 w-5 h-5 bg-slate-800 rounded-full"></div>`;
+                    div.onclick = () => kembalikanBalokG2(index);
+                }
+                slotContainer.appendChild(div);
+            });
+
+            const choiceContainer = document.getElementById('g2-choices');
+            choiceContainer.innerHTML = '';
+            
+            optionsG2.forEach(opt => {
+                if (!slotsG2.includes(opt)) {
+                    const btn = document.createElement('button');
+                    btn.className = "btn-game bg-white border-4 border-slate-300 text-slate-700 font-black text-xl md:text-3xl py-4 px-6 md:px-8 rounded-3xl hover:bg-slate-50 pop-in flex-grow";
+                    btn.innerText = opt;
+                    btn.onclick = () => pilihBalokG2(opt);
+                    choiceContainer.appendChild(btn);
+                }
+            });
+
+            if (!slotsG2.includes(null)) {
+                document.getElementById('g2-btn-check').classList.remove('hidden');
+            } else {
+                document.getElementById('g2-btn-check').classList.add('hidden');
+            }
+        }
+
+        function pilihBalokG2(teks) {
+            const emptyIndex = slotsG2.indexOf(null);
+            if (emptyIndex !== -1) {
+                slotsG2[emptyIndex] = teks;
+                renderG2();
+            }
+        }
+
+        function kembalikanBalokG2(index) {
+            slotsG2[index] = null;
+            renderG2();
+        }
+
+        function cekJawabanG2() {
+            let benar = true;
+            for(let i=0; i<5; i++) {
+                if(slotsG2[i] !== rukunIslamUrut[i]) benar = false;
+            }
+
+            if (benar) {
+                Swal.fire({
+                    title: 'Luar Biasa! 🎉',
+                    text: 'Urutan Kereta Rukun Islam Benar!',
+                    icon: 'success',
+                    confirmButtonText: 'Main Lagi',
+                    confirmButtonColor: '#3b82f6'
+                }).then(() => initGame2());
+            } else {
+                Swal.fire({
+                    title: 'Yah, Masih Tertukar!',
+                    text: 'Ayo coba susun lagi.',
+                    icon: 'error',
+                    confirmButtonText: 'Coba Lagi',
+                    confirmButtonColor: '#f43f5e'
+                }).then(() => initGame2());
+            }
+        }
+
+        // ==================== LOGIKA GAME 3 ====================
+        const dataPasanganG3 = [
+            { id: 1, ikon: '☝️', teks: 'Syahadat' },
+            { id: 2, ikon: '🕌', teks: 'Shalat' },
+            { id: 3, ikon: '💰', teks: 'Zakat' },
+            { id: 4, ikon: '🌙', teks: 'Puasa' },
+            { id: 5, ikon: '🕋', teks: 'Haji' }
+        ];
+
+        let kiriG3 = [];
+        let kananG3 = [];
+        let aktifKiriG3 = null; 
+        let matchedIdsG3 = [];
+
+        function initGame3() {
+            aktifKiriG3 = null;
+            matchedIdsG3 = [];
+            kiriG3 = acakArray([...dataPasanganG3]);
+            kananG3 = acakArray([...dataPasanganG3]);
+            renderG3();
+        }
+
+        function renderG3() {
+            const wadahKiri = document.getElementById('g3-left');
+            const wadahKanan = document.getElementById('g3-right');
+            
+            wadahKiri.innerHTML = '';
+            wadahKanan.innerHTML = '';
+
+            kiriG3.forEach(item => {
+                const isMatched = matchedIdsG3.includes(item.id);
+                const isActive = (aktifKiriG3 === item.id);
+                
+                const btn = document.createElement('button');
+                btn.className = `btn-game w-full flex-1 flex items-center justify-center text-5xl rounded-3xl border-4 transition-colors ${
+                    isMatched ? 'bg-green-100 border-green-400 opacity-50 cursor-default' : 
+                    isActive ? 'bg-amber-100 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.6)]' : 
+                    'bg-white border-slate-300'
+                }`;
+                btn.innerText = item.ikon;
+                
+                if (!isMatched) btn.onclick = () => { aktifKiriG3 = item.id; renderG3(); };
+                wadahKiri.appendChild(btn);
+            });
+
+            kananG3.forEach(item => {
+                const isMatched = matchedIdsG3.includes(item.id);
+                
+                const btn = document.createElement('button');
+                btn.id = `g3-kanan-${item.id}`; 
+                btn.className = `btn-game w-full flex-1 flex items-center justify-center text-2xl md:text-3xl font-black rounded-3xl border-4 transition-colors ${
+                    isMatched ? 'bg-green-500 text-white border-green-600 cursor-default' : 
+                    'bg-white text-slate-700 border-slate-300'
+                }`;
+                btn.innerText = item.teks;
+
+                if (!isMatched) btn.onclick = () => cekMatchG3(item.id);
+                wadahKanan.appendChild(btn);
+            });
+        }
+
+        function cekMatchG3(idKanan) {
+            if (aktifKiriG3 === null) {
+                Swal.fire({
+                    toast: true, position: 'bottom', icon: 'info',
+                    title: 'Pilih gambar di sebelah kiri dulu!',
+                    showConfirmButton: false, timer: 2000
+                });
+                return;
+            }
+
+            if (aktifKiriG3 === idKanan) {
+                matchedIdsG3.push(idKanan);
+                aktifKiriG3 = null;
+                renderG3();
+
+                if (matchedIdsG3.length === 5) {
+                    setTimeout(() => {
+                        Swal.fire({
+                            title: 'Hebat Sekali! 🌟',
+                            text: 'Semua berhasil dipasangkan!',
+                            icon: 'success',
+                            confirmButtonText: 'Main Lagi',
+                            confirmButtonColor: '#10b981'
+                        }).then(() => initGame3());
+                    }, 500);
+                }
+            } else {
+                const btnSalah = document.getElementById(`g3-kanan-${idKanan}`);
+                btnSalah.classList.remove('bg-white', 'border-slate-300', 'text-slate-700');
+                btnSalah.classList.add('bg-red-400', 'border-red-600', 'text-white', 'shake-error');
+                
+                setTimeout(() => {
+                    btnSalah.classList.remove('bg-red-400', 'border-red-600', 'text-white', 'shake-error');
+                    btnSalah.classList.add('bg-white', 'border-slate-300', 'text-slate-700');
+                    aktifKiriG3 = null; 
+                    renderG3();
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>
