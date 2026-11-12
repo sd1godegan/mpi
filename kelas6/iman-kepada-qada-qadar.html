@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI Interaktif — Iman kepada Qada & Qadar | PAI Kelas 6</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & VARIABLES ========== */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --g-deep:#0b2e23;
+  --g-main:#14523d;
+  --g-med:#1e7a5a;
+  --g-soft:#2f9e78;
+  --g-light:#d5ebe0;
+  --gold:#d4af37;
+  --gold-soft:#f3df8e;
+  --cream:#faf7ee;
+  --ink:#1a2b25;
+  --muted:#5a6f67;
+  --white:#fff;
+  --red:#c94a4a;
+  --red-bg:#fceaea;
+  --green-bg:#e3f5ec;
+  --radius:16px;
+  --shadow-sm:0 4px 14px rgba(11,46,35,.08);
+  --shadow-md:0 10px 32px rgba(11,46,35,.12);
+  --shadow-lg:0 20px 60px rgba(11,46,35,.18);
+  --sidebar-w:268px;
+}
+html,body{height:100%;font-family:'Poppins',sans-serif;color:var(--ink);background:var(--cream);overflow:hidden;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,textarea{font-family:inherit;}
+
+/* ========== APP LAYOUT ========== */
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* ========== SIDEBAR ========== */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:linear-gradient(180deg,#0b2e23 0%,#14523d 100%);
+  color:#dfeae5;display:flex;flex-direction:column;
+  overflow-y:auto;transition:transform .3s ease;z-index:100;
+}
+.sidebar::-webkit-scrollbar{width:6px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px;}
+.sb-logo{
+  padding:24px 22px 18px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.sb-logo .logo-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),#b8902a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+  box-shadow:0 6px 18px rgba(212,175,55,.35);
+}
+.sb-logo .logo-text{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff;line-height:1.2;}
+.sb-logo .logo-text small{font-family:'Poppins',sans-serif;font-weight:400;font-size:10.5px;color:var(--gold-soft);letter-spacing:1px;display:block;margin-top:2px;}
+
+.sb-progress{padding:16px 22px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-progress-label{display:flex;justify-content:space-between;font-size:11px;color:#a8c4b8;margin-bottom:8px;letter-spacing:.5px;}
+.sb-progress-label b{color:var(--gold-soft);font-weight:600;}
+.sb-progress-track{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
+.sb-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-soft));border-radius:3px;width:0%;transition:width .5s ease;box-shadow:0 0 12px rgba(212,175,55,.5);}
+
+.sb-nav{padding:14px 12px;flex:1;}
+.sb-group-label{
+  font-size:10px;letter-spacing:1.5px;color:#7fa596;text-transform:uppercase;
+  padding:14px 12px 8px;font-weight:600;
+}
+.nav-item{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:10px 14px;border-radius:10px;color:#c9dcd4;
+  font-size:13.5px;font-weight:500;text-align:left;
+  transition:.2s;margin-bottom:2px;position:relative;
+}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.nav-item.active{
+  background:linear-gradient(90deg,rgba(212,175,55,.2),rgba(212,175,55,.05));
+  color:#fff;font-weight:600;
+}
+.nav-item.active::before{
+  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:60%;background:var(--gold);border-radius:2px;
+}
+.nav-item .nav-ico{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
+.nav-item .nav-badge{
+  margin-left:auto;font-size:10px;background:var(--g-soft);color:#fff;
+  padding:2px 7px;border-radius:8px;font-weight:700;
+}
+.nav-item.active .nav-badge{background:var(--gold);color:var(--g-deep);}
+
+/* ========== MAIN AREA ========== */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--cream);position:relative;}
+
+.topbar{
+  height:68px;flex-shrink:0;padding:0 32px;
+  display:flex;align-items:center;gap:20px;
+  background:rgba(250,247,238,.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(11,46,35,.08);z-index:50;
+}
+.menu-toggle{display:none;font-size:22px;color:var(--g-main);padding:6px;}
+.topbar-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--g-deep);flex:1;}
+.topbar-actions{display:flex;gap:8px;align-items:center;}
+.icon-btn{
+  width:40px;height:40px;border-radius:10px;background:var(--white);
+  border:1px solid rgba(11,46,35,.1);color:var(--g-main);font-size:16px;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+  box-shadow:var(--shadow-sm);
+}
+.icon-btn:hover{background:var(--g-main);color:#fff;transform:translateY(-2px);}
+
+.content{flex:1;overflow-y:auto;padding:32px 40px 80px;scroll-behavior:smooth;}
+.content::-webkit-scrollbar{width:10px;}
+.content::-webkit-scrollbar-thumb{background:rgba(11,46,35,.15);border-radius:5px;}
+
+/* ========== SECTIONS ========== */
+.section{display:none;max-width:1080px;margin:0 auto;animation:fadeIn .5s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+.section-head{margin-bottom:28px;}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--g-light);color:var(--g-main);
+  font-size:11.5px;font-weight:600;letter-spacing:.8px;
+  padding:6px 14px;border-radius:99px;margin-bottom:12px;text-transform:uppercase;
+}
+.section-head h2{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,38px);color:var(--g-deep);font-weight:700;line-height:1.2;margin-bottom:8px;}
+.section-head p{color:var(--muted);font-size:15px;line-height:1.6;max-width:760px;}
+
+/* ========== HOME ========== */
+.home-hero{
+  background:linear-gradient(135deg,#0b2e23 0%,#14523d 60%,#1a6b52 100%);
+  border-radius:24px;padding:48px 44px;color:#fff;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-lg);margin-bottom:26px;
+}
+.home-hero::before{
+  content:"";position:absolute;top:-60px;right:-60px;width:280px;height:280px;
+  background:radial-gradient(circle,rgba(212,175,55,.25),transparent 70%);border-radius:50%;
+}
+.home-hero::after{
+  content:"❖";position:absolute;bottom:-20px;left:-10px;font-size:180px;
+  color:rgba(212,175,55,.08);font-family:serif;line-height:1;
+}
+.home-hero .hero-eyebrow{font-size:12px;letter-spacing:3px;color:var(--gold-soft);text-transform:uppercase;margin-bottom:12px;font-weight:500;}
+.home-hero h1{font-family:'Playfair Display',serif;font-size:clamp(30px,4.5vw,52px);line-height:1.1;font-weight:900;margin-bottom:16px;position:relative;z-index:2;}
+.home-hero h1 span{color:var(--gold);}
+.home-hero p{font-size:clamp(14px,1.3vw,17px);color:#c9dcd4;max-width:580px;line-height:1.65;position:relative;z-index:2;margin-bottom:28px;}
+.home-hero .hero-btn{
+  background:var(--gold);color:var(--g-deep);font-weight:700;font-size:15px;
+  padding:14px 28px;border-radius:12px;transition:.25s;
+  display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(212,175,55,.35);
+  position:relative;z-index:2;
+}
+.home-hero .hero-btn:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(212,175,55,.5);}
+
+.home-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:26px;}
+.stat-card{
+  background:#fff;border-radius:16px;padding:22px 20px;
+  border:1px solid rgba(11,46,35,.06);box-shadow:var(--shadow-sm);
+  display:flex;align-items:center;gap:14px;
+}
+.stat-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;
+}
+.stat-icon.green{background:var(--green-bg);color:var(--g-main);}
+.stat-icon.gold{background:#fdf5d8;color:#a88522;}
+.stat-icon.blue{background:#dceaf6;color:#2c6da8;}
+.stat-icon.red{background:var(--red-bg);color:var(--red);}
+.stat-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--g-deep);line-height:1;}
+.stat-lbl{font-size:11.5px;color:var(--muted);margin-top:4px;letter-spacing:.3px;}
+
+.home-modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+.mode-card{
+  background:#fff;border-radius:20px;padding:28px 26px;text-align:left;
+  border:2px solid transparent;box-shadow:var(--shadow-sm);transition:.3s;
+  position:relative;overflow:hidden;
+}
+.mode-card:hover{transform:translateY(-4px);border-color:var(--g-soft);box-shadow:var(--shadow-md);}
+.mode-card .mode-ico{font-size:32px;margin-bottom:14px;display:block;}
+.mode-card h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--g-deep);margin-bottom:6px;}
+.mode-card p{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+.mode-card .mode-btn{color:var(--g-main);font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;}
+
+/* ========== CONTENT CARDS ========== */
+.card{background:#fff;border-radius:var(--radius);padding:22px 26px;border:1px solid rgba(11,46,35,.06);box-shadow:var(--shadow-sm);}
+.card + .card{margin-top:16px;}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+
+.info-panel{
+  background:linear-gradient(135deg,#f3faf6,#e8f5ef);
+  border-left:5px solid var(--g-soft);border-radius:14px;
+  padding:20px 24px;margin:16px 0;
+}
+.info-panel.gold{background:linear-gradient(135deg,#fffaea,#fdf3cc);border-left-color:var(--gold);}
+.info-panel p{font-size:15px;line-height:1.65;}
+.info-panel .label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--g-med);font-weight:700;margin-bottom:6px;}
+.info-panel.gold .label{color:#8a6f1a;}
+
+.term-card{
+  background:#fff;border-radius:16px;padding:24px 26px;box-shadow:var(--shadow-sm);
+  border-top:5px solid var(--g-soft);
+}
+.term-card.gold{border-top-color:var(--gold);}
+.term-card .term-tag{
+  font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--g-med);
+  text-transform:uppercase;margin-bottom:8px;
+}
+.term-card.gold .term-tag{color:#8a6f1a;}
+.term-card .term-word{font-family:'Playfair Display',serif;font-size:28px;color:var(--g-deep);margin-bottom:12px;font-weight:700;}
+.term-card .term-def{font-size:14.5px;color:var(--ink);line-height:1.65;}
+
+.example-list{display:grid;gap:12px;margin-top:12px;}
+.example-item{
+  display:flex;align-items:flex-start;gap:14px;padding:14px 18px;
+  background:#fff;border-radius:12px;border:1px solid rgba(11,46,35,.06);
+  transition:.2s;
+}
+.example-item:hover{border-color:var(--g-soft);transform:translateX(4px);}
+.example-item .ex-ico{font-size:24px;flex-shrink:0;line-height:1;}
+.example-item .ex-title{font-weight:600;color:var(--g-deep);font-size:14.5px;margin-bottom:2px;}
+.example-item .ex-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+
+/* ========== FLIP CARDS ========== */
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:12px;}
+.flip-card{perspective:1000px;height:200px;cursor:pointer;}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .7s;transform-style:preserve-3d;}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+.flip-face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+  padding:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;box-shadow:var(--shadow-sm);
+}
+.flip-front{background:linear-gradient(160deg,#fff,#f5faf7);border:2px solid var(--g-light);}
+.flip-front .fc-ico{font-size:36px;margin-bottom:10px;}
+.flip-front .fc-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--g-deep);font-weight:700;}
+.flip-front .fc-hint{font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.5px;}
+.flip-back{
+  background:linear-gradient(160deg,var(--g-main),var(--g-deep));color:#fff;
+  transform:rotateY(180deg);justify-content:center;
+}
+.flip-back p{font-size:13px;line-height:1.55;color:#dfeae5;}
+
+/* ========== COMPARISON TABLE ========== */
+.cmp-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);margin-top:8px;}
+.cmp-table th{padding:16px 20px;font-size:14px;font-weight:700;letter-spacing:.5px;text-align:left;color:#fff;}
+.cmp-table th.qada{background:linear-gradient(135deg,var(--g-main),var(--g-deep));}
+.cmp-table th.qadar{background:linear-gradient(135deg,#b8902a,var(--gold));color:var(--g-deep);}
+.cmp-table td{padding:14px 20px;font-size:14px;line-height:1.55;border-bottom:1px solid rgba(11,46,35,.06);background:#fff;}
+.cmp-table tr:nth-child(even) td{background:#f7fbf9;}
+.cmp-table tr:last-child td{border-bottom:none;}
+
+/* ========== SORTING GAME ========== */
+.game-wrap{background:#fff;border-radius:20px;padding:32px 30px;box-shadow:var(--shadow-md);border:1px solid rgba(11,46,35,.06);}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
+.game-progress-txt{font-size:13px;color:var(--muted);font-weight:600;}
+.game-progress-txt b{color:var(--g-main);}
+.game-score-txt{font-size:13px;color:var(--muted);font-weight:600;background:var(--green-bg);padding:8px 16px;border-radius:99px;}
+.game-score-txt b{color:var(--g-main);font-size:15px;}
+.game-item{
+  background:linear-gradient(135deg,#f3faf6,#e8f5ef);
+  border:2px dashed var(--g-soft);border-radius:16px;
+  padding:32px 24px;text-align:center;margin-bottom:22px;
+  animation:popIn .35s ease;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+.game-item .gi-ico{font-size:48px;margin-bottom:10px;display:block;}
+.game-item .gi-text{font-family:'Playfair Display',serif;font-size:22px;color:var(--g-deep);font-weight:700;}
+.game-choices{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.choice-btn{
+  padding:20px 16px;border-radius:14px;font-weight:700;font-size:15px;
+  border:2px solid transparent;transition:.25s;background:#fff;box-shadow:var(--shadow-sm);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.choice-btn .ch-ico{font-size:26px;}
+.choice-btn.mubram{color:var(--g-main);border-color:var(--g-light);}
+.choice-btn.mubram:hover{background:var(--green-bg);border-color:var(--g-soft);transform:translateY(-2px);}
+.choice-btn.mualaq{color:#8a6f1a;border-color:#f3df8e;}
+.choice-btn.mualaq:hover{background:#fdf5d8;border-color:var(--gold);transform:translateY(-2px);}
+.choice-btn:disabled{opacity:.7;cursor:not-allowed;}
+.choice-btn:disabled:hover{transform:none;}
+.choice-btn.correct{background:var(--green-bg)!important;border-color:var(--g-soft)!important;animation:shake-correct .4s;opacity:1!important;}
+.choice-btn.wrong{background:var(--red-bg)!important;border-color:var(--red)!important;animation:shake-wrong .4s;opacity:1!important;}
+@keyframes shake-correct{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+@keyframes shake-wrong{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.game-feedback{margin-top:16px;padding:14px 18px;border-radius:12px;font-size:14px;font-weight:500;text-align:center;display:none;}
+.game-feedback.show{display:block;animation:fadeIn .3s;}
+.game-feedback.ok{background:var(--green-bg);color:var(--g-main);}
+.game-feedback.no{background:var(--red-bg);color:var(--red);}
+.game-done{text-align:center;padding:32px 20px;}
+.game-done .done-ico{font-size:64px;margin-bottom:14px;}
+.game-done h3{font-family:'Playfair Display',serif;font-size:26px;color:var(--g-deep);margin-bottom:10px;}
+.game-done .done-score{font-size:52px;font-weight:900;color:var(--g-main);font-family:'Playfair Display',serif;line-height:1;margin:18px 0;}
+.game-done .done-lbl{color:var(--muted);font-size:14px;}
+
+/* ========== QUIZ ========== */
+.quiz-wrap{background:#fff;border-radius:20px;padding:32px 30px;box-shadow:var(--shadow-md);border:1px solid rgba(11,46,35,.06);}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.quiz-counter{font-size:13px;color:var(--muted);font-weight:600;}
+.quiz-counter b{color:var(--g-main);font-size:15px;}
+.quiz-timer{
+  display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:99px;
+  background:var(--green-bg);color:var(--g-main);font-weight:700;font-size:14px;
+}
+.quiz-timer.warning{background:#fff4d6;color:#a88522;animation:pulse-strong 1s infinite;}
+.quiz-timer.danger{background:var(--red-bg);color:var(--red);animation:pulse-strong .6s infinite;}
+@keyframes pulse-strong{0%,100%{opacity:1;}50%{opacity:.55;}}
+.quiz-bar{height:6px;background:#e8eee9;border-radius:3px;overflow:hidden;margin-bottom:22px;}
+.quiz-bar-fill{height:100%;background:linear-gradient(90deg,var(--g-soft),var(--gold));border-radius:3px;width:0%;transition:width .4s;}
+.quiz-q{font-size:17px;font-weight:600;color:var(--g-deep);line-height:1.5;margin-bottom:22px;}
+.quiz-options{display:grid;gap:10px;}
+.quiz-opt{
+  display:flex;align-items:center;gap:14px;padding:16px 20px;
+  background:#fff;border:2px solid rgba(11,46,35,.1);border-radius:12px;
+  font-size:14.5px;text-align:left;transition:.2s;color:var(--ink);
+}
+.quiz-opt:hover:not(:disabled){border-color:var(--g-soft);background:#f7fbf9;transform:translateX(4px);}
+.quiz-opt:disabled{cursor:not-allowed;}
+.quiz-opt .opt-letter{
+  width:32px;height:32px;border-radius:8px;background:var(--g-light);color:var(--g-main);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;
+}
+.quiz-opt.correct{border-color:var(--g-soft)!important;background:var(--green-bg)!important;}
+.quiz-opt.correct .opt-letter{background:var(--g-soft);color:#fff;}
+.quiz-opt.wrong{border-color:var(--red)!important;background:var(--red-bg)!important;}
+.quiz-opt.wrong .opt-letter{background:var(--red);color:#fff;}
+.quiz-explain{margin-top:16px;padding:16px 20px;border-radius:12px;font-size:13.5px;line-height:1.6;display:none;}
+.quiz-explain.show{display:block;animation:fadeIn .3s;}
+.quiz-explain.ok{background:var(--green-bg);color:var(--g-main);border-left:4px solid var(--g-soft);}
+.quiz-explain.no{background:var(--red-bg);color:var(--red);border-left:4px solid var(--red);}
+.quiz-next-btn{
+  margin-top:18px;padding:12px 28px;background:var(--g-main);color:#fff;
+  border-radius:10px;font-weight:600;font-size:14px;transition:.2s;display:none;
+}
+.quiz-next-btn.show{display:inline-block;}
+.quiz-next-btn:hover{background:var(--g-deep);transform:translateY(-2px);}
+
+/* ========== RESULT / CERTIFICATE ========== */
+.result-hero{
+  background:linear-gradient(135deg,#0b2e23,#14523d);border-radius:24px;
+  padding:44px 36px;color:#fff;text-align:center;box-shadow:var(--shadow-lg);
+  position:relative;overflow:hidden;margin-bottom:24px;
+}
+.result-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(212,175,55,.2),transparent 60%);}
+.result-hero .res-eyebrow{font-size:11px;letter-spacing:3px;color:var(--gold-soft);text-transform:uppercase;margin-bottom:10px;position:relative;}
+.result-hero h2{font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,42px);margin-bottom:14px;position:relative;}
+.result-hero .res-score{font-family:'Playfair Display',serif;font-size:clamp(60px,10vw,96px);font-weight:900;color:var(--gold);line-height:1;position:relative;text-shadow:0 4px 20px rgba(212,175,55,.4);}
+.result-hero .res-max{font-size:16px;color:#c9dcd4;position:relative;}
+.result-hero .res-badge{
+  display:inline-block;margin-top:18px;padding:8px 22px;border-radius:99px;
+  background:rgba(212,175,55,.2);border:1px solid var(--gold);color:var(--gold-soft);
+  font-size:13px;font-weight:600;letter-spacing:1px;position:relative;
+}
+
+.cert{
+  background:linear-gradient(135deg,#fdfbf3,#f9f3e1);border:3px double var(--gold);
+  border-radius:20px;padding:38px 34px;text-align:center;box-shadow:var(--shadow-md);
+  position:relative;margin-bottom:24px;
+}
+.cert::before,.cert::after{content:"❖";position:absolute;color:var(--gold);font-size:28px;}
+.cert::before{top:14px;left:18px;}
+.cert::after{bottom:14px;right:18px;}
+.cert-label{font-size:11px;letter-spacing:3px;color:#8a6f1a;text-transform:uppercase;margin-bottom:8px;}
+.cert-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--g-deep);margin-bottom:16px;font-weight:700;}
+.cert-name{font-family:'Playfair Display',serif;font-size:20px;color:var(--g-main);border-bottom:2px dotted var(--gold);display:inline-block;padding:0 20px 4px;margin-bottom:12px;font-style:italic;}
+.cert-desc{font-size:13.5px;color:var(--muted);line-height:1.65;max-width:520px;margin:0 auto 16px;}
+.cert-meta{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:18px;}
+.cert-meta div{text-align:center;}
+.cert-meta b{display:block;color:var(--g-deep);font-size:14px;font-family:'Playfair Display',serif;}
+
+.reflect-box{background:#fff;border-radius:16px;padding:24px 26px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.reflect-box label{display:block;font-weight:600;color:var(--g-deep);margin-bottom:8px;font-size:14px;}
+.reflect-box textarea{
+  width:100%;min-height:100px;padding:14px 16px;border:2px solid #e5ede8;
+  border-radius:12px;font-size:14px;resize:vertical;transition:.2s;color:var(--ink);
+}
+.reflect-box textarea:focus{outline:none;border-color:var(--g-soft);}
+.reflect-saved{margin-top:8px;font-size:12px;color:var(--g-soft);font-weight:600;display:none;}
+.reflect-saved.show{display:block;animation:fadeIn .3s;}
+
+.result-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.action-btn{
+  padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;
+  transition:.25s;display:inline-flex;align-items:center;gap:8px;
+}
+.action-btn.primary{background:var(--g-main);color:#fff;box-shadow:0 6px 18px rgba(20,82,61,.3);}
+.action-btn.primary:hover{background:var(--g-deep);transform:translateY(-2px);}
+.action-btn.outline{background:#fff;color:var(--g-main);border:2px solid var(--g-main);}
+.action-btn.outline:hover{background:var(--green-bg);}
+.action-btn.gold{background:linear-gradient(135deg,var(--gold),#b8902a);color:var(--g-deep);box-shadow:0 6px 18px rgba(212,175,55,.35);}
+.action-btn.gold:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(212,175,55,.5);}
+
+/* ========== SECTION NAV ========== */
+.section-nav{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:32px;padding-top:22px;border-top:1px solid rgba(11,46,35,.08);gap:12px;
+}
+.sn-btn{
+  padding:10px 22px;border-radius:10px;font-weight:600;font-size:13.5px;
+  display:inline-flex;align-items:center;gap:6px;transition:.2s;
+  background:#fff;color:var(--g-main);border:1px solid rgba(11,46,35,.12);
+}
+.sn-btn:hover{background:var(--g-main);color:#fff;border-color:var(--g-main);}
+.sn-btn.primary{background:var(--g-main);color:#fff;border-color:var(--g-main);}
+.sn-btn.primary:hover{background:var(--g-deep);}
+.sn-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+
+/* ========== SPEECH BTN ========== */
+.speak-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;
+  background:var(--green-bg);color:var(--g-main);border-radius:99px;
+  font-size:11.5px;font-weight:600;transition:.2s;margin-left:8px;
+}
+.speak-btn:hover{background:var(--g-soft);color:#fff;}
+.speak-btn.speaking{background:var(--gold);color:var(--g-deep);animation:pulse-strong 1s infinite;}
+
+/* ========== TOAST ========== */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--g-deep);color:#fff;padding:12px 22px;border-radius:99px;
+  font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);
+  transition:transform .35s ease,opacity .35s;opacity:0;z-index:9999;pointer-events:none;
+  display:flex;align-items:center;gap:8px;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ========== ARABIC ========== */
+.arabic-box{
+  background:linear-gradient(135deg,#0b2e23,#14523d);color:#fff;
+  border-radius:16px;padding:26px 28px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.arabic-box + .arabic-box{margin-top:16px;}
+.arabic-box::before{content:"❝";position:absolute;top:-6px;left:14px;font-size:60px;color:var(--gold);opacity:.35;font-family:serif;}
+.arabic-box .ar{font-family:'Amiri',serif;font-size:clamp(19px,2vw,26px);color:var(--gold-soft);text-align:right;direction:rtl;line-height:2;margin-bottom:14px;position:relative;}
+.arabic-box .tr{font-style:italic;font-size:14.5px;color:#e8f2ee;line-height:1.65;}
+.arabic-box .src{display:block;margin-top:10px;font-size:12px;color:var(--gold-soft);letter-spacing:1px;}
+
+/* ========== HIKMAH LIST ========== */
+.hikmah-list{display:grid;gap:12px;}
+.hikmah-item{
+  display:flex;align-items:flex-start;gap:16px;padding:18px 22px;
+  background:#fff;border-radius:14px;box-shadow:var(--shadow-sm);
+  border-left:4px solid var(--gold);transition:.25s;
+}
+.hikmah-item:hover{transform:translateX(6px);border-left-color:var(--g-soft);}
+.hikmah-item .hk-num{
+  width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#b8902a);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;
+}
+.hikmah-item .hk-content{font-size:14.5px;line-height:1.55;}
+.hikmah-item .hk-content b{color:var(--g-deep);}
+
+/* ========== SIKAP CARDS ========== */
+.sikap-card{
+  background:#fff;border-radius:16px;padding:22px 20px;text-align:center;
+  box-shadow:var(--shadow-sm);transition:.3s;border:2px solid transparent;
+}
+.sikap-card:hover{transform:translateY(-6px);border-color:var(--g-soft);box-shadow:var(--shadow-md);}
+.sikap-card .sk-ico{font-size:38px;margin-bottom:10px;display:block;}
+.sikap-card h4{font-family:'Playfair Display',serif;font-size:17px;color:var(--g-deep);margin-bottom:6px;font-weight:700;}
+.sikap-card p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+/* ========== OBJECTIVES ========== */
+.obj-list{display:grid;gap:12px;}
+.obj-item{
+  display:flex;gap:16px;padding:18px 22px;background:#fff;border-radius:14px;
+  box-shadow:var(--shadow-sm);align-items:flex-start;transition:.25s;cursor:pointer;
+}
+.obj-item:hover{transform:translateX(6px);}
+.obj-item .obj-chk{
+  width:26px;height:26px;border-radius:8px;border:2px solid var(--g-light);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  transition:.2s;background:#fff;margin-top:1px;
+}
+.obj-item.checked .obj-chk{background:var(--g-soft);border-color:var(--g-soft);color:#fff;}
+.obj-item.checked .obj-chk::after{content:"✓";font-size:14px;font-weight:700;}
+.obj-item .obj-text{font-size:14.5px;line-height:1.55;color:var(--ink);}
+.obj-item.checked .obj-text{color:var(--muted);}
+.obj-item .obj-text b{color:var(--g-deep);}
+.obj-item.checked .obj-text b{color:var(--g-med);}
+
+/* ========== MOBILE ========== */
+@media(max-width:900px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);box-shadow:var(--shadow-lg);}
+  .sidebar.open{transform:translateX(0);}
+  .menu-toggle{display:flex;align-items:center;justify-content:center;}
+  .content{padding:22px 18px 80px;}
+  .topbar{padding:0 18px;height:62px;}
+  .topbar-title{font-size:16px;}
+  .home-hero{padding:32px 24px;}
+  .grid-2,.grid-3{grid-template-columns:1fr;}
+  .game-choices{grid-template-columns:1fr;}
+  .quiz-wrap,.game-wrap{padding:22px 18px;}
+  .cert{padding:26px 20px;}
+}
+@media(max-width:500px){
+  .home-stats{grid-template-columns:1fr 1fr;}
+  .stat-card{padding:14px 12px;gap:10px;}
+  .stat-icon{width:38px;height:38px;font-size:18px;}
+  .stat-val{font-size:19px;}
+  .stat-lbl{font-size:10px;}
+  .flip-card{height:180px;}
+}
+
+/* ========== PRINT (Sertifikat Saja) ========== */
+@media print {
+  @page { margin: 12mm; }
+  body { background: #fff !important; }
+  body * { visibility: hidden; }
+  #cert, #cert * { visibility: visible; }
+  #cert {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+  .sidebar, .topbar, .result-hero, .reflect-box, .result-actions,
+  .section-nav, .section-head, .toast { display: none !important; }
+  .app, .main, .content, .section { display: block !important; height: auto !important; overflow: visible !important; padding: 0 !important; }
+  .section:not(#hasil) { display: none !important; }
+  #hasil { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <div class="logo-icon">🕌</div>
+      <div class="logo-text">Qada &amp; Qadar<small>PAI KELAS 6</small></div>
+    </div>
+    <div class="sb-progress">
+      <div class="sb-progress-label"><span>Progres Belajar</span><b id="sbProgressText">8%</b></div>
+      <div class="sb-progress-track"><div class="sb-progress-fill" id="sbProgressFill"></div></div>
+    </div>
+    <nav class="sb-nav" id="sbNav">
+      <button class="nav-item active" data-section="home"><span class="nav-ico">🏠</span>Beranda</button>
+      <div class="sb-group-label">📚 Materi</div>
+      <button class="nav-item" data-section="tujuan"><span class="nav-ico">🎯</span>Tujuan</button>
+      <button class="nav-item" data-section="iman"><span class="nav-ico">💚</span>Apa Itu Iman</button>
+      <button class="nav-item" data-section="qada"><span class="nav-ico">📖</span>Qada</button>
+      <button class="nav-item" data-section="qadar"><span class="nav-ico">📖</span>Qadar</button>
+      <button class="nav-item" data-section="banding"><span class="nav-ico">⚖️</span>Perbandingan</button>
+      <button class="nav-item" data-section="takdir"><span class="nav-ico">🔐</span>Macam Takdir</button>
+      <button class="nav-item" data-section="dalil"><span class="nav-ico">📜</span>Dalil</button>
+      <button class="nav-item" data-section="sikap"><span class="nav-ico">🌟</span>Sikap</button>
+      <button class="nav-item" data-section="hikmah"><span class="nav-ico">💎</span>Hikmah</button>
+      <div class="sb-group-label">🎮 Latihan</div>
+      <button class="nav-item" data-section="latihan"><span class="nav-ico">🧩</span>Sortir Takdir <span class="nav-badge">Game</span></button>
+      <button class="nav-item" data-section="kuis"><span class="nav-ico">🎯</span>Kuis Akhir <span class="nav-badge">10 Soal</span></button>
+      <div class="sb-group-label">🏆 Hasil</div>
+      <button class="nav-item" data-section="hasil"><span class="nav-ico">🏅</span>Pencapaian</button>
+    </nav>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <h1 class="topbar-title" id="topbarTitle">Beranda</h1>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="speakToggle" title="Bacakan halaman">🔊</button>
+        <button class="icon-btn" id="resetBtn" title="Mulai ulang">🔄</button>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+
+      <!-- ========== HOME ========== -->
+      <section class="section active" id="home">
+        <div class="home-hero">
+          <div class="hero-eyebrow">❖ Media Pembelajaran Interaktif</div>
+          <h1>Iman kepada<br><span>Qada</span> &amp; <span>Qadar</span></h1>
+          <p>Belajar mengenal takdir Allah dengan cara yang menyenangkan — melalui materi interaktif, kartu flip, permainan sortir, dan kuis berhadiah.</p>
+          <button class="hero-btn" onclick="navigateTo('tujuan')">Mulai Belajar →</button>
+        </div>
+
+        <div class="home-stats">
+          <div class="stat-card">
+            <div class="stat-icon green">📚</div>
+            <div><div class="stat-val">9</div><div class="stat-lbl">Materi</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon gold">🎮</div>
+            <div><div class="stat-val">2</div><div class="stat-lbl">Aktivitas</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue">🎯</div>
+            <div><div class="stat-val">10</div><div class="stat-lbl">Soal Kuis</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red">🏆</div>
+            <div><div class="stat-val">100</div><div class="stat-lbl">Poin Maks</div></div>
+          </div>
+        </div>
+
+        <div class="home-modes">
+          <button class="mode-card" onclick="navigateTo('iman')">
+            <span class="mode-ico">📖</span>
+            <h3>Belajar Materi</h3>
+            <p>Pahami pengertian qada, qadar, macam takdir, dalil, sikap, dan hikmahnya.</p>
+            <span class="mode-btn">Buka Materi →</span>
+          </button>
+          <button class="mode-card" onclick="navigateTo('latihan')">
+            <span class="mode-ico">🧩</span>
+            <h3>Latihan Interaktif</h3>
+            <p>Uji pemahamanmu dengan permainan sortir takdir mubram dan mualaq.</p>
+            <span class="mode-btn">Main Game →</span>
+          </button>
+          <button class="mode-card" onclick="navigateTo('kuis')">
+            <span class="mode-ico">🎯</span>
+            <h3>Kuis Akhir</h3>
+            <p>Jawab 10 soal pilihan ganda dengan timer dan raih skor tertinggi!</p>
+            <span class="mode-btn">Mulai Kuis →</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ========== TUJUAN ========== -->
+      <section class="section" id="tujuan">
+        <div class="section-head">
+          <span class="section-eyebrow">🎯 Bagian 1</span>
+          <h2>Tujuan Pembelajaran</h2>
+          <p>Setelah mengikuti pembelajaran ini, peserta didik diharapkan mampu mencapai tujuan-tujuan berikut. Klik kotak untuk menandai yang sudah kamu pahami.</p>
+        </div>
+        <div class="obj-list" id="objList">
+          <div class="obj-item" data-obj="1"><div class="obj-chk"></div><div class="obj-text"><b>Menjelaskan</b> pengertian iman kepada qada dan qadar dengan bahasa sendiri.</div></div>
+          <div class="obj-item" data-obj="2"><div class="obj-chk"></div><div class="obj-text"><b>Membedakan</b> pengertian qada dan qadar beserta contohnya dalam kehidupan sehari-hari.</div></div>
+          <div class="obj-item" data-obj="3"><div class="obj-chk"></div><div class="obj-text"><b>Menyebutkan</b> dalil Al-Qur'an tentang qada dan qadar dengan sederhana.</div></div>
+          <div class="obj-item" data-obj="4"><div class="obj-chk"></div><div class="obj-text"><b>Membedakan</b> takdir mubram dan takdir mualaq serta memberikan contohnya.</div></div>
+          <div class="obj-item" data-obj="5"><div class="obj-chk"></div><div class="obj-text"><b>Menunjukkan</b> sikap beriman kepada qada dan qadar melalui perilaku optimis, ikhtiar, tawakal, sabar, dan syukur.</div></div>
+          <div class="obj-item" data-obj="6"><div class="obj-chk"></div><div class="obj-text"><b>Menceritakan</b> hikmah iman kepada qada dan qadar dalam kehidupan di sekolah dan keluarga.</div></div>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('home')">← Beranda</button>
+          <button class="sn-btn primary" onclick="navigateTo('iman')">Selanjutnya: Apa Itu Iman →</button>
+        </div>
+      </section>
+
+      <!-- ========== IMAN ========== -->
+      <section class="section" id="iman">
+        <div class="section-head">
+          <span class="section-eyebrow">💚 Bagian 2</span>
+          <h2>Apa Itu Iman?</h2>
+          <p>Sebelum masuk ke qada dan qadar, mari pahami dulu makna iman dalam Islam.</p>
+        </div>
+        <div class="info-panel">
+          <div class="label">📌 Pengertian</div>
+          <p><b>Iman</b> artinya <b>percaya</b>. Iman kepada Qada dan Qadar adalah <b>rukun iman yang ke-6</b> dari 6 rukun iman dalam Islam.</p>
+        </div>
+        <div class="info-panel gold">
+          <div class="label">💭 Kalimat Kunci</div>
+          <p style="font-size:16px;font-style:italic;">"Percaya bahwa semua yang terjadi di dunia ini sudah diatur oleh Allah Swt."</p>
+        </div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:20px;color:var(--g-deep);margin:26px 0 14px;">Klik kartu untuk membuka penjelasan 🔄</h3>
+        <div class="flip-grid">
+          <div class="flip-card"><div class="flip-inner">
+            <div class="flip-face flip-front"><span class="fc-ico">✅</span><div class="fc-title">Wajib Percaya</div><div class="fc-hint">klik untuk lihat</div></div>
+            <div class="flip-face flip-back"><p>Setiap muslim <b>wajib</b> meyakini bahwa segala sesuatu yang terjadi sudah diatur oleh Allah.</p></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-inner">
+            <div class="flip-face flip-front"><span class="fc-ico">🤲</span><div class="fc-title">Tetap Berusaha</div><div class="fc-hint">klik untuk lihat</div></div>
+            <div class="flip-face flip-back"><p>Beriman bukan berarti diam saja. Kita tetap <b>ikhtiar</b> dan <b>berdoa</b> dengan sungguh-sungguh.</p></div>
+          </div></div>
+          <div class="flip-card"><div class="flip-inner">
+            <div class="flip-face flip-front"><span class="fc-ico">💚</span><div class="fc-title">Tidak Mengeluh</div><div class="fc-hint">klik untuk lihat</div></div>
+            <div class="flip-face flip-back"><p>Menerima setiap ketetapan Allah dengan <b>hati lapang</b> dan <b>husnuzan</b> (berbaik sangka).</p></div>
+          </div></div>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('tujuan')">← Tujuan</button>
+          <button class="sn-btn primary" onclick="navigateTo('qada')">Selanjutnya: Qada →</button>
+        </div>
+      </section>
+
+      <!-- ========== QADA ========== -->
+      <section class="section" id="qada">
+        <div class="section-head">
+          <span class="section-eyebrow">📖 Bagian 3</span>
+          <h2>Apa Itu Qada?</h2>
+          <p>Qada adalah ketetapan Allah yang dituliskan sejak zaman azali.</p>
+        </div>
+        <div class="term-card">
+          <div class="term-tag">✨ Definisi Qada</div>
+          <div class="term-word">Qada</div>
+          <p class="term-def"><b>Qada</b> adalah <b>ketetapan Allah sejak zaman azali</b>. Artinya, Allah sudah <b>menuliskan</b> dan <b>menentukan</b> segala sesuatu <b>sebelum</b> hal itu terjadi di dunia.</p>
+          <div style="margin-top:14px;"><span class="speak-btn" onclick="speakText('Qada adalah ketetapan Allah sejak zaman azali. Allah sudah menuliskan dan menentukan segala sesuatu sebelum terjadi.', this)">🔊 Dengarkan</span></div>
+        </div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--g-deep);margin:26px 0 6px;">Contoh Qada dalam Kehidupan:</h3>
+        <div class="example-list">
+          <div class="example-item"><span class="ex-ico">👶</span><div><div class="ex-title">Kapan kita lahir</div><div class="ex-desc">Allah sudah menentukan tanggal, hari, dan tempat kelahiran kita.</div></div></div>
+          <div class="example-item"><span class="ex-ico">👨‍👩‍👧</span><div><div class="ex-title">Siapa orang tua kita</div><div class="ex-desc">Allah menetapkan kepada keluarga mana kita dilahirkan.</div></div></div>
+          <div class="example-item"><span class="ex-ico">⏳</span><div><div class="ex-title">Kapan hari kiamat</div><div class="ex-desc">Hanya Allah yang tahu dan sudah menetapkannya.</div></div></div>
+        </div>
+        <div class="info-panel gold" style="margin-top:20px;">
+          <div class="label">📌 Ingat!</div>
+          <p><b>Qada itu rencana besar Allah.</b> Semuanya sudah tertulis rapi di Lauh Mahfuz.</p>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('iman')">← Iman</button>
+          <button class="sn-btn primary" onclick="navigateTo('qadar')">Selanjutnya: Qadar →</button>
+        </div>
+      </section>
+
+      <!-- ========== QADAR ========== -->
+      <section class="section" id="qadar">
+        <div class="section-head">
+          <span class="section-eyebrow">📖 Bagian 4</span>
+          <h2>Apa Itu Qadar?</h2>
+          <p>Qadar adalah ketetapan Allah yang sudah terjadi dalam kehidupan kita.</p>
+        </div>
+        <div class="term-card gold">
+          <div class="term-tag">✨ Definisi Qadar</div>
+          <div class="term-word">Qadar</div>
+          <p class="term-def"><b>Qadar</b> adalah <b>ketetapan Allah yang sudah terjadi</b>. Qadar adalah <b>pelaksanaan</b> dari qada — rencana Allah yang sudah menjadi kenyataan dalam hidup kita.</p>
+          <div style="margin-top:14px;"><span class="speak-btn" onclick="speakText('Qadar adalah ketetapan Allah yang sudah terjadi. Qadar adalah pelaksanaan dari qada, rencana Allah yang sudah menjadi kenyataan.', this)">🔊 Dengarkan</span></div>
+        </div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:19px;color:var(--g-deep);margin:26px 0 6px;">Contoh Qadar dalam Kehidupan:</h3>
+        <div class="example-list">
+          <div class="example-item"><span class="ex-ico">🏠</span><div><div class="ex-title">Keluarga kita sekarang</div><div class="ex-desc">Kita benar-benar lahir dan dibesarkan di keluarga ini.</div></div></div>
+          <div class="example-item"><span class="ex-ico">🌧️</span><div><div class="ex-title">Cuaca hari ini</div><div class="ex-desc">Hujan turun hari ini — itu sudah menjadi kenyataan.</div></div></div>
+          <div class="example-item"><span class="ex-ico">📝</span><div><div class="ex-title">Nilai ujian kita</div><div class="ex-desc">Nilai yang kita peroleh hari ini adalah hasil dari usaha dan ketetapan Allah.</div></div></div>
+        </div>
+        <div class="info-panel" style="margin-top:20px;">
+          <div class="label">📌 Ingat!</div>
+          <p><b>Qadar itu hasil nyata dari rencana Allah.</b> Qada yang sudah dilaksanakan dalam kehidupan.</p>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('qada')">← Qada</button>
+          <button class="sn-btn primary" onclick="navigateTo('banding')">Selanjutnya: Perbandingan →</button>
+        </div>
+      </section>
+
+      <!-- ========== PERBANDINGAN ========== -->
+      <section class="section" id="banding">
+        <div class="section-head">
+          <span class="section-eyebrow">⚖️ Bagian 5</span>
+          <h2>Perbedaan Qada &amp; Qadar</h2>
+          <p>Perhatikan tabel berikut agar kamu tidak tertukar antara qada dan qadar.</p>
+        </div>
+        <table class="cmp-table">
+          <thead><tr><th class="qada">QADA</th><th class="qadar">QADAR</th></tr></thead>
+          <tbody>
+            <tr><td>Ketetapan Allah <b>sebelum</b> terjadi</td><td>Ketetapan Allah yang <b>sudah</b> terjadi</td></tr>
+            <tr><td>Masih berupa <b>rencana</b></td><td>Sudah menjadi <b>kenyataan</b></td></tr>
+            <tr><td>Contoh: Allah tahu kita akan lahir</td><td>Contoh: kita benar-benar lahir</td></tr>
+            <tr><td>Ditulis di Lauh Mahfuz sejak azali</td><td>Terjadi dalam kehidupan sehari-hari</td></tr>
+          </tbody>
+        </table>
+        <div class="info-panel gold" style="margin-top:20px;">
+          <div class="label">🔑 Kunci Mengingat</div>
+          <p><b>Qada</b> = <b>Rencana</b> Allah &nbsp;·&nbsp; <b>Qadar</b> = <b>Kenyataan</b> yang sudah terjadi.</p>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('qadar')">← Qadar</button>
+          <button class="sn-btn primary" onclick="navigateTo('takdir')">Selanjutnya: Macam Takdir →</button>
+        </div>
+      </section>
+
+      <!-- ========== TAKDIR ========== -->
+      <section class="section" id="takdir">
+        <div class="section-head">
+          <span class="section-eyebrow">🔐 Bagian 6</span>
+          <h2>Dua Macam Takdir</h2>
+          <p>Dalam Islam, takdir dibagi menjadi dua: takdir mubram dan takdir mualaq.</p>
+        </div>
+        <div class="grid-2">
+          <div class="card" style="border-top:5px solid var(--g-main);">
+            <div style="font-size:32px;margin-bottom:8px;">🔒</div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:20px;color:var(--g-deep);margin-bottom:8px;">Takdir Mubram</h3>
+            <p style="font-size:14px;line-height:1.6;color:var(--ink);">Takdir yang <b>sudah pasti</b> dan <b>tidak bisa diubah</b> oleh manusia.</p>
+            <div style="margin-top:12px;padding:12px 14px;background:var(--green-bg);border-radius:10px;font-size:13px;">
+              <b style="color:var(--g-main);">Contoh:</b> kelahiran, kematian, jenis kelamin, hari kiamat.
+            </div>
+          </div>
+          <div class="card" style="border-top:5px solid var(--gold);">
+            <div style="font-size:32px;margin-bottom:8px;">🔄</div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:20px;color:var(--g-deep);margin-bottom:8px;">Takdir Mualaq</h3>
+            <p style="font-size:14px;line-height:1.6;color:var(--ink);">Takdir yang <b>bisa berubah</b> dengan usaha dan doa manusia.</p>
+            <div style="margin-top:12px;padding:12px 14px;background:#fdf5d8;border-radius:10px;font-size:13px;">
+              <b style="color:#8a6f1a;">Contoh:</b> nilai ujian, rezeki, kesehatan, kepintaran.
+            </div>
+          </div>
+        </div>
+        <div class="arabic-box" style="margin-top:22px;">
+          <div class="ar">إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا مَا بِأَنفُسِهِمْ</div>
+          <p class="tr">"Sesungguhnya Allah tidak akan mengubah nasib suatu kaum kecuali kaum itu sendiri yang mengubahnya."</p>
+          <span class="src">QS. AR-RA'D: 11</span>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('banding')">← Perbandingan</button>
+          <button class="sn-btn primary" onclick="navigateTo('dalil')">Selanjutnya: Dalil →</button>
+        </div>
+      </section>
+
+      <!-- ========== DALIL ========== -->
+      <section class="section" id="dalil">
+        <div class="section-head">
+          <span class="section-eyebrow">📜 Bagian 7</span>
+          <h2>Dalil dari Al-Qur'an</h2>
+          <p>Berikut dua dalil yang menjelaskan tentang qada dan qadar.</p>
+        </div>
+        <div class="arabic-box">
+          <div class="ar">إِنَّا كُلَّ شَيْءٍ خَلَقْنَاهُ بِقَدَرٍ</div>
+          <p class="tr">"Sesungguhnya Kami menciptakan segala sesuatu menurut ukuran (qadar)."</p>
+          <span class="src">QS. AL-QAMAR: 49</span>
+        </div>
+        <div class="arabic-box">
+          <div class="ar">مَا أَصَابَ مِن مُّصِيبَةٍ فِي الْأَرْضِ وَلَا فِي أَنفُسِكُمْ إِلَّا فِي كِتَابٍ مِّن قَبْلِ أَن نَّبْرَأَهَا</div>
+          <p class="tr">"Tiada suatu bencana pun yang menimpa di bumi dan pada dirimu sendiri melainkan telah tertulis dalam kitab (Lauh Mahfuz) sebelum Kami menciptakannya."</p>
+          <span class="src">QS. AL-HADID: 22</span>
+        </div>
+        <div class="info-panel" style="margin-top:20px;">
+          <div class="label">📖 Pesan Dalil</div>
+          <p>Semua yang terjadi di dunia ini sudah diatur dan dituliskan oleh Allah. Tugas kita adalah <b>menjalani dengan baik</b>, <b>berusaha</b>, dan <b>berdoa</b>.</p>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('takdir')">← Macam Takdir</button>
+          <button class="sn-btn primary" onclick="navigateTo('sikap')">Selanjutnya: Sikap →</button>
+        </div>
+      </section>
+
+      <!-- ========== SIKAP ========== -->
+      <section class="section" id="sikap">
+        <div class="section-head">
+          <span class="section-eyebrow">🌟 Bagian 8</span>
+          <h2>Sikap Anak Beriman kepada Qada &amp; Qadar</h2>
+          <p>Anak yang beriman kepada qada dan qadar akan menunjukkan sikap-sikap berikut dalam kehidupan sehari-hari.</p>
+        </div>
+        <div class="grid-3">
+          <div class="sikap-card"><span class="sk-ico">🌅</span><h4>Optimis</h4><p>Selalu berharap baik kepada Allah dalam setiap keadaan.</p></div>
+          <div class="sikap-card"><span class="sk-ico">💪</span><h4>Ikhtiar</h4><p>Tetap berusaha dengan sungguh-sungguh, tidak mudah menyerah.</p></div>
+          <div class="sikap-card"><span class="sk-ico">🤲</span><h4>Tawakal</h4><p>Setelah berusaha, menyerahkan hasilnya kepada Allah.</p></div>
+          <div class="sikap-card"><span class="sk-ico">🍃</span><h4>Sabar</h4><p>Tetap tenang saat mendapat musibah atau kegagalan.</p></div>
+          <div class="sikap-card"><span class="sk-ico">🙏</span><h4>Syukur</h4><p>Bersyukur saat mendapat nikmat dan keberhasilan.</p></div>
+          <div class="sikap-card"><span class="sk-ico">🚫</span><h4>Tidak Sombong</h4><p>Sadar bahwa semua keberhasilan berasal dari Allah.</p></div>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('dalil')">← Dalil</button>
+          <button class="sn-btn primary" onclick="navigateTo('hikmah')">Selanjutnya: Hikmah →</button>
+        </div>
+      </section>
+
+      <!-- ========== HIKMAH ========== -->
+      <section class="section" id="hikmah">
+        <div class="section-head">
+          <span class="section-eyebrow">💎 Bagian 9</span>
+          <h2>Hikmah Iman kepada Qada &amp; Qadar</h2>
+          <p>Mengapa kita perlu beriman kepada qada dan qadar? Berikut hikmah-hikmahnya.</p>
+        </div>
+        <div class="hikmah-list">
+          <div class="hikmah-item"><div class="hk-num">1</div><div class="hk-content"><b>Hati menjadi tenang</b> — tidak gelisah menghadapi masalah.</div></div>
+          <div class="hikmah-item"><div class="hk-num">2</div><div class="hk-content"><b>Tidak mudah putus asa</b> — selalu ada harapan pada Allah.</div></div>
+          <div class="hikmah-item"><div class="hk-num">3</div><div class="hk-content"><b>Rajin berusaha dan berdoa</b> — karena hasil ada di tangan Allah.</div></div>
+          <div class="hikmah-item"><div class="hk-num">4</div><div class="hk-content"><b>Sabar saat musibah</b> — menerima dengan lapang dada.</div></div>
+          <div class="hikmah-item"><div class="hk-num">5</div><div class="hk-content"><b>Syukur saat mendapat nikmat</b> — tidak lupa diri saat berhasil.</div></div>
+          <div class="hikmah-item"><div class="hk-num">6</div><div class="hk-content"><b>Terhindar dari kesombongan</b> — sadar semua berasal dari Allah.</div></div>
+        </div>
+        <div class="info-panel gold" style="margin-top:20px;text-align:center;">
+          <p style="font-size:16px;font-style:italic;">"Yang penting adalah <b>usaha terbaik kita</b>, hasilnya Allah yang menentukan."</p>
+        </div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('sikap')">← Sikap</button>
+          <button class="sn-btn primary" onclick="navigateTo('latihan')">Latihan Interaktif →</button>
+        </div>
+      </section>
+
+      <!-- ========== LATIHAN (SORTING GAME) ========== -->
+      <section class="section" id="latihan">
+        <div class="section-head">
+          <span class="section-eyebrow">🧩 Aktivitas</span>
+          <h2>Sortir Takdir</h2>
+          <p>Tentukan apakah contoh di bawah ini termasuk <b>takdir mubram</b> (tidak bisa diubah) atau <b>takdir mualaq</b> (bisa diubah dengan usaha dan doa).</p>
+        </div>
+        <div class="game-wrap" id="gameWrap"></div>
+        <div class="section-nav">
+          <button class="sn-btn" onclick="navigateTo('hikmah')">← Hikmah</button>
+          <button class="sn-btn primary" onclick="navigateTo('kuis')">Lanjut ke Kuis →</button>
+        </div>
+      </section>
+
+      <!-- ========== KUIS ========== -->
+      <section class="section" id="kuis">
+        <div class="section-head">
+          <span class="section-eyebrow">🎯 Ujian Akhir</span>
+          <h2>Kuis Akhir</h2>
+          <p>Jawab 10 soal berikut dengan benar. Kamu punya waktu 30 detik per soal. Semoga sukses!</p>
+        </div>
+        <div class="quiz-wrap">
+          <div class="quiz-top">
+            <div class="quiz-counter">Soal <b id="quizCur">1</b> / <b>10</b></div>
+            <div class="quiz-timer" id="quizTimer">⏱ <span id="timerText">30</span>s</div>
+          </div>
+          <div class="quiz-bar"><div class="quiz-bar-fill" id="quizBar"></div></div>
+          <div class="quiz-q" id="quizQ">Memuat soal...</div>
+          <div class="quiz-options" id="quizOpts"></div>
+          <div class="quiz-explain" id="quizExplain"></div>
+          <button class="quiz-next-btn" id="quizNext" onclick="nextQuiz()">Soal Berikutnya →</button>
+        </div>
+      </section>
+
+      <!-- ========== HASIL ========== -->
+      <section class="section" id="hasil">
+        <div class="section-head">
+          <span class="section-eyebrow">🏆 Pencapaian</span>
+          <h2>Hasil Belajar Kamu</h2>
+          <p>Lihat hasil belajarmu dan refleksikan apa yang sudah kamu pelajari.</p>
+        </div>
+        <div class="result-hero">
+          <div class="res-eyebrow">❖ SELAMAT ❖</div>
+          <h2 id="resultTitle">Hebat!</h2>
+          <div class="res-score"><span id="resultScore">0</span></div>
+          <div class="res-max">dari 100 poin</div>
+          <div class="res-badge" id="resultBadge">🏅 Penjelajah Takdir</div>
+        </div>
+
+        <div class="cert" id="cert">
+          <div class="cert-label">✦ SERTIFIKAT PENGHARGAAN ✦</div>
+          <div class="cert-title">Peserta Didik Berprestasi</div>
+          <div class="cert-name">Ananda Hebat</div>
+          <p class="cert-desc">Telah menyelesaikan pembelajaran interaktif <b>Iman kepada Qada &amp; Qadar</b> dengan penuh semangat dan dedikasi.</p>
+          <div class="cert-meta">
+            <div><b>PAI Kelas 6</b><span>Mata Pelajaran</span></div>
+            <div><b id="certScore">0</b><span>Skor Akhir</span></div>
+            <div><b id="certDate">-</b><span>Tanggal</span></div>
+          </div>
+        </div>
+
+        <div class="reflect-box">
+          <label for="reflectInput">📝 Refleksi: Apa pelajaran berharga yang kamu dapat hari ini?</label>
+          <textarea id="reflectInput" placeholder="Contoh: Saya belajar bahwa gagal bukan akhir segalanya, yang penting tetap berusaha dan berdoa..."></textarea>
+          <div class="reflect-saved" id="reflectSaved">✅ Refleksi tersimpan!</div>
+        </div>
+
+        <div class="result-actions">
+          <button class="action-btn primary" onclick="restartAll()">🔄 Mulai Ulang</button>
+          <button class="action-btn outline" onclick="navigateTo('kuis')">🎯 Ulangi Kuis</button>
+          <button class="action-btn gold" onclick="printResult()">🖨 Cetak Sertifikat</button>
+        </div>
+        <div style="height:40px;"></div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   STATE
+========================================================= */
+const state = {
+  currentSection: 'home',
+  visited: new Set(['home']),
+  objectives: new Set(),
+  sort: { current: 0, correct: 0, answered: false },
+  quiz: { current: 0, correct: 0, answered: false, timer: null, timeLeft: 30, finished: false },
+  finalScore: 0,
+  reflection: ''
+};
+
+const SECTION_TITLES = {
+  home:'Beranda', tujuan:'Tujuan Pembelajaran', iman:'Apa Itu Iman',
+  qada:'Qada', qadar:'Qadar', banding:'Perbandingan', takdir:'Macam Takdir',
+  dalil:'Dalil Al-Qur\'an', sikap:'Sikap Beriman', hikmah:'Hikmah',
+  latihan:'Latihan Sortir', kuis:'Kuis Akhir', hasil:'Pencapaian'
+};
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+function navigateTo(id){
+  if(!document.getElementById(id)) return;
+
+  // FIX #11: pause timer kalau keluar dari halaman kuis
+  if(state.currentSection === 'kuis' && id !== 'kuis' && !state.quiz.finished){
+    clearInterval(state.quiz.timer);
+    state.quiz.timer = null;
+  }
+
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const nav = document.querySelector(`.nav-item[data-section="${id}"]`);
+  if(nav) nav.classList.add('active');
+  document.getElementById('topbarTitle').textContent = SECTION_TITLES[id] || id;
+  state.currentSection = id;
+  state.visited.add(id);
+  updateProgress();
+  document.getElementById('content').scrollTop = 0;
+  document.getElementById('sidebar').classList.remove('open');
+
+  if(id === 'latihan') initSortGame();
+  if(id === 'kuis') initQuiz();
+  if(id === 'hasil') initResult();
+  speakSectionIntro(id);
+}
+
+function updateProgress(){
+  const total = 13;
+  const pct = Math.min(100, Math.round((state.visited.size / total) * 100));
+  document.getElementById('sbProgressFill').style.width = pct + '%';
+  document.getElementById('sbProgressText').textContent = pct + '%';
+}
+
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => navigateTo(btn.dataset.section));
+});
+
+document.getElementById('menuToggle').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* =========================================================
+   FLIP CARDS
+========================================================= */
+document.querySelectorAll('.flip-card').forEach(card => {
+  card.addEventListener('click', () => card.classList.toggle('flipped'));
+});
+
+/* =========================================================
+   OBJECTIVES CHECK
+========================================================= */
+document.querySelectorAll('#objList .obj-item').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.toggle('checked');
+    if(item.classList.contains('checked')){
+      state.objectives.add(item.dataset.obj);
+      playTone(700, 0.08);
+      toast('✅ Tujuan ditandai tercapai!');
+    } else {
+      state.objectives.delete(item.dataset.obj);
+    }
+  });
+});
+
+/* =========================================================
+   TEXT-TO-SPEECH (FIX #5 & #6: race condition & btn reference)
+========================================================= */
+let utteranceSeq = 0;
+let currentlySpeakingBtn = null;
+
+function speakText(text, btn){
+  if(!('speechSynthesis' in window)){ toast('Browser tidak mendukung suara'); return; }
+  const myId = ++utteranceSeq;
+  window.speechSynthesis.cancel();
+
+  if(currentlySpeakingBtn){
+    currentlySpeakingBtn.classList.remove('speaking');
+    currentlySpeakingBtn = null;
+  }
+  if(btn){
+    currentlySpeakingBtn = btn;
+    btn.classList.add('speaking');
+  }
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'id-ID'; u.rate = 0.92; u.pitch = 1;
+
+  const cleanup = () => {
+    if(myId !== utteranceSeq) return; // hanya bersihkan jika masih utterance terkini
+    if(currentlySpeakingBtn){
+      currentlySpeakingBtn.classList.remove('speaking');
+      currentlySpeakingBtn = null;
+    }
+  };
+  u.onend = cleanup;
+  u.onerror = cleanup;
+  window.speechSynthesis.speak(u);
+}
+
+function speakSectionIntro(id){
+  const intros = {
+    tujuan:'Tujuan pembelajaran. Setelah mengikuti pembelajaran ini, peserta didik mampu menjelaskan, membedakan, dan menunjukkan sikap beriman kepada qada dan qadar.',
+    iman:'Apa itu iman. Iman artinya percaya. Iman kepada qada dan qadar adalah rukun iman yang keenam.',
+    qada:'Apa itu qada. Qada adalah ketetapan Allah sejak zaman azali, sebelum segala sesuatu terjadi.',
+    qadar:'Apa itu qadar. Qadar adalah ketetapan Allah yang sudah terjadi dalam kehidupan kita.',
+    banding:'Perbedaan qada dan qadar. Qada adalah rencana Allah, qadar adalah kenyataan yang sudah terjadi.',
+    takdir:'Dua macam takdir. Takdir mubram yang tidak bisa diubah, dan takdir mualaq yang bisa diubah dengan usaha dan doa.',
+    dalil:'Dalil dari Al-Quran tentang qada dan qadar. Sesungguhnya Kami menciptakan segala sesuatu menurut ukuran.',
+    sikap:'Sikap anak beriman kepada qada dan qadar, yaitu optimis, ikhtiar, tawakal, sabar, syukur, dan tidak sombong.',
+    hikmah:'Hikmah iman kepada qada dan qadar, hati menjadi tenang dan tidak mudah putus asa.'
+  };
+  if(intros[id]) setTimeout(() => speakText(intros[id]), 300);
+}
+
+document.getElementById('speakToggle').addEventListener('click', () => {
+  if(window.speechSynthesis && window.speechSynthesis.speaking){
+    utteranceSeq++; // invalidate callback
+    window.speechSynthesis.cancel();
+    if(currentlySpeakingBtn){ currentlySpeakingBtn.classList.remove('speaking'); currentlySpeakingBtn = null; }
+    toast('⏸ Suara dihentikan');
+  } else {
+    speakSectionIntro(state.currentSection);
+  }
+});
+
+/* =========================================================
+   SOUND EFFECTS
+========================================================= */
+let audioCtx = null;
+function playTone(freq, dur, type='sine'){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.value = freq;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    osc.start(); osc.stop(audioCtx.currentTime + dur);
+  }catch(e){}
+}
+function soundCorrect(){ playTone(600,0.1); setTimeout(()=>playTone(800,0.15),100); }
+function soundWrong(){ playTone(300,0.15); setTimeout(()=>playTone(200,0.2),150); }
+
+/* =========================================================
+   TOAST
+========================================================= */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+/* =========================================================
+   SORTING GAME (FIX #2: render base template terpisah)
+========================================================= */
+const sortItems = [
+  { text:'Kelahiran kita', type:'mubram', icon:'👶' },
+  { text:'Nilai ujian', type:'mualaq', icon:'📝' },
+  { text:'Kematian seseorang', type:'mubram', icon:'⚰️' },
+  { text:'Rezeki yang didapat', type:'mualaq', icon:'💰' },
+  { text:'Jenis kelamin', type:'mubram', icon:'🧬' },
+  { text:'Kesehatan tubuh', type:'mualaq', icon:'💪' },
+  { text:'Hari kiamat', type:'mubram', icon:'🌋' },
+  { text:'Kepintaran siswa', type:'mualaq', icon:'🧠' }
+];
+let sortGameStarted = false;
+
+function renderSortBase(){
+  document.getElementById('gameWrap').innerHTML = `
+    <div class="game-header">
+      <div class="game-progress-txt">Soal <b id="gameCur">1</b> / <b>8</b></div>
+      <div class="game-score-txt">Skor: <b id="gameScore">0</b></div>
+    </div>
+    <div class="game-item" id="gameItem">
+      <span class="gi-ico" id="giIco">👶</span>
+      <div class="gi-text" id="giText">Kelahiran kita</div>
+    </div>
+    <div class="game-choices">
+      <button class="choice-btn mubram" onclick="answerSort('mubram')"><span class="ch-ico">🔒</span>Takdir Mubram</button>
+      <button class="choice-btn mualaq" onclick="answerSort('mualaq')"><span class="ch-ico">🔄</span>Takdir Mualaq</button>
+    </div>
+    <div class="game-feedback" id="gameFeedback"></div>`;
+}
+
+function initSortGame(){
+  if(sortGameStarted) return;
+  // pastikan base template ada (dalam case di-render kosong)
+  if(!document.getElementById('gameCur')) renderSortBase();
+  sortGameStarted = true;
+  state.sort = { current: 0, correct: 0, answered: false };
+  renderSortQuestion();
+}
+
+function renderSortQuestion(){
+  state.sort.answered = false;
+  const item = sortItems[state.sort.current];
+  document.getElementById('gameCur').textContent = state.sort.current + 1;
+  document.getElementById('gameScore').textContent = state.sort.correct * 12.5;
+  document.getElementById('giIco').textContent = item.icon;
+  document.getElementById('giText').textContent = item.text;
+  const fb = document.getElementById('gameFeedback');
+  fb.className = 'game-feedback';
+  fb.textContent = '';
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.classList.remove('correct','wrong');
+    b.disabled = false;
+  });
+}
+
+function answerSort(choice){
+  if(state.sort.answered) return;
+  state.sort.answered = true;
+  const item = sortItems[state.sort.current];
+  const fb = document.getElementById('gameFeedback');
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+
+  if(choice === item.type){
+    state.sort.correct++;
+    soundCorrect();
+    btns.forEach(b => { if(b.classList.contains(choice)) b.classList.add('correct'); });
+    fb.className = 'game-feedback show ok';
+    fb.textContent = '✅ Benar! ' + (item.type==='mubram' ? 'Ini takdir mubram (tidak bisa diubah).' : 'Ini takdir mualaq (bisa diubah dengan usaha dan doa).');
+  } else {
+    soundWrong();
+    btns.forEach(b => {
+      if(b.classList.contains(choice)) b.classList.add('wrong');
+      if(b.classList.contains(item.type)) b.classList.add('correct');
+    });
+    fb.className = 'game-feedback show no';
+    fb.textContent = '❌ Belum tepat. Jawaban yang benar adalah ' + (item.type==='mubram'?'Takdir Mubram':'Takdir Mualaq') + '.';
+  }
+  document.getElementById('gameScore').textContent = state.sort.correct * 12.5;
+
+  setTimeout(() => {
+    state.sort.current++;
+    if(state.sort.current >= sortItems.length){
+      showSortResult();
+    } else {
+      renderSortQuestion();
+    }
+  }, 1600);
+}
+
+function showSortResult(){
+  const wrap = document.getElementById('gameWrap');
+  const correct = state.sort.correct;
+  const stars = correct >= 7 ? '⭐⭐⭐' : correct >= 5 ? '⭐⭐' : '⭐';
+  wrap.innerHTML = `
+    <div class="game-done">
+      <div class="done-ico">🎉</div>
+      <h3>Selesai!</h3>
+      <div class="done-score">${correct} / ${sortItems.length}</div>
+      <div class="done-lbl">Jawaban benar</div>
+      <p style="margin-top:16px;font-size:32px;">${stars}</p>
+      <button class="action-btn primary" style="margin-top:20px;" onclick="restartSort()">🔄 Main Lagi</button>
+      <button class="action-btn outline" style="margin-top:20px;" onclick="navigateTo('kuis')">Lanjut ke Kuis →</button>
+    </div>`;
+}
+
+function restartSort(){
+  sortGameStarted = false;
+  renderSortBase();
+  initSortGame();
+}
+
+/* =========================================================
+   QUIZ (FIX #1: clear timer; FIX #8: progress to 100%)
+========================================================= */
+const quizQuestions = [
+  { q:'Iman kepada qada dan qadar termasuk rukun iman yang ke...', options:['3','4','5','6'], correct:3, explain:'Iman kepada qada dan qadar adalah rukun iman yang ke-6.' },
+  { q:'Ketetapan Allah yang sudah terjadi dalam kehidupan kita disebut...', options:['Qada','Qadar','Ikhtiar','Tawakal'], correct:1, explain:'Qadar adalah ketetapan Allah yang sudah terjadi atau nyata.' },
+  { q:'Takdir yang tidak bisa diubah oleh manusia disebut takdir...', options:['Mualaq','Mubram','Mukhayyar','Musytarak'], correct:1, explain:'Takdir mubram sudah pasti, misalnya kelahiran dan kematian.' },
+  { q:'Sikap yang tepat ketika kita gagal ujian adalah...', options:['Menyerah dan putus asa','Menyalahkan orang lain','Berusaha lagi dan berdoa','Marah kepada guru'], correct:2, explain:'Kita harus tetap berusaha, berdoa, dan bertawakal kepada Allah.' },
+  { q:'Nilai ulangan yang bagus termasuk contoh takdir...', options:['Mubram','Mualaq','Azali','Qada saja'], correct:1, explain:'Nilai bisa berubah dengan usaha dan doa, jadi termasuk takdir mualaq.' },
+  { q:'Qada adalah ketetapan Allah yang ditetapkan sejak...', options:['Kemarin','Zaman azali','Besok','Setelah kita lahir'], correct:1, explain:'Qada ditetapkan sejak zaman azali, sebelum segala sesuatu terjadi.' },
+  { q:'Dalil "Sesungguhnya Kami menciptakan segala sesuatu menurut ukuran" terdapat dalam surah...', options:['Al-Fatihah','Al-Qamar: 49','Al-Ikhlas','An-Nas'], correct:1, explain:'Dalil tersebut terdapat dalam QS. Al-Qamar ayat 49.' },
+  { q:'Sikap menyerahkan hasil kepada Allah setelah berusaha disebut...', options:['Ikhtiar','Tawakal','Sabar','Syukur'], correct:1, explain:'Tawakal adalah menyerahkan hasil kepada Allah setelah berusaha maksimal.' },
+  { q:'Berikut yang BUKAN hikmah iman kepada qada dan qadar adalah...', options:['Hati menjadi tenang','Tidak mudah putus asa','Menjadi sombong','Rajin berusaha'], correct:2, explain:'Iman kepada qada dan qadar justru menjauhkan kita dari sifat sombong.' },
+  { q:'Contoh takdir mualaq adalah...', options:['Kelahiran','Kematian','Jenis kelamin','Kepintaran'], correct:3, explain:'Kepintaran bisa diubah dengan belajar, jadi termasuk takdir mualaq.' }
+];
+let quizInitialized = false;
+
+function initQuiz(){
+  // FIX #1: clear timer lama sebelum reset
+  clearInterval(state.quiz.timer);
+
+  if(quizInitialized && !state.quiz.finished) return;
+  quizInitialized = true;
+  state.quiz = { current:0, correct:0, answered:false, timer:null, timeLeft:30, finished:false };
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion(){
+  clearInterval(state.quiz.timer);
+  state.quiz.answered = false;
+  state.quiz.timeLeft = 30;
+  const q = quizQuestions[state.quiz.current];
+  document.getElementById('quizCur').textContent = state.quiz.current + 1;
+  document.getElementById('quizQ').textContent = q.q;
+  const optsEl = document.getElementById('quizOpts');
+  const letters = ['A','B','C','D'];
+  optsEl.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => answerQuiz(i);
+    optsEl.appendChild(btn);
+  });
+  document.getElementById('quizExplain').className = 'quiz-explain';
+  document.getElementById('quizExplain').textContent = '';
+  document.getElementById('quizNext').classList.remove('show');
+  // progress awal (sebelum jawab) = current/total
+  document.getElementById('quizBar').style.width = ((state.quiz.current) / quizQuestions.length * 100) + '%';
+  updateTimerUI();
+  state.quiz.timer = setInterval(() => {
+    state.quiz.timeLeft--;
+    updateTimerUI();
+    if(state.quiz.timeLeft <= 0){
+      clearInterval(state.quiz.timer);
+      if(!state.quiz.answered) answerQuiz(-1);
+    }
+  }, 1000);
+}
+
+function updateTimerUI(){
+  const el = document.getElementById('quizTimer');
+  document.getElementById('timerText').textContent = Math.max(0, state.quiz.timeLeft);
+  el.className = 'quiz-timer';
+  if(state.quiz.timeLeft <= 10) el.classList.add('danger');
+  else if(state.quiz.timeLeft <= 20) el.classList.add('warning');
+}
+
+function answerQuiz(choice){
+  if(state.quiz.answered) return;
+  state.quiz.answered = true;
+  clearInterval(state.quiz.timer);
+  const q = quizQuestions[state.quiz.current];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  const isTimeout = choice === -1;
+
+  if(choice === q.correct){
+    state.quiz.correct++;
+    soundCorrect();
+    opts[q.correct].classList.add('correct');
+    const ex = document.getElementById('quizExplain');
+    ex.className = 'quiz-explain show ok';
+    ex.innerHTML = '✅ <b>Benar!</b> ' + q.explain;
+  } else {
+    soundWrong();
+    if(choice >= 0) opts[choice].classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+    const ex = document.getElementById('quizExplain');
+    ex.className = 'quiz-explain show no';
+    ex.innerHTML = '❌ <b>Belum tepat.</b> ' + (isTimeout ? 'Waktu habis! ' : '') + q.explain;
+  }
+
+  // FIX #8: progress bar sampai 100% saat selesai
+  document.getElementById('quizBar').style.width = ((state.quiz.current + 1) / quizQuestions.length * 100) + '%';
+
+  const nextBtn = document.getElementById('quizNext');
+  nextBtn.classList.add('show');
+  nextBtn.textContent = state.quiz.current === quizQuestions.length - 1 ? '🏆 Lihat Hasil' : 'Soal Berikutnya →';
+}
+
+function nextQuiz(){
+  state.quiz.current++;
+  if(state.quiz.current >= quizQuestions.length){
+    finishQuiz();
+  } else {
+    renderQuizQuestion();
+  }
+}
+
+function finishQuiz(){
+  clearInterval(state.quiz.timer);
+  state.quiz.finished = true;
+  const quizScore = Math.round((state.quiz.correct / quizQuestions.length) * 70);
+  const sortScore = (state.sort.current >= sortItems.length)
+    ? Math.round((state.sort.correct / sortItems.length) * 30)
+    : 0;
+  state.finalScore = quizScore + sortScore;
+  navigateTo('hasil');
+}
+
+/* =========================================================
+   RESULT
+========================================================= */
+function initResult(){
+  const score = state.finalScore || 0;
+  document.getElementById('resultScore').textContent = score;
+  document.getElementById('certScore').textContent = score;
+  const d = new Date();
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('certDate').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+  let title, badge;
+  if(score >= 90){ title = 'Luar Biasa! 🏆'; badge = '👑 Master Qada & Qadar'; }
+  else if(score >= 75){ title = 'Hebat! 🌟'; badge = '🏅 Penjelajah Takdir'; }
+  else if(score >= 60){ title = 'Bagus! 👍'; badge = '📚 Pelajar Tekun'; }
+  else { title = 'Terus Semangat! 💪'; badge = '🌱 Calon Hebat'; }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultBadge').textContent = badge;
+
+  document.getElementById('reflectInput').value = state.reflection || '';
+  document.getElementById('reflectSaved').classList.remove('show');
+}
+
+document.getElementById('reflectInput')?.addEventListener('input', (e) => {
+  state.reflection = e.target.value;
+  const saved = document.getElementById('reflectSaved');
+  saved.classList.add('show');
+  clearTimeout(window._reflectTimer);
+  window._reflectTimer = setTimeout(() => saved.classList.remove('show'), 2000);
+});
+
+function printResult(){ window.print(); }
+
+/* =========================================================
+   RESET (FIX #1 & #2)
+========================================================= */
+function restartAll(){
+  if(!confirm('Mulai ulang semua pembelajaran? Progres akan dihapus.')) return;
+
+  // FIX #1: clear timer aktif
+  clearInterval(state.quiz.timer);
+
+  // reset state
+  state.visited = new Set(['home']);
+  state.objectives.clear();
+  state.sort = { current:0, correct:0, answered:false };
+  state.quiz = { current:0, correct:0, answered:false, timer:null, timeLeft:30, finished:false };
+  state.finalScore = 0;
+  state.reflection = '';
+  sortGameStarted = false;
+  quizInitialized = false;
+
+  // reset UI
+  document.querySelectorAll('.obj-item').forEach(o => o.classList.remove('checked'));
+  document.querySelectorAll('.flip-card').forEach(c => c.classList.remove('flipped'));
+  document.getElementById('reflectInput').value = '';
+
+  // FIX #2: restore sort game base template
+  renderSortBase();
+
+  updateProgress();
+  navigateTo('home');
+  toast('🔄 Pembelajaran dimulai ulang');
+}
+
+document.getElementById('resetBtn').addEventListener('click', restartAll);
+
+/* =========================================================
+   KEYBOARD SHORTCUTS (FIX #3: skip inputs)
+========================================================= */
+document.addEventListener('keydown', (e) => {
+  // FIX #3: jangan picu navigasi saat user sedang mengetik
+  if(e.target.matches('input, textarea, select, [contenteditable="true"]')) return;
+
+  const order = ['home','tujuan','iman','qada','qadar','banding','takdir','dalil','sikap','hikmah','latihan','kuis','hasil'];
+  const idx = order.indexOf(state.currentSection);
+  if(e.key === 'ArrowRight' && idx < order.length-1){ navigateTo(order[idx+1]); }
+  else if(e.key === 'ArrowLeft' && idx > 0){ navigateTo(order[idx-1]); }
+});
+
+/* =========================================================
+   INIT
+========================================================= */
+renderSortBase();   // pastikan template game siap
+updateProgress();
+</script>
+</body>
+</html>
