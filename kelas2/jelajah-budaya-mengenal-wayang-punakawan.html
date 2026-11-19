@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jelajah Budaya: Mengenal Wayang Punakawan</title>
+    
+    <!-- Google Fonts: Cinzel Decorative / Playfair Display untuk nuansa klasik & Plus Jakarta Sans untuk keterbacaan modern -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Philosopher"', 'serif'],
+                    },
+                    colors: {
+                        parchment: {
+                            50: '#FDFBF7',
+                            100: '#F7F1E3',
+                            200: '#EFE3C8',
+                            300: '#E2CEA2',
+                        },
+                        sogan: {
+                            600: '#8D5524',
+                            700: '#6F3E15',
+                            800: '#4E2A0C',
+                            900: '#361B06',
+                        },
+                        emas: {
+                            400: '#E6B84C',
+                            500: '#D49B27',
+                            600: '#B57F16',
+                        },
+                        sage: {
+                            100: '#E4ECE5',
+                            500: '#587E62',
+                            600: '#42634B',
+                            700: '#2F4A37',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Pola latar belakang halus terinspirasi motif batik kawung/parang */
+        body {
+            background-color: #F7F1E3;
+            background-image: radial-gradient(#D49B2722 1.5px, transparent 1.5px), radial-gradient(#6F3E1518 1.5px, #F7F1E3 1.5px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+        }
+
+        /* Animasi halus untuk transisi tab dan elemen interaktif */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-tab {
+            animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes floatGentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(1deg); }
+        }
+
+        .wayang-float {
+            animation: floatGentle 4s ease-in-out infinite;
+        }
+
+        /* Efek Kartu Flip 3D untuk Mode 2 (Silsilah & Filosofi) */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Confetti Animasi untuk Mini Game & Kuis */
+        @keyframes confettiFall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .confetti-piece {
+            position: fixed;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            z-index: 9999;
+            pointer-events: none;
+            animation: confettiFall 2.8s linear forwards;
+        }
+
+        /* Custom Scrollbar ramah mata */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #EFE3C8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8D5524;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="text-sogan-900 min-h-screen flex flex-col selection:bg-emas-400 selection:text-sogan-900">
+
+    <!-- ==================== HEADER & TUJUAN PEMBELAJARAN ==================== -->
+    <header class="bg-gradient-to-r from-sogan-900 via-sogan-800 to-sogan-900 text-parchment-50 shadow-xl border-b-4 border-emas-500 sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-4 sm:py-5">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <!-- Ikon Gunungan Wayang SVG -->
+                    <div class="w-12 h-12 rounded-2xl bg-emas-500/20 border border-emas-400/50 flex items-center justify-center shrink-0 shadow-inner">
+                        <svg viewBox="0 0 64 64" class="w-9 h-9 text-emas-400" fill="currentColor">
+                            <path d="M32 4C26 16 14 28 12 46C12 52 18 56 32 56C46 56 52 52 52 46C50 28 38 16 32 4ZM32 14C36 22 43 32 44 45C44 48 40 50 32 50C24 50 20 48 20 45C21 32 28 22 32 14Z"/>
+                            <circle cx="32" cy="36" r="4"/>
+                            <path d="M26 56H38V60H26V56Z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="inline-block text-xs font-bold uppercase tracking-widest text-emas-400 bg-sogan-950/60 px-2.5 py-0.5 rounded-full mb-1">
+                            Media Pembelajaran Budaya Nusantara
+                        </span>
+                        <h1 class="font-serif text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-parchment-50 leading-tight">
+                            Jelajah Budaya: Mengenal Wayang Punakawan
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Badge Tujuan Pembelajaran -->
+                <button onclick="toggleObjectiveModal()" class="self-start md:self-center flex items-center gap-2 bg-sage-600 hover:bg-sage-500 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl shadow transition border border-sage-400/30">
+                    <svg class="w-4 h-4 text-emas-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Tujuan Pembelajaran</span>
+                </button>
+            </div>
+
+            <!-- Subjudul Filosofi Singkat -->
+            <p class="mt-2.5 text-xs sm:text-sm text-parchment-200 max-w-4xl leading-relaxed">
+                Mengenal empat tokoh <strong class="text-emas-400">Pamomong</strong> (pengasuh dan penasihat bijak) dalam seni pewayangan Jawa yang mengajarkan budi pekerti, kesederhanaan, humor, dan kebijaksanaan hidup.
+            </p>
+
+            <!-- Navigasi Antar-Mode Pembelajaran -->
+            <nav aria-label="Menu Mode Pembelajaran" class="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-2">
+                <button id="nav-mode-1" onclick="switchMode(1)" class="nav-btn active flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm bg-emas-500 text-sogan-900 ring-2 ring-parchment-50">
+                    <span>1. Materi & Karakter</span>
+                </button>
+                <button id="nav-mode-2" onclick="switchMode(2)" class="nav-btn flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all bg-sogan-700/80 text-parchment-100 hover:bg-sogan-600">
+                    <span>2. Filosofi & Silsilah</span>
+                </button>
+                <button id="nav-mode-3" onclick="switchMode(3)" class="nav-btn flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all bg-sogan-700/80 text-parchment-100 hover:bg-sogan-600">
+                    <span>3. Kuis Interaktif</span>
+                </button>
+                <button id="nav-mode-4" onclick="switchMode(4)" class="nav-btn flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all bg-sogan-700/80 text-parchment-100 hover:bg-sogan-600">
+                    <span>4. Tebak Ciri Tokoh</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ==================== MODAL TUJUAN PEMBELAJARAN ==================== -->
+    <div id="objective-modal" class="fixed inset-0 bg-sogan-900/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-parchment-50 border-2 border-emas-500 rounded-3xl max-w-lg w-full p-6 shadow-2xl animate-tab">
+            <div class="flex items-center justify-between border-b border-parchment-300 pb-3 mb-4">
+                <h2 class="font-serif text-xl font-bold text-sogan-800 flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-full bg-emas-500 text-sogan-900 flex items-center justify-center font-sans text-sm font-extrabold">TP</span>
+                    Tujuan Pembelajaran
+                </h2>
+                <button onclick="toggleObjectiveModal()" class="text-sogan-600 hover:text-sogan-900 p-1 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <ul class="space-y-3 text-sm sm:text-base text-sogan-800">
+                <li class="flex items-start gap-2.5">
+                    <span class="w-6 h-6 rounded-full bg-sage-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                    <span>Siswa mampu mengidentifikasi empat tokoh utama Wayang Punakawan (<strong>Semar, Gareng, Petruk, dan Bagong</strong>) berdasarkan ciri fisiknya.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                    <span class="w-6 h-6 rounded-full bg-sage-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                    <span>Siswa memahami silsilah keluarga dan peran Punakawan sebagai <em>pamomong</em> (pengasuh & penasihat) para ksatria.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                    <span class="w-6 h-6 rounded-full bg-sage-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+                    <span>Siswa mampu meneladani makna filosofis nama dan watak Punakawan dalam kehidupan sehari-hari.</span>
+                </li>
+            </ul>
+            <div class="mt-6 text-right">
+                <button onclick="toggleObjectiveModal()" class="bg-sogan-800 hover:bg-sogan-700 text-parchment-50 font-bold px-5 py-2.5 rounded-xl shadow transition">
+                    Siap Belajar!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== KONTEN UTAMA ==================== -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 sm:py-8">
+
+        <!-- =====================================================================
+             MODE 1: ENSIKLOPEDIA KARAKTER PUNAKAWAN
+             ===================================================================== -->
+        <section id="mode-1" class="mode-section animate-tab">
+            <div class="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-sogan-800">Ensiklopedia Karakter Punakawan</h2>
+                    <p class="text-sm text-sogan-600">Pilih salah satu tokoh di bawah ini untuk mengamati ciri fisik, watak, dan mendengarkan pesan bijaknya.</p>
+                </div>
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold bg-sage-100 text-sage-700 px-3 py-1.5 rounded-full border border-sage-500/30 self-start">
+                    <span class="w-2 h-2 rounded-full bg-sage-600 animate-pulse"></span> Klik Kartu Tokoh
+                </span>
+            </div>
+
+            <!-- Pemilih 4 Tokoh Utama -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6" id="character-selector-grid">
+                <!-- Diisi dinamis oleh JavaScript agar sinkron dengan SVG dan status aktif -->
+            </div>
+
+            <!-- Panel Detail Interaktif Tokoh Terpilih -->
+            <div id="character-detail-panel" class="bg-parchment-50 border-2 border-parchment-300 rounded-3xl shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    
+                    <!-- Kolom Kiri: Panggung Wayang & Ilustrasi SVG Besar -->
+                    <div class="lg:col-span-5 bg-gradient-to-b from-sogan-800 via-sogan-900 to-sogan-950 p-6 sm:p-8 flex flex-col items-center justify-between relative overflow-hidden text-center">
+                        <!-- Dekorasi Lingkaran Cahaya Blencong (Lampu Wayang) -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emas-400/20 rounded-full blur-2xl pointer-events-none"></div>
+                        
+                        <div class="w-full flex justify-between items-center z-10 mb-2">
+                            <span id="detail-order-badge" class="text-xs font-bold uppercase tracking-wider bg-emas-500 text-sogan-900 px-3 py-1 rounded-full shadow">
+                                Sesepuh / Ayah
+                            </span>
+                            <span class="text-xs text-parchment-300 font-medium">Wayang Kulit Purwa</span>
+                        </div>
+
+                        <!-- Container Ilustrasi SVG Kustom -->
+                        <div id="detail-svg-container" class="w-56 h-64 sm:w-64 sm:h-72 my-2 flex items-center justify-center z-10 wayang-float drop-shadow-[0_12px_18px_rgba(0,0,0,0.65)]">
+                            <!-- SVG dimasukkan oleh JS -->
+                        </div>
+
+                        <!-- Balon Dialog & Tombol Suara TTS -->
+                        <div class="w-full z-10 mt-3">
+                            <div id="quote-bubble" class="bg-parchment-50/95 text-sogan-900 rounded-2xl p-3.5 text-xs sm:text-sm italic font-medium shadow-lg border border-emas-400 relative mb-3 transition-all">
+                                "<span id="detail-quote-text">Mbegegeg ugeg-ugeg sadulita mel-mel...</span>"
+                            </div>
+                            <button id="btn-speak" onclick="speakCharacterQuote()" class="w-full flex items-center justify-center gap-2 bg-emas-500 hover:bg-emas-400 active:scale-[0.99] text-sogan-900 font-extrabold py-3 px-4 rounded-xl shadow-md transition">
+                                <svg id="speak-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+                                </svg>
+                                <span id="speak-btn-text">Dengarkan Kutipan Khas</span>
+                            </button>
+                            <p id="tts-status" class="text-[11px] text-parchment-300 mt-1.5 h-4"></p>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan: Informasi Edukatif Mendalam -->
+                    <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="border-b-2 border-parchment-200 pb-4 mb-5">
+                                <p id="detail-subtitle" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-sage-600 mb-1">
+                                    Pamomong Utama Para Pandawa
+                                </p>
+                                <h3 id="detail-name" class="font-serif text-2xl sm:text-4xl font-bold text-sogan-900">
+                                    Kyai Lurah Semar Badranaya
+                                </h3>
+                            </div>
+
+                            <div class="space-y-4">
+                                <!-- Ciri Fisik Khas -->
+                                <div class="bg-parchment-100/80 border border-parchment-300 rounded-2xl p-4">
+                                    <h4 class="font-bold text-sogan-800 text-sm sm:text-base flex items-center gap-2 mb-1.5">
+                                        <span class="w-6 h-6 rounded-lg bg-sogan-800 text-emas-400 flex items-center justify-center text-xs">👁️</span>
+                                        Ciri Fisik Khas
+                                    </h4>
+                                    <p id="detail-physical" class="text-sm text-sogan-700 leading-relaxed"></p>
+                                </div>
+
+                                <!-- Sifat / Watak -->
+                                <div class="bg-sage-100/60 border border-sage-500/25 rounded-2xl p-4">
+                                    <h4 class="font-bold text-sage-700 text-sm sm:text-base flex items-center gap-2 mb-1.5">
+                                        <span class="w-6 h-6 rounded-lg bg-sage-600 text-white flex items-center justify-center text-xs">💛</span>
+                                        Sifat & Watak Teladan
+                                    </h4>
+                                    <p id="detail-personality" class="text-sm text-sogan-800 leading-relaxed"></p>
+                                </div>
+
+                                <!-- Makna Filosofis -->
+                                <div class="bg-emas-400/15 border border-emas-500/40 rounded-2xl p-4">
+                                    <h4 class="font-bold text-sogan-800 text-sm sm:text-base flex items-center gap-2 mb-1.5">
+                                        <span class="w-6 h-6 rounded-lg bg-emas-500 text-sogan-900 flex items-center justify-center text-xs">✨</span>
+                                        Makna Filosofis
+                                    </h4>
+                                    <p id="detail-philosophy" class="text-sm text-sogan-800 leading-relaxed"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigasi Cepat Sebelumnya / Selanjutnya -->
+                        <div class="mt-6 pt-4 border-t border-parchment-200 flex items-center justify-between">
+                            <button onclick="cycleCharacter(-1)" class="flex items-center gap-1.5 text-sm font-bold text-sogan-700 hover:text-sogan-900 bg-parchment-200/70 hover:bg-parchment-200 px-4 py-2 rounded-xl transition">
+                                <span>← Tokoh Sebelumnya</span>
+                            </button>
+                            <button onclick="cycleCharacter(1)" class="flex items-center gap-1.5 text-sm font-bold text-sogan-700 hover:text-sogan-900 bg-parchment-200/70 hover:bg-parchment-200 px-4 py-2 rounded-xl transition">
+                                <span>Tokoh Berikutnya →</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             MODE 2: SILSILAH & MAKNA NAMA (PETA KONSEP INTERAKTIF)
+             ===================================================================== -->
+        <section id="mode-2" class="mode-section hidden animate-tab">
+            <div class="mb-6 text-center max-w-3xl mx-auto">
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-sogan-800">Silsilah & Filosofi Nama Punakawan</h2>
+                <p class="text-sm text-sogan-600 mt-1">
+                    Kata <strong>Punakawan</strong> berasal dari <em>Pana</em> (paham/jelas) dan <em>Kawan</em> (teman/sahabat). Klik setiap kartu di bawah ini untuk membalik kartu dan mengungkap filosofi mendalam di balik nama mereka!
+                </p>
+            </div>
+
+            <!-- Diagram Silsilah Keluarga Punakawan -->
+            <div class="bg-parchment-50 border-2 border-parchment-300 rounded-3xl p-5 sm:p-8 shadow-lg mb-8">
+                <div class="flex flex-col items-center">
+                    <!-- Tingkat 1: Semar (Ayah / Pengasuh) -->
+                    <div class="bg-gradient-to-r from-sogan-800 to-sogan-900 text-parchment-50 px-6 py-4 rounded-2xl shadow-md border-2 border-emas-500 text-center max-w-md w-full">
+                        <span class="text-[11px] uppercase tracking-widest text-emas-400 font-bold">Ayah / Pamomong Utama</span>
+                        <h3 class="font-serif text-xl font-bold mt-0.5">Kyai Lurah Semar</h3>
+                        <p class="text-xs text-parchment-200 mt-1">Penjelmaan Batara Ismaya yang turun ke bumi untuk membimbing ksatria berhati lurus.</p>
+                    </div>
+
+                    <!-- Garis Penghubung Silsilah -->
+                    <div class="w-1 h-7 bg-sogan-600"></div>
+                    <div class="w-3/4 max-w-2xl h-1 bg-sogan-600 rounded-full"></div>
+                    <div class="w-3/4 max-w-2xl flex justify-between">
+                        <div class="w-1 h-6 bg-sogan-600"></div>
+                        <div class="w-1 h-6 bg-sogan-600"></div>
+                        <div class="w-1 h-6 bg-sogan-600"></div>
+                    </div>
+
+                    <!-- Tingkat 2: Tiga Anak Angkat / Kiasan -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl">
+                        <div class="bg-parchment-100 border-2 border-sogan-600/40 rounded-2xl p-4 text-center shadow-sm">
+                            <span class="inline-block bg-sage-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full mb-1.5">Anak Sulung (Ke-1)</span>
+                            <h4 class="font-serif text-lg font-bold text-sogan-900">Nala Gareng</h4>
+                            <p class="text-xs text-sogan-700 mt-1">Anak angkat pertama Semar. Melambangkan kehati-hatian dalam bertindak dan melangkah.</p>
+                        </div>
+                        <div class="bg-parchment-100 border-2 border-sogan-600/40 rounded-2xl p-4 text-center shadow-sm">
+                            <span class="inline-block bg-emas-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-full mb-1.5">Anak Kedua (Ke-2)</span>
+                            <h4 class="font-serif text-lg font-bold text-sogan-900">Petruk Kantong Bolong</h4>
+                            <p class="text-xs text-sogan-700 mt-1">Anak angkat kedua Semar. Melambangkan sifat dermawan, cerdas, dan suka menolong sesama.</p>
+                        </div>
+                        <div class="bg-parchment-100 border-2 border-sogan-600/40 rounded-2xl p-4 text-center shadow-sm">
+                            <span class="inline-block bg-sogan-700 text-white text-xs font-bold px-2.5 py-0.5 rounded-full mb-1.5">Anak Bungsu (Ke-3)</span>
+                            <h4 class="font-serif text-lg font-bold text-sogan-900">Bagong</h4>
+                            <p class="text-xs text-sogan-700 mt-1">Tercipta dari <strong>bayangan Semar</strong> sendiri atas sabda Sang Hyang Tunggal untuk menemani Semar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kartu Interaktif Flip (Makna Nama & Simbolisme) -->
+            <div class="mb-3 flex items-center justify-between">
+                <h3 class="font-serif text-xl font-bold text-sogan-800">Kartu Filosofi Nama (Klik Kartu untuk Membalik)</h3>
+                <button onclick="resetAllFlipCards()" class="text-xs font-bold text-sogan-700 hover:text-sogan-900 underline">
+                    Tutup Semua Kartu
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="philosophy-cards-grid">
+                <!-- Diisi oleh JS -->
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             MODE 3: KUIS INTERAKTIF EVALUASI PEMAHAMAN (8 SOAL)
+             ===================================================================== -->
+        <section id="mode-3" class="mode-section hidden animate-tab">
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-5 text-center">
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-sogan-800">Kuis Evaluasi Pemahaman</h2>
+                    <p class="text-sm text-sogan-600">Jawab 8 pertanyaan berikut untuk menguji pengetahuanmu tentang Wayang Punakawan!</p>
+                </div>
+
+                <!-- Container Utama Kuis -->
+                <div id="quiz-container" class="bg-parchment-50 border-2 border-parchment-300 rounded-3xl p-6 sm:p-8 shadow-xl">
+                    <!-- Header Progress & Skor -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <span id="quiz-progress-text" class="text-xs sm:text-sm font-bold text-sogan-700 bg-parchment-200 px-3 py-1 rounded-full">
+                            Soal 1 dari 8
+                        </span>
+                        <span id="quiz-score-badge" class="text-xs sm:text-sm font-bold text-sage-700 bg-sage-100 px-3 py-1 rounded-full border border-sage-500/30">
+                            Skor: 0
+                        </span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full h-2.5 bg-parchment-200 rounded-full overflow-hidden mb-6">
+                        <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-emas-500 to-sage-600 transition-all duration-300" style="width: 12.5%;"></div>
+                    </div>
+
+                    <!-- Pertanyaan -->
+                    <h3 id="quiz-question" class="font-serif text-lg sm:text-xl font-bold text-sogan-900 mb-5 leading-snug">
+                        Memuat pertanyaan...
+                    </h3>
+
+                    <!-- Pilihan Jawaban -->
+                    <div id="quiz-options" class="space-y-3">
+                        <!-- Opsi jawaban diisi oleh JS -->
+                    </div>
+
+                    <!-- Kotak Umpan Balik / Pembahasan -->
+                    <div id="quiz-feedback" class="hidden mt-5 p-4 rounded-2xl border text-sm leading-relaxed">
+                        <p id="quiz-feedback-title" class="font-extrabold mb-1"></p>
+                        <p id="quiz-feedback-desc"></p>
+                    </div>
+
+                    <!-- Tombol Lanjut -->
+                    <div class="mt-6 flex justify-end">
+                        <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-sogan-800 hover:bg-sogan-700 text-parchment-50 font-bold px-6 py-3 rounded-xl shadow-md transition">
+                            Soal Berikutnya →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Layar Hasil Akhir & Sertifikat Mini (Tersembunyi saat kuis berjalan) -->
+                <div id="quiz-result-container" class="hidden bg-parchment-50 border-4 border-emas-500 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
+                    <div class="inline-block bg-emas-500 text-sogan-900 text-xs font-extrabold uppercase tracking-widest px-4 py-1 rounded-full mb-3">
+                        Sertifikat Apresiasi Belajar
+                    </div>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-sogan-900">Selamat Telah Menyelesaikan Kuis!</h3>
+                    
+                    <div class="my-5 bg-parchment-100 border-2 border-dashed border-sogan-600/40 rounded-2xl p-5 max-w-lg mx-auto">
+                        <p class="text-xs text-sogan-600 mb-2">Masukkan nama lengkapmu untuk ditampilkan pada sertifikat:</p>
+                        <input type="text" id="student-name-input" placeholder="Ketik nama siswa di sini..." oninput="updateCertificateName()" class="w-full text-center font-serif text-lg font-bold text-sogan-900 bg-white border border-parchment-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emas-500 mb-3">
+                        
+                        <p class="text-xs uppercase tracking-wider text-sogan-600">Diberikan kepada:</p>
+                        <p id="cert-student-name" class="font-serif text-2xl font-bold text-sogan-800 my-1 underline decoration-emas-500 decoration-2 underline-offset-4">
+                            Sahabat Budaya Nusantara
+                        </p>
+                        <p class="text-xs sm:text-sm text-sogan-700 mt-2">
+                            Atas keberhasilannya mempelajari dan memahami nilai-nilai luhur <strong>Wayang Punakawan</strong> dengan perolehan nilai:
+                        </p>
+                        <div class="mt-3 flex items-center justify-center gap-4">
+                            <div class="bg-sogan-800 text-emas-400 px-5 py-2 rounded-xl">
+                                <span class="block text-[10px] uppercase text-parchment-200">Nilai Akhir</span>
+                                <span id="final-score-display" class="text-2xl font-extrabold">100</span>
+                            </div>
+                            <div class="bg-sage-600 text-white px-5 py-2 rounded-xl">
+                                <span class="block text-[10px] uppercase text-sage-100">Predikat</span>
+                                <span id="final-grade-display" class="text-lg font-extrabold">Sangat Baik</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="restartQuiz()" class="bg-sogan-800 hover:bg-sogan-700 text-parchment-50 font-bold px-6 py-3 rounded-xl shadow transition">
+                        🔄 Ulangi Kuis
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             MODE 4: MINI-GAME "TEBAK TOKOH PUNAKAWAN" (TANTANGAN CEPAT)
+             ===================================================================== -->
+        <section id="mode-4" class="mode-section hidden animate-tab">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-5 text-center">
+                    <h2 class="font-serif text-2xl sm:text-3xl font-bold text-sogan-800">Tantangan Cepat: Tebak Tokoh Punakawan</h2>
+                    <p class="text-sm text-sogan-600">Baca petunjuk ciri fisik atau watak yang muncul, lalu klik gambar tokoh yang paling tepat sebelum waktu habis!</p>
+                </div>
+
+                <div class="bg-parchment-50 border-2 border-parchment-300 rounded-3xl p-5 sm:p-8 shadow-xl">
+                    <!-- Papan Status Game -->
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="bg-parchment-100 border border-parchment-300 rounded-2xl p-3 text-center">
+                            <span class="block text-[11px] font-bold uppercase text-sogan-600">Nyawa</span>
+                            <span id="game-lives" class="text-lg sm:text-xl font-extrabold text-red-600">❤️❤️❤️</span>
+                        </div>
+                        <div class="bg-parchment-100 border border-parchment-300 rounded-2xl p-3 text-center">
+                            <span class="block text-[11px] font-bold uppercase text-sogan-600">Skor Saat Ini</span>
+                            <span id="game-score" class="text-lg sm:text-xl font-extrabold text-sogan-900">0</span>
+                        </div>
+                        <div class="bg-emas-400/20 border border-emas-500/40 rounded-2xl p-3 text-center">
+                            <span class="block text-[11px] font-bold uppercase text-sogan-700">Skor Tertinggi</span>
+                            <span id="game-highscore" class="text-lg sm:text-xl font-extrabold text-sogan-800">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Layar Awal Permainan -->
+                    <div id="game-start-screen" class="text-center py-8">
+                        <div class="w-20 h-20 mx-auto bg-sogan-800 text-emas-400 rounded-3xl flex items-center justify-center text-4xl shadow-lg mb-4">
+                            🎯
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-sogan-900 mb-2">Siap Menguji Ketajaman Ingatanmu?</h3>
+                        <p class="text-sm text-sogan-600 max-w-md mx-auto mb-6">
+                            Kamu memiliki waktu <strong>12 detik</strong> untuk setiap petunjuk dan <strong>3 nyawa</strong>. Raih skor setinggi mungkin!
+                        </p>
+                        <button onclick="startMiniGame()" class="bg-sage-600 hover:bg-sage-500 text-white font-extrabold text-base px-8 py-3.5 rounded-2xl shadow-lg transition transform hover:scale-105">
+                            ▶ Mulai Tantangan Sekarang
+                        </button>
+                    </div>
+
+                    <!-- Layar Aktif Bermain -->
+                    <div id="game-play-screen" class="hidden">
+                        <!-- Timer Bar -->
+                        <div class="mb-4">
+                            <div class="flex justify-between text-xs font-bold text-sogan-700 mb-1">
+                                <span>Sisa Waktu</span>
+                                <span id="game-timer-text">12 detik</span>
+                            </div>
+                            <div class="w-full h-3 bg-parchment-200 rounded-full overflow-hidden">
+                                <div id="game-timer-bar" class="h-full bg-sage-600 transition-all duration-200" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Kotak Petunjuk -->
+                        <div class="bg-gradient-to-r from-sogan-800 to-sogan-900 text-parchment-50 rounded-2xl p-5 sm:p-6 text-center shadow-md border-2 border-emas-500 mb-6">
+                            <span class="inline-block text-[11px] uppercase tracking-widest text-emas-400 font-bold mb-1">
+                                Siapakah Aku?
+                            </span>
+                            <p id="game-clue-text" class="font-serif text-lg sm:text-xl font-bold leading-relaxed">
+                                "Aku memiliki kuncung putih di kepala dan tubuh bulat gempal..."
+                            </p>
+                        </div>
+
+                        <!-- 4 Pilihan Gambar Tokoh -->
+                        <div id="game-choices-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                            <!-- Diisi oleh JS -->
+                        </div>
+
+                        <!-- Pesan Status Jawaban Cepat -->
+                        <div id="game-status-banner" class="mt-4 text-center font-bold text-sm h-6"></div>
+                    </div>
+
+                    <!-- Layar Game Over -->
+                    <div id="game-over-screen" class="hidden text-center py-8">
+                        <div class="text-5xl mb-3">🏆</div>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-bold text-sogan-900 mb-1">Permainan Selesai!</h3>
+                        <p id="game-over-reason" class="text-sm text-sogan-600 mb-4">Hebat! Kamu telah berjuang dengan sangat baik.</p>
+                        
+                        <div class="inline-flex gap-6 bg-parchment-100 border border-parchment-300 px-6 py-4 rounded-2xl mb-6">
+                            <div>
+                                <span class="block text-xs text-sogan-600">Skor Akhir</span>
+                                <span id="game-final-score" class="text-2xl font-extrabold text-sogan-900">0</span>
+                            </div>
+                            <div class="w-px bg-parchment-300"></div>
+                            <div>
+                                <span class="block text-xs text-sogan-600">Rekor Terbaik</span>
+                                <span id="game-final-highscore" class="text-2xl font-extrabold text-emas-600">0</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button onclick="startMiniGame()" class="bg-sogan-800 hover:bg-sogan-700 text-parchment-50 font-bold px-7 py-3 rounded-xl shadow-md transition">
+                                🔄 Main Lagi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER EDUKATIF ==================== -->
+    <footer class="bg-sogan-900 text-parchment-200 border-t-2 border-emas-500/40 py-5 px-4 mt-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-center sm:text-left">
+            <p>
+                <strong class="text-emas-400">Jelajah Budaya Nusantara</strong> • Media Pembelajaran Interaktif Wayang Punakawan
+            </p>
+            <p class="text-parchment-300">
+                Melestarikan Kearifan Lokal & Budi Pekerti Luhur Bangsa
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==================== SCRIPT LOGIKA & DATA INTERAKTIF ==================== -->
+    <script>
+        /**
+         * 1. DATA UTAMA WAYANG PUNAKAWAN + ILUSTRASI SVG KUSTOM ARTISTIK
+         * Setiap tokoh memiliki SVG vektor bergaya wayang kulit modern yang akurat ciri fisiknya.
+         */
+        const punakawanData = [
+            {
+                id: 'semar',
+                name: 'Kyai Lurah Semar',
+                shortName: 'Semar',
+                orderBadge: 'Ayah / Pamomong Utama',
+                subtitle: 'Penjelmaan Batara Ismaya • Penasihat Para Ksatria',
+                physical: 'Bertubuh bulat gempal yang melambangkan bumi, memiliki kuncung (jambul rambut putih) di puncak kepala, wajah putih bersih dengan mata sipit yang selalu tampak tersenyum sekaligus menangis, serta mengenakan kain sarung batik parang dan selendang.',
+                personality: 'Sangat bijaksana, sabar, rendah hati, jujur, tidak pernah menyombongkan kesaktiannya, serta selalu membela kebenaran dan keadilan.',
+                philosophy: 'Kuncung putih di kepala melambangkan pikiran yang suci dan fokus pada kebenaran. Mata yang tampak menangis sekaligus tersenyum menggambarkan bahwa kehidupan manusia selalu berdampingan antara suka dan duka.',
+                quote: 'Mbegegeg ugeg-ugeg sadulita mel-mel. Ojo dumeh, eling lan waspada marang Gusti Kang Murbeng Dumadi.',
+                meaningTitle: 'Samar (Tidak Menonjolkan Diri)',
+                meaningDetail: 'Berasal dari kata "Samar" yang artinya tidak tampak atau rendah hati. Semar mengajarkan agar seseorang berbuat kebaikan tanpa mengharapkan pujian atau pamrih.',
+                svg: `
+                <svg viewBox="0 0 240 280" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bayangan Bawah -->
+                    <ellipse cx="120" cy="264" rx="68" ry="10" fill="#00000044"/>
+                    <!-- Gapit / Tangkai Wayang -->
+                    <rect x="116" y="210" width="8" height="54" rx="4" fill="#D49B27"/>
+                    <!-- Badan Bulat Gempal Semar (Hitam-Cokelat Sogan) -->
+                    <path d="M55 155 C45 190, 58 232, 118 235 C178 235, 195 195, 180 155 C170 130, 145 118, 118 118 C85 118, 65 130, 55 155 Z" fill="#2A1A10" stroke="#E6B84C" stroke-width="3"/>
+                    <!-- Kain Batik Parang / Sarung -->
+                    <path d="M58 182 Q118 196 180 182 L173 226 Q118 240 64 226 Z" fill="#6F3E15" stroke="#E6B84C" stroke-width="2.5"/>
+                    <path d="M72 195 L88 225 M96 195 L112 228 M122 195 L138 228 M148 195 L162 224" stroke="#E6B84C" stroke-width="2" stroke-linecap="round"/>
+                    <!-- Selendang Emas di Bahu -->
+                    <path d="M84 122 Q118 158 152 122 L162 135 Q118 175 74 135 Z" fill="#D49B27"/>
+                    <!-- Tangan Kiri & Kanan Khas Semar (Menunjuk Bijak) -->
+                    <path d="M168 148 Q205 142 214 125 Q218 118 210 116 Q202 116 196 128 L164 138 Z" fill="#F5EFE6" stroke="#361B06" stroke-width="2"/>
+                    <path d="M62 152 Q36 168 48 186 Q56 192 66 182 L75 165 Z" fill="#F5EFE6" stroke="#361B06" stroke-width="2"/>
+                    <!-- Kepala & Wajah Putih Khas Semar -->
+                    <path d="M84 82 C82 54, 104 42, 124 44 C146 46, 160 64, 158 88 C156 112, 138 124, 116 122 C94 120, 86 104, 84 82 Z" fill="#FDFBF7" stroke="#361B06" stroke-width="3"/>
+                    <!-- Kuncung Putih Khas Semar di Puncak Kepala -->
+                    <path d="M116 44 C112 24, 126 12, 142 18 C134 26, 130 34, 132 46 Z" fill="#FFFFFF" stroke="#D49B27" stroke-width="2.5"/>
+                    <!-- Rambut Belakang & Gelung -->
+                    <path d="M84 72 C72 78, 72 104, 88 112 C84 96, 84 84, 84 72 Z" fill="#1F140D" stroke="#E6B84C" stroke-width="2"/>
+                    <!-- Mata Sipit Tersenyum & Alis Tebal -->
+                    <path d="M112 72 Q122 66 132 72" fill="none" stroke="#1F140D" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M114 80 Q122 76 130 80" fill="none" stroke="#1F140D" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- Pipi Tembem & Senyum Ramah -->
+                    <circle cx="136" cy="92" r="6" fill="#E6B84C44"/>
+                    <path d="M116 102 Q132 110 144 98" fill="none" stroke="#8D5524" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Sumping (Hiasan Telinga Emas) -->
+                    <path d="M92 78 Q82 68 86 58 Q96 64 96 78 Z" fill="#E6B84C" stroke="#361B06" stroke-width="1.5"/>
+                </svg>`
+            },
+            {
+                id: 'gareng',
+                name: 'Nala Gareng',
+                shortName: 'Gareng',
+                orderBadge: 'Anak Sulung (Ke-1)',
+                subtitle: 'Anak Angkat Pertama Semar • Simbol Kehati-hatian',
+                physical: 'Bertubuh kecil dan pendek, bermata juling (kero), memiliki tangan yang bengkok/melengkung (ceko), serta kaki yang pincang (gejik) saat berjalan.',
+                personality: 'Sangat berhati-hati, tidak suka mengambil hak orang lain, pandai berbicara, jujur, dan selalu menimbang baik-buruk sebelum bertindak.',
+                philosophy: 'Mata juling bermakna tidak mau melihat hal-hal maksiat; tangan ceko bermakna tidak mau mengambil barang yang bukan miliknya; kaki pincang bermakna selalu berhati-hati dalam melangkah di jalan kehidupan.',
+                quote: 'Alon-alon waton kelakon. Langkah yang hati-hati jauh lebih selamat daripada tergesa-gesa tanpa arah.',
+                meaningTitle: 'Nala Gareng (Hati yang Kering dari Kejahatan)',
+                meaningDetail: 'Berasal dari bahasa Arab "Naala Qariin" (memperoleh banyak teman) atau dalam bahasa Jawa "Nala" (hati) dan "Gareng" (kering), yang berarti hati yang bersih dan kering dari niat buruk.',
+                svg: `
+                <svg viewBox="0 0 240 280" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="120" cy="264" rx="56" ry="9" fill="#00000044"/>
+                    <!-- Gapit Wayang -->
+                    <rect x="116" y="212" width="8" height="52" rx="4" fill="#D49B27"/>
+                    <!-- Kaki Pincang Khas Gareng -->
+                    <path d="M98 195 L92 232 L106 232 L108 195 Z" fill="#E0A96D" stroke="#361B06" stroke-width="2"/>
+                    <path d="M132 190 L144 218 L156 214 L142 188 Z" fill="#E0A96D" stroke="#361B06" stroke-width="2"/>
+                    <!-- Kain Batik & Celana -->
+                    <path d="M84 158 L152 158 L148 198 L88 198 Z" fill="#42634B" stroke="#E6B84C" stroke-width="2.5"/>
+                    <path d="M94 166 L142 190 M142 166 L94 190" stroke="#E6B84C" stroke-width="1.5"/>
+                    <!-- Badan Ramping Pendek -->
+                    <path d="M92 108 L144 108 L150 160 L86 160 Z" fill="#D99B52" stroke="#361B06" stroke-width="2.5"/>
+                    <!-- Kalung & Sabuk Emas -->
+                    <path d="M98 108 Q118 132 138 108" fill="none" stroke="#E6B84C" stroke-width="4"/>
+                    <!-- Tangan Ceko (Melengkung Khas Gareng) -->
+                    <path d="M144 114 Q178 112 174 136 Q170 148 156 142" fill="none" stroke="#D99B52" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M144 114 Q178 112 174 136 Q170 148 156 142" fill="none" stroke="#361B06" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M92 114 Q62 122 68 144 Q72 154 84 146" fill="none" stroke="#D99B52" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M92 114 Q62 122 68 144 Q72 154 84 146" fill="none" stroke="#361B06" stroke-width="2" stroke-linecap="round"/>
+                    <!-- Kepala Gareng dengan Gelung Keling -->
+                    <circle cx="86" cy="58" r="16" fill="#1F140D" stroke="#E6B84C" stroke-width="2.5"/>
+                    <path d="M92 64 C92 42, 144 42, 148 68 C150 92, 134 106, 116 106 C98 106, 90 90, 92 64 Z" fill="#E8B478" stroke="#361B06" stroke-width="2.5"/>
+                    <!-- Hidung Bulat Kecil -->
+                    <circle cx="144" cy="76" r="8" fill="#D99B52" stroke="#361B06" stroke-width="2"/>
+                    <!-- Mata Juling (Kero) Khas Gareng -->
+                    <circle cx="122" cy="66" r="7" fill="#FFFFFF" stroke="#361B06" stroke-width="2"/>
+                    <circle cx="125" cy="65" r="3" fill="#1F140D"/>
+                    <circle cx="137" cy="66" r="6" fill="#FFFFFF" stroke="#361B06" stroke-width="2"/>
+                    <circle cx="134" cy="67" r="2.8" fill="#1F140D"/>
+                    <!-- Kumis Tipis & Senyum -->
+                    <path d="M126 86 Q138 82 146 88" fill="none" stroke="#1F140D" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M124 94 Q134 99 142 93" fill="none" stroke="#6F3E15" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- Sumping Emas -->
+                    <path d="M96 68 Q86 58 92 48 Q100 54 100 68 Z" fill="#E6B84C" stroke="#361B06" stroke-width="1.5"/>
+                </svg>`
+            },
+            {
+                id: 'petruk',
+                name: 'Petruk Kantong Bolong',
+                shortName: 'Petruk',
+                orderBadge: 'Anak Kedua (Ke-2)',
+                subtitle: 'Anak Angkat Kedua Semar • Simbol Kedermawanan & Kecerdasan',
+                physical: 'Bertubuh sangat tinggi dan kurus semampai, berhidung mancung sangat panjang, bermata lebar ramah, serta selalu tersenyum ceria dan jenaka.',
+                personality: 'Cerdas, jenaka, lincah, sangat dermawan (tidak pernah menyimpan harta untuk diri sendiri), setia kawan, dan pandai menghibur.',
+                philosophy: 'Julukan "Kantong Bolong" (saku berlubang) bermakna ia tidak pernah menimbun kekayaan karena hartanya selalu dibagikan kepada orang yang membutuhkan. Tubuh tinggi melambangkan pemikiran yang jauh ke depan.',
+                quote: 'Urip iku urup. Sebaik-baiknya manusia adalah yang paling banyak memberi manfaat dan kebahagiaan bagi sesama.',
+                meaningTitle: 'Fatruk (Meninggalkan Segala Keburukan)',
+                meaningDetail: 'Berasal dari kata bahasa Arab "Fatruk" yang artinya tinggalkanlah. Petruk mengajarkan agar manusia meninggalkan sifat serakah, sombong, dan segala perbuatan tercela.',
+                svg: `
+                <svg viewBox="0 0 240 280" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="120" cy="266" rx="58" ry="8" fill="#00000044"/>
+                    <!-- Gapit Wayang -->
+                    <rect x="116" y="218" width="8" height="48" rx="4" fill="#D49B27"/>
+                    <!-- Kaki Panjang Semampai -->
+                    <path d="M100 185 L94 242 L106 242 L112 185 Z" fill="#D99B52" stroke="#361B06" stroke-width="2"/>
+                    <path d="M128 185 L136 242 L148 242 L140 185 Z" fill="#D99B52" stroke="#361B06" stroke-width="2"/>
+                    <!-- Kain Batik Kawung -->
+                    <path d="M90 148 L148 148 L144 192 L94 192 Z" fill="#8D5524" stroke="#E6B84C" stroke-width="2.5"/>
+                    <circle cx="108" cy="168" r="5" fill="none" stroke="#E6B84C" stroke-width="1.5"/>
+                    <circle cx="130" cy="168" r="5" fill="none" stroke="#E6B84C" stroke-width="1.5"/>
+                    <!-- Badan Tinggi Ramping -->
+                    <path d="M96 86 L142 86 L146 150 L92 150 Z" fill="#E8B478" stroke="#361B06" stroke-width="2.5"/>
+                    <!-- Tangan Panjang Luwes -->
+                    <path d="M142 94 L182 126 L196 114" fill="none" stroke="#E8B478" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M142 94 L182 126 L196 114" fill="none" stroke="#361B06" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M96 94 L62 128 L74 152" fill="none" stroke="#E8B478" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M96 94 L62 128 L74 152" fill="none" stroke="#361B06" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Kepala & Kuncung Kecil Petruk -->
+                    <path d="M104 28 C100 14, 114 8, 122 16 C116 20, 114 25, 116 30 Z" fill="#1F140D" stroke="#E6B84C" stroke-width="2"/>
+                    <path d="M96 46 C96 28, 136 28, 140 50 C142 74, 130 86, 116 86 C102 86, 96 72, 96 46 Z" fill="#F0C28B" stroke="#361B06" stroke-width="2.5"/>
+                    <!-- HIDUNG MANCUNG PANJANG KHAS PETRUK -->
+                    <path d="M138 50 L192 58 Q198 62 190 66 L136 64 Z" fill="#F0C28B" stroke="#361B06" stroke-width="2.5" stroke-linejoin="round"/>
+                    <!-- Mata Ramah & Ceria -->
+                    <ellipse cx="126" cy="46" rx="6" ry="5" fill="#FFFFFF" stroke="#361B06" stroke-width="2"/>
+                    <circle cx="128" cy="46" r="2.5" fill="#1F140D"/>
+                    <!-- Mulut Tersenyum Lebar Jenaka -->
+                    <path d="M116 70 Q130 80 142 68" fill="none" stroke="#6F3E15" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Sumping Emas -->
+                    <path d="M98 52 Q88 42 94 32 Q102 38 102 52 Z" fill="#E6B84C" stroke="#361B06" stroke-width="1.5"/>
+                </svg>`
+            },
+            {
+                id: 'bagong',
+                name: 'Bagong',
+                shortName: 'Bagong',
+                orderBadge: 'Anak Bungsu (Ke-3)',
+                subtitle: 'Tercipta dari Bayangan Semar • Simbol Kejujuran Polos',
+                physical: 'Bertubuh pendek, lebar, dan gempal menyerupai Semar; memiliki mata yang sangat lebar (belo) bulat besar, hidung pesek besar, serta bibir tebal yang lucu dan ekspresif.',
+                personality: 'Polos, apa adanya, lucu, berani mengkritik ketidakadilan tanpa rasa takut, jujur tanpa basa-basi, dan sangat setia pada Semar serta para Pandawa.',
+                philosophy: 'Sebagai anak bungsu yang lahir dari bayangan Semar, Bagong melambangkan bahwa manusia harus berani berkata jujur apa adanya dan tidak berpura-pura demi menyembunyikan kebenaran.',
+                quote: 'Sing bener ya kudu diomongke bener, sing salah ya salah! Ojo wedi ngomong jujur.',
+                meaningTitle: 'Bagha (Bayangan / Keberanian & Kejujuran)',
+                meaningDetail: 'Berasal dari kata "Bagha" yang berarti bayangan (karena diciptakan dari bayangan Semar) atau "Bagho" yang bermakna menolak kebatilan dan berani menyuarakan kebenaran secara lugas.',
+                svg: `
+                <svg viewBox="0 0 240 280" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="120" cy="264" rx="66" ry="10" fill="#00000044"/>
+                    <!-- Gapit Wayang -->
+                    <rect x="116" y="212" width="8" height="52" rx="4" fill="#D49B27"/>
+                    <!-- Badan Gempal Pendek Khas Bagong -->
+                    <path d="M62 146 C54 182, 66 226, 120 228 C174 228, 186 184, 176 146 C168 122, 146 112, 120 112 C94 112, 70 122, 62 146 Z" fill="#3B2314" stroke="#E6B84C" stroke-width="3"/>
+                    <!-- Kain Sarung Kotak-kotak / Poleng Khas Bagong -->
+                    <path d="M65 174 Q120 186 175 174 L168 220 Q120 232 72 220 Z" fill="#FDFBF7" stroke="#361B06" stroke-width="2.5"/>
+                    <path d="M88 178 L86 222 M112 180 L112 225 M136 180 L136 225 M156 178 L158 220 M68 198 L172 198" stroke="#1F140D" stroke-width="3"/>
+                    <!-- Tangan Gempal Ekspresif -->
+                    <path d="M170 142 Q202 152 194 176 Q188 184 178 176 L166 158 Z" fill="#D99B52" stroke="#361B06" stroke-width="2"/>
+                    <path d="M68 142 Q36 152 44 176 Q50 184 60 176 L72 158 Z" fill="#D99B52" stroke="#361B06" stroke-width="2"/>
+                    <!-- Kepala Bulat Besar Bagong -->
+                    <path d="M82 76 C80 46, 106 36, 126 38 C148 40, 162 58, 160 84 C158 108, 138 118, 118 118 C96 118, 84 102, 82 76 Z" fill="#D99B52" stroke="#361B06" stroke-width="3"/>
+                    <!-- Kuncung Hitam Pendek -->
+                    <path d="M108 38 C106 24, 118 20, 122 36 Z" fill="#1F140D" stroke="#E6B84C" stroke-width="1.5"/>
+                    <!-- MATA BELO (SANGAT LEBAR BULAT) KHAS BAGONG -->
+                    <circle cx="122" cy="66" r="11" fill="#FFFFFF" stroke="#361B06" stroke-width="2.5"/>
+                    <circle cx="124" cy="66" r="5" fill="#1F140D"/>
+                    <circle cx="143" cy="66" r="10" fill="#FFFFFF" stroke="#361B06" stroke-width="2.5"/>
+                    <circle cx="145" cy="66" r="4.5" fill="#1F140D"/>
+                    <!-- Hidung Pesek Besar -->
+                    <ellipse cx="148" cy="82" rx="9" ry="7" fill="#C4823B" stroke="#361B06" stroke-width="2"/>
+                    <!-- BIBIR TEBAL KHAS BAGONG -->
+                    <path d="M114 96 Q136 90 156 96 Q158 106 136 108 Q114 106 114 96 Z" fill="#B84A39" stroke="#361B06" stroke-width="2.5"/>
+                    <path d="M118 99 Q136 102 152 99" fill="none" stroke="#361B06" stroke-width="2"/>
+                    <!-- Sumping Emas -->
+                    <path d="M88 72 Q78 62 84 52 Q92 58 92 72 Z" fill="#E6B84C" stroke="#361B06" stroke-width="1.5"/>
+                </svg>`
+            }
+        ];
+
+        /**
+         * 2. DATA SOAL KUIS INTERAKTIF (8 SOAL)
+         */
+        const quizQuestions = [
+            {
+                question: "Apa arti kata 'Punakawan' dalam budaya pewayangan Jawa?",
+                options: [
+                    "Raja yang berkuasa di kerajaan besar",
+                    "Sahabat atau teman yang paham dan bijaksana",
+                    "Prajurit perang yang membawa senjata sakti",
+                    "Pengawal kerajaan yang selalu diam"
+                ],
+                correct: 1,
+                explanation: "Kata Punakawan berasal dari kata 'Pana' (paham/mengerti) dan 'Kawan' (teman/sahabat). Mereka adalah sahabat sekaligus pamomong (penasihat) bagi para ksatria."
+            },
+            {
+                question: "Siapakah tokoh Punakawan yang memiliki ciri fisik kuncung putih di kepala dan tubuh bulat gempal?",
+                options: [
+                    "Petruk Kantong Bolong",
+                    "Nala Gareng",
+                    "Kyai Lurah Semar",
+                    "Bagong"
+                ],
+                correct: 2,
+                explanation: "Kyai Lurah Semar memiliki ciri khas kuncung putih di puncak kepalanya yang melambangkan pikiran suci dan berorientasi pada kebenaran."
+            },
+            {
+                question: "Tokoh Punakawan manakah yang memiliki ciri fisik bermata juling (kero), tangan melengkung (ceko), dan kaki pincang?",
+                options: [
+                    "Nala Gareng",
+                    "Semar",
+                    "Bagong",
+                    "Petruk"
+                ],
+                correct: 0,
+                explanation: "Nala Gareng adalah anak sulung Semar yang memiliki ciri fisik bermata juling, tangan ceko, dan kaki pincang sebagai simbol kehati-hatian dalam bersikap dan melangkah."
+            },
+            {
+                question: "Mengapa Petruk mendapat julukan 'Kantong Bolong'?",
+                options: [
+                    "Karena bajunya selalu robek saat bertarung",
+                    "Karena sifatnya yang sangat dermawan dan suka berbagi harta kepada sesama",
+                    "Karena ia sering kehilangan barang di jalan",
+                    "Karena ia suka mengumpulkan batu-batu di sakunya"
+                ],
+                correct: 1,
+                explanation: "Julukan 'Kantong Bolong' (saku berlubang) adalah kiasan bahwa Petruk tidak pernah menimbun harta kekayaan untuk dirinya sendiri, melainkan selalu membagikannya kepada orang yang membutuhkan."
+            },
+            {
+                question: "Bagaimanakah asal-usul terciptanya Bagong, anak bungsu dalam keluarga Punakawan?",
+                options: [
+                    "Ditemukan di tengah hutan belantara",
+                    "Merupakan putra mahkota dari kerajaan seberang",
+                    "Tercipta dari bayangan Semar sendiri",
+                    "Datang dari dasar samudra"
+                ],
+                correct: 2,
+                explanation: "Dalam kisah pewayangan Jawa, Bagong tercipta dari bayangan Semar atas sabda Sang Hyang Tunggal agar Semar memiliki teman pendamping saat turun ke bumi."
+            },
+            {
+                question: "Urutan anggota keluarga Punakawan dari yang tertua hingga yang paling bungsu adalah...",
+                options: [
+                    "Semar – Petruk – Gareng – Bagong",
+                    "Semar – Bagong – Gareng – Petruk",
+                    "Semar – Gareng – Petruk – Bagong",
+                    "Gareng – Semar – Petruk – Bagong"
+                ],
+                correct: 2,
+                explanation: "Urutan yang tepat adalah Kyai Lurah Semar sebagai ayah/pengasuh, diikuti anak sulung Nala Gareng, anak kedua Petruk, dan anak bungsu Bagong."
+            },
+            {
+                question: "Apa makna filosofis dari ciri fisik Bagong yang bermata lebar (belo) dan berbibir tebal?",
+                options: [
+                    "Suka tidur dan bermalas-malasan",
+                    "Jujur apa adanya, polos, dan berani menyuarakan kebenaran",
+                    "Suka marah-marah tanpa alasan",
+                    "Pemalu dan tidak berani berbicara di depan umum"
+                ],
+                correct: 1,
+                explanation: "Bagong melambangkan kejujuran yang polos, apa adanya, dan keberanian untuk mengkritik ketidakadilan secara lugas tanpa basa-basi."
+            },
+            {
+                question: "Peran utama keempat tokoh Punakawan bagi para ksatria Pandawa adalah sebagai...",
+                options: [
+                    "Musuh bebuyutan yang selalu menghalangi perjalanan",
+                    "Pamomong (pengasuh, penghibur, dan penasihat bijak)",
+                    "Pedagang rempah-rempah di pasar",
+                    "Pembuat senjata pusaka kerajaan"
+                ],
+                correct: 1,
+                explanation: "Punakawan berperan sebagai pamomong yang setia menemani, menghibur di kala sedih, serta memberikan nasihat bijak saat para ksatria menghadapi masalah."
+            }
+        ];
+
+        /**
+         * 3. DATA PETUNJUK MINI-GAME "TEBAK TOKOH PUNAKAWAN"
+         */
+        const gameClues = [
+            { targetId: 'semar', clue: "Aku memiliki kuncung putih di kepala dan tubuh bulat gempal." },
+            { targetId: 'semar', clue: "Aku adalah ayah sekaligus pamomong utama para ksatria Pandawa." },
+            { targetId: 'semar', clue: "Mataku tampak selalu menangis sekaligus tersenyum penuh kebijaksanaan." },
+            { targetId: 'gareng', clue: "Aku anak sulung Semar yang kakinya pincang dan tangannya melengkung (ceko)." },
+            { targetId: 'gareng', clue: "Mataku juling (kero) sebagai simbol tidak mau melihat hal-hal buruk." },
+            { targetId: 'gareng', clue: "Namaku bermakna hati yang bersih dan kering dari niat jahat." },
+            { targetId: 'petruk', clue: "Tubuhku paling tinggi semampai dan hidungku mancung sangat panjang." },
+            { targetId: 'petruk', clue: "Aku dijuluki 'Kantong Bolong' karena sifatku yang sangat dermawan." },
+            { targetId: 'petruk', clue: "Aku anak kedua Semar yang jenaka, cerdas, dan suka menghibur." },
+            { targetId: 'bagong', clue: "Aku tercipta dari bayangan Semar dan menjadi anak paling bungsu." },
+            { targetId: 'bagong', clue: "Mataku sangat lebar bulat (belo) dan bibirku tebal ekspresif." },
+            { targetId: 'bagong', clue: "Aku terkenal polos, lucu, dan berani berkata jujur apa adanya tanpa basa-basi." }
+        ];
+
+        /**
+         * STATE APLIKASI GLOBAL
+         */
+        let currentCharacterIndex = 0;
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        // State Mini-Game
+        let gameScore = 0;
+        let gameHighScore = 0;
+        let gameLives = 3;
+        let gameTimerInterval = null;
+        let gameTimeLeft = 12;
+        let currentClueObj = null;
+        let gameLocked = false;
+
+        /**
+         * INISIALISASI SAAT HALAMAN DIMUAT
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCharacterSelector();
+            selectCharacter(0);
+            renderPhilosophyCards();
+            initQuiz();
+            loadHighScore();
+        });
+
+        /**
+         * NAVIGASI ANTAR-MODE PEMBELAJARAN
+         */
+        function switchMode(modeNumber) {
+            // Hentikan suara TTS jika berpindah tab
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            // Hentikan timer mini-game jika meninggalkan mode 4
+            if (modeNumber !== 4 && gameTimerInterval) {
+                clearInterval(gameTimerInterval);
+            }
+
+            // Sembunyikan semua section
+            document.querySelectorAll('.mode-section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+
+            // Tampilkan section terpilih
+            const activeSection = document.getElementById(`mode-${modeNumber}`);
+            if (activeSection) {
+                activeSection.classList.remove('hidden');
+                // Re-trigger animasi
+                activeSection.classList.remove('animate-tab');
+                void activeSection.offsetWidth;
+                activeSection.classList.add('animate-tab');
+            }
+
+            // Perbarui gaya tombol navigasi
+            document.querySelectorAll('.nav-btn').forEach((btn, idx) => {
+                if (idx + 1 === modeNumber) {
+                    btn.className = 'nav-btn active flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm bg-emas-500 text-sogan-900 ring-2 ring-parchment-50';
+                } else {
+                    btn.className = 'nav-btn flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all bg-sogan-700/80 text-parchment-100 hover:bg-sogan-600';
+                }
+            });
+        }
+
+        function toggleObjectiveModal() {
+            const modal = document.getElementById('objective-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        /**
+         * LOGIKA MODE 1: ENSIKLOPEDIA KARAKTER PUNAKAWAN
+         */
+        function renderCharacterSelector() {
+            const grid = document.getElementById('character-selector-grid');
+            grid.innerHTML = punakawanData.map((char, index) => `
+                <button onclick="selectCharacter(${index})" id="char-card-${index}" 
+                    class="char-selector-card group bg-parchment-50 hover:bg-parchment-100 border-2 border-parchment-300 rounded-2xl p-3 sm:p-4 text-center transition-all shadow-sm hover:shadow-md flex flex-col items-center">
+                    <div class="w-16 h-20 sm:w-20 sm:h-24 mb-2 transform group-hover:scale-105 transition-transform">
+                        ${char.svg}
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-sage-600">${char.orderBadge.split(' ')[0]}</span>
+                    <h3 class="font-serif font-bold text-sm sm:text-base text-sogan-900">${char.shortName}</h3>
+                </button>
+            `).join('');
+        }
+
+        function selectCharacter(index) {
+            currentCharacterIndex = index;
+            const char = punakawanData[index];
+
+            // Hentikan TTS yang sedang berjalan
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            document.getElementById('tts-status').textContent = '';
+
+            // Highlight kartu aktif
+            document.querySelectorAll('.char-selector-card').forEach((card, idx) => {
+                if (idx === index) {
+                    card.className = 'char-selector-card group bg-gradient-to-b from-emas-400/25 to-parchment-50 border-2 border-emas-500 ring-2 ring-emas-500/40 rounded-2xl p-3 sm:p-4 text-center transition-all shadow-md flex flex-col items-center scale-[1.02]';
+                } else {
+                    card.className = 'char-selector-card group bg-parchment-50 hover:bg-parchment-100 border-2 border-parchment-300 rounded-2xl p-3 sm:p-4 text-center transition-all shadow-sm hover:shadow-md flex flex-col items-center opacity-85 hover:opacity-100';
+                }
+            });
+
+            // Isi panel detail
+            document.getElementById('detail-order-badge').textContent = char.orderBadge;
+            document.getElementById('detail-svg-container').innerHTML = char.svg;
+            document.getElementById('detail-quote-text').textContent = char.quote;
+            document.getElementById('detail-subtitle').textContent = char.subtitle;
+            document.getElementById('detail-name').textContent = char.name;
+            document.getElementById('detail-physical').textContent = char.physical;
+            document.getElementById('detail-personality').textContent = char.personality;
+            document.getElementById('detail-philosophy').textContent = char.philosophy;
+        }
+
+        function cycleCharacter(step) {
+            let nextIndex = (currentCharacterIndex + step + punakawanData.length) % punakawanData.length;
+            selectCharacter(nextIndex);
+        }
+
+        /**
+         * TEXT-TO-SPEECH (WEB SPEECH API) DENGAN FALLBACK VISUAL
+         */
+        function speakCharacterQuote() {
+            const char = punakawanData[currentCharacterIndex];
+            const bubble = document.getElementById('quote-bubble');
+            const statusEl = document.getElementById('tts-status');
+
+            // Efek visual balon dialog selalu aktif
+            bubble.classList.add('ring-4', 'ring-emas-400', 'scale-[1.02]');
+            setTimeout(() => {
+                bubble.classList.remove('ring-4', 'ring-emas-400', 'scale-[1.02]');
+            }, 1800);
+
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(`${char.shortName} berkata: ${char.quote}`);
+                    utterance.lang = 'id-ID';
+                    utterance.rate = 0.92;
+                    
+                    // Penyesuaian nada suara (pitch) sesuai karakter tokoh
+                    if (char.id === 'semar') utterance.pitch = 0.85;
+                    else if (char.id === 'gareng') utterance.pitch = 1.15;
+                    else if (char.id === 'petruk') utterance.pitch = 1.05;
+                    else if (char.id === 'bagong') utterance.pitch = 0.9;
+
+                    utterance.onstart = () => {
+                        statusEl.textContent = '🔊 Membacakan kutipan tokoh...';
+                    };
+                    utterance.onend = () => {
+                        statusEl.textContent = '';
+                    };
+                    utterance.onerror = () => {
+                        statusEl.textContent = '💬 Baca pesan bijak pada balon dialog di atas.';
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                } catch (err) {
+                    statusEl.textContent = '💬 Baca pesan bijak pada balon dialog di atas.';
+                }
+            } else {
+                statusEl.textContent = '💬 Perangkat tidak mendukung suara otomatis, silakan baca balon dialog di atas.';
+            }
+        }
+
+        /**
+         * LOGIKA MODE 2: KARTU FLIP FILOSOFI & SILSILAH
+         */
+        function renderPhilosophyCards() {
+            const grid = document.getElementById('philosophy-cards-grid');
+            grid.innerHTML = punakawanData.map((char, idx) => `
+                <div onclick="this.classList.toggle('flipped')" class="flip-card perspective-1000 h-80 cursor-pointer select-none">
+                    <div class="flip-card-inner">
+                        <!-- Sisi Depan -->
+                        <div class="flip-card-front bg-parchment-50 border-2 border-parchment-300 hover:border-emas-500 rounded-3xl p-5 shadow-md flex flex-col items-center justify-between text-center">
+                            <span class="text-[11px] font-bold uppercase tracking-wider bg-sogan-800 text-emas-400 px-3 py-1 rounded-full">
+                                ${char.orderBadge}
+                            </span>
+                            <div class="w-28 h-32 my-1">
+                                ${char.svg}
+                            </div>
+                            <div>
+                                <h4 class="font-serif text-xl font-bold text-sogan-900">${char.shortName}</h4>
+                                <p class="text-xs text-sage-600 font-semibold mt-1">Klik untuk ungkap makna nama ↻</p>
+                            </div>
+                        </div>
+
+                        <!-- Sisi Belakang -->
+                        <div class="flip-card-back bg-gradient-to-br from-sogan-800 to-sogan-950 text-parchment-50 border-2 border-emas-500 rounded-3xl p-5 shadow-xl flex flex-col justify-between text-center">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-widest text-emas-400 font-bold">Filosofi Nama</span>
+                                <h4 class="font-serif text-lg font-bold text-white mt-1 border-b border-emas-500/30 pb-2">
+                                    ${char.meaningTitle}
+                                </h4>
+                                <p class="text-xs sm:text-sm text-parchment-100 mt-3 leading-relaxed">
+                                    ${char.meaningDetail}
+                                </p>
+                            </div>
+                            <span class="text-[11px] text-emas-400 font-semibold">Klik lagi untuk kembali ↺</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resetAllFlipCards() {
+            document.querySelectorAll('.flip-card').forEach(card => card.classList.remove('flipped'));
+        }
+
+        /**
+         * LOGIKA MODE 3: KUIS INTERAKTIF 8 SOAL
+         */
+        function initQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            quizAnswered = false;
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-result-container').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            quizAnswered = false;
+            const q = quizQuestions[currentQuizIndex];
+            const total = quizQuestions.length;
+
+            document.getElementById('quiz-progress-text').textContent = `Soal ${currentQuizIndex + 1} dari ${total}`;
+            document.getElementById('quiz-score-badge').textContent = `Skor: ${quizScore}`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQuizIndex + 1) / total) * 100}%`;
+            document.getElementById('quiz-question').textContent = q.question;
+
+            const feedbackBox = document.getElementById('quiz-feedback');
+            feedbackBox.classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            const letters = ['A', 'B', 'C', 'D'];
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = q.options.map((opt, idx) => `
+                <button onclick="selectQuizAnswer(${idx})" id="quiz-opt-${idx}" 
+                    class="w-full text-left p-4 rounded-2xl border-2 border-parchment-300 bg-white hover:bg-parchment-100 hover:border-sogan-600 transition flex items-center gap-3.5 font-medium text-sm sm:text-base text-sogan-900">
+                    <span class="w-8 h-8 rounded-xl bg-parchment-200 text-sogan-800 font-extrabold flex items-center justify-center shrink-0">
+                        ${letters[idx]}
+                    </span>
+                    <span>${opt}</span>
+                </button>
+            `).join('');
+        }
+
+        function selectQuizAnswer(selectedIndex) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const q = quizQuestions[currentQuizIndex];
+            const isCorrect = selectedIndex === q.correct;
+
+            if (isCorrect) {
+                quizScore += 12.5; // 8 soal x 12.5 = 100
+            }
+
+            // Warnai semua opsi jawaban
+            q.options.forEach((_, idx) => {
+                const btn = document.getElementById(`quiz-opt-${idx}`);
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-sage-600 bg-sage-100 text-sage-800 font-bold flex items-center gap-3.5 text-sm sm:text-base';
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-red-500 bg-red-50 text-red-800 font-semibold flex items-center gap-3.5 text-sm sm:text-base';
+                } else {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-parchment-200 bg-white/50 text-sogan-500 flex items-center gap-3.5 text-sm sm:text-base opacity-60';
+                }
+            });
+
+            // Perbarui skor tampilan
+            document.getElementById('quiz-score-badge').textContent = `Skor: ${Math.round(quizScore)}`;
+
+            // Tampilkan pembahasan
+            const feedbackBox = document.getElementById('quiz-feedback');
+            const feedbackTitle = document.getElementById('quiz-feedback-title');
+            const feedbackDesc = document.getElementById('quiz-feedback-desc');
+
+            feedbackBox.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackBox.className = 'mt-5 p-4 rounded-2xl border-2 border-sage-500 bg-sage-100/80 text-sogan-900 text-sm leading-relaxed';
+                feedbackTitle.textContent = '✅ Jawaban Tepat! Hebat!';
+            } else {
+                feedbackBox.className = 'mt-5 p-4 rounded-2xl border-2 border-amber-500 bg-amber-50 text-sogan-900 text-sm leading-relaxed';
+                feedbackTitle.textContent = '💡 Kurang Tepat, Mari Simak Penjelasannya:';
+            }
+            feedbackDesc.textContent = q.explanation;
+
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.textContent = currentQuizIndex === quizQuestions.length - 1 ? 'Lihat Hasil Akhir 🏆' : 'Soal Berikutnya →';
+        }
+
+        function nextQuizQuestion() {
+            if (currentQuizIndex < quizQuestions.length - 1) {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resultContainer = document.getElementById('quiz-result-container');
+            resultContainer.classList.remove('hidden');
+
+            const finalScore = Math.round(quizScore);
+            document.getElementById('final-score-display').textContent = finalScore;
+
+            let grade = 'Terus Berlatih';
+            if (finalScore >= 85) {
+                grade = 'Sangat Istimewa';
+                triggerConfetti();
+            } else if (finalScore >= 70) {
+                grade = 'Baik Sekali';
+                triggerConfetti();
+            } else if (finalScore >= 50) {
+                grade = 'Cukup Baik';
+            }
+            document.getElementById('final-grade-display').textContent = grade;
+        }
+
+        function updateCertificateName() {
+            const val = document.getElementById('student-name-input').value.trim();
+            document.getElementById('cert-student-name').textContent = val || 'Sahabat Budaya Nusantara';
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        /**
+         * LOGIKA MODE 4: MINI-GAME "TEBAK TOKOH PUNAKAWAN"
+         */
+        function loadHighScore() {
+            try {
+                const saved = localStorage.getItem('punakawan_highscore');
+                if (saved) {
+                    gameHighScore = parseInt(saved, 10) || 0;
+                    document.getElementById('game-highscore').textContent = gameHighScore;
+                }
+            } catch (e) {
+                // Abaikan jika localStorage dibatasi
+            }
+        }
+
+        function saveHighScore(newScore) {
+            if (newScore > gameHighScore) {
+                gameHighScore = newScore;
+                document.getElementById('game-highscore').textContent = gameHighScore;
+                try {
+                    localStorage.setItem('punakawan_highscore', gameHighScore.toString());
+                } catch (e) {}
+            }
+        }
+
+        function startMiniGame() {
+            gameScore = 0;
+            gameLives = 3;
+            gameLocked = false;
+            updateGameHUD();
+
+            document.getElementById('game-start-screen').classList.add('hidden');
+            document.getElementById('game-over-screen').classList.add('hidden');
+            document.getElementById('game-play-screen').classList.remove('hidden');
+
+            renderGameChoices();
+            nextGameRound();
+        }
+
+        function updateGameHUD() {
+            document.getElementById('game-score').textContent = gameScore;
+            document.getElementById('game-lives').textContent = '❤️'.repeat(Math.max(0, gameLives)) + '🖤'.repeat(Math.max(0, 3 - gameLives));
+        }
+
+        function renderGameChoices() {
+            const grid = document.getElementById('game-choices-grid');
+            grid.innerHTML = punakawanData.map(char => `
+                <button onclick="checkGameAnswer('${char.id}')" id="game-choice-${char.id}"
+                    class="game-choice-btn group bg-white hover:bg-parchment-100 border-2 border-parchment-300 hover:border-emas-500 rounded-2xl p-3 sm:p-4 flex flex-col items-center transition transform active:scale-95 shadow-sm">
+                    <div class="w-20 h-24 sm:w-24 sm:h-28 mb-2 group-hover:scale-105 transition-transform">
+                        ${char.svg}
+                    </div>
+                    <span class="font-serif font-bold text-base text-sogan-900">${char.shortName}</span>
+                </button>
+            `).join('');
+        }
+
+        function nextGameRound() {
+            if (gameLives <= 0) {
+                endMiniGame('Nyawamu telah habis!');
+                return;
+            }
+
+            gameLocked = false;
+            document.getElementById('game-status-banner').textContent = '';
+
+            // Pilih petunjuk acak yang berbeda dari sebelumnya
+            let nextClue;
+            do {
+                nextClue = gameClues[Math.floor(Math.random() * gameClues.length)];
+            } while (currentClueObj && nextClue.clue === currentClueObj.clue && gameClues.length > 1);
+            
+            currentClueObj = nextClue;
+            document.getElementById('game-clue-text').textContent = `"${currentClueObj.clue}"`;
+
+            // Reset timer 12 detik
+            clearInterval(gameTimerInterval);
+            gameTimeLeft = 12;
+            updateTimerUI();
+
+            gameTimerInterval = setInterval(() => {
+                gameTimeLeft -= 0.2;
+                if (gameTimeLeft <= 0) {
+                    clearInterval(gameTimerInterval);
+                    handleTimeOut();
+                } else {
+                    updateTimerUI();
+                }
+            }, 200);
+        }
+
+        function updateTimerUI() {
+            const pct = Math.max(0, (gameTimeLeft / 12) * 100);
+            const bar = document.getElementById('game-timer-bar');
+            bar.style.width = `${pct}%`;
+            document.getElementById('game-timer-text').textContent = `${Math.ceil(gameTimeLeft)} detik`;
+
+            if (pct > 50) bar.className = 'h-full bg-sage-600 transition-all duration-200';
+            else if (pct > 25) bar.className = 'h-full bg-emas-500 transition-all duration-200';
+            else bar.className = 'h-full bg-red-600 transition-all duration-200';
+        }
+
+        function handleTimeOut() {
+            if (gameLocked) return;
+            gameLocked = true;
+            gameLives--;
+            updateGameHUD();
+
+            const banner = document.getElementById('game-status-banner');
+            banner.className = 'mt-4 text-center font-bold text-sm h-6 text-red-600';
+            banner.textContent = '⏰ Waktu habis! -1 Nyawa';
+
+            setTimeout(() => {
+                if (gameLives <= 0) endMiniGame('Waktu habis dan nyawa telah habis!');
+                else nextGameRound();
+            }, 1100);
+        }
+
+        function checkGameAnswer(selectedId) {
+            if (gameLocked) return;
+            gameLocked = true;
+            clearInterval(gameTimerInterval);
+
+            const banner = document.getElementById('game-status-banner');
+            const clickedBtn = document.getElementById(`game-choice-${selectedId}`);
+
+            if (selectedId === currentClueObj.targetId) {
+                gameScore += 10;
+                saveHighScore(gameScore);
+                updateGameHUD();
+
+                banner.className = 'mt-4 text-center font-bold text-sm h-6 text-sage-700';
+                banner.textContent = '🎉 Benar sekali! +10 Poin';
+                clickedBtn.classList.add('ring-4', 'ring-sage-500', 'bg-sage-100');
+
+                if (gameScore % 50 === 0) triggerConfetti();
+
+                setTimeout(() => {
+                    clickedBtn.classList.remove('ring-4', 'ring-sage-500', 'bg-sage-100');
+                    nextGameRound();
+                }, 900);
+            } else {
+                gameLives--;
+                updateGameHUD();
+
+                const correctName = punakawanData.find(p => p.id === currentClueObj.targetId)?.shortName || '';
+                banner.className = 'mt-4 text-center font-bold text-sm h-6 text-red-600';
+                banner.textContent = `❌ Kurang tepat! Jawaban yang benar adalah ${correctName}.`;
+                clickedBtn.classList.add('ring-4', 'ring-red-500', 'bg-red-50');
+
+                setTimeout(() => {
+                    clickedBtn.classList.remove('ring-4', 'ring-red-500', 'bg-red-50');
+                    if (gameLives <= 0) endMiniGame('Kesempatan nyawamu sudah habis.');
+                    else nextGameRound();
+                }, 1300);
+            }
+        }
+
+        function endMiniGame(reasonText) {
+            clearInterval(gameTimerInterval);
+            document.getElementById('game-play-screen').classList.add('hidden');
+            document.getElementById('game-over-screen').classList.remove('hidden');
+
+            document.getElementById('game-over-reason').textContent = reasonText;
+            document.getElementById('game-final-score').textContent = gameScore;
+            document.getElementById('game-final-highscore').textContent = gameHighScore;
+
+            if (gameScore >= 30) {
+                triggerConfetti();
+            }
+        }
+
+        /**
+         * EFEK VISUAL CONFETTI MURNI JS/CSS
+         */
+        function triggerConfetti() {
+            const colors = ['#D49B27', '#587E62', '#8D5524', '#E6B84C', '#C84B31'];
+            for (let i = 0; i < 42; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = `${Math.random() * 100}vw`;
+                piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                piece.style.animationDuration = `${1.8 + Math.random() * 1.5}s`;
+                document.body.appendChild(piece);
+
+                setTimeout(() => {
+                    piece.remove();
+                }, 3400);
+            }
+        }
+    </script>
+</body>
+</html>
