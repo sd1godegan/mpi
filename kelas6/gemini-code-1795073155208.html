@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Petualangan Makanan</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #2C3E50;
+            --light: #F7FFF7;
+            --success: #2ECC71;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none; /* Mencegah seleksi teks di HP */
+        }
+
+        body {
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container ala Layar HP Portrait */
+        #app-container {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 850px;
+            background: var(--light);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            animation: fadeIn 0.4s ease-in-out;
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        h1, h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: var(--dark);
+            line-height: 1.5;
+            font-size: 1.1rem;
+        }
+
+        /* Tombol Global */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #c0392b;
+            transition: all 0.1s;
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: 20px;
+        }
+
+        .btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 #c0392b;
+        }
+
+        /* Babak 1: Intro */
+        .hero-img {
+            font-size: 100px;
+            text-align: center;
+            margin: 40px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Babak 2: Eksplorasi */
+        .organ-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .organ-btn {
+            background: var(--secondary);
+            border: none;
+            padding: 15px 10px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 0 #16a085;
+        }
+
+        .organ-btn.viewed {
+            background: var(--dark);
+            box-shadow: 0 4px 0 #1a252f;
+        }
+
+        .info-card {
+            background: white;
+            border: 3px solid var(--accent);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .info-card h3 { color: var(--dark); margin-bottom: 10px; }
+        .organ-emoji { font-size: 50px; margin-bottom: 10px; }
+
+        /* Babak 3: Kuis */
+        .quiz-card {
+            background: var(--accent);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            color: var(--dark);
+            transition: 0.3s;
+        }
+
+        .option-btn.correct { background: var(--success); color: white; border-color: var(--success); }
+        .option-btn.wrong { background: var(--primary); color: white; }
+
+        /* Babak 4: Outro */
+        .badge {
+            font-size: 120px;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255, 230, 109, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    
+    <!-- Layar 1: Apersepsi -->
+    <div id="screen-intro" class="screen active">
+        <header>
+            <h1>Petualangan Makanan</h1>
+            <p>Menjelajah Mesin Hebat di Tubuh Kita!</p>
+        </header>
+        <div class="hero-img">🍎</div>
+        <p style="text-align: center; font-size: 1.2rem;">
+            Halo! Aku Si Apel. <br><br>
+            Ke mana ya perginya aku setelah kamu telan? Yuk, kita ikuti perjalananku di dalam tubuhmu!
+        </p>
+        <button class="btn" onclick="goToScreen('screen-explore')">Mulai Petualangan! 🚀</button>
+    </div>
+
+    <!-- Layar 2: Eksplorasi -->
+    <div id="screen-explore" class="screen">
+        <header>
+            <h2>Peta Pencernaan</h2>
+            <p>Klik berurutan dari Mulut sampai Anus!</p>
+        </header>
+        
+        <div class="organ-grid">
+            <button class="organ-btn" onclick="showInfo(0)">1. Mulut</button>
+            <button class="organ-btn" onclick="showInfo(1)">2. Kerongkongan</button>
+            <button class="organ-btn" onclick="showInfo(2)">3. Lambung</button>
+            <button class="organ-btn" onclick="showInfo(3)">4. Usus Halus</button>
+            <button class="organ-btn" onclick="showInfo(4)">5. Usus Besar</button>
+            <button class="organ-btn" onclick="showInfo(5)">6. Anus</button>
+        </div>
+
+        <div class="info-card" id="info-display">
+            <div class="organ-emoji">❓</div>
+            <h3>Pilih Organ</h3>
+            <p>Klik tombol di atas untuk melihat apa yang terjadi pada Si Apel di setiap organ.</p>
+        </div>
+
+        <button class="btn" id="btn-to-quiz" style="display: none;" onclick="startQuiz()">Lanjut ke Tantangan! 🎮</button>
+    </div>
+
+    <!-- Layar 3: Tantangan / Kuis -->
+    <div id="screen-quiz" class="screen">
+        <header>
+            <h2>Tantangan Akhir!</h2>
+            <p>Buktikan kamu sudah paham!</p>
+        </header>
+        
+        <div class="quiz-card" id="question-text">
+            Memuat pertanyaan...
+        </div>
+
+        <div class="options" id="quiz-options">
+            <!-- Pilihan jawaban di-generate via JS -->
+        </div>
+    </div>
+
+    <!-- Layar 4: Kesimpulan -->
+    <div id="screen-outro" class="screen">
+        <header>
+            <h2>Selamat! 🎉</h2>
+            <p>Kamu berhasil menyelesaikan misi!</p>
+        </header>
+        <div class="badge">🏅</div>
+        <p style="text-align: center;">
+            Sekarang kamu sudah tahu urutan pencernaan manusia: <br>
+            <b>Mulut ➡️ Kerongkongan ➡️ Lambung ➡️ Usus Halus ➡️ Usus Besar ➡️ Anus.</b><br><br>
+            Kamu resmi menjadi <b>Ahli Pencernaan!</b>
+        </p>
+        <button class="btn" onclick="location.reload()">Main Lagi 🔄</button>
+    </div>
+
+</div>
+
+<script>
+    // Data Materi (Eksplorasi)
+    const organs = [
+        { name: "Mulut", emoji: "👄", desc: "Di sini aku dikunyah oleh gigi, dibantu lidah, dan dihancurkan oleh air liur agar mudah ditelan." },
+        { name: "Kerongkongan", emoji: "🌭", desc: "Ini seperti perosotan panjang! Otot di sini meremas dan mendorongku perlahan menuju lambung (Gerak Peristaltik)." },
+        { name: "Lambung", emoji: "🫘", desc: "Wow, di sini seperti mesin cuci! Aku diaduk-aduk dan dihancurkan menggunakan asam lambung yang super kuat." },
+        { name: "Usus Halus", emoji: "🍝", desc: "Perjalanan terpanjang! Di sini, nutrisi dan vitamin dari tubuhku diserap untuk memberimu energi." },
+        { name: "Usus Besar", emoji: "🍩", desc: "Sisa-sisa tubuhku yang tidak terpakai masuk ke sini. Airnya diserap dan sisanya dibusukkan." },
+        { name: "Anus", emoji: "💩", desc: "Pintu keluar! Sisa-sisa makanan yang sudah menjadi kotoran (feses) dibuang ke luar tubuh dari sini." }
+    ];
+
+    let viewedOrgans = new Set();
+
+    // Data Kuis (Tantangan)
+    const questions = [
+        { q: "Organ yang menyerap sari-sari makanan (nutrisi) adalah...", a: "Usus Halus", options: ["Lambung", "Usus Halus", "Mulut"] },
+        { q: "Gerakan meremas dan mendorong makanan di kerongkongan disebut gerak...", a: "Peristaltik", options: ["Mekanik", "Peristaltik", "Kimiawi"] },
+        { q: "Tempat dibusukkannya sisa makanan dan penyerapan air adalah...", a: "Usus Besar", options: ["Usus Besar", "Anus", "Lambung"] }
+    ];
+    
+    let currentQ = 0;
+
+    // Fungsi Pindah Layar
+    function goToScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    // Fungsi Tampilkan Info Organ
+    function showInfo(index) {
+        const organ = organs[index];
+        const display = document.getElementById('info-display');
+        display.innerHTML = `
+            <div class="organ-emoji">${organ.emoji}</div>
+            <h3>${organ.name}</h3>
+            <p>${organ.desc}</p>
+        `;
+        
+        // Tandai sudah dibaca
+        document.querySelectorAll('.organ-btn')[index].classList.add('viewed');
+        viewedOrgans.add(index);
+
+        // Tampilkan tombol lanjut jika semua sudah dibaca
+        if(viewedOrgans.size === organs.length) {
+            document.getElementById('btn-to-quiz').style.display = 'block';
+        }
+    }
+
+    // Fungsi Mulai Kuis
+    function startQuiz() {
+        currentQ = 0;
+        goToScreen('screen-quiz');
+        loadQuestion();
+    }
+
+    // Fungsi Muat Pertanyaan
+    function loadQuestion() {
+        if(currentQ >= questions.length) {
+            setTimeout(() => goToScreen('screen-outro'), 500);
+            return;
+        }
+
+        const q = questions[currentQ];
+        document.getElementById('question-text').innerHTML = `Pertanyaan ${currentQ + 1}/3:<br><br>${q.q}`;
+        
+        const optionsDiv = document.getElementById('quiz-options');
+        optionsDiv.innerHTML = '';
+        
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(btn, opt, q.a);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    // Fungsi Cek Jawaban
+    function checkAnswer(btn, selected, correct) {
+        // Disable semua tombol agar tidak diklik dua kali
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            setTimeout(() => {
+                currentQ++;
+                loadQuestion();
+            }, 1000);
+        } else {
+            btn.classList.add('wrong');
+            // Tunjukkan yang benar
+            allBtns.forEach(b => {
+                if(b.innerText === correct) b.classList.add('correct');
+            });
+            setTimeout(() => {
+                currentQ++;
+                loadQuestion();
+            }, 1500);
+        }
+    }
+</script>
+</body>
+</html>
