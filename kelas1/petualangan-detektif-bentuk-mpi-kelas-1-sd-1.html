@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petualangan Detektif Bentuk - Mengurai Bangun Datar (Kelas 1 SD)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Nunito untuk tampilan ramah anak -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --font-display: 'Fredoka', cursive, sans-serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(circle at top left, #e0f2fe 0%, #fef9c3 50%, #fce7f3 100%);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: var(--font-display);
+    }
+
+    /* Animasi mengambang untuk maskot & elemen dekoratif */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+    .animate-float {
+      animation: floatSlow 3.5s ease-in-out infinite;
+    }
+
+    /* Animasi pop masuk layar */
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .screen-enter {
+      animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Animasi getar lembut saat jawaban kurang tepat */
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+    .animate-shake {
+      animation: gentleShake 0.45s ease-in-out;
+    }
+
+    /* Animasi bintang melompat */
+    @keyframes starBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25) rotate(8deg); }
+    }
+    .animate-star {
+      animation: starBounce 0.6s ease-out;
+    }
+
+    /* Gaya tombol 3D ramah anak */
+    .btn-3d {
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
+    }
+    .btn-3d:hover:not(:disabled) {
+      filter: brightness(1.04);
+      transform: translateY(-2px);
+    }
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(3px);
+    }
+
+    /* Bagian SVG interaktif pada layar eksplorasi */
+    .shape-part {
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease, filter 0.2s ease;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .shape-part:hover:not(.extracted) {
+      filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.95));
+      transform: scale(1.04);
+    }
+    .shape-part.extracted {
+      opacity: 0.22;
+      pointer-events: none;
+      filter: grayscale(80%);
+    }
+
+    /* Confetti canvas overlay */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+  <!-- Canvas Confetti untuk perayaan -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- HEADER & NAVIGASI ATAS (Responsif untuk layar laptop) -->
+  <header class="w-full max-w-6xl mx-auto px-4 pt-3 pb-2 z-20">
+    <div class="bg-white/90 backdrop-blur-md border-4 border-sky-200 rounded-3xl shadow-lg px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Tombol Home & Judul -->
+      <div class="flex items-center gap-3">
+        <button id="btn-home" onclick="app.goToScreen(0)" title="Kembali ke Beranda"
+          class="btn-3d bg-amber-400 hover:bg-amber-300 text-amber-950 border-b-4 border-amber-600 rounded-2xl p-2.5 flex items-center justify-center shadow">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+        </button>
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-sky-600 block">Matematika Kelas 1 SD</span>
+          <h1 class="text-lg sm:text-xl font-bold text-slate-800 leading-tight">Petualangan Detektif Bentuk</h1>
+        </div>
+      </div>
+
+      <!-- Indikator Tahap Pembelajaran (Stepper) -->
+      <nav aria-label="Tahapan Belajar" class="hidden md:flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl border-2 border-slate-200">
+        <button onclick="app.goToScreen(0)" id="nav-step-0" class="step-pill px-3.5 py-1.5 rounded-xl text-sm font-bold transition">1. Beranda</button>
+        <button onclick="app.goToScreen(1)" id="nav-step-1" class="step-pill px-3.5 py-1.5 rounded-xl text-sm font-bold transition">2. Kenal Bentuk</button>
+        <button onclick="app.goToScreen(2)" id="nav-step-2" class="step-pill px-3.5 py-1.5 rounded-xl text-sm font-bold transition">3. Urai Benda</button>
+        <button onclick="app.goToScreen(3)" id="nav-step-3" class="step-pill px-3.5 py-1.5 rounded-xl text-sm font-bold transition">4. Kuis Bintang</button>
+      </nav>
+
+      <!-- Kontrol Audio (Ulangi Suara & Mute/Unmute) + Skor Bintang -->
+      <div class="flex items-center gap-2.5">
+        <!-- Penghitung Bintang -->
+        <div class="bg-yellow-100 border-2 border-yellow-400 rounded-2xl px-3.5 py-1.5 flex items-center gap-1.5 shadow-inner">
+          <span class="text-xl" id="star-icon">⭐</span>
+          <span id="star-count" class="font-display font-bold text-lg text-yellow-800">0</span>
+        </div>
+
+        <!-- Tombol Ulangi Narasi -->
+        <button onclick="app.repeatSpeech()" title="Dengarkan Instruksi Lagi"
+          class="btn-3d bg-sky-500 text-white border-b-4 border-sky-700 rounded-2xl px-3.5 py-2 flex items-center gap-1.5 font-bold text-sm shadow">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+          <span class="hidden sm:inline">Ulangi Suara</span>
+        </button>
+
+        <!-- Tombol Mute/Unmute -->
+        <button id="btn-mute" onclick="app.toggleMute()" title="Matikan / Nyalakan Suara"
+          class="btn-3d bg-emerald-500 text-white border-b-4 border-emerald-700 rounded-2xl p-2.5 shadow">
+          <svg id="icon-sound-on" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
+          </svg>
+          <svg id="icon-sound-off" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Kotak Subtitel / Balon Narasi Guru -->
+    <div class="mt-2 bg-white/95 border-2 border-indigo-200 rounded-2xl px-4 py-2 shadow-sm flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full bg-indigo-100 border-2 border-indigo-400 flex items-center justify-center shrink-0 text-lg">
+        🦉
+      </div>
+      <p id="teacher-subtitle" class="text-sm sm:text-base font-bold text-slate-700 leading-snug">
+        Halo Detektif Cilik! Ayo klik tombol MULAI PETUALANGAN untuk belajar mengurai bangun datar!
+      </p>
+    </div>
+  </header>
+
+  <!-- AREA KONTEN UTAMA (Didesain pas di layar laptop 16:9 tanpa scroll berlebih) -->
+  <main id="main-stage" class="flex-1 w-full max-w-6xl mx-auto px-4 py-2 flex items-center justify-center">
+    <!-- Konten layar dirender secara dinamis oleh JavaScript -->
+  </main>
+
+  <!-- FOOTER NAVIGASI BAWAH -->
+  <footer class="w-full max-w-6xl mx-auto px-4 pb-3 pt-1">
+    <div class="flex items-center justify-between bg-white/80 backdrop-blur-sm border-2 border-slate-200 rounded-2xl px-4 py-2">
+      <button id="btn-prev" onclick="app.prevScreen()"
+        class="btn-3d bg-slate-200 hover:bg-slate-300 text-slate-700 border-b-4 border-slate-400 rounded-xl px-4 py-2 font-bold text-sm sm:text-base flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
+        ⬅️ Sebelumnya
+      </button>
+
+      <div class="text-xs sm:text-sm font-bold text-slate-500 text-center">
+        Tujuan: Mengurai bangun datar penyusun benda di sekitar kita
+      </div>
+
+      <button id="btn-next" onclick="app.nextScreen()"
+        class="btn-3d bg-indigo-600 hover:bg-indigo-500 text-white border-b-4 border-indigo-800 rounded-xl px-5 py-2 font-bold text-sm sm:text-base flex items-center gap-2">
+        Lanjut ➡️
+      </button>
+    </div>
+  </footer>
+
+  <!-- LOGIKA APLIKASI & AUDIO ENGINE -->
+  <script>
+    /**
+     * Modul Audio & Narasi (Web Speech API + Web Audio API Synthesizer)
+     * Tidak membutuhkan file MP3 eksternal sehingga bebas dari error 404.
+     */
+    const AudioEngine = {
+      ctx: null,
+      isMuted: false,
+      lastText: "",
+
+      initContext() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+          this.ctx.resume();
+        }
+      },
+
+      // Efek suara klik / pop ceria
+      playPop() {
+        if (this.isMuted) return;
+        try {
+          this.initContext();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.12);
+          gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.13);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.14);
+        } catch (e) {}
+      },
+
+      // Efek suara benar / bintang (Arpeggio mayor)
+      playSuccess() {
+        if (this.isMuted) return;
+        try {
+          this.initContext();
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "triangle";
+            const start = this.ctx.currentTime + i * 0.08;
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0.22, start);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + 0.28);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(start);
+            osc.stop(start + 0.3);
+          });
+        } catch (e) {}
+      },
+
+      // Efek suara lembut saat salah
+      playTryAgain() {
+        if (this.isMuted) return;
+        try {
+          this.initContext();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(220, this.ctx.currentTime + 0.22);
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.24);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.25);
+        } catch (e) {}
+      },
+
+      // Narasi Text-to-Speech Bahasa Indonesia
+      speak(text) {
+        this.lastText = text;
+        const subtitleEl = document.getElementById("teacher-subtitle");
+        if (subtitleEl) subtitleEl.textContent = text;
+
+        if (this.isMuted || !("speechSynthesis" in window)) return;
+        try {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(text);
+          utter.lang = "id-ID";
+          utter.rate = 0.95; // Sedikit lebih lambat & jelas untuk anak kelas 1 SD
+          utter.pitch = 1.15; // Nada ramah & ceria
+          window.speechSynthesis.speak(utter);
+        } catch (e) {}
+      }
+    };
+
+    /**
+     * Data Konten Pembelajaran
+     */
+    const DATA = {
+      // Layar 2: Mengenal 4 Bangun Datar Dasar
+      basicShapes: [
+        {
+          id: "segitiga",
+          name: "Segitiga",
+          sides: "Punya 3 sisi lurus dan 3 titik sudut",
+          example: "Seperti potongan pizza atau atap rumah",
+          color: "bg-rose-100 border-rose-400 text-rose-800",
+          btnColor: "bg-rose-500 border-rose-700",
+          svg: `<svg viewBox="0 0 120 110" class="w-28 h-28 mx-auto drop-shadow">
+                  <polygon points="60,12 108,96 12,96" fill="#f43f5e" stroke="#881337" stroke-width="5" stroke-linejoin="round"/>
+                </svg>`
+        },
+        {
+          id: "persegi",
+          name: "Persegi",
+          sides: "Punya 4 sisi yang sama panjang",
+          example: "Seperti jam dinding kotak atau papan catur",
+          color: "bg-sky-100 border-sky-400 text-sky-800",
+          btnColor: "bg-sky-500 border-sky-700",
+          svg: `<svg viewBox="0 0 120 110" class="w-28 h-28 mx-auto drop-shadow">
+                  <rect x="20" y="15" width="80" height="80" rx="6" fill="#0ea5e9" stroke="#0c4a6e" stroke-width="5"/>
+                </svg>`
+        },
+        {
+          id: "persegi_panjang",
+          name: "Persegi Panjang",
+          sides: "Punya 4 sisi, sisi berhadapan sama panjang",
+          example: "Seperti pintu rumah, buku tulis, dan papan tulis",
+          color: "bg-emerald-100 border-emerald-400 text-emerald-800",
+          btnColor: "bg-emerald-500 border-emerald-700",
+          svg: `<svg viewBox="0 0 140 110" class="w-32 h-28 mx-auto drop-shadow">
+                  <rect x="12" y="25" width="116" height="60" rx="6" fill="#10b981" stroke="#064e3b" stroke-width="5"/>
+                </svg>`
+        },
+        {
+          id: "lingkaran",
+          name: "Lingkaran",
+          sides: "Punya 1 sisi melengkung dan tidak punya sudut",
+          example: "Seperti roda sepeda, bola, dan uang koin",
+          color: "bg-amber-100 border-amber-400 text-amber-800",
+          btnColor: "bg-amber-500 border-amber-700",
+          svg: `<svg viewBox="0 0 120 110" class="w-28 h-28 mx-auto drop-shadow">
+                  <circle cx="60" cy="55" r="42" fill="#f59e0b" stroke="#78350f" stroke-width="5"/>
+                </svg>`
+        }
+      ],
+
+      // Layar 3: Level Mengurai Benda (Tap to Split)
+      decomposeLevels: [
+        {
+          id: "rumah",
+          title: "Benda 1: Rumah Sederhana",
+          intro: "Lihat gambar rumah ini! Ketuk setiap bagian rumah untuk mengurainya menjadi bangun datar!",
+          completeMsg: "Luar biasa! Kamu berhasil mengurai gambar rumah menjadi segitiga, persegi, persegi panjang, dan lingkaran!",
+          parts: [
+            { id: "atap", label: "Atap Rumah", shape: "segitiga", shapeName: "Segitiga", color: "#f43f5e" },
+            { id: "dinding", label: "Dinding Rumah", shape: "persegi", shapeName: "Persegi", color: "#38bdf8" },
+            { id: "pintu", label: "Pintu", shape: "persegi_panjang", shapeName: "Persegi Panjang", color: "#10b981" },
+            { id: "jendela", label: "Jendela Atas", shape: "lingkaran", shapeName: "Lingkaran", color: "#fbbf24" }
+          ],
+          renderSVG: (extractedSet) => `
+            <svg viewBox="0 0 320 270" class="w-full max-w-[330px] h-auto mx-auto select-none">
+              <!-- Latar Rumput -->
+              <ellipse cx="160" cy="252" rx="140" ry="12" fill="#86efac" />
+              <!-- Dinding (Persegi) -->
+              <rect onclick="app.extractPart('dinding')"
+                class="shape-part ${extractedSet.has('dinding') ? 'extracted' : ''}"
+                x="80" y="115" width="160" height="135" rx="4" fill="#38bdf8" stroke="#0369a1" stroke-width="4" />
+              <!-- Atap (Segitiga) -->
+              <polygon onclick="app.extractPart('atap')"
+                class="shape-part ${extractedSet.has('atap') ? 'extracted' : ''}"
+                points="160,22 55,115 265,115" fill="#f43f5e" stroke="#9f1239" stroke-width="4" stroke-linejoin="round" />
+              <!-- Jendela (Lingkaran) -->
+              <circle onclick="app.extractPart('jendela')"
+                class="shape-part ${extractedSet.has('jendela') ? 'extracted' : ''}"
+                cx="160" cy="82" r="18" fill="#fbbf24" stroke="#92400e" stroke-width="3.5" />
+              <!-- Pintu (Persegi Panjang) -->
+              <rect onclick="app.extractPart('pintu')"
+                class="shape-part ${extractedSet.has('pintu') ? 'extracted' : ''}"
+                x="135" y="168" width="50" height="82" rx="4" fill="#10b981" stroke="#065f46" stroke-width="4" />
+              <!-- Gagang pintu dekoratif -->
+              <circle cx="176" cy="212" r="3.5" fill="#fef08a" pointer-events="none" opacity="${extractedSet.has('pintu') ? '0.2' : '1'}" />
+            </svg>`
+        },
+        {
+          id: "roket",
+          title: "Benda 2: Roket Luar Angkasa",
+          intro: "Wih, ada roket siap meluncur! Ayo ketuk ujung, badan, jendela, dan sayap roket untuk mengurainya!",
+          completeMsg: "Hebat sekali Detektif! Roket ini tersusun dari segitiga, persegi panjang, dan lingkaran!",
+          parts: [
+            { id: "ujung", label: "Ujung Roket", shape: "segitiga", shapeName: "Segitiga", color: "#f43f5e" },
+            { id: "badan", label: "Badan Roket", shape: "persegi_panjang", shapeName: "Persegi Panjang", color: "#a855f7" },
+            { id: "kaca", label: "Kaca Kabin", shape: "lingkaran", shapeName: "Lingkaran", color: "#38bdf8" },
+            { id: "sayap_kiri", label: "Sayap Kiri", shape: "segitiga", shapeName: "Segitiga", color: "#fb923c" },
+            { id: "sayap_kanan", label: "Sayap Kanan", shape: "segitiga", shapeName: "Segitiga", color: "#fb923c" }
+          ],
+          renderSVG: (extractedSet) => `
+            <svg viewBox="0 0 320 270" class="w-full max-w-[330px] h-auto mx-auto select-none">
+              <!-- Api Roket Dekoratif -->
+              <path d="M142 225 Q160 265 178 225 Z" fill="#facc15" />
+              <!-- Sayap Kiri (Segitiga) -->
+              <polygon onclick="app.extractPart('sayap_kiri')"
+                class="shape-part ${extractedSet.has('sayap_kiri') ? 'extracted' : ''}"
+                points="120,155 70,220 120,220" fill="#fb923c" stroke="#9a3412" stroke-width="4" stroke-linejoin="round" />
+              <!-- Sayap Kanan (Segitiga) -->
+              <polygon onclick="app.extractPart('sayap_kanan')"
+                class="shape-part ${extractedSet.has('sayap_kanan') ? 'extracted' : ''}"
+                points="200,155 250,220 200,220" fill="#fb923c" stroke="#9a3412" stroke-width="4" stroke-linejoin="round" />
+              <!-- Badan Roket (Persegi Panjang) -->
+              <rect onclick="app.extractPart('badan')"
+                class="shape-part ${extractedSet.has('badan') ? 'extracted' : ''}"
+                x="120" y="90" width="80" height="135" rx="4" fill="#a855f7" stroke="#581c87" stroke-width="4" />
+              <!-- Ujung Roket (Segitiga) -->
+              <polygon onclick="app.extractPart('ujung')"
+                class="shape-part ${extractedSet.has('ujung') ? 'extracted' : ''}"
+                points="160,20 115,90 205,90" fill="#f43f5e" stroke="#881337" stroke-width="4" stroke-linejoin="round" />
+              <!-- Kaca Kabin (Lingkaran) -->
+              <circle onclick="app.extractPart('kaca')"
+                class="shape-part ${extractedSet.has('kaca') ? 'extracted' : ''}"
+                cx="160" cy="145" r="24" fill="#38bdf8" stroke="#0369a1" stroke-width="4" />
+            </svg>`
+        },
+        {
+          id: "kereta",
+          title: "Benda 3: Kereta Api Mainan",
+          intro: "Tut-tut-tut! Ayo urai bagian kereta api mainan ini. Ketuk semua bagiannya satu per satu!",
+          completeMsg: "Sempurna! Semua benda di sekitar kita ternyata gabungan dari bangun datar sederhana!",
+          parts: [
+            { id: "cerobong", label: "Cerobong Asap", shape: "segitiga", shapeName: "Segitiga", color: "#f43f5e" },
+            { id: "kabin", label: "Kabin Masinis", shape: "persegi", shapeName: "Persegi", color: "#3b82f6" },
+            { id: "mesin", label: "Badan Mesin", shape: "persegi_panjang", shapeName: "Persegi Panjang", color: "#10b981" },
+            { id: "roda1", label: "Roda Belakang", shape: "lingkaran", shapeName: "Lingkaran", color: "#f59e0b" },
+            { id: "roda2", label: "Roda Depan", shape: "lingkaran", shapeName: "Lingkaran", color: "#f59e0b" }
+          ],
+          renderSVG: (extractedSet) => `
+            <svg viewBox="0 0 320 270" class="w-full max-w-[330px] h-auto mx-auto select-none">
+              <!-- Rel Kereta -->
+              <line x1="25" y1="232" x2="295" y2="232" stroke="#64748b" stroke-width="6" stroke-linecap="round" />
+              <!-- Cerobong (Segitiga terbalik / kerucut) -->
+              <polygon onclick="app.extractPart('cerobong')"
+                class="shape-part ${extractedSet.has('cerobong') ? 'extracted' : ''}"
+                points="210,70 250,70 230,125" fill="#f43f5e" stroke="#881337" stroke-width="4" stroke-linejoin="round" />
+              <!-- Kabin Masinis (Persegi) -->
+              <rect onclick="app.extractPart('kabin')"
+                class="shape-part ${extractedSet.has('kabin') ? 'extracted' : ''}"
+                x="55" y="75" width="95" height="95" rx="4" fill="#3b82f6" stroke="#1e3a8a" stroke-width="4" />
+              <!-- Badan Mesin (Persegi Panjang) -->
+              <rect onclick="app.extractPart('mesin')"
+                class="shape-part ${extractedSet.has('mesin') ? 'extracted' : ''}"
+                x="150" y="120" width="115" height="50" rx="4" fill="#10b981" stroke="#065f46" stroke-width="4" />
+              <!-- Roda Belakang (Lingkaran) -->
+              <circle onclick="app.extractPart('roda1')"
+                class="shape-part ${extractedSet.has('roda1') ? 'extracted' : ''}"
+                cx="102" cy="198" r="30" fill="#f59e0b" stroke="#78350f" stroke-width="4" />
+              <!-- Roda Depan (Lingkaran) -->
+              <circle onclick="app.extractPart('roda2')"
+                class="shape-part ${extractedSet.has('roda2') ? 'extracted' : ''}"
+                cx="222" cy="198" r="30" fill="#f59e0b" stroke="#78350f" stroke-width="4" />
+            </svg>`
+        }
+      ],
+
+      // Layar 4: Kuis Evaluasi Visual (4 Pertanyaan)
+      quizQuestions: [
+        {
+          question: "Perhatikan gambar es krim ini! Bagian atas es krim berbentuk apa?",
+          illustration: `
+            <svg viewBox="0 0 200 200" class="w-40 h-40 mx-auto">
+              <polygon points="65,95 135,95 100,185" fill="#d97706" stroke="#78350f" stroke-width="4" stroke-linejoin="round"/>
+              <circle cx="100" cy="70" r="40" fill="#f472b6" stroke="#9d174d" stroke-width="4"/>
+            </svg>`,
+          options: [
+            { label: "Lingkaran", icon: "🟠", isCorrect: true },
+            { label: "Persegi", icon: "🟦", isCorrect: false },
+            { label: "Segitiga", icon: "🔺", isCorrect: false }
+          ],
+          feedbackCorrect: "Benar sekali! Bagian atas es krim berbentuk lingkaran!",
+          feedbackWrong: "Coba perhatikan lagi bentuk melengkung di bagian atas es krim!"
+        },
+        {
+          question: "Lihat perahu layar ini! Ada berapa bangun SEGITIGA pada gambar perahu?",
+          illustration: `
+            <svg viewBox="0 0 240 200" class="w-44 h-40 mx-auto">
+              <!-- Layar Kiri (Segitiga) -->
+              <polygon points="115,25 45,125 115,125" fill="#38bdf8" stroke="#0369a1" stroke-width="4" stroke-linejoin="round"/>
+              <!-- Layar Kanan (Segitiga) -->
+              <polygon points="125,45 185,125 125,125" fill="#fbbf24" stroke="#92400e" stroke-width="4" stroke-linejoin="round"/>
+              <!-- Badan Perahu (Persegi Panjang) -->
+              <rect x="40" y="132" width="160" height="36" rx="6" fill="#f43f5e" stroke="#881337" stroke-width="4"/>
+            </svg>`,
+          options: [
+            { label: "1 Segitiga", icon: "1️⃣", isCorrect: false },
+            { label: "2 Segitiga", icon: "2️⃣", isCorrect: true },
+            { label: "4 Segitiga", icon: "4️⃣", isCorrect: false }
+          ],
+          feedbackCorrect: "Tepat sekali! Ada 2 layar berbentuk segitiga pada perahu!",
+          feedbackWrong: "Ayo hitung lagi layar perahu yang berbentuk segitiga di bagian atas!"
+        },
+        {
+          question: "Pintu kelas kita berbentuk seperti gambar ini. Apa nama bangun datarnya?",
+          illustration: `
+            <svg viewBox="0 0 200 200" class="w-40 h-40 mx-auto">
+              <rect x="55" y="20" width="90" height="160" rx="6" fill="#10b981" stroke="#065f46" stroke-width="5"/>
+              <circle cx="130" cy="105" r="7" fill="#fef08a"/>
+            </svg>`,
+          options: [
+            { label: "Lingkaran", icon: "🟡", isCorrect: false },
+            { label: "Segitiga", icon: "🔺", isCorrect: false },
+            { label: "Persegi Panjang", icon: "🟩", isCorrect: true }
+          ],
+          feedbackCorrect: "Hebat! Pintu berbentuk persegi panjang karena punya dua sisi panjang dan dua sisi pendek!",
+          feedbackWrong: "Belum tepat. Pintu punya 4 sisi tapi dua sisinya lebih panjang!"
+        },
+        {
+          question: "Manakah benda yang BUKAN penyusun gambar robot sederhana ini?",
+          illustration: `
+            <svg viewBox="0 0 220 200" class="w-44 h-40 mx-auto">
+              <!-- Kepala Persegi -->
+              <rect x="75" y="20" width="70" height="60" rx="6" fill="#60a5fa" stroke="#1e3a8a" stroke-width="4"/>
+              <!-- Mata Lingkaran -->
+              <circle cx="95" cy="48" r="8" fill="#fef08a"/>
+              <circle cx="125" cy="48" r="8" fill="#fef08a"/>
+              <!-- Badan Persegi Panjang -->
+              <rect x="60" y="88" width="100" height="85" rx="6" fill="#a78bfa" stroke="#4c1d95" stroke-width="4"/>
+            </svg>`,
+          options: [
+            { label: "Segitiga", icon: "🔺", isCorrect: true },
+            { label: "Persegi", icon: "🟦", isCorrect: false },
+            { label: "Lingkaran", icon: "🟡", isCorrect: false }
+          ],
+          feedbackCorrect: "Jitu! Robot ini hanya memakai persegi, persegi panjang, dan lingkaran. Tidak ada segitiganya!",
+          feedbackWrong: "Coba lihat lagi kepala dan mata robotnya, bentuk itu ada di gambar!"
+        }
+      ]
+    };
+
+    /**
+     * Controller Utama Aplikasi MPI
+     */
+    const app = {
+      currentScreen: 0, // 0: Beranda, 1: Kenal Bentuk, 2: Eksplorasi Urai Benda, 3: Kuis
+      stars: 0,
+      decomposeIdx: 0,
+      extractedParts: new Set(),
+      quizIdx: 0,
+      quizScore: 0,
+      quizAnswered: false,
+      quizFinished: false,
+
+      init() {
+        this.renderScreen();
+      },
+
+      addStar(amount = 1) {
+        this.stars += amount;
+        const countEl = document.getElementById("star-count");
+        const iconEl = document.getElementById("star-icon");
+        if (countEl) countEl.textContent = this.stars;
+        if (iconEl) {
+          iconEl.classList.remove("animate-star");
+          void iconEl.offsetWidth;
+          iconEl.classList.add("animate-star");
+        }
+      },
+
+      toggleMute() {
+        AudioEngine.isMuted = !AudioEngine.isMuted;
+        const btn = document.getElementById("btn-mute");
+        const onIcon = document.getElementById("icon-sound-on");
+        const offIcon = document.getElementById("icon-sound-off");
+
+        if (AudioEngine.isMuted) {
+          window.speechSynthesis?.cancel();
+          btn.classList.replace("bg-emerald-500", "bg-rose-500");
+          btn.classList.replace("border-emerald-700", "border-rose-700");
+          onIcon.classList.add("hidden");
+          offIcon.classList.remove("hidden");
+        } else {
+          btn.classList.replace("bg-rose-500", "bg-emerald-500");
+          btn.classList.replace("border-rose-700", "border-emerald-700");
+          onIcon.classList.remove("hidden");
+          offIcon.classList.add("hidden");
+          AudioEngine.speak(AudioEngine.lastText);
+        }
+      },
+
+      repeatSpeech() {
+        AudioEngine.playPop();
+        AudioEngine.speak(AudioEngine.lastText);
+      },
+
+      goToScreen(idx) {
+        if (idx < 0 || idx > 3) return;
+        AudioEngine.playPop();
+        this.currentScreen = idx;
+        if (idx === 2) {
+          this.extractedParts.clear();
+        }
+        if (idx === 3 && this.quizFinished) {
+          this.resetQuiz();
+        }
+        this.renderScreen();
+      },
+
+      nextScreen() {
+        if (this.currentScreen < 3) {
+          this.goToScreen(this.currentScreen + 1);
+        }
+      },
+
+      prevScreen() {
+        if (this.currentScreen > 0) {
+          this.goToScreen(this.currentScreen - 1);
+        }
+      },
+
+      updateNavUI() {
+        // Update pills di header
+        for (let i = 0; i < 4; i++) {
+          const pill = document.getElementById(`nav-step-${i}`);
+          if (!pill) continue;
+          if (i === this.currentScreen) {
+            pill.className = "step-pill px-3.5 py-1.5 rounded-xl text-sm font-extrabold bg-indigo-600 text-white shadow";
+          } else {
+            pill.className = "step-pill px-3.5 py-1.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-200";
+          }
+        }
+
+        // Update tombol footer
+        const btnPrev = document.getElementById("btn-prev");
+        const btnNext = document.getElementById("btn-next");
+        if (btnPrev) btnPrev.disabled = this.currentScreen === 0;
+        if (btnNext) {
+          if (this.currentScreen === 3) {
+            btnNext.classList.add("hidden");
+          } else {
+            btnNext.classList.remove("hidden");
+            btnNext.innerHTML = this.currentScreen === 0 ? "Mulai Belajar ➡️" : "Lanjut ➡️";
+          }
+        }
+      },
+
+      renderScreen() {
+        this.updateNavUI();
+        const stage = document.getElementById("main-stage");
+        if (!stage) return;
+
+        switch (this.currentScreen) {
+          case 0:
+            this.renderHome(stage);
+            break;
+          case 1:
+            this.renderWarmup(stage);
+            break;
+          case 2:
+            this.renderDecompose(stage);
+            break;
+          case 3:
+            this.renderQuiz(stage);
+            break;
+        }
+      },
+
+      // ==========================================
+      // LAYAR 1: BERANDA (HOME)
+      // ==========================================
+      renderHome(stage) {
+        AudioEngine.speak("Halo Detektif Cilik! Selamat datang di Petualangan Detektif Bentuk. Ayo klik tombol Mulai Petualangan!");
+        stage.innerHTML = `
+          <div class="screen-enter w-full bg-white/95 border-4 border-amber-300 rounded-[2rem] shadow-xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <!-- Maskot Burung Hantu Detektif SVG -->
+            <div class="md:col-span-5 flex flex-col items-center justify-center">
+              <div class="animate-float bg-sky-100 border-4 border-sky-300 rounded-full p-5 shadow-inner">
+                <svg viewBox="0 0 220 220" class="w-44 h-44 sm:w-52 sm:h-52">
+                  <!-- Badan Burung Hantu -->
+                  <ellipse cx="110" cy="125" rx="68" ry="75" fill="#6366f1" stroke="#312e81" stroke-width="5"/>
+                  <!-- Perut -->
+                  <ellipse cx="110" cy="142" rx="45" ry="48" fill="#e0e7ff"/>
+                  <!-- Sayap -->
+                  <path d="M42 115 Q22 145 48 172" fill="#4f46e5" stroke="#312e81" stroke-width="5" stroke-linecap="round"/>
+                  <path d="M178 115 Q198 145 172 172" fill="#4f46e5" stroke="#312e81" stroke-width="5" stroke-linecap="round"/>
+                  <!-- Mata Kacamata Detektif -->
+                  <circle cx="84" cy="95" r="24" fill="#ffffff" stroke="#1e293b" stroke-width="5"/>
+                  <circle cx="136" cy="95" r="24" fill="#ffffff" stroke="#1e293b" stroke-width="5"/>
+                  <line x1="108" y1="95" x2="112" y2="95" stroke="#1e293b" stroke-width="5"/>
+                  <circle cx="86" cy="95" r="9" fill="#0f172a"/>
+                  <circle cx="134" cy="95" r="9" fill="#0f172a"/>
+                  <circle cx="89" cy="92" r="3" fill="#ffffff"/>
+                  <circle cx="137" cy="92" r="3" fill="#ffffff"/>
+                  <!-- Paruh Segitiga -->
+                  <polygon points="102,112 118,112 110,126" fill="#f59e0b" stroke="#92400e" stroke-width="3" stroke-linejoin="round"/>
+                  <!-- Topi Detektif -->
+                  <ellipse cx="110" cy="58" rx="62" ry="12" fill="#d97706" stroke="#78350f" stroke-width="4"/>
+                  <path d="M68 58 Q110 22 152 58 Z" fill="#f59e0b" stroke="#78350f" stroke-width="4"/>
+                  <!-- Kaca Pembesar -->
+                  <circle cx="176" cy="155" r="22" fill="#bae6fd" stroke="#0369a1" stroke-width="5"/>
+                  <line x1="192" y1="171" x2="210" y2="192" stroke="#78350f" stroke-width="8" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Teks Sambutan & Tombol Aksi -->
+            <div class="md:col-span-7 text-center md:text-left space-y-4">
+              <div class="inline-flex items-center gap-2 bg-amber-100 border-2 border-amber-400 text-amber-900 px-4 py-1 rounded-full font-extrabold text-sm">
+                🔍 Misi Rahasia Kelas 1 SD
+              </div>
+              <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-800 leading-tight">
+                Ayo Mengurai <span class="text-indigo-600">Bangun Datar</span> di Sekitar Kita!
+              </h2>
+              <p class="text-base sm:text-lg text-slate-600 font-semibold leading-relaxed">
+                Tahukah kamu? Rumah, roket, dan kereta api sebenarnya tersusun dari potongan bentuk sederhana seperti <strong>segitiga, persegi, persegi panjang,</strong> dan <strong>lingkaran</strong>!
+              </p>
+
+              <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-4">
+                <button onclick="app.goToScreen(1)"
+                  class="btn-3d bg-emerald-500 hover:bg-emerald-400 text-white border-b-8 border-emerald-700 rounded-3xl px-8 py-4 font-display font-bold text-xl sm:text-2xl shadow-lg flex items-center gap-3">
+                  <span>🚀 MULAI PETUALANGAN</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      // ==========================================
+      // LAYAR 2: PEMANASAN (KENAL 4 BENTUK DASAR)
+      // ==========================================
+      renderWarmup(stage) {
+        AudioEngine.speak("Ayo kenali 4 bangun datar dasar! Klik setiap kartu bentuk untuk mendengar penjelasan dan contoh bendanya.");
+        const cardsHtml = DATA.basicShapes.map((shape) => `
+          <button onclick="app.inspectBasicShape('${shape.id}')"
+            class="btn-3d ${shape.color} border-4 rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-between text-center shadow-md hover:shadow-xl transition">
+            <div class="mb-2">${shape.svg}</div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-1">${shape.name}</h3>
+            <p class="text-xs sm:text-sm font-bold opacity-90 mb-3">${shape.sides}</p>
+            <span class="${shape.btnColor} text-white border-b-4 rounded-2xl px-4 py-1.5 text-xs sm:text-sm font-extrabold inline-flex items-center gap-1.5">
+              🔊 Ketuk Aku
+            </span>
+          </button>
+        `).join("");
+
+        stage.innerHTML = `
+          <div class="screen-enter w-full space-y-4">
+            <div class="text-center">
+              <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Langkah 1: Kenali 4 Bentuk Dasar</h2>
+              <p class="text-sm sm:text-base font-bold text-slate-600">Klik kartu di bawah ini untuk mendengarkan ciri-cirinya!</p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              ${cardsHtml}
+            </div>
+          </div>
+        `;
+      },
+
+      inspectBasicShape(shapeId) {
+        const shape = DATA.basicShapes.find((s) => s.id === shapeId);
+        if (!shape) return;
+        AudioEngine.playPop();
+        AudioEngine.speak(`Ini adalah ${shape.name}. ${shape.sides}. ${shape.example}.`);
+      },
+
+      // ==========================================
+      // LAYAR 3: EKSPLORASI KONSEP (TAP TO SPLIT)
+      // ==========================================
+      renderDecompose(stage) {
+        const level = DATA.decomposeLevels[this.decomposeIdx];
+        const totalParts = level.parts.length;
+        const doneCount = this.extractedParts.size;
+        const isAllDone = doneCount === totalParts;
+
+        if (doneCount === 0) {
+          AudioEngine.speak(level.intro);
+        }
+
+        // Daftar tombol pilihan level benda di atas
+        const levelTabs = DATA.decomposeLevels.map((lvl, idx) => `
+          <button onclick="app.selectDecomposeLevel(${idx})"
+            class="btn-3d px-4 py-1.5 rounded-2xl font-extrabold text-xs sm:text-sm border-b-4 transition ${
+              idx === this.decomposeIdx
+                ? "bg-amber-400 text-amber-950 border-amber-600 shadow"
+                : "bg-white text-slate-600 border-slate-300 hover:bg-slate-50"
+            }">
+            ${idx === 0 ? "🏠 Rumah" : idx === 1 ? "🚀 Roket" : "🚂 Kereta"}
+          </button>
+        `).join("");
+
+        // Slot hasil uraian di panel kanan
+        const slotsHtml = level.parts.map((part) => {
+          const isExtracted = this.extractedParts.has(part.id);
+          return `
+            <div class="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border-2 transition-all ${
+              isExtracted
+                ? "bg-emerald-50 border-emerald-400 shadow-sm"
+                : "bg-slate-100/80 border-dashed border-slate-300"
+            }">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shadow-sm"
+                  style="background-color: ${isExtracted ? part.color : '#cbd5e1'}">
+                  ${this.getMiniShapeSVG(part.shape)}
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-slate-500 block">${part.label}</span>
+                  <span class="text-sm sm:text-base font-extrabold ${isExtracted ? "text-slate-800" : "text-slate-400"}">
+                    ${isExtracted ? part.shapeName : "??? (Ketuk gambar)"}
+                  </span>
+                </div>
+              </div>
+              <span class="text-lg">${isExtracted ? "✅" : "🔍"}</span>
+            </div>
+          `;
+        }).join("");
+
+        stage.innerHTML = `
+          <div class="screen-enter w-full bg-white/95 border-4 border-sky-300 rounded-[2rem] shadow-xl p-4 sm:p-6">
+            <!-- Header Level -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b-2 border-slate-100">
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">${level.title}</h2>
+                <p class="text-xs sm:text-sm font-bold text-sky-700">Terurai: ${doneCount} dari ${totalParts} bagian</p>
+              </div>
+              <div class="flex items-center gap-2">
+                ${levelTabs}
+                <button onclick="app.resetCurrentDecompose()" title="Susun Ulang Benda"
+                  class="btn-3d bg-slate-200 hover:bg-slate-300 text-slate-700 border-b-4 border-slate-400 rounded-2xl px-3 py-1.5 text-xs sm:text-sm font-extrabold">
+                  🔄 Susun Ulang
+                </button>
+              </div>
+            </div>
+
+            <!-- Grid 2 Kolom (Kiri: Gambar Benda Interaktif, Kanan: Keranjang Hasil Uraian) -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+              <!-- Area Gambar SVG Tap-to-Split -->
+              <div class="md:col-span-6 bg-gradient-to-b from-sky-50 to-indigo-50 border-3 border-sky-200 rounded-3xl p-4 flex flex-col items-center justify-center relative">
+                <span class="bg-white/90 border border-sky-200 text-sky-800 text-xs font-extrabold px-3 py-1 rounded-full mb-2 shadow-sm">
+                  👆 Ketuk langsung bagian-bagian gambar!
+                </span>
+                ${level.renderSVG(this.extractedParts)}
+              </div>
+
+              <!-- Area Daftar Hasil Uraian -->
+              <div class="md:col-span-6 space-y-2.5">
+                <h3 class="text-base sm:text-lg font-bold text-slate-700 flex items-center gap-2">
+                  📦 Kotak Hasil Uraian Bentuk:
+                </h3>
+                <div class="space-y-2">
+                  ${slotsHtml}
+                </div>
+
+                ${isAllDone ? `
+                  <div class="mt-3 bg-amber-100 border-2 border-amber-400 rounded-2xl p-3 flex items-center justify-between gap-3">
+                    <span class="text-sm font-extrabold text-amber-900">🎉 Semua bagian berhasil diurai!</span>
+                    ${this.decomposeIdx < DATA.decomposeLevels.length - 1
+                      ? `<button onclick="app.selectDecomposeLevel(${this.decomposeIdx + 1})"
+                          class="btn-3d bg-emerald-500 text-white border-b-4 border-emerald-700 rounded-xl px-4 py-2 text-sm font-extrabold shrink-0">
+                          Benda Berikutnya ➡️
+                        </button>`
+                      : `<button onclick="app.goToScreen(3)"
+                          class="btn-3d bg-indigo-600 text-white border-b-4 border-indigo-800 rounded-xl px-4 py-2 text-sm font-extrabold shrink-0">
+                          Mulai Kuis Bintang ⭐
+                        </button>`
+                    }
+                  </div>
+                ` : ""}
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      getMiniShapeSVG(shapeType) {
+        switch (shapeType) {
+          case "segitiga":
+            return `<svg viewBox="0 0 24 24" class="w-6 h-6 fill-current"><polygon points="12,3 22,20 2,20"/></svg>`;
+          case "persegi":
+            return `<svg viewBox="0 0 24 24" class="w-6 h-6 fill-current"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>`;
+          case "persegi_panjang":
+            return `<svg viewBox="0 0 24 24" class="w-6 h-6 fill-current"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>`;
+          case "lingkaran":
+            return `<svg viewBox="0 0 24 24" class="w-6 h-6 fill-current"><circle cx="12" cy="12" r="9"/></svg>`;
+          default:
+            return "";
+        }
+      },
+
+      selectDecomposeLevel(idx) {
+        AudioEngine.playPop();
+        this.decomposeIdx = idx;
+        this.extractedParts.clear();
+        this.renderScreen();
+      },
+
+      resetCurrentDecompose() {
+        AudioEngine.playPop();
+        this.extractedParts.clear();
+        this.renderScreen();
+      },
+
+      extractPart(partId) {
+        if (this.extractedParts.has(partId)) return;
+        const level = DATA.decomposeLevels[this.decomposeIdx];
+        const part = level.parts.find((p) => p.id === partId);
+        if (!part) return;
+
+        this.extractedParts.add(partId);
+        AudioEngine.playSuccess();
+        this.addStar(1);
+
+        if (this.extractedParts.size === level.parts.length) {
+          AudioEngine.speak(`Bagus! Itu ${part.label}, berbentuk ${part.shapeName}. ${level.completeMsg}`);
+          Confetti.burst();
+        } else {
+          AudioEngine.speak(`Hebat! ${part.label} ini berbentuk ${part.shapeName}!`);
+        }
+
+        this.renderScreen();
+      },
+
+      // ==========================================
+      // LAYAR 4: KUIS DETEKTIF (EVALUASI VISUAL)
+      // ==========================================
+      renderQuiz(stage) {
+        if (this.quizFinished) {
+          this.renderQuizComplete(stage);
+          return;
+        }
+
+        const q = DATA.quizQuestions[this.quizIdx];
+        if (!this.quizAnswered) {
+          AudioEngine.speak(`Soal nomor ${this.quizIdx + 1}. ${q.question}`);
+        }
+
+        const optionsHtml = q.options.map((opt, idx) => `
+          <button onclick="app.answerQuiz(${idx})" id="quiz-opt-${idx}"
+            class="btn-3d w-full bg-white hover:bg-indigo-50 border-4 border-indigo-200 rounded-2xl p-3.5 sm:p-4 flex items-center gap-4 text-left shadow-sm transition">
+            <span class="text-2xl sm:text-3xl bg-indigo-100 w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+              ${opt.icon}
+            </span>
+            <span class="text-lg sm:text-xl font-extrabold text-slate-800">${opt.label}</span>
+          </button>
+        `).join("");
+
+        stage.innerHTML = `
+          <div class="screen-enter w-full max-w-4xl bg-white/95 border-4 border-purple-300 rounded-[2rem] shadow-xl p-5 sm:p-7">
+            <div class="flex items-center justify-between mb-4">
+              <span class="bg-purple-100 text-purple-800 border-2 border-purple-300 px-4 py-1 rounded-full font-extrabold text-sm">
+                🏆 Tantangan Detektif: Soal ${this.quizIdx + 1} dari ${DATA.quizQuestions.length}
+              </span>
+              <span class="font-extrabold text-sm text-slate-500">Skor Kuis: ${this.quizScore} / ${DATA.quizQuestions.length}</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <!-- Gambar Soal -->
+              <div class="md:col-span-5 bg-amber-50 border-3 border-amber-200 rounded-3xl p-4 flex items-center justify-center">
+                ${q.illustration}
+              </div>
+
+              <!-- Pertanyaan & Pilihan Jawaban -->
+              <div class="md:col-span-7 space-y-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug">
+                  ${q.question}
+                </h2>
+                <div class="space-y-2.5" id="quiz-options-container">
+                  ${optionsHtml}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      answerQuiz(optionIdx) {
+        if (this.quizAnswered) return;
+        const q = DATA.quizQuestions[this.quizIdx];
+        const selected = q.options[optionIdx];
+        const btnEl = document.getElementById(`quiz-opt-${optionIdx}`);
+
+        if (selected.isCorrect) {
+          this.quizAnswered = true;
+          this.quizScore++;
+          this.addStar(2);
+          AudioEngine.playSuccess();
+          AudioEngine.speak(q.feedbackCorrect);
+
+          if (btnEl) {
+            btnEl.classList.remove("border-indigo-200", "bg-white");
+            btnEl.classList.add("border-emerald-500", "bg-emerald-100");
+          }
+
+          setTimeout(() => {
+            if (this.quizIdx < DATA.quizQuestions.length - 1) {
+              this.quizIdx++;
+              this.quizAnswered = false;
+              this.renderScreen();
+            } else {
+              this.quizFinished = true;
+              Confetti.burst();
+              this.renderScreen();
+            }
+          }, 1800);
+        } else {
+          AudioEngine.playTryAgain();
+          AudioEngine.speak(q.feedbackWrong);
+          if (btnEl) {
+            btnEl.classList.remove("animate-shake", "border-indigo-200");
+            void btnEl.offsetWidth;
+            btnEl.classList.add("animate-shake", "border-rose-400", "bg-rose-50");
+          }
+        }
+      },
+
+      renderQuizComplete(stage) {
+        AudioEngine.playSuccess();
+        AudioEngine.speak(`Selamat Detektif Hebat! Kamu sudah menyelesaikan semua misi mengurai bangun datar dan mengumpulkan ${this.stars} bintang!`);
+
+        stage.innerHTML = `
+          <div class="screen-enter w-full max-w-3xl bg-white/95 border-4 border-amber-400 rounded-[2rem] shadow-2xl p-6 sm:p-10 text-center space-y-5">
+            <div class="text-6xl sm:text-7xl animate-bounce">🏅</div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-800">
+              Selamat, Detektif Bentuk Hebat!
+            </h2>
+            <p class="text-base sm:text-lg font-bold text-slate-600 max-w-xl mx-auto">
+              Kamu sudah pintar mengurai benda di sekitar menjadi bangun <strong>segitiga, persegi, persegi panjang,</strong> dan <strong>lingkaran</strong>!
+            </p>
+
+            <div class="inline-flex items-center gap-3 bg-yellow-100 border-4 border-yellow-400 rounded-3xl px-6 py-3 shadow-inner">
+              <span class="text-3xl">⭐</span>
+              <div class="text-left">
+                <span class="text-xs font-extrabold uppercase text-yellow-800 block">Total Bintangmu</span>
+                <span class="font-display text-3xl font-bold text-yellow-900">${this.stars} Bintang</span>
+              </div>
+            </div>
+
+            <div class="pt-3 flex flex-wrap justify-center gap-4">
+              <button onclick="app.restartAll()"
+                class="btn-3d bg-emerald-500 hover:bg-emerald-400 text-white border-b-8 border-emerald-700 rounded-3xl px-8 py-4 font-display font-bold text-xl shadow-lg">
+                🔄 Main Lagi dari Awal
+              </button>
+            </div>
+          </div>
+        `;
+      },
+
+      resetQuiz() {
+        this.quizIdx = 0;
+        this.quizScore = 0;
+        this.quizAnswered = false;
+        this.quizFinished = false;
+      },
+
+      restartAll() {
+        AudioEngine.playPop();
+        this.stars = 0;
+        document.getElementById("star-count").textContent = "0";
+        this.decomposeIdx = 0;
+        this.extractedParts.clear();
+        this.resetQuiz();
+        this.goToScreen(0);
+      }
+    };
+
+    /**
+     * Efek Confetti Ringan Berbasis Canvas
+     */
+    const Confetti = {
+      particles: [],
+      animating: false,
+
+      burst() {
+        const canvas = document.getElementById("confetti-canvas");
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const colors = ["#f43f5e", "#38bdf8", "#10b981", "#f59e0b", "#a855f7"];
+
+        for (let i = 0; i < 85; i++) {
+          this.particles.push({
+            x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+            y: canvas.height / 2,
+            vx: (Math.random() - 0.5) * 14,
+            vy: (Math.random() - 0.8) * 14,
+            size: Math.random() * 9 + 5,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 100
+          });
+        }
+
+        if (!this.animating) {
+          this.animating = true;
+          this.loop();
+        }
+      },
+
+      loop() {
+        const canvas = document.getElementById("confetti-canvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // gravitasi
+          p.life--;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size * 0.6);
+        });
+
+        this.particles = this.particles.filter((p) => p.life > 0);
+        if (this.particles.length > 0) {
+          requestAnimationFrame(() => this.loop());
+        } else {
+          this.animating = false;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+    };
+
+    // Inisialisasi aplikasi saat halaman siap
+    window.addEventListener("DOMContentLoaded", () => {
+      app.init();
+    });
+  </script>
+</body>
+</html>
