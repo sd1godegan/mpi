@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Misi Anak Hebat di Meja Makan - Pendidikan Pancasila Kelas 1 SD</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Ramah Anak: Fredoka & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: 'Fredoka', cursive, sans-serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(circle at top left, #fef3c7 0%, #dcfce7 50%, #e0f2fe 100%);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: var(--font-display);
+    }
+
+    /* Animasi Mengambang Lembut */
+    @keyframes floatSoft {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+    .animate-float {
+      animation: floatSoft 3.2s ease-in-out infinite;
+    }
+
+    /* Animasi Masuk Layar */
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.95) translateY(8px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .screen-enter {
+      animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Animasi Loncat Senang */
+    @keyframes happyBounce {
+      0%, 100% { transform: scale(1) translateY(0); }
+      40% { transform: scale(1.06) translateY(-10px); }
+      70% { transform: scale(0.98) translateY(0); }
+    }
+    .animate-happy {
+      animation: happyBounce 0.55s ease-out;
+    }
+
+    /* Animasi Getar Lembut Saat Pilihan Kurang Tepat */
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-7px); }
+      40% { transform: translateX(7px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    .animate-shake {
+      animation: gentleShake 0.4s ease-in-out;
+    }
+
+    /* Animasi Bintang Skor */
+    @keyframes starPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.32) rotate(12deg); }
+    }
+    .animate-star {
+      animation: starPulse 0.5s ease-out;
+    }
+
+    /* Tombol 3D Ramah Anak */
+    .btn-3d {
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
+    }
+    .btn-3d:hover:not(:disabled) {
+      filter: brightness(1.03);
+      transform: translateY(-2px);
+    }
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(3px);
+    }
+
+    /* Confetti Overlay */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.relative{position:relative}.-right-2\.5{right:-0.625rem}.-top-2\.5{top:-0.625rem}.z-20{z-index:20}.mx-auto{margin-left:auto;margin-right:auto}.my-0\.5{margin-top:0.125rem;margin-bottom:0.125rem}.mt-1\.5{margin-top:0.375rem}.mb-1\.5{margin-bottom:0.375rem}.mb-3{margin-bottom:0.75rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-4{height:1rem}.h-5{height:1.25rem}.h-8{height:2rem}.h-20{height:5rem}.h-12{height:3rem}.h-auto{height:auto}.h-3\.5{height:0.875rem}.min-h-screen{min-height:100vh}.w-4{width:1rem}.w-5{width:1.25rem}.w-8{width:2rem}.w-full{width:100%}.w-24{width:6rem}.w-12{width:3rem}.w-3\.5{width:0.875rem}.max-w-6xl{max-width:72rem}.max-w-\[300px\]{max-width:300px}.max-w-4xl{max-width:56rem}.max-w-\[250px\]{max-width:250px}.max-w-3xl{max-width:48rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.scale-\[1\.03\]{--tw-scale-x:1.03;--tw-scale-y:1.03;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-5{gap:1.25rem}.gap-4{gap:1rem}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.whitespace-nowrap{white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-\[2rem\]{border-radius:2rem}.border-2{border-width:2px}.border-4{border-width:4px}.border{border-width:1px}.border-b-4{border-bottom-width:4px}.border-b-2{border-bottom-width:2px}.border-b-8{border-bottom-width:8px}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138 / var(--tw-border-opacity, 1))}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77 / var(--tw-border-opacity, 1))}.border-amber-400{--tw-border-opacity:1;border-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-emerald-700{--tw-border-opacity:1;border-color:rgb(4 120 87 / var(--tw-border-opacity, 1))}.border-emerald-800{--tw-border-opacity:1;border-color:rgb(6 95 70 / var(--tw-border-opacity, 1))}.border-indigo-800{--tw-border-opacity:1;border-color:rgb(55 48 163 / var(--tw-border-opacity, 1))}.border-orange-600{--tw-border-opacity:1;border-color:rgb(234 88 12 / var(--tw-border-opacity, 1))}.border-sky-700{--tw-border-opacity:1;border-color:rgb(3 105 161 / var(--tw-border-opacity, 1))}.border-slate-400{--tw-border-opacity:1;border-color:rgb(148 163 184 / var(--tw-border-opacity, 1))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(250 204 21 / var(--tw-border-opacity, 1))}.border-amber-600{--tw-border-opacity:1;border-color:rgb(217 119 6 / var(--tw-border-opacity, 1))}.border-current{border-color:currentColor}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-400{--tw-border-opacity:1;border-color:rgb(52 211 153 / var(--tw-border-opacity, 1))}.border-indigo-400{--tw-border-opacity:1;border-color:rgb(129 140 248 / var(--tw-border-opacity, 1))}.border-purple-400{--tw-border-opacity:1;border-color:rgb(192 132 252 / var(--tw-border-opacity, 1))}.border-sky-400{--tw-border-opacity:1;border-color:rgb(56 189 248 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.border-lime-400{--tw-border-opacity:1;border-color:rgb(163 230 53 / var(--tw-border-opacity, 1))}.border-orange-400{--tw-border-opacity:1;border-color:rgb(251 146 60 / var(--tw-border-opacity, 1))}.border-rose-400{--tw-border-opacity:1;border-color:rgb(251 113 133 / var(--tw-border-opacity, 1))}.border-teal-400{--tw-border-opacity:1;border-color:rgb(45 212 191 / var(--tw-border-opacity, 1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-cyan-400{--tw-border-opacity:1;border-color:rgb(34 211 238 / var(--tw-border-opacity, 1))}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.border-rose-700{--tw-border-opacity:1;border-color:rgb(190 18 60 / var(--tw-border-opacity, 1))}.border-sky-300{--tw-border-opacity:1;border-color:rgb(125 211 252 / var(--tw-border-opacity, 1))}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-orange-400{--tw-bg-opacity:1;background-color:rgb(251 146 60 / var(--tw-bg-opacity, 1))}.bg-sky-500{--tw-bg-opacity:1;background-color:rgb(14 165 233 / var(--tw-bg-opacity, 1))}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-white\/85{background-color:rgb(255 255 255 / 0.85)}.bg-white\/95{background-color:rgb(255 255 255 / 0.95)}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-sky-100{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-lime-100{--tw-bg-opacity:1;background-color:rgb(236 252 203 / var(--tw-bg-opacity, 1))}.bg-orange-100{--tw-bg-opacity:1;background-color:rgb(255 237 213 / var(--tw-bg-opacity, 1))}.bg-rose-100{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.bg-teal-100{--tw-bg-opacity:1;background-color:rgb(204 251 241 / var(--tw-bg-opacity, 1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-cyan-100{--tw-bg-opacity:1;background-color:rgb(207 250 254 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-700\/40{background-color:rgb(4 120 87 / 0.4)}.bg-rose-500{--tw-bg-opacity:1;background-color:rgb(244 63 94 / var(--tw-bg-opacity, 1))}.bg-rose-700\/40{background-color:rgb(190 18 60 / 0.4)}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-1\.5{padding:0.375rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.pb-1{padding-bottom:0.25rem}.pb-2{padding-bottom:0.5rem}.pt-1{padding-top:0.25rem}.pt-2\.5{padding-top:0.625rem}.pb-2\.5{padding-bottom:0.625rem}.pt-2{padding-top:0.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-6xl{font-size:3.75rem;line-height:1}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.uppercase{text-transform:uppercase}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-wider{letter-spacing:0.05em}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.text-amber-950{--tw-text-opacity:1;color:rgb(69 26 3 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-emerald-950{--tw-text-opacity:1;color:rgb(2 44 34 / var(--tw-text-opacity, 1))}.text-indigo-950{--tw-text-opacity:1;color:rgb(30 27 75 / var(--tw-text-opacity, 1))}.text-purple-950{--tw-text-opacity:1;color:rgb(59 7 100 / var(--tw-text-opacity, 1))}.text-sky-950{--tw-text-opacity:1;color:rgb(8 47 73 / var(--tw-text-opacity, 1))}.text-lime-950{--tw-text-opacity:1;color:rgb(26 46 5 / var(--tw-text-opacity, 1))}.text-orange-950{--tw-text-opacity:1;color:rgb(67 20 7 / var(--tw-text-opacity, 1))}.text-rose-950{--tw-text-opacity:1;color:rgb(76 5 25 / var(--tw-text-opacity, 1))}.text-teal-950{--tw-text-opacity:1;color:rgb(4 47 46 / var(--tw-text-opacity, 1))}.text-yellow-950{--tw-text-opacity:1;color:rgb(66 32 6 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-cyan-950{--tw-text-opacity:1;color:rgb(8 51 68 / var(--tw-text-opacity, 1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59 / var(--tw-text-opacity, 1))}.text-sky-900{--tw-text-opacity:1;color:rgb(12 74 110 / var(--tw-text-opacity, 1))}.text-yellow-900{--tw-text-opacity:1;color:rgb(113 63 18 / var(--tw-text-opacity, 1))}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-emerald-500{--tw-ring-opacity:1;--tw-ring-color:rgb(16 185 129 / var(--tw-ring-opacity, 1))}.ring-emerald-400{--tw-ring-opacity:1;--tw-ring-color:rgb(52 211 153 / var(--tw-ring-opacity, 1))}.ring-amber-600{--tw-ring-opacity:1;--tw-ring-color:rgb(217 119 6 / var(--tw-ring-opacity, 1))}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-500:hover{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.hover\:bg-orange-300:hover{--tw-bg-opacity:1;background-color:rgb(253 186 116 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-300:hover{--tw-bg-opacity:1;background-color:rgb(203 213 225 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-100:hover{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-50:hover{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-400:hover{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-400:hover{--tw-bg-opacity:1;background-color:rgb(251 113 133 / var(--tw-bg-opacity, 1))}.hover\:shadow-lg:hover{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.disabled\:pointer-events-none:disabled{pointer-events:none}.disabled\:opacity-40:disabled{opacity:0.4}.disabled\:opacity-80:disabled{opacity:0.8}.disabled\:opacity-60:disabled{opacity:0.6}@media (min-width: 640px){.sm\:block{display:block}.sm\:inline{display:inline}.sm\:h-5{height:1.25rem}.sm\:h-6{height:1.5rem}.sm\:w-5{width:1.25rem}.sm\:w-6{width:1.5rem}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:p-3\.5{padding:0.875rem}.sm\:p-5{padding:1.25rem}.sm\:p-6{padding:1.5rem}.sm\:p-8{padding:2rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-xs{font-size:0.75rem;line-height:1rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-7xl{font-size:4.5rem;line-height:1}}@media (min-width: 768px){.md\:col-span-5{grid-column:span 5 / span 5}.md\:col-span-7{grid-column:span 7 / span 7}.md\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.md\:text-left{text-align:left}.md\:text-base{font-size:1rem;line-height:1.5rem}}@media (min-width: 1024px){.lg\:inline{display:inline}.lg\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.lg\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 1280px){.xl\:inline{display:inline}}</style></head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+  <!-- Canvas Confetti Perayaan -->
+  <canvas id="confetti-canvas" width="1536" height="622"></canvas>
+
+  <!-- HEADER & NAVIGASI 4 TAHAP -->
+  <header class="w-full max-w-6xl mx-auto px-4 pt-2.5 pb-1 z-20">
+    <div class="bg-white/95 backdrop-blur-md border-4 border-amber-300 rounded-3xl shadow-md px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+      
+      <!-- Identitas Media -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="app.goToScreen(0)" title="Kembali ke Beranda" class="btn-3d bg-orange-400 hover:bg-orange-300 text-white border-b-4 border-orange-600 rounded-2xl p-2 flex items-center justify-center shadow">
+          <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+        </button>
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 block">Pendidikan Pancasila • Kelas 1 SD</span>
+          <h1 class="text-base sm:text-lg font-bold text-slate-800 leading-tight">Misi Anak Hebat di Meja Makan</h1>
+        </div>
+      </div>
+
+      <!-- Indikator Progres 4 Tahap -->
+      <nav aria-label="Tahapan Pembelajaran" class="flex items-center gap-1.5 bg-amber-50 p-1 rounded-2xl border-2 border-amber-200 overflow-x-auto">
+        <button onclick="app.goToScreen(0)" id="nav-step-0" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-amber-100 whitespace-nowrap">1. Beranda</button>
+        <button onclick="app.goToScreen(1)" id="nav-step-1" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-extrabold bg-emerald-600 text-white shadow whitespace-nowrap">2. Belajar Aturan</button>
+        <button onclick="app.goToScreen(2)" id="nav-step-2" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-amber-100 whitespace-nowrap">3. Bantu Bimo</button>
+        <button onclick="app.goToScreen(3)" id="nav-step-3" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-amber-100 whitespace-nowrap">4. Kuis Jempol</button>
+      </nav>
+
+      <!-- Kontrol Suara, Bintang & Unduh HTML -->
+      <div class="flex items-center gap-2">
+        <!-- Skor Bintang -->
+        <div class="bg-yellow-100 border-2 border-yellow-400 rounded-2xl px-3 py-1 flex items-center gap-1.5 shadow-inner" title="Bintang Kebaikan">
+          <span class="text-lg animate-star" id="star-icon">⭐</span>
+          <span id="star-count" class="font-display font-bold text-base sm:text-lg text-yellow-800">0</span>
+        </div>
+
+        <!-- Tombol Ulangi Suara -->
+        <button onclick="app.repeatSpeech()" title="Ulangi Suara Narasi" class="btn-3d bg-sky-500 text-white border-b-4 border-sky-700 rounded-2xl px-3 py-1.5 flex items-center gap-1.5 font-bold text-xs sm:text-sm shadow">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+          </svg>
+          <span class="hidden lg:inline">Ulangi Suara</span>
+        </button>
+
+        <!-- Tombol Suara ON/OFF -->
+        <button id="btn-mute" onclick="app.toggleMute()" title="Suara ON / OFF" class="btn-3d bg-emerald-500 text-white border-b-4 border-emerald-700 rounded-2xl px-2.5 py-1.5 flex items-center gap-1 font-bold text-xs shadow">
+          <svg id="icon-sound-on" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"></path>
+          </svg>
+          <svg id="icon-sound-off" class="w-4 h-4 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
+          </svg>
+          <span id="mute-label" class="hidden sm:inline">ON</span>
+        </button>
+
+        <!-- Tombol Unduh HTML -->
+        <button onclick="app.downloadHTML()" title="Unduh File HTML untuk Laptop" class="btn-3d bg-indigo-600 hover:bg-indigo-500 text-white border-b-4 border-indigo-800 rounded-2xl px-3 py-1.5 flex items-center gap-1.5 font-bold text-xs sm:text-sm shadow">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+          </svg>
+          <span class="hidden xl:inline">Unduh HTML</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Balon Subtitel Narasi Guru -->
+    <div class="mt-1.5 bg-white/95 border-2 border-emerald-200 rounded-2xl px-4 py-1.5 shadow-sm flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-amber-100 border-2 border-amber-400 flex items-center justify-center shrink-0 text-base">
+        👦
+      </div>
+      <p id="teacher-subtitle" class="text-xs sm:text-sm md:text-base font-bold text-slate-700 leading-snug">Aturan Sebelum Makan. Ada lima aturan penting sebelum makan. Klik setiap kartu untuk mendengarkan penjelasannya!</p>
+    </div>
+  </header>
+
+  <!-- LAYAR UTAMA (Proporsi Layar Laptop 16:9 Rapi Tanpa Scroll) -->
+  <main id="main-stage" class="flex-1 w-full max-w-6xl mx-auto px-4 py-1 flex items-center justify-center">
+          <div class="screen-enter w-full space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-white/95 border-2 border-amber-200 rounded-3xl px-4 py-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-lg sm:text-2xl font-bold text-slate-800">Tahap 2: 15 Aturan Makan Anak Hebat</h2>
+                  <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-0.5 rounded-full text-xs font-extrabold">
+                    Dipelajari: 0 / 15
+                  </span>
+                </div>
+                <p class="text-xs font-bold text-slate-600">Pilih tab waktu makan, lalu ketuk setiap kartunya untuk mendengarkan aturan!</p>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                
+          <button onclick="app.selectRuleTab(0)" class="btn-3d px-3.5 py-1.5 rounded-2xl font-display font-bold text-xs sm:text-sm border-b-4 transition bg-amber-400 text-amber-950 border-amber-600 shadow-md">
+            1. Sebelum Makan (5)
+          </button>
+        
+          <button onclick="app.selectRuleTab(1)" class="btn-3d px-3.5 py-1.5 rounded-2xl font-display font-bold text-xs sm:text-sm border-b-4 transition bg-white text-slate-600 border-slate-300 hover:bg-amber-50">
+            2. Saat Makan (5)
+          </button>
+        
+          <button onclick="app.selectRuleTab(2)" class="btn-3d px-3.5 py-1.5 rounded-2xl font-display font-bold text-xs sm:text-sm border-b-4 transition bg-white text-slate-600 border-slate-300 hover:bg-amber-50">
+            3. Sesudah Makan (5)
+          </button>
+        
+              </div>
+            </div>
+
+            <!-- Grid 5 Kolom Responsif di Layar Laptop -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              
+            <button onclick="app.selectRuleCard('cuci_tangan')" class="btn-3d relative bg-sky-100 border-sky-400 text-sky-950 border-4 rounded-3xl p-3 flex flex-col items-center justify-between text-center shadow-md transition hover:shadow-lg">
+              
+              <div class="my-0.5 bg-white/85 rounded-2xl p-1.5 w-full"><svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <path d="M25 20 H55 V35 H45 V47 H35 V35 H25 Z" fill="#94a3b8" stroke="#334155" stroke-width="3"></path>
+                      <path d="M40 49 Q36 67 40 83" stroke="#38bdf8" stroke-width="5" stroke-linecap="round" fill="none"></path>
+                      <path d="M46 49 Q50 65 46 79" stroke="#7dd3fc" stroke-width="4" stroke-linecap="round" fill="none"></path>
+                      <ellipse cx="68" cy="77" rx="18" ry="11" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></ellipse>
+                      <ellipse cx="86" cy="80" rx="18" ry="11" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></ellipse>
+                      <circle cx="72" cy="63" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"></circle>
+                      <circle cx="85" cy="59" r="9" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"></circle>
+                      <circle cx="96" cy="67" r="6" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"></circle>
+                    </svg></div>
+              <h3 class="text-sm sm:text-base lg:text-lg font-bold mt-1.5 mb-1.5 leading-tight">Cuci Tangan Pakai Sabun</h3>
+              <span class="bg-white/95 border border-current rounded-full px-3 py-1 text-[11px] sm:text-xs font-extrabold inline-flex items-center gap-1">
+                🔊 Dengarkan
+              </span>
+            </button>
+          
+            <button onclick="app.selectRuleCard('siapkan_meja')" class="btn-3d relative bg-indigo-100 border-indigo-400 text-indigo-950 border-4 rounded-3xl p-3 flex flex-col items-center justify-between text-center shadow-md transition hover:shadow-lg">
+              
+              <div class="my-0.5 bg-white/85 rounded-2xl p-1.5 w-full"><svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <rect x="18" y="76" width="104" height="14" rx="4" fill="#d97706"></rect>
+                      <ellipse cx="62" cy="72" rx="28" ry="8" fill="#ffffff" stroke="#0284c7" stroke-width="3"></ellipse>
+                      <rect x="98" y="48" width="16" height="24" rx="3" fill="#bae6fd" stroke="#0369a1" stroke-width="3"></rect>
+                      <line x1="28" y1="54" x2="28" y2="72" stroke="#64748b" stroke-width="4" stroke-linecap="round"></line>
+                      <ellipse cx="28" cy="50" rx="4" ry="6" fill="#94a3b8"></ellipse>
+                      <text x="58" y="38" font-size="22">🤝</text>
+                    </svg></div>
+              <h3 class="text-sm sm:text-base lg:text-lg font-bold mt-1.5 mb-1.5 leading-tight">Membantu Menyiapkan Meja</h3>
+              <span class="bg-white/95 border border-current rounded-full px-3 py-1 text-[11px] sm:text-xs font-extrabold inline-flex items-center gap-1">
+                🔊 Dengarkan
+              </span>
+            </button>
+          
+            <button onclick="app.selectRuleCard('duduk_rapi')" class="btn-3d relative bg-amber-100 border-amber-400 text-amber-950 border-4 rounded-3xl p-3 flex flex-col items-center justify-between text-center shadow-md transition hover:shadow-lg">
+              
+              <div class="my-0.5 bg-white/85 rounded-2xl p-1.5 w-full"><svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <rect x="42" y="20" width="10" height="78" rx="3" fill="#b45309"></rect>
+                      <rect x="42" y="63" width="46" height="10" rx="3" fill="#d97706"></rect>
+                      <rect x="78" y="63" width="10" height="35" rx="3" fill="#b45309"></rect>
+                      <circle cx="66" cy="29" r="14" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></circle>
+                      <path d="M53 26 Q66 11 79 26 Z" fill="#1e293b"></path>
+                      <rect x="55" y="43" width="22" height="22" rx="6" fill="#10b981" stroke="#065f46" stroke-width="3"></rect>
+                      <path d="M74 59 H92 V93" stroke="#1e40af" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+                    </svg></div>
+              <h3 class="text-sm sm:text-base lg:text-lg font-bold mt-1.5 mb-1.5 leading-tight">Duduk Tertib di Kursi</h3>
+              <span class="bg-white/95 border border-current rounded-full px-3 py-1 text-[11px] sm:text-xs font-extrabold inline-flex items-center gap-1">
+                🔊 Dengarkan
+              </span>
+            </button>
+          
+            <button onclick="app.selectRuleCard('berdoa_sebelum')" class="btn-3d relative bg-emerald-100 border-emerald-400 text-emerald-950 border-4 rounded-3xl p-3 flex flex-col items-center justify-between text-center shadow-md transition hover:shadow-lg">
+              
+              <div class="my-0.5 bg-white/85 rounded-2xl p-1.5 w-full"><svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <circle cx="70" cy="36" r="19" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></circle>
+                      <path d="M52 32 Q70 12 88 32 Z" fill="#1e293b"></path>
+                      <path d="M61 36 Q64 39 67 36" stroke="#1e293b" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+                      <path d="M73 36 Q76 39 79 36" stroke="#1e293b" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+                      <path d="M66 45 Q70 49 74 45" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+                      <path d="M44 60 H96 L104 96 H36 Z" fill="#38bdf8" stroke="#0369a1" stroke-width="3" stroke-linejoin="round"></path>
+                      <ellipse cx="56" cy="75" rx="11" ry="13" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></ellipse>
+                      <ellipse cx="84" cy="75" rx="11" ry="13" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></ellipse>
+                    </svg></div>
+              <h3 class="text-sm sm:text-base lg:text-lg font-bold mt-1.5 mb-1.5 leading-tight">Berdoa Sebelum Makan</h3>
+              <span class="bg-white/95 border border-current rounded-full px-3 py-1 text-[11px] sm:text-xs font-extrabold inline-flex items-center gap-1">
+                🔊 Dengarkan
+              </span>
+            </button>
+          
+            <button onclick="app.selectRuleCard('menunggu_siap')" class="btn-3d relative bg-purple-100 border-purple-400 text-purple-950 border-4 rounded-3xl p-3 flex flex-col items-center justify-between text-center shadow-md transition hover:shadow-lg">
+              
+              <div class="my-0.5 bg-white/85 rounded-2xl p-1.5 w-full"><svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <circle cx="46" cy="44" r="16" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></circle>
+                      <path d="M31 40 Q46 22 61 40 Z" fill="#1e293b"></path>
+                      <circle cx="94" cy="44" r="16" fill="#fed7aa" stroke="#9a3412" stroke-width="3"></circle>
+                      <path d="M79 40 Q94 22 109 40 Z" fill="#7c2d12"></path>
+                      <rect x="28" y="62" width="36" height="30" rx="8" fill="#a855f7" stroke="#581c87" stroke-width="3"></rect>
+                      <rect x="76" y="62" width="36" height="30" rx="8" fill="#ec4899" stroke="#831843" stroke-width="3"></rect>
+                      <text x="61" y="28" font-size="20">❤️</text>
+                    </svg></div>
+              <h3 class="text-sm sm:text-base lg:text-lg font-bold mt-1.5 mb-1.5 leading-tight">Menunggu Semua Siap</h3>
+              <span class="bg-white/95 border border-current rounded-full px-3 py-1 text-[11px] sm:text-xs font-extrabold inline-flex items-center gap-1">
+                🔊 Dengarkan
+              </span>
+            </button>
+          
+            </div>
+          </div>
+        </main>
+
+  <!-- FOOTER NAVIGASI CEPAT -->
+  <footer class="w-full max-w-6xl mx-auto px-4 pb-2 pt-1">
+    <div class="flex items-center justify-between bg-white/85 backdrop-blur-sm border-2 border-amber-200 rounded-2xl px-4 py-1.5">
+      <button id="btn-prev" onclick="app.prevScreen()" class="btn-3d bg-slate-200 hover:bg-slate-300 text-slate-700 border-b-4 border-slate-400 rounded-xl px-4 py-1.5 font-bold text-xs sm:text-sm flex items-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none">
+        ⬅️ Sebelumnya
+      </button>
+
+      <div class="text-xs font-bold text-slate-600 text-center hidden sm:block">
+        Tujuan Pembelajaran: Siswa mampu mengenal dan mentaati aturan sebelum, saat, dan sesudah makan.
+      </div>
+
+      <button id="btn-next" onclick="app.nextScreen()" class="btn-3d bg-emerald-600 hover:bg-emerald-500 text-white border-b-4 border-emerald-800 rounded-xl px-4 py-1.5 font-bold text-xs sm:text-sm flex items-center gap-1.5">Lanjut ➡️</button>
+    </div>
+  </footer>
+
+  <!-- ENGINE AUDIO, ILUSTRASI SVG & LOGIKA APLIKASI -->
+  <script>
+    /**
+     * 1. AUDIO ENGINE (Web Speech API id-ID + Web Audio Synthesizer)
+     */
+    const AudioEngine = {
+      ctx: null,
+      isMuted: false,
+      lastText: "",
+      idVoice: null,
+
+      init() {
+        if ("speechSynthesis" in window) {
+          const loadVoices = () => {
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+              this.idVoice =
+                voices.find((v) => v.lang === "id-ID") ||
+                voices.find((v) => v.lang.toLowerCase().includes("id")) ||
+                null;
+            }
+          };
+          loadVoices();
+          if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+          }
+        }
+      },
+
+      ensureCtx() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+          this.ctx.resume().catch(() => {});
+        }
+      },
+
+      playDing() {
+        if (this.isMuted) return;
+        try {
+          this.ensureCtx();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(660, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(990, this.ctx.currentTime + 0.12);
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.15);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.16);
+        } catch (e) {}
+      },
+
+      playSuccessChime() {
+        if (this.isMuted) return;
+        try {
+          this.ensureCtx();
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6
+          notes.forEach((f, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "triangle";
+            const start = this.ctx.currentTime + i * 0.07;
+            osc.frequency.setValueAtTime(f, start);
+            gain.gain.setValueAtTime(0.22, start);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + 0.25);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(start);
+            osc.stop(start + 0.27);
+          });
+        } catch (e) {}
+      },
+
+      playGentleBuzz() {
+        if (this.isMuted) return;
+        try {
+          this.ensureCtx();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(280, this.ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(210, this.ctx.currentTime + 0.24);
+          gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.26);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.27);
+        } catch (e) {}
+      },
+
+      playFanfare() {
+        if (this.isMuted) return;
+        try {
+          this.ensureCtx();
+          const seq = [
+            { f: 523.25, t: 0, d: 0.14 },
+            { f: 659.25, t: 0.13, d: 0.14 },
+            { f: 783.99, t: 0.26, d: 0.14 },
+            { f: 1046.50, t: 0.40, d: 0.45 }
+          ];
+          seq.forEach((n) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "triangle";
+            const start = this.ctx.currentTime + n.t;
+            osc.frequency.setValueAtTime(n.f, start);
+            gain.gain.setValueAtTime(0.25, start);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + n.d);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(start);
+            osc.stop(start + n.d + 0.02);
+          });
+        } catch (e) {}
+      },
+
+      speak(text) {
+        this.lastText = text;
+        const sub = document.getElementById("teacher-subtitle");
+        if (sub) sub.textContent = text;
+
+        if (this.isMuted || !("speechSynthesis" in window)) return;
+        try {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(text);
+          utter.lang = "id-ID";
+          if (this.idVoice) utter.voice = this.idVoice;
+          utter.rate = 0.94;
+          utter.pitch = 1.12;
+          window.speechSynthesis.speak(utter);
+        } catch (e) {}
+      }
+    };
+
+    /**
+     * 2. DATA KONTEN PEMBELAJARAN & ILUSTRASI SVG
+     */
+    const DATA = {
+      // Tahap 2: Belajar Aturan (3 Waktu Makan x 5 Kartu = 15 Aturan Lengkap)
+      rulePhases: [
+        {
+          id: "sebelum",
+          tabLabel: "1. Sebelum Makan (5)",
+          intro: "Aturan Sebelum Makan. Ada lima aturan penting sebelum makan. Klik setiap kartu untuk mendengarkan penjelasannya!",
+          rules: [
+            {
+              id: "cuci_tangan",
+              title: "Cuci Tangan Pakai Sabun",
+              narration: "Aturan pertama sebelum makan: Cuci tangan memakai sabun dan air mengalir agar kuman hilang.",
+              cardColor: "bg-sky-100 border-sky-400 text-sky-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <path d="M25 20 H55 V35 H45 V47 H35 V35 H25 Z" fill="#94a3b8" stroke="#334155" stroke-width="3"/>
+                      <path d="M40 49 Q36 67 40 83" stroke="#38bdf8" stroke-width="5" stroke-linecap="round" fill="none"/>
+                      <path d="M46 49 Q50 65 46 79" stroke="#7dd3fc" stroke-width="4" stroke-linecap="round" fill="none"/>
+                      <ellipse cx="68" cy="77" rx="18" ry="11" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <ellipse cx="86" cy="80" rx="18" ry="11" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <circle cx="72" cy="63" r="7" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"/>
+                      <circle cx="85" cy="59" r="9" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"/>
+                      <circle cx="96" cy="67" r="6" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"/>
+                    </svg>`
+            },
+            {
+              id: "siapkan_meja",
+              title: "Membantu Menyiapkan Meja",
+              narration: "Aturan kedua sebelum makan: Bantu orang tua menyiapkan sendok, piring, atau gelas di meja makan dengan hati-hati.",
+              cardColor: "bg-indigo-100 border-indigo-400 text-indigo-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <rect x="18" y="76" width="104" height="14" rx="4" fill="#d97706"/>
+                      <ellipse cx="62" cy="72" rx="28" ry="8" fill="#ffffff" stroke="#0284c7" stroke-width="3"/>
+                      <rect x="98" y="48" width="16" height="24" rx="3" fill="#bae6fd" stroke="#0369a1" stroke-width="3"/>
+                      <line x1="28" y1="54" x2="28" y2="72" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+                      <ellipse cx="28" cy="50" rx="4" ry="6" fill="#94a3b8"/>
+                      <text x="58" y="38" font-size="22">🤝</text>
+                    </svg>`
+            },
+            {
+              id: "duduk_rapi",
+              title: "Duduk Tertib di Kursi",
+              narration: "Aturan ketiga sebelum makan: Duduklah dengan tegak dan rapi di kursi makan, tidak naik ke atas kursi.",
+              cardColor: "bg-amber-100 border-amber-400 text-amber-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <rect x="42" y="20" width="10" height="78" rx="3" fill="#b45309"/>
+                      <rect x="42" y="63" width="46" height="10" rx="3" fill="#d97706"/>
+                      <rect x="78" y="63" width="10" height="35" rx="3" fill="#b45309"/>
+                      <circle cx="66" cy="29" r="14" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <path d="M53 26 Q66 11 79 26 Z" fill="#1e293b"/>
+                      <rect x="55" y="43" width="22" height="22" rx="6" fill="#10b981" stroke="#065f46" stroke-width="3"/>
+                      <path d="M74 59 H92 V93" stroke="#1e40af" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>`
+            },
+            {
+              id: "berdoa_sebelum",
+              title: "Berdoa Sebelum Makan",
+              narration: "Aturan keempat sebelum makan: Berdoa sebelum makan sebagai tanda bersyukur kepada Tuhan atas rezeki makanan.",
+              cardColor: "bg-emerald-100 border-emerald-400 text-emerald-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <circle cx="70" cy="36" r="19" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <path d="M52 32 Q70 12 88 32 Z" fill="#1e293b"/>
+                      <path d="M61 36 Q64 39 67 36" stroke="#1e293b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <path d="M73 36 Q76 39 79 36" stroke="#1e293b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <path d="M66 45 Q70 49 74 45" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <path d="M44 60 H96 L104 96 H36 Z" fill="#38bdf8" stroke="#0369a1" stroke-width="3" stroke-linejoin="round"/>
+                      <ellipse cx="56" cy="75" rx="11" ry="13" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <ellipse cx="84" cy="75" rx="11" ry="13" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                    </svg>`
+            },
+            {
+              id: "menunggu_siap",
+              title: "Menunggu Semua Siap",
+              narration: "Aturan kelima sebelum makan: Tidak terburu-buru makan sendiri sebelum keluarga atau teman duduk bersama.",
+              cardColor: "bg-purple-100 border-purple-400 text-purple-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <circle cx="46" cy="44" r="16" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <path d="M31 40 Q46 22 61 40 Z" fill="#1e293b"/>
+                      <circle cx="94" cy="44" r="16" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <path d="M79 40 Q94 22 109 40 Z" fill="#7c2d12"/>
+                      <rect x="28" y="62" width="36" height="30" rx="8" fill="#a855f7" stroke="#581c87" stroke-width="3"/>
+                      <rect x="76" y="62" width="36" height="30" rx="8" fill="#ec4899" stroke="#831843" stroke-width="3"/>
+                      <text x="61" y="28" font-size="20">❤️</text>
+                    </svg>`
+            }
+          ]
+        },
+        {
+          id: "saat",
+          tabLabel: "2. Saat Makan (5)",
+          intro: "Aturan Saat Makan. Ada lima aturan sopan santun saat sedang makan. Ketuk setiap kartunya!",
+          rules: [
+            {
+              id: "ambil_secukupnya",
+              title: "Ambil Makanan Secukupnya",
+              narration: "Aturan pertama saat makan: Ambil nasi dan lauk secukupnya sesuai kebutuhan perut kita agar tidak terbuang.",
+              cardColor: "bg-yellow-100 border-yellow-400 text-yellow-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <ellipse cx="70" cy="78" rx="46" ry="16" fill="#ffffff" stroke="#0284c7" stroke-width="4"/>
+                      <path d="M46 76 Q70 52 94 76 Z" fill="#fef08a" stroke="#eab308" stroke-width="3"/>
+                      <circle cx="62" cy="66" r="6" fill="#ef4444"/>
+                      <circle cx="78" cy="67" r="6" fill="#22c55e"/>
+                      <text x="58" y="38" font-size="22">👌</text>
+                    </svg>`
+            },
+            {
+              id: "tangan_kanan",
+              title: "Makan dengan Tangan Kanan",
+              narration: "Aturan kedua saat makan: Gunakan tangan kanan yang sopan saat menyuap makanan atau memegang sendok.",
+              cardColor: "bg-orange-100 border-orange-400 text-orange-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <ellipse cx="70" cy="82" rx="42" ry="15" fill="#ffffff" stroke="#0284c7" stroke-width="4"/>
+                      <path d="M48 78 Q70 58 92 78 Z" fill="#fef08a" stroke="#eab308" stroke-width="2.5"/>
+                      <ellipse cx="85" cy="44" rx="14" ry="9" transform="rotate(-25 85 44)" fill="#e2e8f0" stroke="#475569" stroke-width="3"/>
+                      <line x1="97" y1="38" x2="124" y2="24" stroke="#475569" stroke-width="6" stroke-linecap="round"/>
+                      <circle cx="114" cy="29" r="11" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <text x="22" y="38" font-size="22" font-weight="900" fill="#16a34a">✓</text>
+                    </svg>`
+            },
+            {
+              id: "kunyah_perlahan",
+              title: "Mengunyah Perlahan & Tenang",
+              narration: "Aturan ketiga saat makan: Kunyah makanan perlahan sampai lembut dengan mulut tertutup dan tidak mengecap keras.",
+              cardColor: "bg-teal-100 border-teal-400 text-teal-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <circle cx="70" cy="55" r="32" fill="#fed7aa" stroke="#9a3412" stroke-width="3.5"/>
+                      <path d="M40 46 Q70 16 100 46 Z" fill="#1e293b"/>
+                      <circle cx="58" cy="51" r="4" fill="#1e293b"/>
+                      <circle cx="82" cy="51" r="4" fill="#1e293b"/>
+                      <circle cx="52" cy="63" r="6" fill="#fda4af" opacity="0.75"/>
+                      <circle cx="88" cy="63" r="6" fill="#fda4af" opacity="0.75"/>
+                      <path d="M61 68 Q70 74 79 68" stroke="#9a3412" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </svg>`
+            },
+            {
+              id: "tidak_bicara",
+              title: "Tidak Bicara Saat Mulut Penuh",
+              narration: "Aturan keempat saat makan: Telan dulu makananmu sebelum berbicara agar tidak tersedak.",
+              cardColor: "bg-rose-100 border-rose-400 text-rose-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <circle cx="70" cy="54" r="32" fill="#fed7aa" stroke="#9a3412" stroke-width="3.5"/>
+                      <path d="M40 45 Q70 15 100 45 Z" fill="#1e293b"/>
+                      <circle cx="58" cy="50" r="4" fill="#1e293b"/>
+                      <circle cx="82" cy="50" r="4" fill="#1e293b"/>
+                      <path d="M62 68 Q70 72 78 68" stroke="#9a3412" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <rect x="66" y="60" width="8" height="26" rx="4" fill="#fdba74" stroke="#9a3412" stroke-width="2.5"/>
+                    </svg>`
+            },
+            {
+              id: "habiskan_makanan",
+              title: "Menghabiskan Makanan",
+              narration: "Aturan kelima saat makan: Habiskan makanan yang sudah diambil di piringmu sebagai bentuk rasa syukur.",
+              cardColor: "bg-lime-100 border-lime-400 text-lime-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <ellipse cx="70" cy="64" rx="46" ry="24" fill="#ffffff" stroke="#10b981" stroke-width="5"/>
+                      <ellipse cx="70" cy="64" rx="30" ry="14" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2.5"/>
+                      <text x="61" y="32" font-size="22">✨</text>
+                      <text x="95" y="44" font-size="18">⭐</text>
+                    </svg>`
+            }
+          ]
+        },
+        {
+          id: "sesudah",
+          tabLabel: "3. Sesudah Makan (5)",
+          intro: "Aturan Sesudah Makan. Ada lima kebaikan yang dilakukan setelah selesai makan. Ketuk setiap kartunya!",
+          rules: [
+            {
+              id: "berdoa_sesudah",
+              title: "Berdoa Sesudah Makan",
+              narration: "Aturan pertama sesudah makan: Ucapkan syukur dan berdoa setelah selesai makan.",
+              cardColor: "bg-emerald-100 border-emerald-400 text-emerald-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <circle cx="70" cy="38" r="19" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <path d="M52 34 Q70 14 88 34 Z" fill="#1e293b"/>
+                      <circle cx="63" cy="37" r="3" fill="#1e293b"/>
+                      <circle cx="77" cy="37" r="3" fill="#1e293b"/>
+                      <path d="M63 45 Q70 52 77 45" stroke="#9a3412" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <path d="M44 62 H96 L104 96 H36 Z" fill="#10b981" stroke="#065f46" stroke-width="3" stroke-linejoin="round"/>
+                      <path d="M62 72 L70 60 L78 72 L70 88 Z" fill="#fed7aa" stroke="#9a3412" stroke-width="3" stroke-linejoin="round"/>
+                    </svg>`
+            },
+            {
+              id: "minum_air",
+              title: "Minum Air Putih Secukupnya",
+              narration: "Aturan kedua sesudah makan: Minumlah air putih dengan tenang sambil duduk setelah selesai makan.",
+              cardColor: "bg-sky-100 border-sky-400 text-sky-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <polygon points="48,26 92,26 85,92 55,92" fill="#e0f2fe" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+                      <polygon points="51,46 89,46 85,90 55,90" fill="#38bdf8"/>
+                      <path d="M60 56 Q70 52 80 56" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <text x="95" y="45" font-size="20">💧</text>
+                    </svg>`
+            },
+            {
+              id: "rapikan_piring",
+              title: "Merapikan Alat Makan",
+              narration: "Aturan ketiga sesudah makan: Bantu orang tua membawa piring dan gelas kotor ke dapur atau tempat cucian dengan hati-hati.",
+              cardColor: "bg-indigo-100 border-indigo-400 text-indigo-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <rect x="25" y="72" width="90" height="26" rx="6" fill="#cbd5e1" stroke="#475569" stroke-width="3"/>
+                      <ellipse cx="62" cy="66" rx="26" ry="8" fill="#ffffff" stroke="#0284c7" stroke-width="3"/>
+                      <ellipse cx="62" cy="57" rx="24" ry="7" fill="#ffffff" stroke="#0284c7" stroke-width="3"/>
+                      <rect x="95" y="44" width="16" height="26" rx="3" fill="#bae6fd" stroke="#0369a1" stroke-width="3"/>
+                      <text x="58" y="38" font-size="20">👍</text>
+                    </svg>`
+            },
+            {
+              id: "bersihkan_remah",
+              title: "Membersihkan Remah di Meja",
+              narration: "Aturan keempat sesudah makan: Lap dan bersihkan sisa makanan atau remah nasi yang jatuh di meja makan.",
+              cardColor: "bg-amber-100 border-amber-400 text-amber-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <rect x="20" y="74" width="100" height="16" rx="5" fill="#d97706"/>
+                      <rect x="48" y="52" width="38" height="22" rx="6" fill="#facc15" stroke="#ca8a04" stroke-width="3"/>
+                      <circle cx="96" cy="68" r="3" fill="#fde047"/>
+                      <circle cx="106" cy="69" r="2.5" fill="#fde047"/>
+                      <text x="30" y="44" font-size="20">✨</text>
+                      <text x="92" y="44" font-size="20">🧽</text>
+                    </svg>`
+            },
+            {
+              id: "cuci_tangan_akhir",
+              title: "Cuci Tangan & Mulut",
+              narration: "Aturan kelima sesudah makan: Cuci tangan dan bersihkan mulut supaya kembali bersih dan wangi.",
+              cardColor: "bg-cyan-100 border-cyan-400 text-cyan-950",
+              svg: `<svg viewBox="0 0 140 110" class="w-24 h-20 mx-auto">
+                      <ellipse cx="70" cy="62" rx="24" ry="28" fill="#fed7aa" stroke="#9a3412" stroke-width="3.5"/>
+                      <ellipse cx="70" cy="36" rx="12" ry="7" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                      <circle cx="48" cy="40" r="8" fill="#ffffff" stroke="#06b6d4" stroke-width="2.5"/>
+                      <circle cx="94" cy="48" r="9" fill="#ffffff" stroke="#06b6d4" stroke-width="2.5"/>
+                      <circle cx="46" cy="74" r="7" fill="#ffffff" stroke="#06b6d4" stroke-width="2.5"/>
+                      <text x="86" y="88" font-size="20">✨</text>
+                    </svg>`
+            }
+          ]
+        }
+      ],
+
+      // Tahap 3: Simulasi Bantu Bimo (5 Misi Berurutan)
+      simScenarios: [
+        {
+          id: "sim_1",
+          stepTitle: "Misi 1: Sebelum Makan",
+          prompt: "Tangan Bimo masih kotor habis bermain dan makanan sudah siap di meja! Apa yang harus Bimo lakukan sebelum makan?",
+          initialState: "dirty_hands",
+          successState: "clean_praying",
+          successNarration: "Hore! Bimo mencuci tangan dengan sabun, duduk tertib, dan berdoa sebelum makan!",
+          choices: [
+            {
+              id: "c1_wrong1",
+              label: "Langsung makan dengan tangan kotor",
+              icon: "🦠",
+              isCorrect: false,
+              feedback: "Ups! Tangan Bimo masih kotor. Kuman bisa ikut masuk ke perut. Yuk cuci tangan dan berdoa dulu!"
+            },
+            {
+              id: "c1_right",
+              label: "Cuci tangan lalu duduk & berdoa",
+              icon: "🧼🙏",
+              isCorrect: true
+            },
+            {
+              id: "c1_wrong2",
+              label: "Naik ke atas kursi sambil berteriak",
+              icon: "🪑",
+              isCorrect: false,
+              feedback: "Jangan naik ke atas kursi ya, nanti bisa terjatuh. Duduk rapi dan cuci tangan dulu!"
+            }
+          ]
+        },
+        {
+          id: "sim_2",
+          stepTitle: "Misi 2: Mengambil Makanan",
+          prompt: "Di meja makan ada banyak sekali lauk kesukaan Bimo! Berapa banyak makanan yang sebaiknya Bimo ambil?",
+          initialState: "many_foods",
+          successState: "portion_right",
+          successNarration: "Hebat! Bimo mengambil nasi dan lauk secukupnya agar habis dimakan dan tidak terbuang!",
+          choices: [
+            {
+              id: "c2_right",
+              label: "Ambil makanan secukupnya saja",
+              icon: "🍚👌",
+              isCorrect: true
+            },
+            {
+              id: "c2_wrong1",
+              label: "Ambil semua lauk sampai piring tumpah",
+              icon: "🏔️",
+              isCorrect: false,
+              feedback: "Kalau mengambil terlalu banyak nanti tidak habis dan terbuang mubazir. Ambil secukupnya ya!"
+            },
+            {
+              id: "c2_wrong2",
+              label: "Mengacak-acak lauk di meja",
+              icon: "🙅",
+              isCorrect: false,
+              feedback: "Mengacak-acak makanan itu tidak sopan. Ambil lauk yang dekat dengan rapi ya!"
+            }
+          ]
+        },
+        {
+          id: "sim_3",
+          stepTitle: "Misi 3: Cara Makan Tertib",
+          prompt: "Bimo sedang mengunyah nasi dan adiknya mengajak bercanda. Bagaimana cara makan yang benar dan sopan?",
+          initialState: "eating_question",
+          successState: "eating_polite",
+          successNarration: "Pintar! Bimo mengunyah perlahan dengan tangan kanan dan menelan makanan dulu sebelum berbicara!",
+          choices: [
+            {
+              id: "c3_wrong1",
+              label: "Bicara & tertawa saat mulut penuh nasi",
+              icon: "🗣️",
+              isCorrect: false,
+              feedback: "Hati-hati tersedak! Telan dulu makanan di mulut sebelum berbicara ya!"
+            },
+            {
+              id: "c3_right",
+              label: "Telan dulu baru bicara & pakai tangan kanan",
+              icon: "🥄😊",
+              isCorrect: true
+            },
+            {
+              id: "c3_wrong2",
+              label: "Makan berdiri sambil jalan-jalan",
+              icon: "🚶",
+              isCorrect: false,
+              feedback: "Saat makan kita harus duduk tenang di kursi, tidak sambil jalan-jalan."
+            }
+          ]
+        },
+        {
+          id: "sim_4",
+          stepTitle: "Misi 4: Merapikan Meja",
+          prompt: "Makanan di piring Bimo sudah habis bersih dan Bimo sudah minum air putih! Apa yang harus Bimo lakukan?",
+          initialState: "finished_table",
+          successState: "table_wiped",
+          successNarration: "Luar biasa! Bimo berdoa sesudah makan, merapikan piring ke dapur, dan mengelap remah di meja!",
+          choices: [
+            {
+              id: "c4_wrong1",
+              label: "Tinggalkan piring & remah nasi di meja",
+              icon: "🙈",
+              isCorrect: false,
+              feedback: "Jangan tinggalkan meja berantakan ya. Anak hebat membantu merapikan piring dan mengelap meja!"
+            },
+            {
+              id: "c4_wrong2",
+              label: "Langsung lari menonton televisi",
+              icon: "📺",
+              isCorrect: false,
+              feedback: "Eits, berdoa dulu sesudah makan dan rapikan alat makanmu ke dapur ya!"
+            },
+            {
+              id: "c4_right",
+              label: "Berdoa, rapikan piring & lap remah meja",
+              icon: "🍽️🧽",
+              isCorrect: true
+            }
+          ]
+        },
+        {
+          id: "sim_5",
+          stepTitle: "Misi 5: Kebersihan Akhir",
+          prompt: "Piring kotor sudah dibawa ke dapur dan meja sudah bersih! Apa langkah terakhir agar Bimo kembali bersih?",
+          initialState: "table_wiped",
+          successState: "all_tidy",
+          successNarration: "Sempurna! Bimo mencuci tangan dan membersihkan mulut setelah makan. Semua misi aturan makan berhasil!",
+          choices: [
+            {
+              id: "c5_right",
+              label: "Cuci tangan dan bersihkan mulut",
+              icon: "🚿✨",
+              isCorrect: true
+            },
+            {
+              id: "c5_wrong1",
+              label: "Mengusap tangan kotor ke baju",
+              icon: "👕",
+              isCorrect: false,
+              feedback: "Nanti bajunya kotor terkena sisa makanan! Cuci tangan di keran air ya."
+            },
+            {
+              id: "c5_wrong2",
+              label: "Langsung tidur tanpa cuci tangan",
+              icon: "😴",
+              isCorrect: false,
+              feedback: "Cuci tangan dan bersihkan mulut dulu agar tetap sehat dan wangi!"
+            }
+          ]
+        }
+      ],
+
+      // Tahap 4: Kuis Jempol (7 Situasi Bergambar)
+      quizQuestions: [
+        {
+          id: "q1",
+          situationText: "Siti duduk rapi dan berdoa sebelum mulai makan.",
+          isGood: true,
+          correctFeedback: "Benar! Jempol atas! Duduk rapi dan berdoa sebelum makan adalah aturan wajib yang tertib.",
+          wrongFeedback: "Kurang tepat. Berdoa sebelum makan adalah sikap bersyukur yang sangat baik.",
+          svg: `<svg viewBox="0 0 240 155" class="w-full max-w-[250px] h-auto mx-auto">
+                  <rect x="25" y="108" width="190" height="14" rx="5" fill="#d97706"/>
+                  <circle cx="120" cy="52" r="24" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <path d="M94 50 Q120 18 146 50 L152 82 H88 Z" fill="#f43f5e" stroke="#881337" stroke-width="3"/>
+                  <circle cx="120" cy="54" r="18" fill="#fed7aa"/>
+                  <path d="M111 52 Q114 55 117 52" stroke="#1e293b" stroke-width="2.5" fill="none"/>
+                  <path d="M123 52 Q126 55 129 52" stroke="#1e293b" stroke-width="2.5" fill="none"/>
+                  <path d="M115 61 Q120 65 125 61" stroke="#9a3412" stroke-width="2.5" fill="none"/>
+                  <path d="M112 94 L120 80 L128 94 L120 108 Z" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <ellipse cx="168" cy="104" rx="22" ry="7" fill="#ffffff" stroke="#0284c7" stroke-width="3"/>
+                </svg>`
+        },
+        {
+          id: "q2",
+          situationText: "Bimo membantu ibu menata piring dan sendok di meja makan.",
+          isGood: true,
+          correctFeedback: "Hebat! Jempol atas! Membantu menyiapkan meja makan adalah perbuatan terpuji.",
+          wrongFeedback: "Perhatikan lagi. Membantu orang tua menyiapkan meja makan adalah kebiasaan anak hebat!",
+          svg: `<svg viewBox="0 0 240 155" class="w-full max-w-[250px] h-auto mx-auto">
+                  <rect x="25" y="110" width="190" height="14" rx="5" fill="#d97706"/>
+                  <circle cx="105" cy="46" r="20" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <path d="M86 42 Q105 18 124 42 Z" fill="#1e293b"/>
+                  <path d="M98 53 Q105 60 112 53" stroke="#9a3412" stroke-width="2.5" fill="none"/>
+                  <rect x="85" y="67" width="40" height="42" rx="9" fill="#10b981" stroke="#065f46" stroke-width="3"/>
+                  <ellipse cx="156" cy="105" rx="26" ry="7" fill="#ffffff" stroke="#0284c7" stroke-width="3"/>
+                  <rect x="190" y="84" width="14" height="22" rx="3" fill="#bae6fd" stroke="#0369a1" stroke-width="2.5"/>
+                  <text x="148" y="68" font-size="24">🤝</text>
+                </svg>`
+        },
+        {
+          id: "q3",
+          situationText: "Doni makan bakso sambil berlari-lari di ruang tamu.",
+          isGood: false,
+          correctFeedback: "Tepat sekali! Jempol bawah! Makan sambil berlari sangat berbahaya karena bisa terjatuh dan tersedak.",
+          wrongFeedback: "Makan tidak boleh sambil berlari ya. Kita harus duduk rapi di kursi makan.",
+          svg: `<svg viewBox="0 0 240 155" class="w-full max-w-[250px] h-auto mx-auto">
+                  <line x1="25" y1="138" x2="215" y2="138" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+                  <circle cx="115" cy="40" r="20" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <path d="M96 36 Q115 14 134 36 Z" fill="#1e293b"/>
+                  <rect x="98" y="60" width="32" height="36" rx="8" transform="rotate(-12 114 78)" fill="#3b82f6" stroke="#1e3a8a" stroke-width="3"/>
+                  <path d="M102 94 L78 120 L64 112" stroke="#1e293b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M122 94 L146 116 L138 134" stroke="#1e293b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M138 66 Q154 82 170 66 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3"/>
+                </svg>`
+        },
+        {
+          id: "q4",
+          situationText: "Lani mengambil banyak nasi dan lauk lalu menyisakannya di piring.",
+          isGood: false,
+          correctFeedback: "Betul! Jempol bawah! Kita harus mengambil makanan secukupnya dan menghabiskannya.",
+          wrongFeedback: "Menyisakan banyak makanan bukan kebiasaan baik. Ambil secukupnya agar habis ya!",
+          svg: `<svg viewBox="0 0 240 155" class="w-full max-w-[250px] h-auto mx-auto">
+                  <rect x="25" y="112" width="190" height="14" rx="5" fill="#d97706"/>
+                  <ellipse cx="120" cy="102" rx="52" ry="14" fill="#ffffff" stroke="#0284c7" stroke-width="4"/>
+                  <path d="M84 100 Q105 72 128 94 Q142 76 156 100 Z" fill="#fde047" stroke="#ca8a04" stroke-width="2.5"/>
+                  <circle cx="108" cy="86" r="6" fill="#ef4444"/>
+                  <circle cx="134" cy="88" r="6" fill="#22c55e"/>
+                  <text x="166" y="62" font-size="28">😢</text>
+                </svg>`
+        },
+        {
+          id: "q5",
+          situationText: "Bimo mengunyah makanan perlahan dengan tenang dan tidak mengecap.",
+          isGood: true,
+          correctFeedback: "Pintar sekali! Jempol atas! Mengunyah makanan perlahan dengan tenang membuat pencernaan sehat dan sopan.",
+          wrongFeedback: "Mengunyah perlahan dengan tenang adalah aturan makan yang baik dan sopan.",
+          svg: `<svg viewBox="0 0 240 155" class="w-full max-w-[250px] h-auto mx-auto">
+                  <rect x="25" y="112" width="190" height="14" rx="5" fill="#d97706"/>
+                  <circle cx="120" cy="52" r="24" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <path d="M97 46 Q120 18 143 46 Z" fill="#1e293b"/>
+                  <circle cx="112" cy="50" r="3" fill="#1e293b"/>
+                  <circle cx="128" cy="50" r="3" fill="#1e293b"/>
+                  <circle cx="106" cy="58" r="5" fill="#fda4af"/>
+                  <circle cx="134" cy="58" r="5" fill="#fda4af"/>
+                  <path d="M113 62 Q120 67 127 62" stroke="#9a3412" stroke-width="2.5" fill="none"/>
+                  <rect x="96" y="76" width="48" height="36" rx="10" fill="#10b981" stroke="#065f46" stroke-width="3"/>
+                </svg>`
+        },
+        {
+          id: "q6",
+          situationText: "Udin berbicara keras saat mulutnya masih penuh dengan makanan.",
+          isGood: false,
+          correctFeedback: "Tepat! Jempol bawah! Berbicara saat mulut penuh makanan tidak sopan dan bisa membuat tersedak.",
+          wrongFeedback: "Saat mulut penuh makanan kita tidak boleh berbicara. Telan dulu makanannya ya!",
+          svg: `<svg viewBox="0 0 240 155" class="w-full max-w-[250px] h-auto mx-auto">
+                  <circle cx="105" cy="64" r="28" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <path d="M78 56 Q105 24 132 56 Z" fill="#1e293b"/>
+                  <circle cx="96" cy="60" r="3.5" fill="#1e293b"/>
+                  <circle cx="115" cy="60" r="3.5" fill="#1e293b"/>
+                  <ellipse cx="106" cy="76" rx="10" ry="8" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"/>
+                  <text x="142" y="58" font-size="26">💬📢</text>
+                  <text x="148" y="96" font-size="24">⚠️</text>
+                </svg>`
+        },
+        {
+          id: "q7",
+          situationText: "Sesudah makan, Siti membawa piring ke dapur dan mengelap remah di meja.",
+          isGood: true,
+          correctFeedback: "Luar biasa! Jempol atas! Merapikan alat makan dan membersihkan remah meja adalah sikap tanggung jawab.",
+          wrongFeedback: "Membantu merapikan piring dan mengelap meja setelah makan adalah perbuatan yang sangat terpuji!",
+          svg: `<svg viewBox="0 0 240 155" class="w-full max-w-[250px] h-auto mx-auto">
+                  <rect x="25" y="112" width="190" height="14" rx="5" fill="#d97706"/>
+                  <circle cx="95" cy="48" r="21" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+                  <path d="M72 46 Q95 16 118 46 L124 76 H66 Z" fill="#f43f5e" stroke="#881337" stroke-width="3"/>
+                  <circle cx="95" cy="50" r="16" fill="#fed7aa"/>
+                  <path d="M89 56 Q95 62 101 56" stroke="#9a3412" stroke-width="2.5" fill="none"/>
+                  <rect x="132" y="92" width="34" height="18" rx="5" fill="#facc15" stroke="#ca8a04" stroke-width="2.5"/>
+                  <text x="168" y="84" font-size="24">✨</text>
+                </svg>`
+        }
+      ]
+    };
+
+    /**
+     * 3. RENDERER ILUSTRASI SVG DINAMIS UNTUK SIMULASI BIMO (TAHAP 3)
+     */
+    function renderBimoSimSVG(state) {
+      const isHappy = ["clean_praying", "portion_right", "eating_polite", "table_wiped", "all_tidy"].includes(state);
+      const showDirty = state === "dirty_hands";
+      const showPraying = state === "clean_praying";
+      const showManyFoods = state === "many_foods";
+      const showPortionRight = state === "portion_right";
+      const showEating = state === "eating_question" || state === "eating_polite";
+      const showEmptyPlate = state === "finished_table";
+      const showWiped = state === "table_wiped" || state === "all_tidy";
+
+      return `
+        <svg viewBox="0 0 300 245" class="w-full max-w-[300px] h-auto mx-auto select-none">
+          <!-- Latar Dinding Ruang Makan -->
+          <rect x="12" y="10" width="276" height="175" rx="22" fill="#fef9c3" stroke="#fde047" stroke-width="3"/>
+          <!-- Jendela Ruang Makan -->
+          <rect x="28" y="26" width="54" height="54" rx="8" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
+          <line x1="55" y1="26" x2="55" y2="80" stroke="#0284c7" stroke-width="2.5"/>
+          <line x1="28" y1="53" x2="82" y2="53" stroke="#0284c7" stroke-width="2.5"/>
+
+          <!-- Badan Bimo -->
+          <rect x="114" y="114" width="72" height="68" rx="16" fill="#10b981" stroke="#065f46" stroke-width="3.5"/>
+          <!-- Kepala Bimo -->
+          <circle cx="150" cy="78" r="34" fill="#fed7aa" stroke="#9a3412" stroke-width="3.5"/>
+          <!-- Rambut Bimo -->
+          <path d="M117 72 Q150 32 183 72 Q166 56 150 62 Q134 56 117 72 Z" fill="#1e293b"/>
+
+          <!-- Ekspresi Wajah -->
+          ${showPraying ? `
+            <path d="M134 76 Q139 81 144 76" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M156 76 Q161 81 166 76" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M142 90 Q150 97 158 90" stroke="#9a3412" stroke-width="3" fill="none" stroke-linecap="round"/>
+          ` : `
+            <circle cx="139" cy="76" r="4.5" fill="#1e293b"/>
+            <circle cx="161" cy="76" r="4.5" fill="#1e293b"/>
+            <circle cx="140.5" cy="74.5" r="1.5" fill="#ffffff"/>
+            <circle cx="162.5" cy="74.5" r="1.5" fill="#ffffff"/>
+            ${isHappy
+              ? `<path d="M138 89 Q150 101 162 89" stroke="#9a3412" stroke-width="3.5" fill="none" stroke-linecap="round"/>`
+              : `<ellipse cx="150" cy="92" rx="6" ry="5" fill="#9a3412"/>`
+            }
+          `}
+
+          <!-- Meja Makan -->
+          <rect x="24" y="172" width="252" height="20" rx="8" fill="#d97706" stroke="#78350f" stroke-width="3.5"/>
+          <rect x="44" y="192" width="16" height="42" rx="4" fill="#b45309"/>
+          <rect x="240" y="192" width="16" height="42" rx="4" fill="#b45309"/>
+
+          <!-- Kondisi Meja & Makanan -->
+          ${!showWiped ? `
+            <ellipse cx="150" cy="168" rx="42" ry="11" fill="#ffffff" stroke="#0284c7" stroke-width="3.5"/>
+            ${!showEmptyPlate ? `
+              <path d="M122 166 Q150 146 178 166 Z" fill="#fef08a" stroke="#eab308" stroke-width="2.5"/>
+              <circle cx="142" cy="160" r="5" fill="#ef4444"/>
+              <circle cx="158" cy="160" r="5" fill="#22c55e"/>
+            ` : `
+              <text x="142" y="171" font-size="11" font-weight="800" fill="#10b981">HABIS</text>
+              <circle cx="96" cy="169" r="3" fill="#fde047"/>
+              <circle cx="104" cy="170" r="2.5" fill="#fde047"/>
+            `}
+            <rect x="210" y="140" width="20" height="30" rx="4" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+          ` : `
+            <!-- Meja Sudah Rapi & Dilap Bersih -->
+            <rect x="130" y="152" width="40" height="18" rx="4" fill="#f43f5e" stroke="#9f1239" stroke-width="2.5"/>
+            <circle cx="142" cy="146" r="7" fill="#facc15"/>
+            <circle cx="158" cy="146" r="7" fill="#38bdf8"/>
+          `}
+
+          ${showManyFoods ? `
+            <ellipse cx="78" cy="167" rx="26" ry="8" fill="#ffffff" stroke="#f59e0b" stroke-width="2.5"/>
+            <circle cx="72" cy="161" r="6" fill="#ef4444"/>
+            <circle cx="84" cy="161" r="6" fill="#f97316"/>
+          ` : ""}
+
+          ${showPortionRight ? `
+            <text x="74" y="152" font-size="22">👌</text>
+          ` : ""}
+
+          <!-- Tangan Bimo Sesuai Kondisi -->
+          ${showDirty ? `
+            <circle cx="105" cy="148" r="13" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+            <circle cx="195" cy="148" r="13" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+            <circle cx="103" cy="146" r="4" fill="#78350f"/>
+            <circle cx="109" cy="151" r="3" fill="#78350f"/>
+            <circle cx="193" cy="146" r="4" fill="#78350f"/>
+            <circle cx="198" cy="151" r="3" fill="#78350f"/>
+            <text x="82" y="128" font-size="18">🦠</text>
+            <text x="200" y="128" font-size="18">🦠</text>
+          ` : ""}
+
+          ${showPraying ? `
+            <path d="M138 148 L150 124 L162 148 L150 160 Z" fill="#fed7aa" stroke="#9a3412" stroke-width="3" stroke-linejoin="round"/>
+          ` : ""}
+
+          ${showEating ? `
+            <circle cx="115" cy="152" r="11" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+            <line x1="115" y1="152" x2="142" y2="162" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+          ` : ""}
+
+          ${state === "all_tidy" ? `
+            <circle cx="96" cy="146" r="12" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+            <circle cx="204" cy="146" r="12" fill="#fed7aa" stroke="#9a3412" stroke-width="3"/>
+            <circle cx="84" cy="134" r="6" fill="#ffffff" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="216" cy="134" r="6" fill="#ffffff" stroke="#38bdf8" stroke-width="2"/>
+          ` : ""}
+
+          <!-- Efek Bintang Berhasil -->
+          ${isHappy ? `
+            <text x="215" y="55" font-size="26">⭐</text>
+            <text x="242" y="88" font-size="22">✨</text>
+            <text x="64" y="114" font-size="22">🌟</text>
+          ` : ""}
+        </svg>
+      `;
+    }
+
+    /**
+     * 4. CONTROLLER UTAMA APLIKASI
+     */
+    const app = {
+      currentScreen: 0, // 0: Beranda, 1: Belajar Aturan, 2: Bantu Bimo, 3: Kuis Jempol
+      stars: 0,
+      ruleTabIdx: 0,
+      activeRuleId: null,
+      learnedRules: new Set(),
+      simIdx: 0,
+      simSolved: false,
+      quizIdx: 0,
+      quizLocked: false,
+      quizFinished: false,
+
+      init() {
+        AudioEngine.init();
+        this.renderScreen();
+      },
+
+      addStar(amount = 1) {
+        this.stars += amount;
+        const countEl = document.getElementById("star-count");
+        const iconEl = document.getElementById("star-icon");
+        if (countEl) countEl.textContent = this.stars;
+        if (iconEl) {
+          iconEl.classList.remove("animate-star");
+          void iconEl.offsetWidth;
+          iconEl.classList.add("animate-star");
+        }
+      },
+
+      toggleMute() {
+        AudioEngine.isMuted = !AudioEngine.isMuted;
+        const btn = document.getElementById("btn-mute");
+        const onIcon = document.getElementById("icon-sound-on");
+        const offIcon = document.getElementById("icon-sound-off");
+        const label = document.getElementById("mute-label");
+
+        if (AudioEngine.isMuted) {
+          window.speechSynthesis?.cancel();
+          btn.classList.replace("bg-emerald-500", "bg-rose-500");
+          btn.classList.replace("border-emerald-700", "border-rose-700");
+          onIcon.classList.add("hidden");
+          offIcon.classList.remove("hidden");
+          if (label) label.textContent = "OFF";
+        } else {
+          btn.classList.replace("bg-rose-500", "bg-emerald-500");
+          btn.classList.replace("border-rose-700", "border-emerald-700");
+          onIcon.classList.remove("hidden");
+          offIcon.classList.add("hidden");
+          if (label) label.textContent = "ON";
+          AudioEngine.speak(AudioEngine.lastText);
+        }
+      },
+
+      repeatSpeech() {
+        AudioEngine.playDing();
+        AudioEngine.speak(AudioEngine.lastText);
+      },
+
+      goToScreen(idx) {
+        if (idx < 0 || idx > 3) return;
+        AudioEngine.playDing();
+        this.currentScreen = idx;
+        if (idx === 3 && this.quizFinished) {
+          this.resetQuiz();
+        }
+        this.renderScreen();
+      },
+
+      nextScreen() {
+        if (this.currentScreen < 3) this.goToScreen(this.currentScreen + 1);
+      },
+
+      prevScreen() {
+        if (this.currentScreen > 0) this.goToScreen(this.currentScreen - 1);
+      },
+
+      updateNavUI() {
+        for (let i = 0; i < 4; i++) {
+          const pill = document.getElementById(`nav-step-${i}`);
+          if (!pill) continue;
+          if (i === this.currentScreen) {
+            pill.className = "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-extrabold bg-emerald-600 text-white shadow whitespace-nowrap";
+          } else {
+            pill.className = "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-amber-100 whitespace-nowrap";
+          }
+        }
+
+        const btnPrev = document.getElementById("btn-prev");
+        const btnNext = document.getElementById("btn-next");
+        if (btnPrev) btnPrev.disabled = this.currentScreen === 0;
+        if (btnNext) {
+          if (this.currentScreen === 3) {
+            btnNext.classList.add("hidden");
+          } else {
+            btnNext.classList.remove("hidden");
+            btnNext.innerHTML = this.currentScreen === 0 ? "Mulai Belajar ➡️" : "Lanjut ➡️";
+          }
+        }
+      },
+
+      renderScreen() {
+        this.updateNavUI();
+        const stage = document.getElementById("main-stage");
+        if (!stage) return;
+
+        switch (this.currentScreen) {
+          case 0: this.renderHome(stage); break;
+          case 1: this.renderRules(stage); break;
+          case 2: this.renderSimulation(stage); break;
+          case 3: this.renderQuiz(stage); break;
+        }
+      },
+
+      // ==========================================
+      // TAHAP 2: BELAJAR ATURAN (15 ATURAN: 3 WAKTU x 5 KARTU)
+      // ==========================================
+      renderRules(stage) {
+        const phase = DATA.rulePhases[this.ruleTabIdx];
+        if (!this.activeRuleId) {
+          AudioEngine.speak(phase.intro);
+        }
+
+        const totalLearned = this.learnedRules.size;
+
+        const tabsHtml = DATA.rulePhases.map((p, idx) => `
+          <button onclick="app.selectRuleTab(${idx})"
+            class="btn-3d px-3.5 py-1.5 rounded-2xl font-display font-bold text-xs sm:text-sm border-b-4 transition ${
+              idx === this.ruleTabIdx
+                ? "bg-amber-400 text-amber-950 border-amber-600 shadow-md"
+                : "bg-white text-slate-600 border-slate-300 hover:bg-amber-50"
+            }">
+            ${p.tabLabel}
+          </button>
+        `).join("");
+
+        const cardsHtml = phase.rules.map((r) => {
+          const isSelected = this.activeRuleId === r.id;
+          const isLearned = this.learnedRules.has(r.id);
+          return `
+            <button onclick="app.selectRuleCard('${r.id}')"
+              class="btn-3d relative ${r.cardColor} border-4 rounded-3xl p-3 flex flex-col items-center justify-between text-center shadow-md transition ${
+                isSelected ? "ring-4 ring-emerald-500 scale-[1.03] animate-happy" : "hover:shadow-lg"
+              }">
+              ${isLearned ? `
+                <span class="absolute -top-2.5 -right-2.5 bg-emerald-500 text-white border-2 border-white rounded-full px-2 py-0.5 text-[11px] font-extrabold shadow">
+                  ✅ Sudah Dipelajari
+                </span>
+              ` : ""}
+              <div class="my-0.5 bg-white/85 rounded-2xl p-1.5 w-full">${r.svg}</div>
+              <h3 class="text-sm sm:text-base lg:text-lg font-bold mt-1.5 mb-1.5 leading-tight">${r.title}</h3>
+              <span class="bg-white/95 border border-current rounded-full px-3 py-1 text-[11px] sm:text-xs font-extrabold inline-flex items-center gap-1">
+                🔊 Dengarkan
+              </span>
+            </button>
+          `;
+        }).join("");
+
+        stage.innerHTML = `
+          <div class="screen-enter w-full space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-white/95 border-2 border-amber-200 rounded-3xl px-4 py-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-lg sm:text-2xl font-bold text-slate-800">Tahap 2: 15 Aturan Makan Anak Hebat</h2>
+                  <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-0.5 rounded-full text-xs font-extrabold">
+                    Dipelajari: ${totalLearned} / 15
+                  </span>
+                </div>
+                <p class="text-xs font-bold text-slate-600">Pilih tab waktu makan, lalu ketuk setiap kartunya untuk mendengarkan aturan!</p>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                ${tabsHtml}
+              </div>
+            </div>
+
+            <!-- Grid 5 Kolom Responsif di Layar Laptop -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              ${cardsHtml}
+            </div>
+          </div>
+        `;
+      },
+
+      selectRuleTab(idx) {
+        AudioEngine.playDing();
+        this.ruleTabIdx = idx;
+        this.activeRuleId = null;
+        this.renderScreen();
+      },
+
+      selectRuleCard(ruleId) {
+        const phase = DATA.rulePhases[this.ruleTabIdx];
+        const rule = phase.rules.find((r) => r.id === ruleId);
+        if (!rule) return;
+
+        this.activeRuleId = ruleId;
+        if (!this.learnedRules.has(ruleId)) {
+          this.learnedRules.add(ruleId);
+          this.addStar(1);
+        }
+        AudioEngine.playSuccessChime();
+        AudioEngine.speak(rule.narration);
+        this.renderScreen();
+      },
+
+      // ==========================================
+      // TAHAP 3: SIMULASI BANTU BIMO
+      // ==========================================
+      renderSimulation(stage) {
+        const sim = DATA.simScenarios[this.simIdx];
+        if (!this.simSolved) {
+          AudioEngine.speak(`${sim.stepTitle}. ${sim.prompt}`);
+        }
+
+        const visualState = this.simSolved ? sim.successState : sim.initialState;
+
+        const stepPills = DATA.simScenarios.map((s, idx) => `
+          <span class="px-3 py-1 rounded-full text-xs font-extrabold border ${
+            idx === this.simIdx
+              ? "bg-emerald-600 text-white border-emerald-700"
+              : idx < this.simIdx
+              ? "bg-emerald-100 text-emerald-800 border-emerald-300"
+              : "bg-slate-100 text-slate-500 border-slate-200"
+          }">
+            ${idx < this.simIdx ? "✅ " : ""}${s.stepTitle}
+          </span>
+        `).join("");
+
+        const choicesHtml = sim.choices.map((ch) => `
+          <button onclick="app.handleSimChoice('${ch.id}')" ${this.simSolved ? "disabled" : ""}
+            class="btn-3d w-full text-left bg-white hover:bg-amber-50 border-3 ${
+              this.simSolved && ch.isCorrect
+                ? "border-emerald-500 bg-emerald-50 ring-2 ring-emerald-400"
+                : "border-slate-300"
+            } rounded-2xl p-3 sm:p-3.5 flex items-center gap-3 shadow-sm disabled:opacity-80">
+            <span class="w-12 h-12 rounded-2xl bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-2xl shrink-0">
+              ${ch.icon}
+            </span>
+            <span class="font-display font-bold text-base sm:text-lg text-slate-800 leading-snug">
+              ${ch.label}
+            </span>
+          </button>
+        `).join("");
+
+        stage.innerHTML = `
+          <div class="screen-enter w-full bg-white/95 border-4 border-emerald-300 rounded-[2rem] shadow-xl p-4 sm:p-5">
+            <!-- Progres 3 Misi Simulasi -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-3 border-b-2 border-slate-100">
+              <h2 class="text-lg sm:text-2xl font-bold text-slate-800">Tahap 3: Simulasi Bantu Bimo</h2>
+              <div class="flex flex-wrap gap-1.5">
+                ${stepPills}
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+              <!-- Sisi Kiri: Visual Bimo Dinamis -->
+              <div id="sim-visual-box" class="md:col-span-5 bg-sky-50 border-3 border-sky-200 rounded-3xl p-3 flex flex-col items-center justify-center">
+                ${renderBimoSimSVG(visualState)}
+              </div>
+
+              <!-- Sisi Kanan: Pertanyaan Situasi & 3 Tombol Pilihan -->
+              <div class="md:col-span-7 space-y-3">
+                <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3">
+                  <p class="text-sm sm:text-base font-extrabold text-amber-950 leading-snug">
+                    ${sim.prompt}
+                  </p>
+                </div>
+
+                <div class="space-y-2.5">
+                  ${choicesHtml}
+                </div>
+
+                ${this.simSolved ? `
+                  <div class="bg-emerald-100 border-2 border-emerald-400 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 animate-happy">
+                    <span class="text-xs sm:text-sm font-extrabold text-emerald-900">🎉 Hebat! Kamu membantu Bimo mentaati aturan!</span>
+                    ${this.simIdx < DATA.simScenarios.length - 1
+                      ? `<button onclick="app.nextSimScenario()"
+                          class="btn-3d bg-emerald-600 text-white border-b-4 border-emerald-800 rounded-xl px-4 py-1.5 text-xs sm:text-sm font-extrabold">
+                          Misi Berikutnya ➡️
+                        </button>`
+                      : `<button onclick="app.goToScreen(3)"
+                          class="btn-3d bg-indigo-600 text-white border-b-4 border-indigo-800 rounded-xl px-4 py-1.5 text-xs sm:text-sm font-extrabold">
+                          Lanjut Kuis Jempol 👍
+                        </button>`
+                    }
+                  </div>
+                ` : ""}
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      handleSimChoice(choiceId) {
+        if (this.simSolved) return;
+        const sim = DATA.simScenarios[this.simIdx];
+        const choice = sim.choices.find((c) => c.id === choiceId);
+        if (!choice) return;
+
+        if (choice.isCorrect) {
+          this.simSolved = true;
+          AudioEngine.playSuccessChime();
+          this.addStar(2);
+          AudioEngine.speak(sim.successNarration);
+          if (this.simIdx === DATA.simScenarios.length - 1) {
+            Confetti.burst();
+          }
+          this.renderScreen();
+        } else {
+          AudioEngine.playGentleBuzz();
+          AudioEngine.speak(choice.feedback);
+          const box = document.getElementById("sim-visual-box");
+          if (box) {
+            box.classList.remove("animate-shake");
+            void box.offsetWidth;
+            box.classList.add("animate-shake");
+          }
+        }
+      },
+
+      nextSimScenario() {
+        AudioEngine.playDing();
+        this.simIdx++;
+        this.simSolved = false;
+        this.renderScreen();
+      },
+
+      // ==========================================
+      // TAHAP 4: KUIS JEMPOL (5 SITUASI)
+      // ==========================================
+      renderQuiz(stage) {
+        if (this.quizFinished) {
+          this.renderQuizComplete(stage);
+          return;
+        }
+
+        const q = DATA.quizQuestions[this.quizIdx];
+        if (!this.quizLocked) {
+          AudioEngine.speak(`Situasi nomor ${this.quizIdx + 1}. ${q.situationText} Apakah tindakan ini tertib atau tidak tertib?`);
+        }
+
+        stage.innerHTML = `
+          <div class="screen-enter w-full max-w-4xl bg-white/95 border-4 border-sky-300 rounded-[2rem] shadow-xl p-5 sm:p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-sky-100 text-sky-900 border-2 border-sky-300 px-4 py-1 rounded-full font-extrabold text-xs sm:text-sm">
+                🏆 Kuis Jempol: Situasi ${this.quizIdx + 1} dari ${DATA.quizQuestions.length}
+              </span>
+              <div class="flex gap-1.5">
+                ${DATA.quizQuestions.map((_, i) => `
+                  <span class="w-3.5 h-3.5 rounded-full ${i < this.quizIdx ? 'bg-emerald-500' : i === this.quizIdx ? 'bg-amber-400 ring-2 ring-amber-600' : 'bg-slate-200'}"></span>
+                `).join("")}
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+              <!-- Ilustrasi Situasi -->
+              <div id="quiz-card-box" class="md:col-span-5 bg-amber-50 border-3 border-amber-200 rounded-3xl p-4 flex items-center justify-center">
+                ${q.svg}
+              </div>
+
+              <!-- Teks Situasi & Tombol Jempol Atas / Jempol Bawah -->
+              <div class="md:col-span-7 space-y-4 text-center md:text-left">
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 leading-snug">
+                  "${q.situationText}"
+                </h2>
+                <p class="text-sm font-bold text-slate-500">
+                  Pilih Jempol Atas jika sesuai aturan makan, atau Jempol Bawah jika tidak sesuai aturan!
+                </p>
+
+                <div class="grid grid-cols-2 gap-4 pt-1">
+                  <button onclick="app.answerQuiz(true)" ${this.quizLocked ? "disabled" : ""}
+                    class="btn-3d bg-emerald-500 hover:bg-emerald-400 text-white border-b-8 border-emerald-700 rounded-3xl p-4 flex flex-col items-center justify-center gap-1 shadow-lg disabled:opacity-60">
+                    <span class="text-4xl sm:text-5xl">👍</span>
+                    <span class="font-display font-bold text-lg sm:text-xl">Jempol Atas</span>
+                    <span class="text-xs font-extrabold bg-emerald-700/40 px-2.5 py-0.5 rounded-full">Tertib</span>
+                  </button>
+
+                  <button onclick="app.answerQuiz(false)" ${this.quizLocked ? "disabled" : ""}
+                    class="btn-3d bg-rose-500 hover:bg-rose-400 text-white border-b-8 border-rose-700 rounded-3xl p-4 flex flex-col items-center justify-center gap-1 shadow-lg disabled:opacity-60">
+                    <span class="text-4xl sm:text-5xl">👎</span>
+                    <span class="font-display font-bold text-lg sm:text-xl">Jempol Bawah</span>
+                    <span class="text-xs font-extrabold bg-rose-700/40 px-2.5 py-0.5 rounded-full">Tidak Tertib</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      answerQuiz(userSaysGood) {
+        if (this.quizLocked || this.quizFinished) return;
+        const q = DATA.quizQuestions[this.quizIdx];
+
+        if (userSaysGood === q.isGood) {
+          this.quizLocked = true;
+          AudioEngine.playSuccessChime();
+          this.addStar(2);
+          AudioEngine.speak(q.correctFeedback);
+
+          const box = document.getElementById("quiz-card-box");
+          if (box) box.classList.add("animate-happy", "border-emerald-400", "bg-emerald-50");
+
+          setTimeout(() => {
+            if (this.quizIdx < DATA.quizQuestions.length - 1) {
+              this.quizIdx++;
+              this.quizLocked = false;
+              this.renderScreen();
+            } else {
+              this.quizFinished = true;
+              this.quizLocked = false;
+              AudioEngine.playFanfare();
+              Confetti.burst();
+              this.renderScreen();
+            }
+          }, 2100);
+        } else {
+          AudioEngine.playGentleBuzz();
+          AudioEngine.speak(q.wrongFeedback);
+          const box = document.getElementById("quiz-card-box");
+          if (box) {
+            box.classList.remove("animate-shake");
+            void box.offsetWidth;
+            box.classList.add("animate-shake");
+          }
+        }
+      },
+
+      renderQuizComplete(stage) {
+        AudioEngine.speak(`Selamat Anak Hebat! Kamu sudah menyelesaikan seluruh Misi Anak Hebat di Meja Makan dan mengumpulkan ${this.stars} bintang!`);
+        stage.innerHTML = `
+          <div class="screen-enter w-full max-w-3xl bg-white/95 border-4 border-amber-400 rounded-[2rem] shadow-2xl p-6 sm:p-8 text-center space-y-4">
+            <div class="text-6xl sm:text-7xl animate-bounce">🏆</div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-800">
+              Selamat, Anak Hebat!
+            </h2>
+            <p class="text-sm sm:text-lg font-bold text-slate-600 max-w-xl mx-auto">
+              Kamu sudah memahami dan mentaati aturan <strong>sebelum makan, saat makan,</strong> dan <strong>sesudah makan</strong>. Terus praktikkan di rumah dan di sekolah ya!
+            </p>
+
+            <div class="inline-flex items-center gap-3 bg-yellow-100 border-4 border-yellow-400 rounded-3xl px-6 py-3 shadow-inner">
+              <span class="text-3xl">⭐</span>
+              <div class="text-left">
+                <span class="text-xs font-extrabold uppercase text-yellow-800 block">Total Bintang Kebaikan</span>
+                <span class="font-display text-3xl font-bold text-yellow-900">${this.stars} Bintang</span>
+              </div>
+            </div>
+
+            <div class="pt-2 flex flex-wrap justify-center gap-4">
+              <button onclick="app.restartAll()"
+                class="btn-3d bg-emerald-500 hover:bg-emerald-400 text-white border-b-8 border-emerald-700 rounded-3xl px-8 py-3.5 font-display font-bold text-xl shadow-lg">
+                🔄 Main Lagi
+              </button>
+            </div>
+          </div>
+        `;
+      },
+
+      resetQuiz() {
+        this.quizIdx = 0;
+        this.quizLocked = false;
+        this.quizFinished = false;
+      },
+
+      restartAll() {
+        AudioEngine.playDing();
+        this.stars = 0;
+        const countEl = document.getElementById("star-count");
+        if (countEl) countEl.textContent = "0";
+        this.ruleTabIdx = 0;
+        this.activeRuleId = null;
+        this.learnedRules.clear();
+        this.simIdx = 0;
+        this.simSolved = false;
+        this.resetQuiz();
+        this.goToScreen(0);
+      },
+
+      // Simpan sebagai file HTML offline mandiri
+      downloadHTML() {
+        AudioEngine.playDing();
+        const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Misi-Anak-Hebat-Di-Meja-Makan-Kelas1SD.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    };
+
+    /**
+     * 5. EFEK CONFETTI PERAYAAN
+     */
+    const Confetti = {
+      particles: [],
+      animating: false,
+
+      burst() {
+        const canvas = document.getElementById("confetti-canvas");
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const colors = ["#10b981", "#f59e0b", "#38bdf8", "#f43f5e", "#a855f7"];
+
+        for (let i = 0; i < 95; i++) {
+          this.particles.push({
+            x: canvas.width / 2 + (Math.random() - 0.5) * 240,
+            y: canvas.height / 2,
+            vx: (Math.random() - 0.5) * 15,
+            vy: (Math.random() - 0.8) * 15,
+            size: Math.random() * 9 + 5,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 110
+          });
+        }
+
+        if (!this.animating) {
+          this.animating = true;
+          this.loop();
+        }
+      },
+
+      loop() {
+        const canvas = document.getElementById("confetti-canvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35;
+          p.life--;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size * 0.6);
+        });
+
+        this.particles = this.particles.filter((p) => p.life > 0);
+        if (this.particles.length > 0) {
+          requestAnimationFrame(() => this.loop());
+        } else {
+          this.animating = false;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      app.init();
+    });
+  </script>
+
+</body></html>
